@@ -1,0 +1,2 @@
+# EventSurfer
+Event management app
