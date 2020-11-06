@@ -1,0 +1,53 @@
+EVENTSURFER APP:
+--------------------------------------------------------------------------------------------------------------
+
+Dev 0.0.1:
+
+	* - Package app
+
+	· AppDummy class (empty).
+
+	* - Package event
+
+	· BasicEvent class:
+	· BasicEvent properties: id (static), title, List <UpdatedEvent> updates.
+	· BasicEvent constructor: id autoincrement, title max length 200, LinkedList updates.
+
+	· EventStatus enum:
+	· EventStatus elements: OPEN, IN_PROCESS, CLOSED.
+
+	· UpdatedEvent class:
+	· UpdatedEvent properties: date, status, basicEventId, id (static), description.
+	· UpdatedEvent constructor: date (current date & time), status OPEN, basic event id, id autoincrement.
+
+	* - Package company
+
+	· Company class.
+	· Company properties: name, List <Workplace> workplaces.
+
+	· Workplace class.
+	· Workplace properties: name, List <User> users, List <String> zones.
+
+	· User class.
+	· User properties: firstName, lastName, login, password, userType.
+
+	· UserType enum.
+	· UserType elements: SYSADMIN, ADMIN, USER.
+	
+Dev 0.0.2
+
+	* - Package app
+
+	· AppDummy class:
+	· Added jdbc connection to surferdb database (localhost).
+
+Dev 0.0.3
+
+	· Add Development log to project folder
+
+	· AppDummy class:
+	· Added jdbc connection to devsurferdb database (localhost).
+
+	* - Package Company
+
+	· Refactor class name Workplace to BusinessUnit

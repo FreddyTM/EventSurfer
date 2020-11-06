@@ -25,6 +25,11 @@ public class AppDummy {
 		String user = "surferadmin";
 		String password = "surferpass";
 		
+		Connection devConnection = null;
+		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+		String devUser = "surferadmin";
+		String devPassword = "surferpass";
+		
 		try {
 			Class.forName("org.postgresql.Driver");
 			} catch (ClassNotFoundException ex) {
@@ -35,9 +40,20 @@ public class AppDummy {
 		try{
 			//Obtenim una connexió des de DriverManager
 			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("Connexió realitzada usant"
+			System.out.println("Connexió a surferdb realitzada usant"
 			+ " DriverManager");
 			connection.close();
+			 
+			} catch (SQLException ex) {
+			System.out.println("Error " + ex.getMessage());
+			}
+		
+		try{
+			//Obtenim una connexió des de DriverManager
+			devConnection = DriverManager.getConnection(devUrl, devUser, devPassword);
+			System.out.println("Connexió a devsurferdb realitzada usant"
+			+ " DriverManager");
+			devConnection.close();
 			 
 			} catch (SQLException ex) {
 			System.out.println("Error " + ex.getMessage());
