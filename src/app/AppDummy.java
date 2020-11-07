@@ -5,18 +5,23 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import persistence.PersistenceManager;
+
 //VERSION 0.0.2
 //Se añade conexión a la base de datos
 
 public class AppDummy {
 
+	Connection connection;
+	
 	public static void main(String[] args) {
 		AppDummy appDummy = new AppDummy();
 		appDummy.go();
 	}
 	
 	public void go() {
-		connectToDatabase();
+		
+		//connectToDatabase();
 	}
 	
 	public void connectToDatabase () {
@@ -32,10 +37,10 @@ public class AppDummy {
 		
 		try {
 			Class.forName("org.postgresql.Driver");
-			} catch (ClassNotFoundException ex) {
+		} catch (ClassNotFoundException ex) {
 				System.out.println("No se encuentra el controlador JDBC ("
 				+ ex.getMessage() +")");
-			}
+		}
 		
 		try{
 			//Obtenim una connexió des de DriverManager
@@ -44,9 +49,9 @@ public class AppDummy {
 			+ " DriverManager");
 			connection.close();
 			 
-			} catch (SQLException ex) {
+		} catch (SQLException ex) {
 			System.out.println("Error " + ex.getMessage());
-			}
+		}
 		
 		try{
 			//Obtenim una connexió des de DriverManager
@@ -55,9 +60,37 @@ public class AppDummy {
 			+ " DriverManager");
 			devConnection.close();
 			 
-			} catch (SQLException ex) {
+		} catch (SQLException ex) {
 			System.out.println("Error " + ex.getMessage());
-			}
 		}
+	}
+	
+	//LOCAL_DB - Local database
+	//LOCAL_TEST_DB - Local test database
+	//REMOTE - Remote database (Heroku)
+	public void loadData(String database) {
+		String url = null;
+		String user = null;
+		String password = null;
+		
+		switch(database) {
+		case "LOCAL_DB":
+			url = "jdbc:postgresql://localhost:5432/surferdb";
+			user = "surferadmin";
+			password = "surferpass";
+			break;
+		case "LOCAL_TEST_DB":
+			url = "jdbc:postgresql://localhost:5432/devsurferdb";
+			user = "surferadmin";
+			password = "surferpass";
+			break;
+		case "REMOTE":
+			url = null;
+			user = null;
+			password = null;
+		}
+		connection = PersistenceManager.openDatabase(url, user, password);
+		PersistenceManager.closeDatabase(connection);
+	}
 
 }

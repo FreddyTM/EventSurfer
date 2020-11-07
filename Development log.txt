@@ -3,11 +3,11 @@ EVENTSURFER APP:
 
 Dev 0.0.1:
 
-	* - Package app
+	* - Package app (new)
 
 	· AppDummy class (empty).
 
-	* - Package event
+	* - Package event (new)
 
 	· BasicEvent class:
 	· BasicEvent properties: id (static), title, List <UpdatedEvent> updates.
@@ -20,7 +20,7 @@ Dev 0.0.1:
 	· UpdatedEvent properties: date, status, basicEventId, id (static), description.
 	· UpdatedEvent constructor: date (current date & time), status OPEN, basic event id, id autoincrement.
 
-	* - Package company
+	* - Package company (new)
 
 	· Company class.
 	· Company properties: name, List <Workplace> workplaces.
@@ -51,3 +51,15 @@ Dev 0.0.3
 	* - Package Company
 
 	· Refactor class name Workplace to BusinessUnit
+
+Dev 0.0.4
+	
+	* - Package persistence (new)
+
+	· PersistenceManager class:
+	· openDatabase()
+	· closeDatabase()
+
+	* - Package app
+	· AppDummy class:
+	· loadData()
