@@ -5,7 +5,7 @@ Dev 0.0.1:
 
 	* - Package app (new)
 
-	· AppDummy class (empty).
+	· AppDummy class --empty--
 
 	* - Package event (new)
 
@@ -63,3 +63,14 @@ Dev 0.0.4
 	* - Package app
 	· AppDummy class:
 	· loadData()
+
+Dev 0.0.5
+
+	* - Package types_states (new)
+	
+	UserType class:
+	· numeroTiposDeUsuario()
+	· tiposDeUsuario()
+	· getClave()
+	· getTipoDeUsuario()
+	· cargaDatos() --empty--
