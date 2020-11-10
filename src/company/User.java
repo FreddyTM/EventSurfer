@@ -1,6 +1,8 @@
 
 package company;
 
+import types_states.UserType;
+
 public class User {
 
 	private String firstName;
