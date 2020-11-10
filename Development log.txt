@@ -80,6 +80,13 @@ Dev 0.0.6
 	* - Package types_states
 	
 	UserType class:
+	· Rename:
+	· numeroTiposDeUsuario() >> getNumberOfUserTypes()
+	· tiposDeUsuario() >> getUserTypes()
+	· getClave() >> getUserTypeId
+	· getTipoDeUsuario() >> getUserType()
+	· cargaDatos() >> loadData()
+	
 	· cargaDatos()
 
 	* - Packages company, event
