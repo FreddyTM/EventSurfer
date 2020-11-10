@@ -74,3 +74,14 @@ Dev 0.0.5
 	· getClave()
 	· getTipoDeUsuario()
 	· cargaDatos() --empty--
+
+Dev 0.0.6
+
+	* - Package types_states
+	
+	UserType class:
+	· cargaDatos()
+
+	* - Packages company, event
+
+	· Get rid of enum classes: UserType, EventStatus

@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import types_states.UserType;
 import persistence.PersistenceManager;
+
 
 //VERSION 0.0.2
 //Se añade conexión a la base de datos
@@ -22,6 +24,7 @@ public class AppDummy {
 	public void go() {
 		
 		//connectToDatabase();
+		loadData("LOCAL_DB");
 	}
 	
 	public void connectToDatabase () {
@@ -90,6 +93,8 @@ public class AppDummy {
 			password = null;
 		}
 		connection = PersistenceManager.openDatabase(url, user, password);
+		UserType userTypeList = new UserType(connection);
+		userTypeList.loadData();
 		PersistenceManager.closeDatabase(connection);
 	}
 
