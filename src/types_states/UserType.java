@@ -35,7 +35,6 @@ public class UserType {
 		String[] tiposDeUsuario = new String[getNumberOfUserTypes()];
 		Collection<String> tipos = userTypes.values();
 		tiposDeUsuario = tipos.toArray(tiposDeUsuario);
-		//Connection newConnection = UserType.connection;
 		return tiposDeUsuario;
 	}
 	
@@ -51,14 +50,13 @@ public class UserType {
 			}
 		}
 		//El tipo de usuario no existe
-		return -1;
-		
+		return -1;	
 	}
 	
 	/**
 	 * Retorna el tipo de usuario que corresponde a la clave pasada por parámetro
 	 * @param key
-	 * @return
+	 * @return tipo de usuario o null si la clave no existe
 	 */
 	public String getUserType (int key) {
 		if (userTypes.containsKey(key)) {

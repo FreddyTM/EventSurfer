@@ -68,7 +68,11 @@ Dev 0.0.5
 
 	* - Package types_states (new)
 	
-	UserType class:
+	· UserType class:
+
+	· Connection connection
+	· Map <Integer, String> userTypes
+	
 	· numeroTiposDeUsuario()
 	· tiposDeUsuario()
 	· getClave()
@@ -79,7 +83,7 @@ Dev 0.0.6
 
 	* - Package types_states
 	
-	UserType class:
+	· UserType class:
 	· Rename:
 	· numeroTiposDeUsuario() >> getNumberOfUserTypes()
 	· tiposDeUsuario() >> getUserTypes()
@@ -87,8 +91,25 @@ Dev 0.0.6
 	· getTipoDeUsuario() >> getUserType()
 	· cargaDatos() >> loadData()
 	
-	· cargaDatos()
+	· loadData()
 
 	* - Packages company, event
 
 	· Get rid of enum classes: UserType, EventStatus
+
+Dev 0.0.7
+
+	* - Package types_states
+
+	· EventType class:
+
+	· Connection connection
+	· Map <Integer, String> eventTypes
+
+	· get NumberOfEventTypes()
+	· getEventTypes()
+	· getEventTypeId()
+	· getEventType()
+	· loadData()
+
+

@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import types_states.EventType;
 import types_states.UserType;
 import persistence.PersistenceManager;
 
@@ -93,8 +94,12 @@ public class AppDummy {
 			password = null;
 		}
 		connection = PersistenceManager.openDatabase(url, user, password);
+		
 		UserType userTypeList = new UserType(connection);
 		userTypeList.loadData();
+		
+		EventType eventTypeList = new EventType(connection);
+		eventTypeList.loadData();
 		PersistenceManager.closeDatabase(connection);
 	}
 
