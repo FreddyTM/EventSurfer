@@ -69,7 +69,6 @@ Dev 0.0.5
 	* - Package types_states (new)
 	
 	· UserType class:
-
 	· Connection connection
 	· Map <Integer, String> userTypes
 	
@@ -102,7 +101,6 @@ Dev 0.0.7
 	* - Package types_states
 
 	· EventType class:
-
 	· Connection connection
 	· Map <Integer, String> eventTypes
 
@@ -112,4 +110,17 @@ Dev 0.0.7
 	· getEventType()
 	· loadData()
 
+Dev 0.0.8
 
+	* - Package persistence
+
+	· PersistenceManager class:
+	· closeStatement()
+	· closePreparedStatement()
+	· closeResultSet()
+	· getResultSet()
+
+	* - Package types_states
+
+	· EventType class, UserType class:
+	· Update loadData() to use PersistenceManager.getResultSet()
