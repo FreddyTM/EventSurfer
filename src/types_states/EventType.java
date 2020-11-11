@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import persistence.PersistenceManager;
+
 public class EventType {
 
 	private Connection connection;
@@ -72,10 +74,10 @@ public class EventType {
 	public void loadData() {
 		Statement statement = null;
 		ResultSet results = null;
+		String sql = "SELECT * FROM event_type;";
 		try {
 			statement = connection.createStatement();
-			results = statement.executeQuery(
-					"SELECT * FROM event_type;");
+			results = PersistenceManager.getResultSet(statement, sql);
 			while(results.next()) {
 				int id = results.getInt(1);
 				String eventType = results.getString(2);
@@ -83,7 +85,12 @@ public class EventType {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(statement);
 		}
+		
+		
 		//Debug
 		System.out.println("Tipos de eventos cargados correctamente\n");
 		System.out.print(eventTypes.entrySet());

@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import persistence.PersistenceManager;
+
 public class UserType {
 
 	private Connection connection;
@@ -73,10 +75,10 @@ public class UserType {
 	public void loadData() {
 		Statement statement = null;
 		ResultSet results = null;
+		String sql = "SELECT * FROM user_type;";
 		try {
 			statement = connection.createStatement();
-			results = statement.executeQuery(
-					"SELECT * FROM user_type;");
+			results = PersistenceManager.getResultSet(statement, sql);
 			while(results.next()) {
 				int id = results.getInt(1);
 				String userType = results.getString(2);
@@ -84,7 +86,30 @@ public class UserType {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(statement);
 		}
+		
+//		Statement statement = null;
+//		ResultSet results = null;
+//		try {
+//			statement = connection.createStatement();
+//			results = statement.executeQuery(
+//					"SELECT * FROM user_type;");
+//			while(results.next()) {
+//				int id = results.getInt(1);
+//				String userType = results.getString(2);
+//				userTypes.put(id, userType);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			PersistenceManager.closeResultSet(results);
+//			PersistenceManager.closeStatement(statement);
+//		}
+		
+		
 		//Debug
 		System.out.println("Tipos de usuario cargados correctamente\n");
 		System.out.print(userTypes.entrySet());
