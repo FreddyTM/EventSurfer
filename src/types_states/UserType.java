@@ -111,7 +111,7 @@ public class UserType {
 		
 		
 		//Debug
-		System.out.println("Tipos de usuario cargados correctamente\n");
+		System.out.println("Tipos de usuario cargados correctamente");
 		System.out.print(userTypes.entrySet());
 		System.out.println();
 //		System.out.println("TIPOS DE USUARIO: ");

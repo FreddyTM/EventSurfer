@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import types_states.EventState;
 import types_states.EventType;
 import types_states.UserType;
 import persistence.PersistenceManager;
@@ -25,7 +26,7 @@ public class AppDummy {
 	public void go() {
 		
 		//connectToDatabase();
-		loadData("LOCAL_DB");
+		loadData("LOCAL_TEST_DB");
 	}
 	
 	public void connectToDatabase () {
@@ -100,6 +101,10 @@ public class AppDummy {
 		
 		EventType eventTypeList = new EventType(connection);
 		eventTypeList.loadData();
+		
+		EventState eventStateList = new EventState(connection);
+		eventStateList.loadData();
+		
 		PersistenceManager.closeDatabase(connection);
 	}
 

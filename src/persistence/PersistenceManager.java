@@ -24,7 +24,7 @@ public class PersistenceManager {
 		try {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("Connexión a " + dbName + " establecida con éxito");
+			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
 		} catch (ClassNotFoundException ex) {
 			System.out.println("No se encuentra el controlador JDBC ("
 			+ ex.getMessage() +")");

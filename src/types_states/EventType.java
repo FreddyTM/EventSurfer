@@ -22,7 +22,7 @@ public class EventType {
 	
 	/**
 	 * Devuelve el número de tipos de evento almacenados en la base de datos
-	 * @return Número de tipos de usuarios 
+	 * @return Número de tipos de eventos 
 	 */
 	public int getNumberOfEventTypes() {
 		return eventTypes.size();
@@ -44,13 +44,13 @@ public class EventType {
 	 * @param eventType tipo de evento del que queremos saber su id
 	 * @return id del tipo de evento (-1 si no existe)
 	 */
-	public int getEventTypeId (String userType) {
+	public int getEventTypeId (String eventType) {
 		for (Integer key : eventTypes.keySet()) {
-			if (userType.equals(eventTypes.get(key))) {
+			if (eventType.equals(eventTypes.get(key))) {
 				return key;
 			}
 		}
-		//El tipo de usuario no existe
+		//El tipo de evento no existe
 		return -1;	
 	}
 	
@@ -92,7 +92,7 @@ public class EventType {
 		
 		
 		//Debug
-		System.out.println("Tipos de eventos cargados correctamente\n");
+		System.out.println("Tipos de eventos cargados correctamente");
 		System.out.print(eventTypes.entrySet());
 		System.out.println();
 //		System.out.println("TIPOS DE USUARIO: ");
