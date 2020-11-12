@@ -134,3 +134,18 @@ Dev 0.0.8
 	· getEventStateId()
 	· getEventState()
 	· loadData()		
+
+Dev 0.0.9
+
+	* - Package company
+
+	· Company class:
+	· Update attributes
+	· Add constructor, setters & getters
+
+	· BusinessUnit class:
+	· Update attributes
+	· Add constructor, setters & getters
+
+	· Area class:
+	· Add attributes, constructor, setters & getters
