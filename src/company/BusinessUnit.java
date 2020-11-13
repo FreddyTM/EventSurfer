@@ -35,7 +35,17 @@ public class BusinessUnit {
 		this.mail = mail;
 	}
 
+	
+	public void addUser () {
+		
+	}
+	
+	public void pruebaEnviaObjeto () {
+		User user = new User();
+		user.prueba(this);
+	}
 
+	
 	public int getId() {
 		return id;
 	}

@@ -3,8 +3,13 @@ package company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import persistence.PersistenceManager;
 import types_states.EventsStatesContainer;
 
 
@@ -21,8 +26,9 @@ public class User {
 	private boolean activo;
 	
 	
-	public User(int id, BusinessUnit bUnit, String userType, String userAlias, String nombre,
-			String apellido, String password, boolean activo) {
+	public User(Connection connection, int id, BusinessUnit bUnit, String userType,
+			String userAlias, String nombre, String apellido, String password, boolean activo) {
+		this.connection = connection;
 		this.id = id;
 		this.bUnit = bUnit;
 		this.userType = userType;
@@ -31,6 +37,10 @@ public class User {
 		this.apellido = apellido;
 		this.password = password;
 		this.activo = activo;
+	}
+	
+	public User () {
+		
 	}
 
 	
@@ -52,11 +62,52 @@ public class User {
 			pstm.setString(6, getPassword());
 			pstm.setBoolean(7, isActivo());
 			pstm.executeUpdate();
+			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateToDB (User user) {
+		String sql = "UPDATE \"user\" SET ";
+	}
+	
+	public List<User> getFromDB(Connection conn, BusinessUnit bUnit) {
+		List<User> userList = new ArrayList<User>();
+		User user = null;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		// Cambiar sql para filtrar por id del bUnit
+		String sql = "SELECT * FROM \"user\";";
+		try {
+			pstm = connection.prepareStatement(sql);
+			results = pstm.executeQuery();
+			while (results.next()) {
+				user = new User();
+				user.setConnection(conn);
+				user.setId(results.getInt(1));
+				//Recuperar código bUnit y relacionarlo con un objeto BusinessUnit
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return userList;
+	}
+	
+	public void prueba(BusinessUnit bUnit) {
+		
+	}
 
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+	
 	public int getId() {
 		return id;
 	}
