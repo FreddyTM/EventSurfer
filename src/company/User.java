@@ -72,6 +72,12 @@ public class User {
 		String sql = "UPDATE \"user\" SET ";
 	}
 	
+	/**
+	 * Obtiene la lista de usuarios del objeto BusinessUnit pasado por parámetro
+	 * @param conn conexión con la base de datos
+	 * @param bUnit objeto del que queremos recuperar sus usuarios
+	 * @return lista de usuarios del objeto almacenados en la base de datos
+	 */
 	public List<User> getFromDB(Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new ArrayList<User>();
 		User user = null;
