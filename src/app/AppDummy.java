@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import types_states.EventState;
 import types_states.EventType;
+import types_states.EventsStatesContainer;
 import types_states.UserType;
 import persistence.PersistenceManager;
 
@@ -104,6 +105,10 @@ public class AppDummy {
 		
 		EventState eventStateList = new EventState(connection);
 		eventStateList.loadData();
+		
+		EventsStatesContainer.setuType(userTypeList);
+		EventsStatesContainer.setEvType(eventTypeList);
+		EventsStatesContainer.setEvState(eventStateList);
 		
 		PersistenceManager.closeDatabase(connection);
 	}

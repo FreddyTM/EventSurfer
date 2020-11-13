@@ -1,10 +1,12 @@
 
 package company;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class BusinessUnit {
 	
+	private Connection connection;
 	private int id;
 	private Company company;
 	private String nombre;
@@ -18,8 +20,10 @@ public class BusinessUnit {
 	private List<Area> areas;
 	
 	
-	public BusinessUnit(int id, Company company, String nombre, String direccion, String provincia, String estado,
-			String cpostal, String telefono, String mail) {
+	public BusinessUnit(Connection connection, int id, Company company, String nombre,
+			String direccion, String provincia, String estado, String cpostal,
+			String telefono, String mail) {
+		this.connection = connection;
 		this.id = id;
 		this.company = company;
 		this.nombre = nombre;

@@ -149,3 +149,17 @@ Dev 0.0.9
 
 	· Area class:
 	· Add attributes, constructor, setters & getters
+
+Dev 0.0.10
+
+	* - Package company
+
+	· User class:
+	· Update attributes
+	· Add constructor, setters & getters
+	· saveToDB()
+
+	* - Package types_states
+
+	· EventsStatesContainer class:
+	· Add attributes, constructor, setters & getters

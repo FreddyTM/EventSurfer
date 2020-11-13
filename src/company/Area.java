@@ -1,13 +1,17 @@
 package company;
 
+import java.sql.Connection;
+
 public class Area {
 
+	private Connection connection;
 	private int id;
 	private String area;
 	private String descripcion;
 	
 	
-	public Area(int id, String area, String descripcion) {
+	public Area(Connection connection, int id, String area, String descripcion) {
+		this.connection = connection;
 		this.id = id;
 		this.area = area;
 		this.descripcion = descripcion;
