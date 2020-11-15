@@ -100,7 +100,7 @@ public class AppDummy {
 			user = null;
 			password = null;
 		default:
-			url = "jdbc:postgresql://localhost:5432/surferdb";
+			url = "jdbc:postgresql://localhost:5432/devsurferdb";
 			user = "surferadmin";
 			password = "surferpass";
 		}

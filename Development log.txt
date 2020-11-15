@@ -212,10 +212,15 @@ Dev 0.0.11
 
 	* - Package company
 
-		· User class:
-			Delete Connection attribute
-			Rename:
-			saveToDB() >> saveUserToDB()
-			updateToDB() >> updateUserToDB()
+	· User class:
+		Delete Connection attribute
+		Delete updateToDB()
 
-			Add getUsersFromDB()
+		Rename:
+		saveToDB() >> saveUserToDB()
+
+		Update saveUserToDB():
+		All PreparedStatement parameters come from the getters of the user parameter
+
+		Add getUsersFromDB()
+		Add updateUserToDB()

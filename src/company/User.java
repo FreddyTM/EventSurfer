@@ -55,13 +55,13 @@ public class User {
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, bUnit.getId());
-			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(this.getUserType()));
-			pstm.setString(3, getUserAlias());
-			pstm.setString(4, getNombre());
-			pstm.setString(5, getApellido());
-			pstm.setString(6, getPassword());
-			pstm.setBoolean(7, isActivo());
+			pstm.setInt(1, user.getbUnit().getId());
+			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(user.getUserType()));
+			pstm.setString(3, user.getUserAlias());
+			pstm.setString(4, user.getNombre());
+			pstm.setString(5, user.getApellido());
+			pstm.setString(6, user.getPassword());
+			pstm.setBoolean(7, user.isActivo());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
@@ -69,8 +69,37 @@ public class User {
 		}
 	}
 	
+	/**
+	 * Actualiza los parámetros de un usuario que ya existe en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param user usuario que contiene los datos que actualizan al usuario ya existente
+	 */
 	public void updateUserToDB (Connection conn, User user) {
-		String sql = "UPDATE \"user\" SET ";
+		String sql = "UPDATE \"user\" "
+				+ "SET "
+				+ "b_unit_id = ?, "
+				+ "user_type_id = ?, "
+				+ "user_alias = ?, "
+				+ "nombre = ?, "
+				+ "apellido = ?, "
+				+ "user_password = ?,"
+				+ "activo = ? "
+				+ "WHERE id = ?;";
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, user.getbUnit().getId());
+			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(user.getUserType()));
+			pstm.setString(3, user.getUserAlias());
+			pstm.setString(4, user.getNombre());
+			pstm.setString(5, user.getApellido());
+			pstm.setString(6, user.getPassword());
+			pstm.setBoolean(7, user.isActivo());
+			pstm.setInt(8, user.getId());
+			pstm.executeUpdate();
+			PersistenceManager.closePrepStatement(pstm);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
