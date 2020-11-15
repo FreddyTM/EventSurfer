@@ -7,7 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import types_states.EventState;
+import types_states.EventType;
+import types_states.EventsStatesContainer;
+import types_states.UserType;
+
 public class PersistenceManager {
+	
+	private static String url;
+	private static String user;
+	private static String password;
 
 	/**
 	 * Abre una conexión con la base de datos
@@ -49,6 +58,27 @@ public class PersistenceManager {
 			System.out.println("Estado: " + e.getSQLState());
 			System.out.println("Código: " + e.getErrorCode());
 		}
+	}
+	
+	public static Connection getConnection () {
+		
+		Connection connection = null;
+		String dbName = url.substring(url.lastIndexOf("/"));;
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+			connection = DriverManager.getConnection(url, user, password);
+			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
+		} catch (ClassNotFoundException ex) {
+			System.out.println("No se encuentra el controlador JDBC ("
+			+ ex.getMessage() +")");
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Estado: " + e.getSQLState());
+			System.out.println("Código: " + e.getErrorCode());
+		}
+		
+		return connection;
 	}
 	
 	/**
@@ -103,5 +133,53 @@ public class PersistenceManager {
 		}
 		
 		return results;
+	}
+	
+	/**
+	 * Carga los datos de la base de datos al abrir la aplicación
+	 * @param conn conexión con la base de datos
+	 */
+	public static void loadData (Connection conn) {
+		
+		//Lista de tipos de usuario
+		UserType userTypeList = new UserType(conn);
+		userTypeList.loadData();
+		
+		//Lista de tipos de eventos
+		EventType eventTypeList = new EventType(conn);
+		eventTypeList.loadData();
+		
+		//Lista de estados de eventos
+		EventState eventStateList = new EventState(conn);
+		eventStateList.loadData();
+		
+		//Mandamos las listas a un objeto contenedor
+		EventsStatesContainer.setuType(userTypeList);
+		EventsStatesContainer.setEvType(eventTypeList);
+		EventsStatesContainer.setEvState(eventStateList);
+	}
+
+	public static String getUrl() {
+		return url;
+	}
+
+	public static void setUrl(String url) {
+		PersistenceManager.url = url;
+	}
+
+	public static String getUser() {
+		return user;
+	}
+
+	public static void setUser(String user) {
+		PersistenceManager.user = user;
+	}
+
+	public static String getPassword() {
+		return password;
+	}
+
+	public static void setPassword(String password) {
+		PersistenceManager.password = password;
 	}
 }

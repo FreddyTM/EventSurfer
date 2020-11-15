@@ -12,22 +12,27 @@ import types_states.UserType;
 import persistence.PersistenceManager;
 
 
-//VERSION 0.0.2
-//Se añade conexión a la base de datos
+//VERSION 0.0.11
+
 
 public class AppDummy {
 
-	Connection connection;
+	//Connection connection;
 	
 	public static void main(String[] args) {
 		AppDummy appDummy = new AppDummy();
-		appDummy.go();
+		appDummy.go(args);
 	}
 	
-	public void go() {
+	public void go(String[] args) {
 		
 		//connectToDatabase();
-		loadData("LOCAL_TEST_DB");
+		System.out.println(args.length);
+		if (args.length == 1) {
+			loadData(args[0]);
+		} else {
+			loadData("");
+		}
 	}
 	
 	public void connectToDatabase () {
@@ -73,7 +78,7 @@ public class AppDummy {
 	
 	//LOCAL_DB - Local database
 	//LOCAL_TEST_DB - Local test database
-	//REMOTE - Remote database (Heroku)
+	//REMOTE_DB - Remote database (Heroku)
 	public void loadData(String database) {
 		String url = null;
 		String user = null;
@@ -90,25 +95,23 @@ public class AppDummy {
 			user = "surferadmin";
 			password = "surferpass";
 			break;
-		case "REMOTE":
+		case "REMOTE_DB":
 			url = null;
 			user = null;
 			password = null;
+		default:
+			url = "jdbc:postgresql://localhost:5432/surferdb";
+			user = "surferadmin";
+			password = "surferpass";
 		}
-		connection = PersistenceManager.openDatabase(url, user, password);
+		//connection = PersistenceManager.openDatabase(url, user, password);
+		//PersistenceManager.loadData(connection);
 		
-		UserType userTypeList = new UserType(connection);
-		userTypeList.loadData();
-		
-		EventType eventTypeList = new EventType(connection);
-		eventTypeList.loadData();
-		
-		EventState eventStateList = new EventState(connection);
-		eventStateList.loadData();
-		
-		EventsStatesContainer.setuType(userTypeList);
-		EventsStatesContainer.setEvType(eventTypeList);
-		EventsStatesContainer.setEvState(eventStateList);
+		PersistenceManager.setUrl(url);
+		PersistenceManager.setUser(user);
+		PersistenceManager.setPassword(password);
+		Connection connection = PersistenceManager.getConnection();
+		PersistenceManager.loadData(connection);
 		
 		PersistenceManager.closeDatabase(connection);
 	}

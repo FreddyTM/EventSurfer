@@ -15,7 +15,7 @@ import types_states.EventsStatesContainer;
 
 public class User {
 
-	private Connection connection;
+	//private Connection connection;
 	private int id;
 	private BusinessUnit bUnit;
 	private String userType;
@@ -26,9 +26,9 @@ public class User {
 	private boolean activo;
 	
 	
-	public User(Connection connection, int id, BusinessUnit bUnit, String userType,
-			String userAlias, String nombre, String apellido, String password, boolean activo) {
-		this.connection = connection;
+	public User(int id, BusinessUnit bUnit, String userType, String userAlias, 
+			String nombre, String apellido, String password, boolean activo) {
+		//this.connection = connection;
 		this.id = id;
 		this.bUnit = bUnit;
 		this.userType = userType;
@@ -46,14 +46,15 @@ public class User {
 	
 	/**
 	 * Inserta un nuevo usuario en la base de datos
+	 * @param conn conexión con la base de datos
 	 * @param user usuario a insertar
 	 */
-	public void saveToDB (User user) {
+	public void saveUserToDB (Connection conn, User user) {
 		String sql = "INSERT INTO \"user\" (b_unit_id, user_type_id, user_alias, nombre, "
 				+ "apellido, user_password, activo) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 		try {
-			PreparedStatement pstm = connection.prepareStatement(sql);
+			PreparedStatement pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, bUnit.getId());
 			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(this.getUserType()));
 			pstm.setString(3, getUserAlias());
@@ -68,7 +69,7 @@ public class User {
 		}
 	}
 	
-	public void updateToDB (User user) {
+	public void updateUserToDB (Connection conn, User user) {
 		String sql = "UPDATE \"user\" SET ";
 	}
 	
@@ -78,41 +79,53 @@ public class User {
 	 * @param bUnit objeto del que queremos recuperar sus usuarios
 	 * @return lista de usuarios del objeto almacenados en la base de datos
 	 */
-	public List<User> getFromDB(Connection conn, BusinessUnit bUnit) {
+	public List<User> getUsersFromDB(Connection conn, BusinessUnit bu) {
 		List<User> userList = new ArrayList<User>();
 		User user = null;
 		PreparedStatement pstm = null;
 		ResultSet results = null;
 		// Cambiar sql para filtrar por id del bUnit
-		String sql = "SELECT * FROM \"user\";";
+		String sql = "SELECT u.id, u.b_unit_id, u.user_type_id, u.user_alias, u.nombre, "
+				+ "u.apellido, u.user_password, u.activo "
+				+ "FROM \"user\" u, business_unit bu "
+				+ "WHERE u.b_unit_id = ?;";
 		try {
-			pstm = connection.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, bu.getId());
 			results = pstm.executeQuery();
 			while (results.next()) {
 				user = new User();
-				user.setConnection(conn);
+				//user.setConnection(conn);
 				user.setId(results.getInt(1));
-				//Recuperar código bUnit y relacionarlo con un objeto BusinessUnit
+				user.setbUnit(bu);
+				user.setUserType(EventsStatesContainer.getuType().getUserType(results.getInt(3)));
+				user.setUserAlias(results.getString(4));
+				user.setNombre(results.getString(5));
+				user.setApellido(results.getString(6));
+				user.setPassword(results.getString(7));
+				user.setActivo(results.getBoolean(8));
+				userList.add(user);
 			}
+			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+				
 		return userList;
 	}
 	
+	//METODO DE PRUEBA. SE PUEDE BORRAR
 	public void prueba(BusinessUnit bUnit) {
 		
 	}
 
-	public Connection getConnection() {
-		return connection;
-	}
-	
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
+//	public Connection getConnection() {
+//		return connection;
+//	}
+//	
+//	public void setConnection(Connection connection) {
+//		this.connection = connection;
+//	}
 	
 	public int getId() {
 		return id;

@@ -40,6 +40,11 @@ public class BusinessUnit {
 		
 	}
 	
+	public void addUsers () {
+		
+	}
+	
+	//METODO DE PRUEBA. SE PUEDE BORRAR
 	public void pruebaEnviaObjeto () {
 		User user = new User();
 		user.prueba(this);
