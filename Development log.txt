@@ -224,3 +224,17 @@ Dev 0.0.11
 
 		Add getUsersFromDB()
 		Add updateUserToDB()
+
+Dev 0.0.12
+
+	* - Package company
+
+	· Area class:
+		Delete Connection attribute
+
+		Add saveAreaToDB()
+		Add updateAreaToDB()
+		Add getAreasFromDB()
+
+
+	
