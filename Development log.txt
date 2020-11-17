@@ -236,5 +236,12 @@ Dev 0.0.12
 		Add updateAreaToDB()
 		Add getAreasFromDB()
 
+Dev 0.0.13
 
+	* - Package company
 	
+	· User class:
+		Add passwordHash()
+		Add getHash()
+		Add getUserByAlias()
+		Add checkUserPassword()

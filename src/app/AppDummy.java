@@ -114,6 +114,8 @@ public class AppDummy {
 		PersistenceManager.loadData(connection);
 		
 		PersistenceManager.closeDatabase(connection);
+		
+		//System.out.println (PersistenceManager.passHash("8salas15pelis*"));
 	}
 
 }
