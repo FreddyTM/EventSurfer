@@ -2,11 +2,15 @@
 package company;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
+
+import persistence.PersistenceManager;
 
 public class BusinessUnit {
 	
-	private Connection connection;
+	//private Connection connection;
 	private int id;
 	private Company company;
 	private String nombre;
@@ -20,10 +24,9 @@ public class BusinessUnit {
 	private List<Area> areas;
 	
 	
-	public BusinessUnit(Connection connection, int id, Company company, String nombre,
-			String direccion, String provincia, String estado, String cpostal,
-			String telefono, String mail) {
-		this.connection = connection;
+	public BusinessUnit(int id, Company company, String nombre, String direccion,
+			String provincia, String estado, String cpostal, String telefono, String mail) {			
+		//this.connection = connection;
 		this.id = id;
 		this.company = company;
 		this.nombre = nombre;
@@ -35,6 +38,32 @@ public class BusinessUnit {
 		this.mail = mail;
 	}
 
+	/**
+	 * Inserta una nueva unidad de negocio en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param bUnit BusinessUnit a insertar
+	 */
+	public void saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
+		String sql = "INSERT INTO business_unit (company_id, nombre, direccion, provincia, "
+				+ "estado, cpostal, telefono, mail) "
+				+ "VALUES (?, ?, ?, ? ,? ,? ,? ,?);";
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, bUnit.getCompany().getId());
+			pstm.setString(2, bUnit.getNombre());
+			pstm.setString(3, bUnit.getDireccion());
+			pstm.setString(4, bUnit.getProvincia());
+			pstm.setString(5, bUnit.getEstado());
+			pstm.setString(6, bUnit.getCpostal());
+			pstm.setString(7, bUnit.getTelefono());
+			pstm.setString(8, bUnit.getMail());
+			pstm.executeUpdate();
+			PersistenceManager.closePrepStatement(pstm);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void addUser () {
 		

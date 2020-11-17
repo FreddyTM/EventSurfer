@@ -245,3 +245,8 @@ Dev 0.0.13
 		Add getHash()
 		Add getUserByAlias()
 		Add checkUserPassword()
+
+	· BusinessUnit class:
+		Delete Connection attribute
+
+		Add saveBUnitToDB()
