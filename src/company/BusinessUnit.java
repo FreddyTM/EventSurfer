@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import event.Event;
 import persistence.PersistenceManager;
 
 public class BusinessUnit {
@@ -22,7 +23,7 @@ public class BusinessUnit {
 	private String mail;
 	private List<User> users;
 	private List<Area> areas;
-	
+	private List<Event> events;
 	
 	public BusinessUnit(int id, Company company, String nombre, String direccion,
 			String provincia, String estado, String cpostal, String telefono, String mail) {			
@@ -36,6 +37,10 @@ public class BusinessUnit {
 		this.cpostal = cpostal;
 		this.telefono = telefono;
 		this.mail = mail;
+	}
+	
+	public BusinessUnit() {
+		
 	}
 
 	/**
@@ -172,9 +177,16 @@ public class BusinessUnit {
 		return areas;
 	}
 
-
 	public void setAreas(List<Area> areas) {
 		this.areas = areas;
+	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
 	}
 		
 }

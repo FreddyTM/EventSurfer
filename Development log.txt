@@ -247,6 +247,22 @@ Dev 0.0.13
 		Add checkUserPassword()
 
 	· BusinessUnit class:
+		Add attribute events	
 		Delete Connection attribute
 
 		Add saveBUnitToDB()
+
+	* - Package event
+
+	· Refactor class name BasicEvent to Event
+	· Event class:
+		Update attributes:
+		id, bUnit, eventType, titulo, descripcion, eventState, updates
+		Add constructor, setters & getters
+
+	· UpdatedEvent class
+		Update attributes:
+		id, event, fechaHora, descripcion, autor
+		Add constructor, setters & getters
+		
+		
