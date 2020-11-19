@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import types_states.EventState;
 import types_states.EventType;
-import types_states.EventsStatesContainer;
+import types_states.TypesStatesContainer;
 import types_states.UserType;
 
 public class PersistenceManager {
@@ -154,9 +154,9 @@ public class PersistenceManager {
 		eventStateList.loadData();
 		
 		//Mandamos las listas a un objeto contenedor
-		EventsStatesContainer.setuType(userTypeList);
-		EventsStatesContainer.setEvType(eventTypeList);
-		EventsStatesContainer.setEvState(eventStateList);
+		TypesStatesContainer.setuType(userTypeList);
+		TypesStatesContainer.setEvType(eventTypeList);
+		TypesStatesContainer.setEvState(eventStateList);
 	}
 	
 //	//Se espera una entrada de 20 caracteres como máximo

@@ -59,7 +59,7 @@ public class Area {
 	}
 	
 	/**
-	 * Actualiza los parámetros de un area que ya existe en la base de datos
+	 * Actualiza los valores de un area que ya existe en la base de datos
 	 * @param conn conexión a la base de datos
 	 * @param area area que contiene los datos que actualizan al area ya existente
 	 */
@@ -107,6 +107,7 @@ public class Area {
 				area.setArea(results.getString(3));
 				areaList.add(area);				
 			}
+			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();

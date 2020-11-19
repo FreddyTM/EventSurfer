@@ -1,15 +1,15 @@
 package types_states;
 
-public class EventsStatesContainer {
+public class TypesStatesContainer {
 
 	private static EventState evState;
 	private static EventType evType;
 	private static UserType uType;
 	
-	public EventsStatesContainer(EventState evState, EventType evType, UserType uType) {
-		EventsStatesContainer.evState = evState;
-		EventsStatesContainer.evType = evType;
-		EventsStatesContainer.uType = uType;
+	public TypesStatesContainer(EventState evState, EventType evType, UserType uType) {
+		TypesStatesContainer.evState = evState;
+		TypesStatesContainer.evType = evType;
+		TypesStatesContainer.uType = uType;
 	}
 
 	public static EventState getEvState() {
@@ -17,7 +17,7 @@ public class EventsStatesContainer {
 	}
 
 	public static void setEvState(EventState evState) {
-		EventsStatesContainer.evState = evState;
+		TypesStatesContainer.evState = evState;
 	}
 
 	public static EventType getEvType() {
@@ -25,7 +25,7 @@ public class EventsStatesContainer {
 	}
 
 	public static void setEvType(EventType evType) {
-		EventsStatesContainer.evType = evType;
+		TypesStatesContainer.evType = evType;
 	}
 
 	public static UserType getuType() {
@@ -33,7 +33,7 @@ public class EventsStatesContainer {
 	}
 
 	public static void setuType(UserType uType) {
-		EventsStatesContainer.uType = uType;
+		TypesStatesContainer.uType = uType;
 	}
 
 

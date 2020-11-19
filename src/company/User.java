@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import persistence.PersistenceManager;
-import types_states.EventsStatesContainer;
+import types_states.TypesStatesContainer;
 
 
 public class User {
@@ -56,7 +56,7 @@ public class User {
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, user.getbUnit().getId());
-			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(user.getUserType()));
+			pstm.setInt(2, TypesStatesContainer.getuType().getUserTypeId(user.getUserType()));
 			pstm.setString(3, user.getUserAlias());
 			pstm.setString(4, user.getNombre());
 			pstm.setString(5, user.getApellido());
@@ -70,7 +70,7 @@ public class User {
 	}
 	
 	/**
-	 * Actualiza los parámetros de un usuario que ya existe en la base de datos
+	 * Actualiza los valores de un usuario que ya existe en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param user usuario que contiene los datos que actualizan al usuario ya existente
 	 */
@@ -88,7 +88,7 @@ public class User {
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, user.getbUnit().getId());
-			pstm.setInt(2, EventsStatesContainer.getuType().getUserTypeId(user.getUserType()));
+			pstm.setInt(2, TypesStatesContainer.getuType().getUserTypeId(user.getUserType()));
 			pstm.setString(3, user.getUserAlias());
 			pstm.setString(4, user.getNombre());
 			pstm.setString(5, user.getApellido());
@@ -125,7 +125,7 @@ public class User {
 				user = new User();
 				user.setId(results.getInt(1));
 				user.setbUnit(bu);
-				user.setUserType(EventsStatesContainer.getuType().getUserType(results.getInt(3)));
+				user.setUserType(TypesStatesContainer.getuType().getUserType(results.getInt(3)));
 				user.setUserAlias(results.getString(4));
 				user.setNombre(results.getString(5));
 				user.setApellido(results.getString(6));
@@ -133,6 +133,7 @@ public class User {
 				user.setActivo(results.getBoolean(8));
 				userList.add(user);
 			}
+			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();

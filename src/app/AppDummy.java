@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import types_states.EventState;
 import types_states.EventType;
-import types_states.EventsStatesContainer;
+import types_states.TypesStatesContainer;
 import types_states.UserType;
 import persistence.PersistenceManager;
 

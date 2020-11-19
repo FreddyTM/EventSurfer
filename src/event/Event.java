@@ -15,7 +15,7 @@ public class Event {
 	private String titulo;
 	private String descripcion;
 	private String eventState;
-	private List<UpdatedEvent> updates;
+	private List<EventUpdate> updates;
 	
 	
 	public Event(int id, BusinessUnit bUnit, String eventType, String titulo,
@@ -26,7 +26,7 @@ public class Event {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.eventState = eventState;
-		this.updates = new ArrayList<UpdatedEvent>();
+		this.updates = new ArrayList<EventUpdate>();
 	}
 	
 	public Event() {
@@ -69,10 +69,10 @@ public class Event {
 	public void setEventState(String eventState) {
 		this.eventState = eventState;
 	}
-	public List<UpdatedEvent> getUpdates() {
+	public List<EventUpdate> getUpdates() {
 		return updates;
 	}
-	public void setUpdates(List<UpdatedEvent> updates) {
+	public void setUpdates(List<EventUpdate> updates) {
 		this.updates = updates;
 	}
 	
