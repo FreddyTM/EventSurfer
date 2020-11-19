@@ -13,12 +13,12 @@ import persistence.PersistenceManager;
 
 public class UserType {
 
-	private Connection connection;
+	//private Connection connection;
 	//Map <id, user_type> Almacena la tabla user_type de la base de datos
 	private Map <Integer, String> userTypes = new LinkedHashMap<Integer, String>();
 	
-	public UserType (Connection connection) {
-		this.connection = connection;
+	public UserType () {
+		//this.connection = connection;
 	}
 	
 	/**
@@ -72,12 +72,12 @@ public class UserType {
 	 * Conecta con la base de datos y almacena cada tipo de usuario con su clave
 	 * en userTypes
 	 */
-	public void loadData() {
+	public void loadData(Connection conn) {
 		Statement statement = null;
 		ResultSet results = null;
 		String sql = "SELECT * FROM user_type;";
 		try {
-			statement = connection.createStatement();
+			statement = conn.createStatement();
 			results = PersistenceManager.getResultSet(statement, sql);
 			while(results.next()) {
 				int id = results.getInt(1);

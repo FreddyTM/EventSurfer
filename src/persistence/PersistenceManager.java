@@ -142,16 +142,16 @@ public class PersistenceManager {
 	public static void loadData (Connection conn) {
 		
 		//Lista de tipos de usuario
-		UserType userTypeList = new UserType(conn);
-		userTypeList.loadData();
+		UserType userTypeList = new UserType();
+		userTypeList.loadData(conn);
 		
 		//Lista de tipos de eventos
-		EventType eventTypeList = new EventType(conn);
-		eventTypeList.loadData();
+		EventType eventTypeList = new EventType();
+		eventTypeList.loadData(conn);
 		
 		//Lista de estados de eventos
-		EventState eventStateList = new EventState(conn);
-		eventStateList.loadData();
+		EventState eventStateList = new EventState();
+		eventStateList.loadData(conn);
 		
 		//Mandamos las listas a un objeto contenedor
 		TypesStatesContainer.setuType(userTypeList);

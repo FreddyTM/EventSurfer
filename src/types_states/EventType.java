@@ -12,12 +12,12 @@ import persistence.PersistenceManager;
 
 public class EventType {
 
-	private Connection connection;
+	//private Connection connection;
 	//Map <id, descripcion> Almacena la tabla event_type de la base de datos
 	private Map <Integer, String> eventTypes = new LinkedHashMap<Integer, String>();
 	
-	public EventType (Connection connection) {
-		this.connection = connection;
+	public EventType () {
+		//this.connection = connection;
 	}
 	
 	/**
@@ -71,12 +71,12 @@ public class EventType {
 	 * Conecta con la base de datos y almacena cada tipo de evento con su clave
 	 * en eventTypes
 	 */
-	public void loadData() {
+	public void loadData(Connection conn) {
 		Statement statement = null;
 		ResultSet results = null;
 		String sql = "SELECT * FROM event_type;";
 		try {
-			statement = connection.createStatement();
+			statement = conn.createStatement();
 			results = PersistenceManager.getResultSet(statement, sql);
 			while(results.next()) {
 				int id = results.getInt(1);

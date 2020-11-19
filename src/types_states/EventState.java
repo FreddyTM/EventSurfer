@@ -12,12 +12,12 @@ import persistence.PersistenceManager;
 
 public class EventState {
 
-	private Connection connection;
+	//private Connection connection;
 	//Map <id, descripcion> Almacena la tabla event_state de la base de datos
 	private Map <Integer, String> eventStates = new LinkedHashMap<Integer, String>();
 	
-	public EventState (Connection connection) {
-		this.connection = connection;
+	public EventState () {
+		//this.connection = connection;
 	}
 	
 	/**
@@ -71,12 +71,12 @@ public class EventState {
 	 * Conecta con la base de datos y almacena cada estado de evento con su clave
 	 * en eventStates
 	 */
-	public void loadData() {
+	public void loadData(Connection conn) {
 		Statement statement = null;
 		ResultSet results = null;
 		String sql = "SELECT * FROM event_state;";
 		try {
-			statement = connection.createStatement();
+			statement = conn.createStatement();
 			results = PersistenceManager.getResultSet(statement, sql);
 			while(results.next()) {
 				int id = results.getInt(1);

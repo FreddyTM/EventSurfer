@@ -297,3 +297,19 @@ Dev 0.0.15
 	
 	· EventUpdate class:
 		Add getEventUpdatesFromDB()
+
+Dev 0.0.16
+
+	* - Package persistence
+
+	· PersistenceManager class:
+		Update loadData() to use new UserType, EventType & EventState constructors,
+		and update their loadData() method calls to use a Connection parameter
+
+	* - Package types_states
+
+	· Delete Connection attribute from classes:
+	EventType, EventState, UserType
+	· Add Connection parameter to loadData() methods in classes:
+	EventType, EventState, UserType
+	
