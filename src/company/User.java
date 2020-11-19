@@ -48,8 +48,9 @@ public class User {
 	 * Inserta un nuevo usuario en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param user usuario a insertar
+	 * @return true si la insercion se hizo con éxito, false si no 
 	 */
-	public void saveUserToDB (Connection conn, User user) {
+	public boolean saveUserToDB (Connection conn, User user) {
 		String sql = "INSERT INTO \"user\" (b_unit_id, user_type_id, user_alias, nombre, "
 				+ "apellido, user_password, activo) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
@@ -64,8 +65,10 @@ public class User {
 			pstm.setBoolean(7, user.isActivo());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -73,8 +76,9 @@ public class User {
 	 * Actualiza los valores de un usuario que ya existe en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param user usuario que contiene los datos que actualizan al usuario ya existente
+	 * @return true si la actualización se hizo con éxito, false si no 
 	 */
-	public void updateUserToDB (Connection conn, User user) {
+	public boolean updateUserToDB (Connection conn, User user) {
 		String sql = "UPDATE \"user\" "
 				+ "SET "
 				+ "b_unit_id = ?, "
@@ -97,8 +101,10 @@ public class User {
 			pstm.setInt(8, user.getId());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	

@@ -278,3 +278,18 @@ Dev 0.0.14
 	· EventUpdate class
 		Add saveEventUpdateToDB()
 		Add updateEventUpdateToDB()
+
+Dev 0.0.15
+
+	· Save & Update methods to DB return true if succeed, false if not, in classes:
+	User, EventUpdate, Area, BusinessUnit
+
+	* - Package company
+
+	· BusinessUnit class:
+		Update addUser()
+		Delete addUsers()
+		Add addArea()
+		Add updateBusinessUnitToDB() --empty--
+		Add addEvent() --empty--
+	

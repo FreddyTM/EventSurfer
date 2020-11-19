@@ -47,8 +47,9 @@ public class BusinessUnit {
 	 * Inserta una nueva unidad de negocio en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param bUnit BusinessUnit a insertar
+	 * @return true si la insercion se hizo con éxito, false si no
 	 */
-	public void saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
+	public boolean saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
 		String sql = "INSERT INTO business_unit (company_id, nombre, direccion, provincia, "
 				+ "estado, cpostal, telefono, mail) "
 				+ "VALUES (?, ?, ?, ? ,? ,? ,? ,?);";
@@ -64,19 +65,68 @@ public class BusinessUnit {
 			pstm.setString(8, bUnit.getMail());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
-	
-	public void addUser () {
+	/**
+	 * Actualiza los valores de una unidad de negocio que ya existe en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param bUnit unidad de negocio que contiene los datos que actualizan
+	 * a la unidad de negocio ya existente
+	 * @return true si la actualización se hizo con éxito, false si no
+	 */
+	public boolean updateBusinessUnitToDB(Connection conn, BusinessUnit bUnit) {
+		String sql = "";
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 		
 	}
 	
-	public void addUsers () {
+	
+	/**
+	 * Añade un usuario a la lista de usuarios si la inserción del usuario en la base de
+	 * datos se hace con éxito
+	 * @param conn conexión con la base de datos
+	 * @param user usuario a añadir
+	 */
+	public void addUser (Connection conn, User user) {
+		if (user.saveUserToDB(conn, user)) {
+			users.add(user);
+		}
+	}
+	
+	/**
+	 * Añade un area a la lista de areas si la inserción del area en la base de
+	 * datos se hace con éxito
+	 * @param conn conexión con la base de datos
+	 * @param area area a añadir
+	 */
+	public void addArea (Connection conn, Area area) {
+		if (area.saveAreaToDB(conn, this, area)) {
+			areas.add(area);
+		}
+	}
+	
+	/**
+	 * Añade un evento a la lista de eventos si la inserción del evento en la base de
+	 * datos se hace con éxito
+	 * @param conn conexión con la base de datos
+	 * @param event evento a añadir
+	 */
+	public void addEvent(Connection conn, Event event) {
 		
 	}
+
 	
 	//METODO DE PRUEBA. SE PUEDE BORRAR
 	public void pruebaEnviaObjeto () {

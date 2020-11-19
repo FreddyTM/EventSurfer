@@ -36,8 +36,9 @@ public class EventUpdate {
 	 * Inserta un nuevo EventUpdate en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param eUpdate EventUpdate a insertar
+	 * @return true si la insercion se hizo con éxito, false si no 
 	 */
-	public void saveEventUpdateToDB (Connection conn, EventUpdate eUpdate ) {
+	public boolean saveEventUpdateToDB (Connection conn, EventUpdate eUpdate ) {
 		String sql = "INSERT INTO event_update (event_id, fecha_hora, descripcion, autor) "
 				+ "VALUES (?, ?, ?, ?);";
 		try {
@@ -51,8 +52,10 @@ public class EventUpdate {
 			pstm.setString(4, eUpdate.getAutor());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -60,8 +63,9 @@ public class EventUpdate {
 	 * Actualiza los valores de un EventUpdate que ya existe en la base de datos
 	 * @param conn
 	 * @param eUpdate
+	 * @return true si la actualización se hizo con éxito, false si no
 	 */
-	public void updateEventUpdateToDB (Connection conn, EventUpdate eUpdate) {
+	public boolean updateEventUpdateToDB (Connection conn, EventUpdate eUpdate) {
 		String sql = "UPDATE event_update "
 				+ "SET "
 				+ "event_id = ?, "
@@ -78,8 +82,10 @@ public class EventUpdate {
 			pstm.setInt(5, eUpdate.getId());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

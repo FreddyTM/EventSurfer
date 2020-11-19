@@ -35,8 +35,9 @@ public class Area {
 	 * @param conn conexión a la base de datos
 	 * @param bUnit BusinessUnit al que pertenece el area a insertar
 	 * @param area Area a insertar en la base de datos
+	 * @return true si la insercion se hizo con éxito, false si no
 	 */
-	public void saveAreaToDB(Connection conn, BusinessUnit bUnit, Area area) {
+	public boolean saveAreaToDB(Connection conn, BusinessUnit bUnit, Area area) {
 		String sqlArea = "INSERT INTO area (area, descripcion) "
 				+ "VALUES (?, ?);";
 		String sqlBUnitArea = "INSERT INTO b_unit_area (b_unit_id, area_id) "
@@ -52,8 +53,10 @@ public class Area {
 			pstmBUA.setInt(2, area.getId());
 			pstmBUA.executeUpdate();
 			PersistenceManager.closePrepStatement(pstmBUA);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 		
 	}
@@ -62,8 +65,9 @@ public class Area {
 	 * Actualiza los valores de un area que ya existe en la base de datos
 	 * @param conn conexión a la base de datos
 	 * @param area area que contiene los datos que actualizan al area ya existente
+	 * @return true si la actualización se hizo con éxito, false si no
 	 */
-	public void updateAreaToDB(Connection conn, Area area) {
+	public boolean updateAreaToDB(Connection conn, Area area) {
 		String sql = "UPDATE area "
 				+ "SET "
 				+ "area = ?,"
@@ -76,8 +80,10 @@ public class Area {
 			pstm.setInt(3, area.getId());
 			pstm.executeUpdate();
 			PersistenceManager.closePrepStatement(pstm);
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
