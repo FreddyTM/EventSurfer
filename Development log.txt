@@ -276,4 +276,5 @@ Dev 0.0.14
 	· Refactor class name UpdatedEvent to EventUpdate
 
 	· EventUpdate class
-			
+		Add saveEventUpdateToDB()
+		Add updateEventUpdateToDB()
