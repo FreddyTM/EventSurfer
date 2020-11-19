@@ -114,37 +114,36 @@ public class User {
 	 * @param bUnit objeto del que queremos recuperar sus usuarios
 	 * @return lista de usuarios del objeto almacenados en la base de datos
 	 */
-	public List<User> getUsersFromDB(Connection conn, BusinessUnit bu) {
+	public List<User> getUsersFromDB(Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new ArrayList<User>();
 		User user = null;
 		PreparedStatement pstm = null;
 		ResultSet results = null;
-		String sql = "SELECT u.id, u.b_unit_id, u.user_type_id, u.user_alias, u.nombre, "
-				+ "u.apellido, u.user_password, u.activo "
-				+ "FROM \"user\" u, business_unit bu "
-				+ "WHERE u.b_unit_id = ?;";
+		String sql = "SELECT id, user_type_id, user_alias, nombre, "
+				+ "apellido, user_password, activo "
+				+ "FROM \"user\" "
+				+ "WHERE b_unit_id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, bu.getId());
+			pstm.setInt(1, bUnit.getId());
 			results = pstm.executeQuery();
 			while (results.next()) {
 				user = new User();
 				user.setId(results.getInt(1));
-				user.setbUnit(bu);
-				user.setUserType(TypesStatesContainer.getuType().getUserType(results.getInt(3)));
-				user.setUserAlias(results.getString(4));
-				user.setNombre(results.getString(5));
-				user.setApellido(results.getString(6));
-				user.setPassword(results.getString(7));
-				user.setActivo(results.getBoolean(8));
+				user.setbUnit(bUnit);
+				user.setUserType(TypesStatesContainer.getuType().getUserType(results.getInt(2)));
+				user.setUserAlias(results.getString(3));
+				user.setNombre(results.getString(4));
+				user.setApellido(results.getString(5));
+				user.setPassword(results.getString(6));
+				user.setActivo(results.getBoolean(7));
 				userList.add(user);
 			}
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-				
+		}				
 		return userList;
 	}
 	

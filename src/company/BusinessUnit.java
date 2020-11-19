@@ -3,7 +3,9 @@ package company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import event.Event;
@@ -80,16 +82,76 @@ public class BusinessUnit {
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateBusinessUnitToDB(Connection conn, BusinessUnit bUnit) {
-		String sql = "";
+		String sql = "UPDATE business_unit "
+				+ "SET "
+				+ "company_id = ?, "
+				+ "nombre = ?, "
+				+ "direccion = ?, "
+				+ "provincia = ?, "
+				+ "estado = ?, "
+				+ "cpostal = ?, "
+				+ "telefono = ?, "
+				+ "mail = ? "
+				+ "WHERE id = ?;";
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
-			
+			pstm.setInt(1, bUnit.getCompany().getId());
+			pstm.setString(2, bUnit.getNombre());
+			pstm.setString(3, bUnit.getDireccion());
+			pstm.setString(4, bUnit.getProvincia());
+			pstm.setString(5, bUnit.getEstado());
+			pstm.setString(6, bUnit.getCpostal());
+			pstm.setString(7, bUnit.getTelefono());
+			pstm.setString(8, bUnit.getMail());
+			pstm.setInt(9, bUnit.getId());
+			pstm.executeUpdate();
+			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
 		
+	}
+	
+	/**
+	 * Obtiene la lista de BusinessUnits del objeto Company pasado por parámetro
+	 * @param conn conexión con la base de datos
+	 * @param company objeto del que queremos recuperar sus BusinessUnits
+	 * @return lista de BusinessUnits del objeto almacenados en la base de datos
+	 */
+	public List<BusinessUnit> getBusinessUnitsFromDB(Connection conn, Company company) {
+		List<BusinessUnit> bUnitsList = new ArrayList<BusinessUnit>();
+		BusinessUnit bUnit = null;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT id, nombre, direccion, provincia, estado, "
+				+ "cpostal, telefono, mail "
+				+ "FROM business_unit "
+				+ "WHERE company_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, company.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnit = new BusinessUnit();
+				bUnit.setId(results.getInt(1));
+				bUnit.setCompanyd(company);
+				bUnit.setNombre(results.getString(2));
+				bUnit.setDireccion(results.getString(3));
+				bUnit.setProvincia(results.getString(4));
+				bUnit.setEstado(results.getString(5));
+				bUnit.setCpostal(results.getString(6));
+				bUnit.setTelefono(results.getString(7));
+				bUnit.setMail(results.getString(8));
+				bUnitsList.add(bUnit);
+			}
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bUnitsList;
 	}
 	
 	

@@ -12,7 +12,7 @@ import types_states.UserType;
 import persistence.PersistenceManager;
 
 
-//VERSION 0.0.11
+//VERSION 0.0.15
 
 
 public class AppDummy {
