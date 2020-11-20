@@ -2,10 +2,15 @@
 package event;
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import company.BusinessUnit;
+import persistence.PersistenceManager;
+import types_states.TypesStatesContainer;
 
 public class Event {
 
@@ -28,6 +33,29 @@ public class Event {
 		this.descripcion = descripcion;
 		this.eventState = eventState;
 		this.updates = new ArrayList<EventUpdate>();
+	}
+	
+	public boolean saveEventToDB(Connection conn, Event event) {
+		PreparedStatement pstm = null;
+		String sql = "INSERT INTO event (b_unit_id, event_type_id, titulo, "
+				+ "descripcion, event_state_id) "
+				+ "VALUES (?, ?, ?, ?, ?);";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, event.getbUnit().getId());
+			pstm.setInt(2, TypesStatesContainer.getEvType().getEventTypeId(event.getEventType()));
+			pstm.setString(3, event.getTitulo());
+			pstm.setString(4, event.getDescripcion());
+			pstm.setInt(5, TypesStatesContainer.getEvState().getEventStateId(event.getEventState()));
+			//SET AREA ID ************************************************
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
 	}
 	
 	public Event() {

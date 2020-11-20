@@ -343,7 +343,14 @@ Dev 0.0.17
 		
 	* - Package event
 
-	· EventUpdate class
+	· EventUpdate class:
 		Add addNewEventUpdate()
 		Update:
 		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
+
+Dev 0.0.18
+
+	* - Package event
+
+	· Event class:
+		Add saveEventToDB()
