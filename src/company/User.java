@@ -15,7 +15,7 @@ import types_states.TypesStatesContainer;
 
 public class User {
 
-	//private Connection connection;
+	public static final String TABLE_NAME = "user";
 	private int id;
 	private BusinessUnit bUnit;
 	private String userType;

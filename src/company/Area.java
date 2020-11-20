@@ -11,7 +11,7 @@ import persistence.PersistenceManager;
 
 public class Area {
 
-	//private Connection connection;
+	public static final String TABLE_NAME = "area";
 	private int id;
 	private String area;
 	private String descripcion;

@@ -9,6 +9,7 @@ import company.BusinessUnit;
 
 public class Event {
 
+	public static final String TABLE_NAME = "event";
 	private int id;
 	private BusinessUnit bUnit;
 	private String eventType;

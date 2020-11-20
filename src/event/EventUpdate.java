@@ -15,6 +15,7 @@ import persistence.PersistenceManager;
 
 public class EventUpdate {
 
+	public static final String TABLE_NAME = "event_update";
 	private int id = 0;
 	private Event event;
 	private Timestamp fechaHora;

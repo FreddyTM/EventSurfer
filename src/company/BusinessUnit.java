@@ -13,7 +13,7 @@ import persistence.PersistenceManager;
 
 public class BusinessUnit {
 	
-	//private Connection connection;
+	public static final String TABLE_NAME = "business_unit";
 	private int id;
 	private Company company;
 	private String nombre;

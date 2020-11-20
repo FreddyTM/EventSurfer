@@ -318,4 +318,10 @@ Dev 0.0.16
 
 	· EventType class:
 		Add TABLE_NAME constant
+		Add saveEventTypeToDB()
+		Add addNewEventType()
+
+Dev 0.0.17
+
+	
 	
