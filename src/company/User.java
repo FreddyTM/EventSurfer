@@ -51,11 +51,12 @@ public class User {
 	 * @return true si la insercion se hizo con éxito, false si no 
 	 */
 	public boolean saveUserToDB (Connection conn, User user) {
+		PreparedStatement pstm = null;
 		String sql = "INSERT INTO \"user\" (b_unit_id, user_type_id, user_alias, nombre, "
 				+ "apellido, user_password, activo) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?);";
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, user.getbUnit().getId());
 			pstm.setInt(2, TypesStatesContainer.getuType().getUserTypeId(user.getUserType()));
 			pstm.setString(3, user.getUserAlias());
@@ -64,12 +65,30 @@ public class User {
 			pstm.setString(6, user.getPassword());
 			pstm.setBoolean(7, user.isActivo());
 			pstm.executeUpdate();
-			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	/**
+	 * Si la inserción de un nuevo usuario en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena
+	 * en el id del objeto User
+	 * @param conn conexión con la base de datos
+	 * @param user
+	 * @return objeto User con el id asignado
+	 */
+	public User addNewUser (Connection conn, User user) {
+		if (saveUserToDB(conn, user)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			user.setId(id);
+			return user;
+		}
+		return null;
 	}
 	
 	/**
@@ -79,6 +98,7 @@ public class User {
 	 * @return true si la actualización se hizo con éxito, false si no 
 	 */
 	public boolean updateUserToDB (Connection conn, User user) {
+		PreparedStatement pstm = null;
 		String sql = "UPDATE \"user\" "
 				+ "SET "
 				+ "b_unit_id = ?, "
@@ -90,7 +110,7 @@ public class User {
 				+ "activo = ? "
 				+ "WHERE id = ?;";
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, user.getbUnit().getId());
 			pstm.setInt(2, TypesStatesContainer.getuType().getUserTypeId(user.getUserType()));
 			pstm.setString(3, user.getUserAlias());
@@ -100,11 +120,12 @@ public class User {
 			pstm.setBoolean(7, user.isActivo());
 			pstm.setInt(8, user.getId());
 			pstm.executeUpdate();
-			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
 	
@@ -139,11 +160,12 @@ public class User {
 				user.setActivo(results.getBoolean(7));
 				userList.add(user);
 			}
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}				
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
 		return userList;
 	}
 	

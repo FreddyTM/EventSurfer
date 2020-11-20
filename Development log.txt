@@ -323,5 +323,27 @@ Dev 0.0.16
 
 Dev 0.0.17
 
-	
-	
+	* - Package company
+
+	· User class:
+		Add addNewUser()
+		Update:
+		saveUserToDB(), updateUserToDB(), getUsersFromDB()
+
+	· BusinessUnit class:
+		Add addNewBusinessUnit()
+		Update:
+		addArea(), addUser(), saveBUnitToDB(), updateBusinessUnitToDB(), getBusinessUnitsFromDB()
+
+	· Area class:
+		Add saveBUnitAreaToDB()
+		Add addNewArea()
+		Update:
+		saveAreaToDB(), updateAreaToDB(), getAreasFromDB()
+		
+	* - Package event
+
+	· EventUpdate class
+		Add addNewEventUpdate()
+		Update:
+		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()

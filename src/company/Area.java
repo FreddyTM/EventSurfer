@@ -12,6 +12,7 @@ import persistence.PersistenceManager;
 public class Area {
 
 	public static final String TABLE_NAME = "area";
+//	public static final String B_UNIT_AREA_TABLE_NAME = "b_unit_area";
 	private int id;
 	private String area;
 	private String descripcion;
@@ -29,36 +30,74 @@ public class Area {
 	}
 	
 	/**
-	 * Inserta un area nueva en la base de datos en la tabla area 
-	 * También inserta las id del BussinesUnit al que pertenece el area nueva
-	 * y el id de dicha area en la tabla b_unit_area
+	 * Inserta un area nueva en la base de datos 
 	 * @param conn conexión a la base de datos
-	 * @param bUnit BusinessUnit al que pertenece el area a insertar
-	 * @param area Area a insertar en la base de datos
+	 * @param area area a insertar en la base de datos
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
-	public boolean saveAreaToDB(Connection conn, BusinessUnit bUnit, Area area) {
-		String sqlArea = "INSERT INTO area (area, descripcion) "
-				+ "VALUES (?, ?);";
-		String sqlBUnitArea = "INSERT INTO b_unit_area (b_unit_id, area_id) "
+	public boolean saveAreaToDB(Connection conn, Area area) {
+		PreparedStatement pstm = null;
+		String sql = "INSERT INTO area (area, descripcion) "
 				+ "VALUES (?, ?);";
 		try {
-			PreparedStatement pstmA = conn.prepareStatement(sqlArea);
-			PreparedStatement pstmBUA = conn.prepareStatement(sqlBUnitArea);
-			pstmA.setString(1, area.getArea());
-			pstmA.setString(2, area.getDescripcion());
-			pstmA.executeUpdate();
-			PersistenceManager.closePrepStatement(pstmA);
-			pstmBUA.setInt(1, bUnit.getId());
-			pstmBUA.setInt(2, area.getId());
-			pstmBUA.executeUpdate();
-			PersistenceManager.closePrepStatement(pstmBUA);
+			pstm = conn.prepareStatement(sql);		
+			pstm.setString(1, area.getArea());
+			pstm.setString(2, area.getDescripcion());
+			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
-		
+	}
+	
+	/**
+	 * Inserta un nuevo registro en la tabla b_unit_area con los id del area nueva
+	 * y de la unidad de negocio a la que pertenece
+	 * @param conn conexión a la base de datos
+	 * @param bUnit unidad de negocio a la que pertenece el area nueva
+	 * @param area area nueva
+	 * @return true si la insercion se hizo con éxito, false si no
+	 */
+	public boolean saveBUnitAreaToDB (Connection conn, BusinessUnit bUnit, Area area) {
+		PreparedStatement pstm = null;
+		String sql = "INSERT INTO b_unit_area (b_unit_id, area_id) "
+				+ "VALUES (?, ?);";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, bUnit.getId());
+			pstm.setInt(2, area.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Si la inserción de un area nueva en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena
+	 * en el id del objeto Area. Tras ello, inserta un nuevo registro en la
+	 * tabla b_unit_area con los id del area y de la unidad de negocio a la que pertenece
+	 * @param conn
+	 * @param bUnit
+	 * @param area
+	 * @return
+	 */
+	public Area addNewArea (Connection conn, BusinessUnit bUnit, Area area) {
+		if (saveAreaToDB(conn, area)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			area.setId(id);
+			if (saveBUnitAreaToDB (conn, bUnit, area)) {
+				return area;
+			}
+		}	
+		return null;
 	}
 	
 	/**
@@ -68,22 +107,24 @@ public class Area {
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateAreaToDB(Connection conn, Area area) {
+		PreparedStatement pstm = null;
 		String sql = "UPDATE area "
 				+ "SET "
 				+ "area = ?,"
 				+ "descripcion = ? "
 				+ "WHERE id = ?;";
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
 			pstm.setString(1, area.getArea());
 			pstm.setString(2, area.getDescripcion());
 			pstm.setInt(3, area.getId());
 			pstm.executeUpdate();
-			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
 	
@@ -113,10 +154,11 @@ public class Area {
 				area.setArea(results.getString(3));
 				areaList.add(area);				
 			}
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
 		}
 		return areaList;
 	}

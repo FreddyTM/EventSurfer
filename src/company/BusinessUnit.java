@@ -52,11 +52,12 @@ public class BusinessUnit {
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
 	public boolean saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
+		PreparedStatement pstm = null;
 		String sql = "INSERT INTO business_unit (company_id, nombre, direccion, provincia, "
 				+ "estado, cpostal, telefono, mail) "
 				+ "VALUES (?, ?, ?, ? ,? ,? ,? ,?);";
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, bUnit.getCompany().getId());
 			pstm.setString(2, bUnit.getNombre());
 			pstm.setString(3, bUnit.getDireccion());
@@ -66,12 +67,30 @@ public class BusinessUnit {
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
 			pstm.executeUpdate();
-			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	/**
+	 * Si la inserción de una nueva unidad de negocio en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena en el id
+	 * del objeto BusinessUnit
+	 * @param conn conexión con la base de datos
+	 * @param bUnit objeto a insertar en la base de datos
+	 * @return objeto BusinessUnit con el id asignado
+	 */
+	public BusinessUnit addNewBusinessUnit (Connection conn, BusinessUnit bUnit) {
+		if (saveBUnitToDB(conn, bUnit)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			bUnit.setId(id);
+			return bUnit;
+		}
+		return null;
 	}
 	
 	/**
@@ -82,6 +101,7 @@ public class BusinessUnit {
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateBusinessUnitToDB(Connection conn, BusinessUnit bUnit) {
+		PreparedStatement pstm = null;
 		String sql = "UPDATE business_unit "
 				+ "SET "
 				+ "company_id = ?, "
@@ -94,7 +114,7 @@ public class BusinessUnit {
 				+ "mail = ? "
 				+ "WHERE id = ?;";
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
+			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, bUnit.getCompany().getId());
 			pstm.setString(2, bUnit.getNombre());
 			pstm.setString(3, bUnit.getDireccion());
@@ -105,13 +125,13 @@ public class BusinessUnit {
 			pstm.setString(8, bUnit.getMail());
 			pstm.setInt(9, bUnit.getId());
 			pstm.executeUpdate();
-			PersistenceManager.closePrepStatement(pstm);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-		}
-		
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}	
 	}
 	
 	/**
@@ -146,10 +166,11 @@ public class BusinessUnit {
 				bUnit.setMail(results.getString(8));
 				bUnitsList.add(bUnit);
 			}
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
 		}
 		return bUnitsList;
 	}
@@ -162,8 +183,9 @@ public class BusinessUnit {
 	 * @param user usuario a añadir
 	 */
 	public void addUser (Connection conn, User user) {
-		if (user.saveUserToDB(conn, user)) {
-			users.add(user);
+		User completeUser = user.addNewUser(conn, user);
+		if (completeUser != null) {
+			users.add(completeUser);
 		}
 	}
 	
@@ -174,8 +196,9 @@ public class BusinessUnit {
 	 * @param area area a añadir
 	 */
 	public void addArea (Connection conn, Area area) {
-		if (area.saveAreaToDB(conn, this, area)) {
-			areas.add(area);
+		Area completeArea = area.addNewArea(conn, this, area);
+		if (completeArea != null) {
+			areas.add(completeArea);
 		}
 	}
 	
