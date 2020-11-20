@@ -1,6 +1,7 @@
 package types_states;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +13,7 @@ import persistence.PersistenceManager;
 
 public class EventType {
 
-	//private Connection connection;
+	public static final String TABLE_NAME = "event_type";
 	//Map <id, descripcion> Almacena la tabla event_type de la base de datos
 	private Map <Integer, String> eventTypes = new LinkedHashMap<Integer, String>();
 	
@@ -70,6 +71,7 @@ public class EventType {
 	/**
 	 * Conecta con la base de datos y almacena cada tipo de evento con su clave
 	 * en eventTypes
+	 * @param conn conexión con la base de datos
 	 */
 	public void loadData(Connection conn) {
 		Statement statement = null;
@@ -100,4 +102,67 @@ public class EventType {
 //			System.out.print(getUserTypes()[i] + ", ");
 //		}
 	}
+	
+	/**
+	 * Inserta un nuevo tipo de evento en la tabla event_type
+	 * @param conn conexión con la base de datos
+	 * @param descripcion descripción del tipo de evento
+	 * @return true si la insercion se hizo con éxito, false si no
+	 */
+	public boolean saveEventTypeToDB(Connection conn, String descripcion) {
+		PreparedStatement pstm = null;
+		String sql = "INSERT INTO event_type (descripcion) "
+				+ "VALUES (?);";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, descripcion);
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Añade un nuevo tipo de evento a la lista eventTypes
+	 * @param conn conexión con la base de datos
+	 * @param descripcion descripción del nuevo tipo de evento
+	 * @return true si la insercion se hizo con éxito, false si no
+	 */
+	public boolean addNewEventType (Connection conn, String descripcion) {
+		if (saveEventTypeToDB(conn, descripcion)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			eventTypes.put(id, descripcion);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+//	/**
+//	 * Devuelve el id del último tipo de evento de la tabla event_type
+//	 * @param conn conexión con la base de datos
+//	 * @return id del último tipo de evento
+//	 */
+//	public int getLastEventTypeIdFromDB (Connection conn) {
+//		int id = 0;
+//		Statement statement = null;
+//		ResultSet results = null;
+//		String sql = "SELECT id FROM event_type "
+//				+ "ORDER BY id DESC LIMIT 1;";
+//		try {
+//			statement = conn.createStatement();
+//			results = PersistenceManager.getResultSet(statement, sql);
+//			while (results.next()) {
+//				id = results.getInt(1);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			return id;
+//		}
+//		return id;
+//	}
 }

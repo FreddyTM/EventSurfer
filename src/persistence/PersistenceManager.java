@@ -60,11 +60,14 @@ public class PersistenceManager {
 		}
 	}
 	
-	public static Connection getConnection () {
-		
+	/**
+	 * Devuelve una conexión a una base de datos
+	 * Los parámetros de la conexión son los atributos de la propia clase PersistenceManager
+	 * @return conexión con la base de datos
+	 */
+	public static Connection getConnection () {		
 		Connection connection = null;
 		String dbName = url.substring(url.lastIndexOf("/"));;
-		
 		try {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url, user, password);
@@ -76,8 +79,7 @@ public class PersistenceManager {
 			System.out.println("Error: " + e.getMessage());
 			System.out.println("Estado: " + e.getSQLState());
 			System.out.println("Código: " + e.getErrorCode());
-		}
-		
+		}		
 		return connection;
 	}
 	
@@ -119,20 +121,64 @@ public class PersistenceManager {
 	
 	/**
 	 * Devuelve un ResultSet a partir de una consulta sql
-	 * @param statement Statement sobre el que se ejecuta la consulta
+	 * @param stm Statement sobre el que se ejecuta la consulta
 	 * @param sql consulta sql
 	 * @return ResultSet obtenido a partir de la consulta sql
 	 */
-	public static ResultSet getResultSet (Statement statement, String sql) {
+	public static ResultSet getResultSet (Statement stm, String sql) {
 		
 		ResultSet results = null;	
 		try {
-			results = statement.executeQuery(sql);
+			results = stm.executeQuery(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 		return results;
+	}
+	
+	/**
+	 * Devuelve un ResultSet a partir de una consulta sql
+	 * @param pstm PreparedStatement sobre el que se ejecuta la consulta
+	 * @param sql consulta sql
+	 * @return ResultSet obtenido a partir de la consulta sql
+	 */
+	public static ResultSet getResultSet (PreparedStatement pstm, String sql) {
+		
+		ResultSet results = null;	
+		try {
+			results = pstm.executeQuery(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		return results;
+	}
+	
+	/**
+	 * Devuelve el id del último tipo de evento de la tabla event_type
+	 * @param conn conexión con la base de datos
+	 * @return id del último tipo de evento
+	 */
+	public static int getLastElementIdFromDB (Connection conn, String tableName) {
+		int id = 0;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT id FROM ? "
+				+ "ORDER BY id DESC LIMIT 1;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, tableName);
+			results = PersistenceManager.getResultSet(pstm, sql);
+			while (results.next()) {
+				id = results.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return id;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return id;
 	}
 	
 	/**

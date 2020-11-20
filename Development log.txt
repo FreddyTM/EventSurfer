@@ -131,6 +131,7 @@ Dev 0.0.8
 		Add closePreparedStatement()
 		Add closeResultSet()
 		Add getResultSet()
+		Add loadData()
 
 	* - Package types_states
 
@@ -305,6 +306,8 @@ Dev 0.0.16
 	· PersistenceManager class:
 		Update loadData() to use new UserType, EventType & EventState constructors,
 		and update their loadData() method calls to use a Connection parameter
+		Add getResultSet() --overload--
+		Add getLastElementIdFromDB()
 
 	* - Package types_states
 
@@ -312,4 +315,7 @@ Dev 0.0.16
 	EventType, EventState, UserType
 	· Add Connection parameter to loadData() methods in classes:
 	EventType, EventState, UserType
+
+	· EventType class:
+		Add TABLE_NAME constant
 	
