@@ -38,6 +38,17 @@ public class Event {
 		this.updates = new ArrayList<EventUpdate>();
 	}
 	
+	public Event() {
+		
+	}
+	
+	
+	/**
+	 * Inserta un nuevo evento en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param event usuario a insertar
+	 * @return true si la insercion se hizo con éxito, false si no 
+	 */
 	public boolean saveEventToDB(Connection conn, Event event) {
 		PreparedStatement pstm = null;
 		String sql = "INSERT INTO event (b_unit_id, area_id, event_type_id, titulo, "
@@ -46,7 +57,7 @@ public class Event {
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, event.getbUnit().getId());
-			pstm.setInt(2, area.getId());
+			pstm.setInt(2, event.getArea().getId());
 			pstm.setInt(3, TypesStatesContainer.getEvType().getEventTypeId(event.getEventType()));
 			pstm.setString(4, event.getTitulo());
 			pstm.setString(5, event.getDescripcion());
@@ -60,9 +71,22 @@ public class Event {
 			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
-	
-	public Event() {
-		
+
+	/**
+	 * Si la inserción de un nuevo evento en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena
+	 * en el id del objeto Event
+	 * @param conn conexión con la base de datos
+	 * @param event objeto a insertar en la base de datos
+	 * @returnobjeto Event con el id asignado
+	 */
+	public Event addNewEvent(Connection conn, Event event) {
+		if (saveEventToDB(conn, event)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			event.setId(id);
+			return event;
+		}
+		return null;
 	}
 	
 	public int getId() {

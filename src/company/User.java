@@ -79,7 +79,7 @@ public class User {
 	 * recupera el id asignado en el registro de la base de datos y lo almacena
 	 * en el id del objeto User
 	 * @param conn conexión con la base de datos
-	 * @param user
+	 * @param user objeto a insertar en la base de datos
 	 * @return objeto User con el id asignado
 	 */
 	public User addNewUser (Connection conn, User user) {
