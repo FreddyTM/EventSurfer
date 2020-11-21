@@ -353,4 +353,6 @@ Dev 0.0.18
 	* - Package event
 
 	· Event class:
+		
+		Add area attribute
 		Add saveEventToDB()
