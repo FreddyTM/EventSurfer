@@ -209,7 +209,10 @@ public class BusinessUnit {
 	 * @param event evento a añadir
 	 */
 	public void addEvent(Connection conn, Event event) {
-		
+		Event completeEvent = event.addNewEvent(conn, event);
+		if (completeEvent != null) {
+			events.add(completeEvent);
+		}
 	}
 
 	

@@ -4,6 +4,7 @@ package event;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,82 @@ public class Event {
 			return event;
 		}
 		return null;
+	}
+	
+	/**
+	 * Actualiza los valores de un evento que ya existe en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param event evento que contiene los datos que actualizan al evento ya existente
+	 * @return true si la actualización se hizo con éxito, false si no
+	 */
+	public boolean updateEventToDB(Connection conn, Event event) {
+		PreparedStatement pstm = null;
+		String sql = "UPDATE \"event\" "
+				+ "SET "
+				+ "b_unit_id = ?, "
+				+ "area_id = ?, "
+				+ "event_type_id = ?, "
+				+ "titulo = ?, "
+				+ "descripcion = ?, "
+				+ "event_state_id = ?, "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, event.getbUnit().getId());
+			pstm.setInt(2, event.getArea().getId());
+			pstm.setInt(3, TypesStatesContainer.getEvType().getEventTypeId(event.getEventType()));
+			pstm.setString(4, event.getTitulo());
+			pstm.setString(5, event.getDescripcion());
+			pstm.setInt(6, TypesStatesContainer.getEvState().getEventStateId(event.getEventState()));
+			pstm.setInt(7, event.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Obtiene la lista de eventos del objeto BusinessUnit pasado por parámetro
+	 * @param conn conexión con la base de datos
+	 * @param bUnit objeto del que queremos recuperar sus eventos
+	 * @return lista de eventos del objeto almacenados en la base de datos
+	 */
+	public List<Event> getEventsFromDB(Connection conn, BusinessUnit bUnit) {
+		List<Event> eventList = new ArrayList<Event>();
+		Event event = null;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT id, area_id, event_type_id, titulo, descripcion, event_state_id "
+				+ "FROM \"event\" "
+				+ "WHERE b_unit_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, bUnit.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				event = new Event();
+				event.setId(results.getInt(1));
+				event.setbUnit(bUnit);
+				Area area = new Area().getAreaById(bUnit, results.getInt(2));
+				event.setArea(area);
+				event.setEventType(TypesStatesContainer.getEvType().getEventType(results.getInt(3)));
+				event.setTitulo(results.getString(4));
+				event.setDescripcion(results.getString(5));
+				event.setEventState(TypesStatesContainer.getEvState().getEventState(results.getInt(6)));
+				eventList.add(event);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return eventList;
 	}
 	
 	/**

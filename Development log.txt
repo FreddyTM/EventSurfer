@@ -357,16 +357,25 @@ Dev 0.0.18
 		Add saveEventToDB()
 		Add addNewEvent()
 		Add getEventById()
+		Add updateEventToDB()
+		Add getEventsFromDB()
 
-	· EventUpdate class
+	· EventUpdate class:
 		Add user attribute
 		Update:
 		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
+
+	· BusinessUnit class:
+		Update addEvent()
 
 	* - Package company
 
 	· User class:
 		Add getUserById()
+		Update getUsersFromDB()
+
+	· Area class:
+		Add getAreaById()
 
 	* - Package persistence
 
