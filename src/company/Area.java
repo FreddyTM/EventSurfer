@@ -156,6 +156,7 @@ public class Area {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return null;
 		} finally {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);

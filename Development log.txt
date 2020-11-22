@@ -366,8 +366,9 @@ Dev 0.0.18
 		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
 
 	· BusinessUnit class:
-		Update addEvent()
-
+		Update:
+		addEvent(), getBusinessUnitsFromDB()
+		
 	* - Package company
 
 	· User class:
@@ -376,6 +377,7 @@ Dev 0.0.18
 
 	· Area class:
 		Add getAreaById()
+		Update getAreasFromDB()
 
 	* - Package persistence
 
