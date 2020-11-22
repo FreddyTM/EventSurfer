@@ -353,7 +353,24 @@ Dev 0.0.18
 	* - Package event
 
 	· Event class:
-		
 		Add area attribute
 		Add saveEventToDB()
 		Add addNewEvent()
+		Add getEventById()
+
+	· EventUpdate class
+		Add user attribute
+		Update:
+		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
+
+	* - Package company
+
+	· User class:
+		Add getUserById()
+
+	* - Package persistence
+
+	· CurrentSession class: (new)
+		Add attributes:
+		company, bUnit, user
+		Add constructor, setters & getters

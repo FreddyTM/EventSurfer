@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import company.BusinessUnit;
+import company.User;
 import persistence.PersistenceManager;
 
 public class EventUpdate {
@@ -21,14 +23,16 @@ public class EventUpdate {
 	private Timestamp fechaHora;
 	private String descripcion;
 	private String autor;
+	private User user;
 	
 	public EventUpdate(int id, Event event, Timestamp fechaHora, String descripcion,
-			String autor) {
+			String autor, User user) {
 		this.id = id;
 		this.event = event;
 		this.fechaHora = fechaHora;
 		this.descripcion = descripcion;
 		this.autor = autor;
+		this.user = user;
 	}
 	
 	public EventUpdate() {
@@ -44,8 +48,8 @@ public class EventUpdate {
 	 */
 	public boolean saveEventUpdateToDB (Connection conn, EventUpdate eUpdate) {
 		PreparedStatement pstm = null;
-		String sql = "INSERT INTO event_update (event_id, fecha_hora, descripcion, autor) "
-				+ "VALUES (?, ?, ?, ?);";
+		String sql = "INSERT INTO event_update (event_id, fecha_hora, descripcion, autor, user_id) "
+				+ "VALUES (?, ?, ?, ?, ?);";
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, 	eUpdate.getEvent().getId());
@@ -55,6 +59,7 @@ public class EventUpdate {
 			pstm.setTimestamp(2, tNow);
 			pstm.setString(3, eUpdate.getDescripcion());
 			pstm.setString(4, eUpdate.getAutor());
+			pstm.setInt(5, eUpdate.getUser().getId());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -95,7 +100,8 @@ public class EventUpdate {
 				+ "event_id = ?, "
 				+ "fecha_hora = ?, "
 				+ "descripcion = ?, "
-				+ "autor = ? "
+				+ "autor = ?, "
+				+ "user_id = ? "
 				+ "WHERE id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
@@ -103,7 +109,8 @@ public class EventUpdate {
 			pstm.setTimestamp(2, eUpdate.getFechaHora());
 			pstm.setString(3, eUpdate.getDescripcion());
 			pstm.setString(4, eUpdate.getAutor());
-			pstm.setInt(5, eUpdate.getId());
+			pstm.setInt(5, eUpdate.getUser().getId());
+			pstm.setInt(6, eUpdate.getId());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -125,7 +132,7 @@ public class EventUpdate {
 		EventUpdate eUpdate = null;
 		PreparedStatement pstm = null;
 		ResultSet results = null;
-		String sql = "SELECT id, fecha_hora, descripcion, autor "
+		String sql = "SELECT id, fecha_hora, descripcion, autor, user_id "
 				+ "FROM event_update "
 				+ "WHERE event_id = ?";
 		try {
@@ -139,6 +146,9 @@ public class EventUpdate {
 				eUpdate.setFechaHora(results.getTimestamp(2));
 				eUpdate.setDescripcion(results.getString(3));
 				eUpdate.setAutor(results.getString(4));
+				BusinessUnit bUnit = event.getbUnit();
+				User user = new User().getUserById(bUnit, results.getInt(5));
+				eUpdate.setUser(user);
 				updatesList.add(eUpdate);
 			}
 		} catch (SQLException e) {
@@ -189,6 +199,14 @@ public class EventUpdate {
 
 	public void setAutor(String autor) {
 		this.autor = autor;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 

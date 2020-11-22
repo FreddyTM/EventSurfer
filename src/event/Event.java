@@ -10,6 +10,7 @@ import java.util.List;
 
 import company.Area;
 import company.BusinessUnit;
+import company.User;
 import persistence.PersistenceManager;
 import types_states.TypesStatesContainer;
 
@@ -86,6 +87,22 @@ public class Event {
 			event.setId(id);
 			return event;
 		}
+		return null;
+	}
+	
+	/**
+	 * Devuelve el usuario al que pertenece el id entrado por parámetro
+	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
+	 * @param id id del usuario buscado
+	 * @return usuario con el id entrado por parámetro (null si no existe)
+	 */
+	public Event getEventById (BusinessUnit bUnit, int id) {
+		List<Event> eventList = bUnit.getEvents();
+		for (Event event: eventList) {
+			if (event.getId() == id) {
+				return event;
+			}
+		}	
 		return null;
 	}
 	
