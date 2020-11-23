@@ -84,9 +84,8 @@ public class Company {
 	}
 	
 	/**
-	 * Actualiza los datos de una empresa que ya existe en la base de datos
-	 * si la actualización de dichos datos en la base de datos se realiza
-	 * con éxito
+	 * Actualiza los datos de la empresa que ya existe en la base de datos si la actualización
+	 * de dichos datos en la base de datos se realiza con éxito
 	 * @param conn conexión con la base de datos
 	 * @param company empresa que contiene los datos que se actualizan
 	 */
@@ -134,11 +133,22 @@ public class Company {
 		}
 	}
 	
-//	public void loadBusinessUnits() {
-//		Statement statement = null;
-//		ResultSet results = null;
-//		String sql = "SELECT * FROM business_unit;";
-//	}
+	/**
+	 * Añade una unidad de negocio a la lista de unidades de negocio si la inserción de
+	 * la unidad de negocio en la base de datos se hace con éxito
+	 * @param conn conexión con la base de datos
+	 * @param bUnit unidad de negocio a añadir
+	 */
+	public void addBusinessUnit (Connection conn, BusinessUnit bUnit) {
+		BusinessUnit completeBUnit = new BusinessUnit().addNewBusinessUnit(conn, bUnit);
+		if (completeBUnit != null) {
+			businessUnits.add(completeBUnit);
+		}
+	}
+	
+	public void updateBusinessunit (Connection conn, BusinessUnit bUnit) {
+		
+	}
 	
 	public int getId() {
 		return id;

@@ -395,3 +395,8 @@ Dev 0.0.19
 		Add updateCompanyToDB()
 		Add updateCompany()
 		Add getCompanyFromDB()
+		Add addBusinessUnit()
+		Add updateBusinessUnit() --empty--
+
+	· BusinessUnit class:
+		Add updateBusinessUnit()
