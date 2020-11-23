@@ -385,3 +385,13 @@ Dev 0.0.18
 		Add attributes:
 		company, bUnit, user
 		Add constructor, setters & getters
+
+Dev 0.0.19
+
+	* - Package company
+
+	· Company class:
+		Delete loadBusinessUnits()
+		Add updateCompanyToDB()
+		Add updateCompany()
+		Add getCompanyFromDB()
