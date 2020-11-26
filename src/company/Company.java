@@ -146,10 +146,10 @@ public class Company {
 		}
 	}
 	
-	public void updateBusinessunit (Connection conn, BusinessUnit bUnit) {
-		
-	}
-	
+//	public void updateBusinessunit (Connection conn, BusinessUnit bUnit) {
+//		
+//	}
+//	
 	public int getId() {
 		return id;
 	}

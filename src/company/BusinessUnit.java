@@ -234,6 +234,38 @@ public class BusinessUnit {
 			events.add(completeEvent);
 		}
 	}
+	
+	/**
+	 * Devuelve la unidad de negocio al que pertenece el nombre entrado por parámetro
+	 * @param company empresa de la que comprobamos la lista de unidades de negocio
+	 * @param name nombre de la unidad de negocio buscada
+	 * @return unidad de negocio con el nombre entrado por parámetro (null si no existe)
+	 */
+	public BusinessUnit getBusinessUnitByName (Company company, String name) {
+		List<BusinessUnit> bUnitList = company.getBusinessUnits();
+		for (BusinessUnit bUnit: bUnitList) {
+			if (bUnit.getNombre().equals(name)) {
+				return bUnit;
+			}
+		}	
+		return null;
+	}
+	
+	/**
+	 * Devuelve la unidad de negocio al que pertenece el id entrado por parámetro
+	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
+	 * @param id id del usuario buscado
+	 * @return usuario con el id entrado por parámetro (null si no existe)
+	 */
+	public BusinessUnit getBusinessUnitById (Company company, int id) {
+		List<BusinessUnit> bUnitList = company.getBusinessUnits();
+		for (BusinessUnit bUnit: bUnitList) {
+			if (bUnit.getId() == id) {
+				return bUnit;
+			}
+		}	
+		return null;
+	}
 
 	
 	//METODO DE PRUEBA. SE PUEDE BORRAR
