@@ -401,3 +401,7 @@ Dev 0.0.19
 		Add updateBusinessUnit()
 		Add getBusinessUnitByName()
 		Add getBusinessUnitById()
+
+	· Area class:
+		Add getAreaByName()
+
