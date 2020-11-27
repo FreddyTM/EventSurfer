@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 import types_states.EventState;
 import types_states.EventType;
@@ -180,6 +183,18 @@ public class PersistenceManager {
 		}
 		return id;
 	}
+	
+	/**
+	 * Devuelve la fecha y la hora actuales
+	 * @return Timestamp con la fecha y la hora actuales
+	 */
+	public static Timestamp getTimestampNow() {
+		Calendar calendar = Calendar.getInstance();
+		Date dNow = calendar.getTime();
+		Timestamp tNow = new Timestamp(dNow.getTime());
+		return tNow;
+	}
+	
 	
 	/**
 	 * Carga los datos de la base de datos al abrir la aplicación

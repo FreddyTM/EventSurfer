@@ -410,3 +410,21 @@ Dev 0.0.19
 	· EventUpdate class:
 		Add getEventUpdateByUserId()
 
+Dev 0.0.20
+
+	* - Package persistence
+
+	· PersistenceManager class:
+		Add getTimestampNow()
+
+	* - Package event
+
+	· EventUpdate class:
+		Update saveEventUpdateToDB()
+
+	* - Package company
+
+	· User class:
+		Update:
+		passwordHash(), getHash()
+

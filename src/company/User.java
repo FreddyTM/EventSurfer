@@ -223,7 +223,7 @@ public class User {
 	public String passwordHash(String input) {
 		String hashedInput = "";
 		int size = input.length();
-		if (size == 40) {
+		if (size == 50) {
 			return input;
 		} else {
 			hashedInput = getHash(input);
@@ -255,8 +255,10 @@ public class User {
 			factor = 25;
 		} else if (size > 20 && size <= 30) {
 			factor = 37;
+		} else if (size > 30 && size <= 40) {
+			factor = 44;
 		} else {
-			factor = 2;
+			factor = 3;
 		}
 		//Debug
 //		System.out.println("factor: " + factor);
