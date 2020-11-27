@@ -405,3 +405,8 @@ Dev 0.0.19
 	· Area class:
 		Add getAreaByName()
 
+	* - Package event
+
+	· EventUpdate class:
+		Add getEventUpdateByUserId()
+

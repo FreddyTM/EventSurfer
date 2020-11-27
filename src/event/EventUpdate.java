@@ -161,6 +161,23 @@ public class EventUpdate {
 		return updatesList;
 	}
 	
+	/**
+	 * Devuelve una lista de actualizaciones de evento que hayan sido realizadas por el 
+	 * usuario cuyo id se pasa por parámetro
+	 * @param event evento del que se buscan las actualizaciones
+	 * @param userId id del usuario que ha hecho las actualizaciones del evento
+	 * @return Lista de actualizaciones de evento realizadas por el usuario
+	 */
+	public List<EventUpdate> getEventUpdatesByUserId(Event event, int userId) {
+		List<EventUpdate> updatesList = event.getUpdates();
+		List<EventUpdate> returnList = new ArrayList<EventUpdate>();
+		for (EventUpdate eUpdate: updatesList) {
+			if (eUpdate.getUser().getId() == userId) {
+				returnList.add(eUpdate);
+			}
+		}
+		return returnList;
+	}
 
 	public int getId() {
 		return id;
