@@ -416,6 +416,7 @@ Dev 0.0.20
 
 	· PersistenceManager class:
 		Add getTimestampNow()
+		Update loadData()
 
 	* - Package event
 
@@ -427,4 +428,10 @@ Dev 0.0.20
 	· User class:
 		Update:
 		passwordHash(), getHash()
+
+	· Company class:
+		Delete Connection attribute
+		Update getCompanyFromDB()
+
+
 

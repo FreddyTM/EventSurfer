@@ -12,7 +12,7 @@ import persistence.PersistenceManager;
 
 public class Company {
 	
-	private Connection connection;
+	//private Connection connection;
 	private int id;
 	private String nombre;
 	private String direccion;
@@ -27,7 +27,7 @@ public class Company {
 	
 	public Company(Connection connection, int id, String nombre, String direccion, String provincia,
 			String estado, String cpostal, String telefono, String mail, String web) {
-		this.connection = connection;
+		//this.connection = connection;
 		this.id = id;
 		this.nombre = nombre;
 		this.direccion = direccion;
@@ -115,15 +115,17 @@ public class Company {
 			stm = conn.createStatement();
 			results = stm.executeQuery(sql);
 			Company company = new Company();
-			company.setId(results.getInt(1));
-			company.setNombre(results.getString(2));
-			company.setDireccion(results.getString(3));
-			company.setProvincia(results.getString(4));
-			company.setEstado(results.getString(5));
-			company.setCpostal(results.getNString(6));
-			company.setTelefono(results.getString(7));
-			company.setMail(results.getString(8));
-			company.setWeb(results.getString(9));
+			while (results.next()) {
+				company.setId(results.getInt(1));
+				company.setNombre(results.getString(2));
+				company.setDireccion(results.getString(3));
+				company.setProvincia(results.getString(4));
+				company.setEstado(results.getString(5));
+				company.setCpostal(results.getString(6));
+				company.setTelefono(results.getString(7));
+				company.setMail(results.getString(8));
+				company.setWeb(results.getString(9));
+			}
 			return company;
 		} catch (SQLException e) {
 			e.printStackTrace();

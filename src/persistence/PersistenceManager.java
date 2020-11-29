@@ -9,7 +9,14 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import company.Area;
+import company.BusinessUnit;
+import company.Company;
+import company.User;
+import event.Event;
+import event.EventUpdate;
 import types_states.EventState;
 import types_states.EventType;
 import types_states.TypesStatesContainer;
@@ -218,6 +225,25 @@ public class PersistenceManager {
 		TypesStatesContainer.setuType(userTypeList);
 		TypesStatesContainer.setEvType(eventTypeList);
 		TypesStatesContainer.setEvState(eventStateList);
+		
+		//Cargamos datos de la compañía
+		Company company = new Company().getCompanyFromDB(conn);
+		//Cargamos las unidades de negocio de la compañía
+		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
+		company.setBusinessUnits(bUnitList);
+		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
+//		for (BusinessUnit bUnit: company.getBusinessUnits()) {
+//			List<User> userList = new User().getUsersFromDB(conn, bUnit);
+//			bUnit.setUsers(userList);
+//			List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
+//			bUnit.setAreas(areaList);
+//			List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
+//			bUnit.setEvents(eventList);
+//			for (Event event: bUnit.getEvents()) {
+//				List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+//				event.setUpdates(eUpdate);
+//			}
+//		}
 	}
 	
 //	//Se espera una entrada de 20 caracteres como máximo
