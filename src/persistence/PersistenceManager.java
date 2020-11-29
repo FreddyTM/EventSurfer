@@ -232,18 +232,18 @@ public class PersistenceManager {
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		company.setBusinessUnits(bUnitList);
 		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
-//		for (BusinessUnit bUnit: company.getBusinessUnits()) {
-//			List<User> userList = new User().getUsersFromDB(conn, bUnit);
-//			bUnit.setUsers(userList);
-//			List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
-//			bUnit.setAreas(areaList);
-//			List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
-//			bUnit.setEvents(eventList);
-//			for (Event event: bUnit.getEvents()) {
-//				List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-//				event.setUpdates(eUpdate);
-//			}
-//		}
+		for (BusinessUnit bUnit: company.getBusinessUnits()) {
+			List<User> userList = new User().getUsersFromDB(conn, bUnit);
+			bUnit.setUsers(userList);
+			List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
+			bUnit.setAreas(areaList);
+			List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
+			bUnit.setEvents(eventList);
+			for (Event event: bUnit.getEvents()) {
+				List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+				event.setUpdates(eUpdate);
+			}
+		}
 	}
 	
 //	//Se espera una entrada de 20 caracteres como máximo
