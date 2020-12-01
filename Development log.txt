@@ -433,5 +433,35 @@ Dev 0.0.20
 		Delete Connection attribute
 		Update getCompanyFromDB()
 
+	· BASIC READ, INSERT & UPDATE METHODS COMPLETED
+
+Dev 0.0.21
+
+	· Rename of existing packages >> main.java.*
+
+	· New test package test.java
+
+	* - Package main.java.app
+
+	· AppDummy class:
+		Update loadData()
+
+	* - Package main.java.persistence
+
+	· PersistenceManager class:
+		Update getLastElementIdFromDB();
+
+	* - Package test.java
+
+	· CompanyTest class (new)
+		Add empty methods: 
+		testUpdateCompanyToDB(), testUpdateCompany(), testGetCompanyFromDB(), testAddBusinessUnit()
+
+	· PersistenceManagerTest class (new)
+		Add testOpenDatabase() --ok--
+		Add testGetConnection() --ok--
+		Add testGetResultSetStatementString() --ok--
+		Add testGetResultSetPreparedStatementString() --ok--
+		Add testGetLastElementIdFromDB() --ok--
 
 

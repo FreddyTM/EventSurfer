@@ -271,3 +271,4 @@ public class PersistenceManager {
 		PersistenceManager.password = password;
 	}
 }
+

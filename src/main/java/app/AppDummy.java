@@ -114,7 +114,7 @@ public class AppDummy {
 		PersistenceManager.loadData(connection);
 		
 		//Debug
-		System.out.println(PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
+		//System.out.println(PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
 		
 		PersistenceManager.closeDatabase(connection);
 		
