@@ -1,4 +1,4 @@
-package types_states;
+package main.java.types_states;
 
 public class TypesStatesContainer {
 

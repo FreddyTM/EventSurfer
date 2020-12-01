@@ -1,5 +1,5 @@
 
-package company;
+package main.java.company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import persistence.PersistenceManager;
+import main.java.persistence.PersistenceManager;
 
 public class Company {
 	

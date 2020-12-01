@@ -1,5 +1,5 @@
 
-package event;
+package main.java.event;
 
 
 import java.sql.Connection;
@@ -9,11 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import company.Area;
-import company.BusinessUnit;
-import company.User;
-import persistence.PersistenceManager;
-import types_states.TypesStatesContainer;
+import main.java.company.Area;
+import main.java.company.BusinessUnit;
+import main.java.company.User;
+import main.java.persistence.PersistenceManager;
+import main.java.types_states.TypesStatesContainer;
 
 public class Event {
 

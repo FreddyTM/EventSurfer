@@ -1,4 +1,4 @@
-package types_states;
+package main.java.types_states;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import persistence.PersistenceManager;
+import main.java.persistence.PersistenceManager;
 
 public class EventState {
 

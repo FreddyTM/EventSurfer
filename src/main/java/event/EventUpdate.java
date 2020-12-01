@@ -1,5 +1,5 @@
 
-package event;
+package main.java.event;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,9 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import company.BusinessUnit;
-import company.User;
-import persistence.PersistenceManager;
+import main.java.company.BusinessUnit;
+import main.java.company.User;
+import main.java.persistence.PersistenceManager;
 
 public class EventUpdate {
 

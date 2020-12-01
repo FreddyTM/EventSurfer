@@ -1,8 +1,8 @@
-package persistence;
+package main.java.persistence;
 
-import company.BusinessUnit;
-import company.Company;
-import company.User;
+import main.java.company.BusinessUnit;
+import main.java.company.Company;
+import main.java.company.User;
 
 public class CurrentSession {
 

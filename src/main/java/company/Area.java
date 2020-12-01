@@ -1,4 +1,4 @@
-package company;
+package main.java.company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import persistence.PersistenceManager;
+import main.java.persistence.PersistenceManager;
 
 public class Area {
 

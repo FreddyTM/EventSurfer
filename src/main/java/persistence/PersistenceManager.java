@@ -1,4 +1,4 @@
-package persistence;
+package main.java.persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,16 +11,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import company.Area;
-import company.BusinessUnit;
-import company.Company;
-import company.User;
-import event.Event;
-import event.EventUpdate;
-import types_states.EventState;
-import types_states.EventType;
-import types_states.TypesStatesContainer;
-import types_states.UserType;
+import main.java.company.Area;
+import main.java.company.BusinessUnit;
+import main.java.company.Company;
+import main.java.company.User;
+import main.java.event.Event;
+import main.java.event.EventUpdate;
+import main.java.types_states.EventState;
+import main.java.types_states.EventType;
+import main.java.types_states.TypesStatesContainer;
+import main.java.types_states.UserType;
 
 public class PersistenceManager {
 	

@@ -1,5 +1,5 @@
 
-package company;
+package main.java.company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import persistence.PersistenceManager;
-import types_states.TypesStatesContainer;
+import main.java.persistence.PersistenceManager;
+import main.java.types_states.TypesStatesContainer;
 
 
 public class User {

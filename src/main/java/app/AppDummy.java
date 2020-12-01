@@ -1,15 +1,15 @@
 
-package app;
+package main.java.app;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import types_states.EventState;
-import types_states.EventType;
-import types_states.TypesStatesContainer;
-import types_states.UserType;
-import persistence.PersistenceManager;
+import main.java.persistence.PersistenceManager;
+import main.java.types_states.EventState;
+import main.java.types_states.EventType;
+import main.java.types_states.TypesStatesContainer;
+import main.java.types_states.UserType;
 
 
 //VERSION 0.0.15
