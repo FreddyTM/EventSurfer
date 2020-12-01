@@ -156,7 +156,7 @@ public class PersistenceManager {
 		
 		ResultSet results = null;	
 		try {
-			results = pstm.executeQuery(sql);
+			results = pstm.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
@@ -170,23 +170,24 @@ public class PersistenceManager {
 	 */
 	public static int getLastElementIdFromDB (Connection conn, String tableName) {
 		int id = 0;
-		PreparedStatement pstm = null;
+		Statement stm = null;
 		ResultSet results = null;
-		String sql = "SELECT id FROM ? "
-				+ "ORDER BY id DESC LIMIT 1;";
+		String sql = "SELECT * FROM " + tableName
+				+ " ORDER BY id DESC LIMIT 1";
 		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setString(1, tableName);
-			results = PersistenceManager.getResultSet(pstm, sql);
+			stm = conn.createStatement();
+			results = stm.executeQuery(sql);
 			while (results.next()) {
 				id = results.getInt(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Estado: " + e.getSQLState());
+			System.out.println("Código: " + e.getErrorCode());
 			return id;
 		} finally {
 			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
+			PersistenceManager.closeStatement(stm);
 		}
 		return id;
 	}
@@ -245,66 +246,6 @@ public class PersistenceManager {
 			}
 		}
 	}
-	
-//	//Se espera una entrada de 20 caracteres como máximo
-//	//Devuelve un hash de 40 caracteres
-//	public static String passHash(String input) {
-//		String hashedInput = "";
-//		int size = input.length();
-//		if (size == 40) {
-//			return input;
-//		} else {
-//			hashedInput = getHash(input);
-//		}
-//		return passHash(hashedInput + getHash(hashedInput));
-//	}
-//	
-//	public static String getHash(String input) {
-//		String hashedInput = "";
-//		int size = input.length();
-//		String charList = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-//				+ "0123456789"
-//				+ "*!$%&@#^";
-//		//Debug
-////		System.out.println("-----------------------------");
-////		System.out.println("charList.lenght(): " + charList.length());
-////		System.out.println("input size: " + size);
-//		int factor = 0;
-//		if (size <=10) {
-//			factor = 7;
-//		} else if (size > 10 && size <= 15) {
-//			factor = 12;
-//		} else if (size > 15 && size <= 20) { 
-//			factor = 25;
-//		} else if (size > 20 && size <= 30) {
-//			factor = 37;
-//		} else {
-//			factor = 2;
-//		}
-//		//Debug
-////		System.out.println("factor: " + factor);
-//		for (int i = 0; i < input.length(); i++) {
-//			char inChar = input.charAt(i);
-//			//Debug
-////			System.out.println ("Char: " + inChar);
-//			int charIndex = charList.indexOf(inChar);
-//			//Debug
-////			System.out.println("charIndex prefactor: " + charIndex);
-//			charIndex = charIndex + factor;
-//			//Debug
-////			System.out.println("charIndex postfactor: " + charIndex);
-//			if (charIndex == charList.length()) {
-//				charIndex = 0;
-//			} else if (charIndex > charList.length()) {
-//				charIndex = charIndex - charList.length() - 1;
-//			}
-//			hashedInput = hashedInput + charList.charAt(charIndex);
-//		}
-//		if (hashedInput.length() > 20) {
-//			hashedInput = hashedInput.substring(0, 20);
-//		}
-//		return hashedInput;
-//	}
 
 	public static String getUrl() {
 		return url;

@@ -113,6 +113,9 @@ public class AppDummy {
 		Connection connection = PersistenceManager.getConnection();
 		PersistenceManager.loadData(connection);
 		
+		//Debug
+		System.out.println(PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
+		
 		PersistenceManager.closeDatabase(connection);
 		
 		//System.out.println (PersistenceManager.passHash("8salas15pelis*"));
