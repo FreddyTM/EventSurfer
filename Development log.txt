@@ -1,0 +1,467 @@
+EVENTSURFER APP:
+--------------------------------------------------------------------------------------------------------------
+
+Dev 0.0.1:
+
+	* - Package app (new)
+
+	· AppDummy class --empty--
+
+	* - Package event (new)
+
+	· BasicEvent class: (new)
+		Add attributes
+		id (static), title, List <UpdatedEvent> updates.
+		Add constructor
+		id autoincrement, title max length 200, LinkedList updates.
+
+	· EventStatus enum class: (new)
+		EventStatus elements:
+		OPEN, IN_PROCESS, CLOSED.
+
+	· UpdatedEvent class: (new)
+		Add attributes:
+		date, status, basicEventId, id (static), description.
+		Add constructor
+		date (current date & time), status OPEN, basic event id, id autoincrement.
+
+	* - Package company (new)
+
+	· Company class: (new)
+		Company attributes: name, List <Workplace> workplaces.
+
+	· Workplace class: (new)
+		Workplace attributes: name, List <User> users, List <String> zones.
+
+	· User class: (new)
+		Add attributes:
+		firstName, lastName, login, password, userType.
+
+	· UserType enum class: (new)
+		UserType elements:
+		SYSADMIN, ADMIN, USER.
+	
+Dev 0.0.2
+
+	* - Package app
+
+	· AppDummy class:
+		Add connectToDatabase()
+		Add jdbc connection to surferdb database (localhost).
+
+Dev 0.0.3
+
+	· Add Development log to project folder (Development log.txt)
+
+	· AppDummy class:
+		Add jdbc connection to devsurferdb database (localhost).
+
+	* - Package Company
+
+	· Refactor class name Workplace to BusinessUnit
+
+Dev 0.0.4
+	
+	* - Package persistence (new)
+
+	· PersistenceManager class: (new)
+		Add openDatabase()
+		Add closeDatabase()
+
+	* - Package app
+
+	· AppDummy class:
+		Add loadData()
+		Switch to LOCAL_DB, LOCAL_TEST_DB, REMOTE_DB (remote Heroku connection comming soon...)
+
+Dev 0.0.5
+
+	* - Package types_states (new)
+	
+	· UserType class: (new)
+		Add attributes:
+		Connection connection, Map <Integer, String> userTypes
+		Add constructor, setters & getters
+
+		Add numeroTiposDeUsuario()
+		Add tiposDeUsuario()
+		Add getClave()
+		Add getTipoDeUsuario()
+		Add cargaDatos() --empty--
+
+Dev 0.0.6
+
+	* - Package types_states
+	
+	· UserType class:
+		Rename:
+		numeroTiposDeUsuario() >> getNumberOfUserTypes()
+		tiposDeUsuario() >> getUserTypes()
+		getClave() >> getUserTypeId
+		getTipoDeUsuario() >> getUserType()
+		cargaDatos() >> loadData()
+	
+		Add loadData()
+
+	* - Packages company, event
+
+	· Get rid of enum classes: UserType, EventStatus
+
+Dev 0.0.7
+
+	* - Package types_states
+
+	· EventType class: (new)
+		Add attributes:
+		Connection connection, Map <Integer, String> eventTypes
+		Add constructor, setters & getters
+
+		Add getNumberOfEventTypes()
+		Add getEventTypes()
+		Add getEventTypeId()
+		Add getEventType()
+		Add loadData()
+
+Dev 0.0.8
+
+	* - Package persistence
+
+	· PersistenceManager class:
+		Add closeStatement()
+		Add closePreparedStatement()
+		Add closeResultSet()
+		Add getResultSet()
+		Add loadData()
+
+	* - Package types_states
+
+	· EventType class, UserType class:
+		Update loadData() to use PersistenceManager.getResultSet()
+
+	· EventState class: (new)
+		Add attributes:
+		Connection connection, Map <Integer, String> eventStates
+		Add constructor, setters & getters
+
+		Add getNumberOfEventStates()
+		Add getEventStates()
+		Add getEventStateId()
+		Add getEventState()
+		Add loadData()		
+
+Dev 0.0.9
+
+	* - Package company
+
+	· Company class:
+		Update attributes:
+		connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, web, businessUnits
+		Add constructor, setters & getters
+
+	· BusinessUnit class:
+		Update attributes:
+		connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, users, areas
+		Add constructor, setters & getters
+
+		Add addUser() --empty--
+		Add addUsers() --empty--
+
+	· Area class: (new)
+		Add attributes:
+		connection, id, area, descripcion
+		Add constructor, setters & getters
+
+Dev 0.0.10
+
+	* - Package company
+
+	· User class:
+		Update attributes:
+		connection, id, bUnit, userType, userAlias, nombre, apellido, password, activo
+		Add constructor, setters & getters
+		
+		Add saveToDB()
+		Add updateToDB() --empty--
+
+	* - Package types_states
+
+	· EventsStatesContainer class: (new)
+		Add attributes
+		evState, evType, uType
+		Add constructor, setters & getters
+
+Dev 0.0.11
+
+	* - Package app
+
+	· AppDummy class:
+	
+		go() Add command line argument to select database
+		Delete Connection attribute
+		Pass connection attributes to PersistenceManager class
+		Start connection using PersistenceManager.getConnection()
+
+	* - Package persistence
+	
+	· PersistenceManager class:
+		Add static attributes:
+		url, user, password
+		Add setters & getters
+
+		Add getConnection()
+
+
+	* - Package company
+
+	· User class:
+		Delete Connection attribute
+		Delete updateToDB()
+
+		Rename:
+		saveToDB() >> saveUserToDB()
+
+		Update saveUserToDB():
+		All PreparedStatement parameters come from the getters of the user parameter
+
+		Add getUsersFromDB()
+		Add updateUserToDB()
+
+Dev 0.0.12
+
+	* - Package company
+
+	· Area class:
+		Delete Connection attribute
+
+		Add saveAreaToDB()
+		Add updateAreaToDB()
+		Add getAreasFromDB()
+
+Dev 0.0.13
+
+	* - Package company
+	
+	· User class:
+		Add passwordHash()
+		Add getHash()
+		Add getUserByAlias()
+		Add checkUserPassword()
+
+	· BusinessUnit class:
+		Add attribute events	
+		Delete Connection attribute
+
+		Add saveBUnitToDB()
+
+	* - Package event
+
+	· Refactor class name BasicEvent to Event
+	· Event class:
+		Update attributes:
+		id, bUnit, eventType, titulo, descripcion, eventState, updates
+		Add constructor, setters & getters
+
+	· UpdatedEvent class
+		Update attributes:
+		id, event, fechaHora, descripcion, autor
+		Add constructor, setters & getters
+		
+Dev 0.0.14
+
+	* - Package types_states
+
+	· Refactor class name EventsStatesContainer to TypesStatesContainer
+
+	* - Package event 
+
+	· Refactor class name UpdatedEvent to EventUpdate
+
+	· EventUpdate class
+		Add saveEventUpdateToDB()
+		Add updateEventUpdateToDB()
+
+Dev 0.0.15
+
+	· Save & Update to DB methods return true if succeed, false if not, in classes:
+	User, EventUpdate, Area, BusinessUnit
+
+	* - Package company
+
+	· BusinessUnit class:
+		Update addUser()
+		Delete addUsers()
+		Add addArea()
+		Add updateBusinessUnitToDB()
+		Add addEvent() --empty--
+	
+	* - Package event
+	
+	· EventUpdate class:
+		Add getEventUpdatesFromDB()
+
+Dev 0.0.16
+
+	* - Package persistence
+
+	· PersistenceManager class:
+		Update loadData() to use new UserType, EventType & EventState constructors,
+		and update their loadData() method calls to use a Connection parameter
+		Add getResultSet() --overload--
+		Add getLastElementIdFromDB()
+
+	* - Package types_states
+
+	· Delete Connection attribute from classes:
+	EventType, EventState, UserType
+	· Add Connection parameter to loadData() methods in classes:
+	EventType, EventState, UserType
+
+	· EventType class:
+		Add TABLE_NAME constant
+		Add saveEventTypeToDB()
+		Add addNewEventType()
+
+Dev 0.0.17
+
+	* - Package company
+
+	· User class:
+		Add addNewUser()
+		Update:
+		saveUserToDB(), updateUserToDB(), getUsersFromDB()
+
+	· BusinessUnit class:
+		Add addNewBusinessUnit()
+		Update:
+		addArea(), addUser(), saveBUnitToDB(), updateBusinessUnitToDB(), getBusinessUnitsFromDB()
+
+	· Area class:
+		Add saveBUnitAreaToDB()
+		Add addNewArea()
+		Update:
+		saveAreaToDB(), updateAreaToDB(), getAreasFromDB()
+		
+	* - Package event
+
+	· EventUpdate class:
+		Add addNewEventUpdate()
+		Update:
+		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
+
+Dev 0.0.18
+
+	* - Package event
+
+	· Event class:
+		Add area attribute
+		Add saveEventToDB()
+		Add addNewEvent()
+		Add getEventById()
+		Add updateEventToDB()
+		Add getEventsFromDB()
+
+	· EventUpdate class:
+		Add user attribute
+		Update:
+		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
+
+	· BusinessUnit class:
+		Update:
+		addEvent(), getBusinessUnitsFromDB()
+		
+	* - Package company
+
+	· User class:
+		Add getUserById()
+		Update getUsersFromDB()
+
+	· Area class:
+		Add getAreaById()
+		Update getAreasFromDB()
+
+	* - Package persistence
+
+	· CurrentSession class: (new)
+		Add attributes:
+		company, bUnit, user
+		Add constructor, setters & getters
+
+Dev 0.0.19
+
+	* - Package company
+
+	· Company class:
+		Delete loadBusinessUnits()
+		Add updateCompanyToDB()
+		Add updateCompany()
+		Add getCompanyFromDB()
+		Add addBusinessUnit()
+
+	· BusinessUnit class:
+		Add updateBusinessUnit()
+		Add getBusinessUnitByName()
+		Add getBusinessUnitById()
+
+	· Area class:
+		Add getAreaByName()
+
+	* - Package event
+
+	· EventUpdate class:
+		Add getEventUpdateByUserId()
+
+Dev 0.0.20
+
+	* - Package persistence
+
+	· PersistenceManager class:
+		Add getTimestampNow()
+		Update loadData()
+
+	* - Package event
+
+	· EventUpdate class:
+		Update saveEventUpdateToDB()
+
+	* - Package company
+
+	· User class:
+		Update:
+		passwordHash(), getHash()
+
+	· Company class:
+		Delete Connection attribute
+		Update getCompanyFromDB()
+
+	· BASIC READ, INSERT & UPDATE METHODS COMPLETED
+
+Dev 0.0.21
+
+	· Rename of existing packages >> main.java.*
+
+	· New test package test.java
+
+	* - Package main.java.app
+
+	· AppDummy class:
+		Update loadData()
+
+	* - Package main.java.persistence
+
+	· PersistenceManager class:
+		Update getLastElementIdFromDB();
+
+	* - Package test.java
+
+	· CompanyTest class (new)
+		Add empty methods: 
+		testUpdateCompanyToDB(), testUpdateCompany(), testGetCompanyFromDB(), testAddBusinessUnit()
+
+	· PersistenceManagerTest class (new)
+		Add testOpenDatabase() --ok--
+		Add testGetConnection() --ok--
+		Add testGetResultSetStatementString() --ok--
+		Add testGetResultSetPreparedStatementString() --ok--
+		Add testGetLastElementIdFromDB() --ok--
+
+
