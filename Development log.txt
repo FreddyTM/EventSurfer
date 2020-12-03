@@ -1,7 +1,7 @@
 EVENTSURFER APP:
 --------------------------------------------------------------------------------------------------------------
 
-Dev 0.0.1:
+Ver 0.0.1:
 
 	* - Package app (new)
 
@@ -11,7 +11,7 @@ Dev 0.0.1:
 
 	· BasicEvent class: (new)
 		Add attributes
-		id (static), title, List <UpdatedEvent> updates.
+		id (static), title, List <UpdateVerent> updates.
 		Add constructor
 		id autoincrement, title max length 200, LinkedList updates.
 
@@ -19,7 +19,7 @@ Dev 0.0.1:
 		EventStatus elements:
 		OPEN, IN_PROCESS, CLOSED.
 
-	· UpdatedEvent class: (new)
+	· UpdateVerent class: (new)
 		Add attributes:
 		date, status, basicEventId, id (static), description.
 		Add constructor
@@ -41,7 +41,7 @@ Dev 0.0.1:
 		UserType elements:
 		SYSADMIN, ADMIN, USER.
 	
-Dev 0.0.2
+Ver 0.0.2
 
 	* - Package app
 
@@ -49,18 +49,18 @@ Dev 0.0.2
 		Add connectToDatabase()
 		Add jdbc connection to surferdb database (localhost).
 
-Dev 0.0.3
+Ver 0.0.3
 
-	· Add Development log to project folder (Development log.txt)
+	· Add Verelopment log to project folder (Verelopment log.txt)
 
 	· AppDummy class:
-		Add jdbc connection to devsurferdb database (localhost).
+		Add jdbc connection to Versurferdb database (localhost).
 
 	* - Package Company
 
 	· Refactor class name Workplace to BusinessUnit
 
-Dev 0.0.4
+Ver 0.0.4
 	
 	* - Package persistence (new)
 
@@ -74,7 +74,7 @@ Dev 0.0.4
 		Add loadData()
 		Switch to LOCAL_DB, LOCAL_TEST_DB, REMOTE_DB (remote Heroku connection comming soon...)
 
-Dev 0.0.5
+Ver 0.0.5
 
 	* - Package types_states (new)
 	
@@ -89,7 +89,7 @@ Dev 0.0.5
 		Add getTipoDeUsuario()
 		Add cargaDatos() --empty--
 
-Dev 0.0.6
+Ver 0.0.6
 
 	* - Package types_states
 	
@@ -107,7 +107,7 @@ Dev 0.0.6
 
 	· Get rid of enum classes: UserType, EventStatus
 
-Dev 0.0.7
+Ver 0.0.7
 
 	* - Package types_states
 
@@ -122,7 +122,7 @@ Dev 0.0.7
 		Add getEventType()
 		Add loadData()
 
-Dev 0.0.8
+Ver 0.0.8
 
 	* - Package persistence
 
@@ -149,7 +149,7 @@ Dev 0.0.8
 		Add getEventState()
 		Add loadData()		
 
-Dev 0.0.9
+Ver 0.0.9
 
 	* - Package company
 
@@ -171,7 +171,7 @@ Dev 0.0.9
 		connection, id, area, descripcion
 		Add constructor, setters & getters
 
-Dev 0.0.10
+Ver 0.0.10
 
 	* - Package company
 
@@ -190,7 +190,7 @@ Dev 0.0.10
 		evState, evType, uType
 		Add constructor, setters & getters
 
-Dev 0.0.11
+Ver 0.0.11
 
 	* - Package app
 
@@ -226,7 +226,7 @@ Dev 0.0.11
 		Add getUsersFromDB()
 		Add updateUserToDB()
 
-Dev 0.0.12
+Ver 0.0.12
 
 	* - Package company
 
@@ -237,7 +237,7 @@ Dev 0.0.12
 		Add updateAreaToDB()
 		Add getAreasFromDB()
 
-Dev 0.0.13
+Ver 0.0.13
 
 	* - Package company
 	
@@ -261,12 +261,12 @@ Dev 0.0.13
 		id, bUnit, eventType, titulo, descripcion, eventState, updates
 		Add constructor, setters & getters
 
-	· UpdatedEvent class
+	· UpdateVerent class
 		Update attributes:
 		id, event, fechaHora, descripcion, autor
 		Add constructor, setters & getters
 		
-Dev 0.0.14
+Ver 0.0.14
 
 	* - Package types_states
 
@@ -274,13 +274,13 @@ Dev 0.0.14
 
 	* - Package event 
 
-	· Refactor class name UpdatedEvent to EventUpdate
+	· Refactor class name UpdateVerent to EventUpdate
 
 	· EventUpdate class
 		Add saveEventUpdateToDB()
 		Add updateEventUpdateToDB()
 
-Dev 0.0.15
+Ver 0.0.15
 
 	· Save & Update to DB methods return true if succeed, false if not, in classes:
 	User, EventUpdate, Area, BusinessUnit
@@ -292,14 +292,14 @@ Dev 0.0.15
 		Delete addUsers()
 		Add addArea()
 		Add updateBusinessUnitToDB()
-		Add addEvent() --empty--
+		Add adVerent() --empty--
 	
 	* - Package event
 	
 	· EventUpdate class:
 		Add getEventUpdatesFromDB()
 
-Dev 0.0.16
+Ver 0.0.16
 
 	* - Package persistence
 
@@ -321,7 +321,7 @@ Dev 0.0.16
 		Add saveEventTypeToDB()
 		Add addNewEventType()
 
-Dev 0.0.17
+Ver 0.0.17
 
 	* - Package company
 
@@ -348,7 +348,7 @@ Dev 0.0.17
 		Update:
 		saveEventUpdateToDB(), updateEventUpdateToDB(), getEventUpdatesFromDB()
 
-Dev 0.0.18
+Ver 0.0.18
 
 	* - Package event
 
@@ -367,7 +367,7 @@ Dev 0.0.18
 
 	· BusinessUnit class:
 		Update:
-		addEvent(), getBusinessUnitsFromDB()
+		adVerent(), getBusinessUnitsFromDB()
 		
 	* - Package company
 
@@ -386,7 +386,7 @@ Dev 0.0.18
 		company, bUnit, user
 		Add constructor, setters & getters
 
-Dev 0.0.19
+Ver 0.0.19
 
 	* - Package company
 
@@ -410,7 +410,7 @@ Dev 0.0.19
 	· EventUpdate class:
 		Add getEventUpdateByUserId()
 
-Dev 0.0.20
+Ver 0.0.20
 
 	* - Package persistence
 
@@ -435,7 +435,7 @@ Dev 0.0.20
 
 	· BASIC READ, INSERT & UPDATE METHODS COMPLETED
 
-Dev 0.0.21
+Ver 0.0.21
 
 	· Rename of existing packages >> main.java.*
 
@@ -455,7 +455,11 @@ Dev 0.0.21
 
 	· CompanyTest class (new)
 		Add empty methods: 
-		testUpdateCompanyToDB(), testUpdateCompany(), testGetCompanyFromDB(), testAddBusinessUnit()
+		testUpdateCompany(),  testAddBusinessUnit()
+		
+		Update
+		testGetCompanyFromDB() --ok--
+		testUpdateCompanyToDB() --ok--
 
 	· PersistenceManagerTest class (new)
 		Add testOpenDatabase() --ok--
