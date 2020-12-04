@@ -451,6 +451,16 @@ Ver 0.0.21
 	· PersistenceManager class:
 		Update getLastElementIdFromDB();
 
+	* - Package main.java.types_states
+
+	· EventState class:
+		Rename getEventStates() >> getEventStatesArray()
+		Add getEventStates()
+
+	· EventType class:
+		Rename getEventTypes() >> getEventTypesArray()
+		Add getEventTypes()
+
 	* - Package test.java
 
 	· CompanyTest class (new)

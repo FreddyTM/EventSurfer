@@ -33,7 +33,7 @@ public class UserType {
 	 * Devuelve un array con el nombre de los diferentes tipos de usuarios
 	 * @return Tipos de usuarios
 	 */
-	public String[] getUserTypes() {
+	public String[] getUserTypesArray() {
 		String[] tiposDeUsuario = new String[getNumberOfUserTypes()];
 		Collection<String> tipos = userTypes.values();
 		tiposDeUsuario = tipos.toArray(tiposDeUsuario);
@@ -90,25 +90,7 @@ public class UserType {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closeStatement(statement);
 		}
-		
-//		Statement statement = null;
-//		ResultSet results = null;
-//		try {
-//			statement = connection.createStatement();
-//			results = statement.executeQuery(
-//					"SELECT * FROM user_type;");
-//			while(results.next()) {
-//				int id = results.getInt(1);
-//				String userType = results.getString(2);
-//				userTypes.put(id, userType);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			PersistenceManager.closeResultSet(results);
-//			PersistenceManager.closeStatement(statement);
-//		}
-		
+
 		
 		//Debug
 		System.out.println("Tipos de usuario cargados correctamente");
@@ -118,5 +100,9 @@ public class UserType {
 //		for (int i = 0; i < getNumberOfUserTypes(); i++) {
 //			System.out.print(getUserTypes()[i] + ", ");
 //		}
+	}
+	
+	public Map <Integer, String> getUserTypes() {
+		return this.userTypes;
 	}
 }
