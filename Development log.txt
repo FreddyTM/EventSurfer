@@ -461,6 +461,10 @@ Ver 0.0.21
 		Rename getEventTypes() >> getEventTypesArray()
 		Add getEventTypes()
 
+	· UserType class:
+		Rename getUserTypes() >> getUserTypesArray()
+		Add getUserTypes()
+
 	* - Package test.java
 
 	· CompanyTest class (new)
@@ -477,5 +481,18 @@ Ver 0.0.21
 		Add testGetResultSetStatementString() --ok--
 		Add testGetResultSetPreparedStatementString() --ok--
 		Add testGetLastElementIdFromDB() --ok--
+
+	· EventStateTest class (new)
+		Add testGetEventStatesArray() --ok--
+		Add testGetEventStateId() --ok--
+		Add testGetEventState() --ok--
+		Add testLoadData() --ok--
+
+	· UserTypeTest class (new)
+		Add testGetUserTypesArray() --ok--
+		Add testGetUserTypeId() --ok--
+		Add testGetUserType() --ok--
+		Add testLoadData() --ok--
+
 
 
