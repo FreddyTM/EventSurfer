@@ -476,6 +476,9 @@ Ver 0.0.21
 		testUpdateCompanyToDB() --ok--
 
 	· PersistenceManagerTest class (new)
+		Preconditions:
+		Empty database with initial default values
+
 		Add testOpenDatabase() --ok--
 		Add testGetConnection() --ok--
 		Add testGetResultSetStatementString() --ok--
@@ -483,12 +486,18 @@ Ver 0.0.21
 		Add testGetLastElementIdFromDB() --ok--
 
 	· EventStateTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+
 		Add testGetEventStatesArray() --ok--
 		Add testGetEventStateId() --ok--
 		Add testGetEventState() --ok--
 		Add testLoadData() --ok--
 
 	· UserTypeTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+
 		Add testGetUserTypesArray() --ok--
 		Add testGetUserTypeId() --ok--
 		Add testGetUserType() --ok--

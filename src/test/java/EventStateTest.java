@@ -10,10 +10,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
 
+@TestMethodOrder(OrderAnnotation.class)
 class EventStateTest {
 
 	private static Connection conn;
