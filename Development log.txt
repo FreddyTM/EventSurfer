@@ -494,5 +494,17 @@ Ver 0.0.21
 		Add testGetUserType() --ok--
 		Add testLoadData() --ok--
 
+	· EventTypeTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+		Empty table event_type, id index start at 1
 
+		Add testGetEventTypesArray() --ok--
+		Add testGetEventTypeId() --ok--
+		Add testGetEventType() --ok--
+		Add testLoadData() --ok--
+		Add testSaveEventTypeToDB() --ok--
+		Add testAddNewEventType() --ok--
+		
+		
 
