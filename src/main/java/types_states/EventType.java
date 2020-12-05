@@ -33,7 +33,7 @@ public class EventType {
 	 * Devuelve un array con el nombre de los diferentes tipos de eventos
 	 * @return Tipos de eventos
 	 */
-	public String[] getEventTypes() {
+	public String[] getEventTypesArray() {
 		String[] tiposDeEvento = new String[getNumberOfEventTypes()];
 		Collection<String> tipos = eventTypes.values();
 		tiposDeEvento = tipos.toArray(tiposDeEvento);
@@ -142,27 +142,8 @@ public class EventType {
 		}
 	}
 	
-//	/**
-//	 * Devuelve el id del último tipo de evento de la tabla event_type
-//	 * @param conn conexión con la base de datos
-//	 * @return id del último tipo de evento
-//	 */
-//	public int getLastEventTypeIdFromDB (Connection conn) {
-//		int id = 0;
-//		Statement statement = null;
-//		ResultSet results = null;
-//		String sql = "SELECT id FROM event_type "
-//				+ "ORDER BY id DESC LIMIT 1;";
-//		try {
-//			statement = conn.createStatement();
-//			results = PersistenceManager.getResultSet(statement, sql);
-//			while (results.next()) {
-//				id = results.getInt(1);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			return id;
-//		}
-//		return id;
-//	}
+	public Map <Integer, String> getEventTypes() {
+		return this.eventTypes;
+	}
+
 }

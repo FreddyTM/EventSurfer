@@ -451,6 +451,20 @@ Ver 0.0.21
 	· PersistenceManager class:
 		Update getLastElementIdFromDB();
 
+	* - Package main.java.types_states
+
+	· EventState class:
+		Rename getEventStates() >> getEventStatesArray()
+		Add getEventStates()
+
+	· EventType class:
+		Rename getEventTypes() >> getEventTypesArray()
+		Add getEventTypes()
+
+	· UserType class:
+		Rename getUserTypes() >> getUserTypesArray()
+		Add getUserTypes()
+
 	* - Package test.java
 
 	· CompanyTest class (new)
@@ -462,10 +476,44 @@ Ver 0.0.21
 		testUpdateCompanyToDB() --ok--
 
 	· PersistenceManagerTest class (new)
+		Preconditions:
+		Empty database with initial default values
+
 		Add testOpenDatabase() --ok--
 		Add testGetConnection() --ok--
 		Add testGetResultSetStatementString() --ok--
 		Add testGetResultSetPreparedStatementString() --ok--
 		Add testGetLastElementIdFromDB() --ok--
 
+	· EventStateTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+
+		Add testGetEventStatesArray() --ok--
+		Add testGetEventStateId() --ok--
+		Add testGetEventState() --ok--
+		Add testLoadData() --ok--
+
+	· UserTypeTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+
+		Add testGetUserTypesArray() --ok--
+		Add testGetUserTypeId() --ok--
+		Add testGetUserType() --ok--
+		Add testLoadData() --ok--
+
+	· EventTypeTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
+		Empty table event_type, id index start at 1
+
+		Add testGetEventTypesArray() --ok--
+		Add testGetEventTypeId() --ok--
+		Add testGetEventType() --ok--
+		Add testLoadData() --ok--
+		Add testSaveEventTypeToDB() --ok--
+		Add testAddNewEventType() --ok--
+		
+		
 

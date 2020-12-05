@@ -32,7 +32,7 @@ public class EventState {
 	 * Devuelve un array con el nombre de los diferentes estados de eventos
 	 * @return Estados de eventos
 	 */
-	public String[] getEventStates() {
+	public String[] getEventStatesArray() {
 		String[] estadosDeEvento = new String[getNumberOfEventStates()];
 		Collection<String> estados = eventStates.values();
 		estadosDeEvento = estados.toArray(estadosDeEvento);
@@ -100,4 +100,9 @@ public class EventState {
 //			System.out.print(getUserTypes()[i] + ", ");
 //		}
 	}
+	
+	public Map <Integer, String> getEventStates() {
+		return this.eventStates;
+	}
+	
 }
