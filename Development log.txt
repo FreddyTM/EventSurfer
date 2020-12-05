@@ -514,6 +514,19 @@ Ver 0.0.21
 		Add testLoadData() --ok--
 		Add testSaveEventTypeToDB() --ok--
 		Add testAddNewEventType() --ok--
-		
+
+	· UserTest class (new)
+
+		Add testSaveUserToDB() --empty--
+		Add testAddNewUser() --empty--
+		Add testUpdateUserToDB() --empty--
+		Add testGetUsersFromDB() --empty--
+		Add testGetUserByAlias() --empty--
+		Add testGetUserById() --empty--
+		Add testCheckUserPassword() --empty--
+
+
+
+		*** CHECK HASH METHODS USER CLASS***
 		
 
