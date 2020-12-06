@@ -175,7 +175,7 @@ public class BusinessUnit {
 			while (results.next()) {
 				bUnit = new BusinessUnit();
 				bUnit.setId(results.getInt(1));
-				bUnit.setCompanyd(company);
+				bUnit.setCompany(company);
 				bUnit.setNombre(results.getString(2));
 				bUnit.setDireccion(results.getString(3));
 				bUnit.setProvincia(results.getString(4));
@@ -287,7 +287,7 @@ public class BusinessUnit {
 		return company;
 	}
 
-	public void setCompanyd(Company company) {
+	public void setCompany(Company company) {
 		this.company = company;
 	}
 

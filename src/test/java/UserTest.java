@@ -8,10 +8,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+import main.java.company.BusinessUnit;
+import main.java.company.Company;
 import main.java.company.User;
 import main.java.persistence.PersistenceManager;
 
@@ -19,6 +22,8 @@ import main.java.persistence.PersistenceManager;
 class UserTest {
 	
 	private static Connection conn;
+	private static Company company = new Company();
+	private static BusinessUnit bUnit = new BusinessUnit();
 	//private static User user = new User();
 
 	@BeforeAll
@@ -27,6 +32,9 @@ class UserTest {
 		PersistenceManager.setUser("surferadmin");
 		PersistenceManager.setPassword("surferpass");
 		conn = PersistenceManager.getConnection();
+		company.setId(1);
+		bUnit.setId(1);
+		bUnit.setCompany(company);
 	}
 
 	@AfterAll
@@ -43,6 +51,7 @@ class UserTest {
 	}
 
 	@Test
+	@Order(1)
 	void testSaveUserToDB() {
 //		fail("Not yet implemented");
 		User user = new User();
