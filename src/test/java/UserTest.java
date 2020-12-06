@@ -51,7 +51,7 @@ class UserTest {
 	}
 
 	@Test
-	@Order(1)
+	@Order(2)
 	void testSaveUserToDB() {
 		User user = new User();
 		user.setbUnit(bUnit);
@@ -62,11 +62,22 @@ class UserTest {
 		user.setPassword(user.passwordHash("MiPassword"));
 		user.setActivo(true);
 		assertTrue(new User().saveUserToDB(conn, user));
+		user.setId(2);
+		bUnit.getUsers().add(user);
 	}
 
 	@Test
+	@Order(3)
 	void testAddNewUser() {
-		fail("Not yet implemented");
+		User user = new User();
+		user.setbUnit(bUnit);
+		user.setUserType("USER");
+		user.setUserAlias("FakeUser");
+		user.setNombre("OtroNombre");
+		user.setApellido("OtroApellido");
+		user.setPassword(user.passwordHash("MiOtroPassword"));
+		user.setActivo(true);
+		
 	}
 
 	@Test
@@ -86,12 +97,15 @@ class UserTest {
 
 	@Test
 	void testGetUserById() {
-		fail("Not yet implemented");
+		
 	}
 
 	@Test
+	@Order(1)
 	void testCheckUserPassword() {
-		fail("Not yet implemented");
+		User user = new User();
+		user.setPassword(user.passwordHash("Pass123+"));
+		assertTrue(new User().checkUserPassword(user, "Pass123+"));
 	}
 
 }
