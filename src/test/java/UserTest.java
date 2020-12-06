@@ -53,9 +53,15 @@ class UserTest {
 	@Test
 	@Order(1)
 	void testSaveUserToDB() {
-//		fail("Not yet implemented");
 		User user = new User();
-		
+		user.setbUnit(bUnit);
+		user.setUserType("MANAGER");
+		user.setUserAlias("FakeManager");
+		user.setNombre("Nombre");
+		user.setApellido("Apellido");
+		user.setPassword(user.passwordHash("MiPassword"));
+		user.setActivo(true);
+		assertTrue(new User().saveUserToDB(conn, user));
 	}
 
 	@Test

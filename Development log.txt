@@ -517,7 +517,7 @@ Ver 0.0.21
 
 	· UserTest class (new)
 
-		Add testSaveUserToDB() --empty--
+		Add testSaveUserToDB() --not tested yet--
 		Add testAddNewUser() --empty--
 		Add testUpdateUserToDB() --empty--
 		Add testGetUsersFromDB() --empty--
