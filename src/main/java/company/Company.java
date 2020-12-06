@@ -12,7 +12,6 @@ import main.java.persistence.PersistenceManager;
 
 public class Company {
 	
-	//private Connection connection;
 	private int id;
 	private String nombre;
 	private String direccion;
@@ -25,9 +24,8 @@ public class Company {
 	private List<BusinessUnit> businessUnits;
 	
 	
-	public Company(Connection connection, int id, String nombre, String direccion, String provincia,
+	public Company(int id, String nombre, String direccion, String provincia,
 			String estado, String cpostal, String telefono, String mail, String web) {
-		//this.connection = connection;
 		this.id = id;
 		this.nombre = nombre;
 		this.direccion = direccion;
@@ -148,10 +146,7 @@ public class Company {
 		}
 	}
 	
-//	public void updateBusinessunit (Connection conn, BusinessUnit bUnit) {
-//		
-//	}
-//	
+	
 	public int getId() {
 		return id;
 	}
