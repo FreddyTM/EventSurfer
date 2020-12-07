@@ -73,7 +73,7 @@ class UserTest {
 
 	@Test
 	@Order(3)
-	@Disabled("waiting for previous test to work fine")
+	//@Disabled("waiting for previous test to work fine")
 	void testAddNewUser() {
 		User user = new User();
 		user.setbUnit(bUnit);
@@ -91,7 +91,7 @@ class UserTest {
 
 	@Test
 	@Order(7)
-	@Disabled("waiting for previous test to work fine")
+	//@Disabled("waiting for previous test to work fine")
 	void testUpdateUserToDB() {
 		User oldUser = new User().getUserByAlias(bUnit, "FakeUser");
 		User newUser = new User();
@@ -109,13 +109,13 @@ class UserTest {
 
 	@Test
 	@Order(4)
-	@Disabled("waiting for previous test to work fine")
+	//@Disabled("waiting for previous test to work fine")
 	void testGetUsersFromDB() {
 		assertNotNull(new User().getUsersFromDB(conn, bUnit));
 	}
 
 	@Test
-	@Order(6)
+	//@Order(6)
 	@Disabled("waiting for previous test to work fine")
 	void testGetUserByAlias() {
 		assertNotNull(new User().getUserByAlias(bUnit, "FakeManager"));
@@ -123,7 +123,7 @@ class UserTest {
 	}
 
 	@Test
-	@Order(5)
+	//@Order(5)
 	@Disabled("waiting for previous test to work fine")
 	void testGetUserById() {
 		assertNotNull(new User().getUserById(bUnit, 3));

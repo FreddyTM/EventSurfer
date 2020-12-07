@@ -530,12 +530,12 @@ Ver 0.0.21
 
 	· UserTest class (new)
 
-		Add testSaveUserToDB() --not tested yet--
-		Add testAddNewUser() --not tested yet--
-		Add testUpdateUserToDB() --not tested yet--
-		Add testGetUsersFromDB() --not tested yet--
-		Add testGetUserByAlias() --not tested yet--
-		Add testGetUserById() --not tested yet--
+		Add testSaveUserToDB() --ok--
+		Add testAddNewUser() --ok--
+		Add testUpdateUserToDB() --ok--
+		Add testGetUsersFromDB() --ok--
+		Add testGetUserByAlias() --ok--
+		Add testGetUserById() --ok--
 		Add testCheckUserPassword() --ok--
 
 
