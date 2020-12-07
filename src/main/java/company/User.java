@@ -216,9 +216,9 @@ public class User {
 	}
 	
 	/**
-	 * Genera un hash de 40 caracteres a partir de un String
+	 * Genera un hash de 50 caracteres a partir de un String
 	 * @param input String de entrada
-	 * @return hash de 40 caracteres
+	 * @return hash de 50 caracteres
 	 */
 	public String passwordHash(String input) {
 		String hashedInput = "";
@@ -279,8 +279,8 @@ public class User {
 			}
 			hashedInput = hashedInput + charList.charAt(charIndex);
 		}
-		if (hashedInput.length() > 20) {
-			hashedInput = hashedInput.substring(0, 20);
+		if (hashedInput.length() > 25) {
+			hashedInput = hashedInput.substring(0, 25);
 		}
 		return hashedInput;
 	}

@@ -465,6 +465,8 @@ Ver 0.0.21
 		Rename getUserTypes() >> getUserTypesArray()
 		Add getUserTypes()
 
+	* - Package 
+
 	* - Package test.java
 
 	· CompanyTest class (new)
@@ -518,12 +520,12 @@ Ver 0.0.21
 	· UserTest class (new)
 
 		Add testSaveUserToDB() --not tested yet--
-		Add testAddNewUser() --empty--
-		Add testUpdateUserToDB() --empty--
-		Add testGetUsersFromDB() --empty--
-		Add testGetUserByAlias() --empty--
-		Add testGetUserById() --empty--
-		Add testCheckUserPassword() --empty--
+		Add testAddNewUser() --not tested yet--
+		Add testUpdateUserToDB() --not tested yet--
+		Add testGetUsersFromDB() --not tested yet--
+		Add testGetUserByAlias() --not tested yet--
+		Add testGetUserById() --not tested yet--
+		Add testCheckUserPassword() --ok--
 
 
 

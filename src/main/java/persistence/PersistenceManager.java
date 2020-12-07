@@ -172,8 +172,8 @@ public class PersistenceManager {
 		int id = 0;
 		Statement stm = null;
 		ResultSet results = null;
-		String sql = "SELECT * FROM " + tableName
-				+ " ORDER BY id DESC LIMIT 1";
+		String sql = "SELECT * FROM \"" + tableName
+				+ "\" ORDER BY id DESC LIMIT 1";
 		try {
 			stm = conn.createStatement();
 			results = stm.executeQuery(sql);
