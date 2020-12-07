@@ -465,7 +465,18 @@ Ver 0.0.21
 		Rename getUserTypes() >> getUserTypesArray()
 		Add getUserTypes()
 
-	* - Package 
+	* - Package main.java.company
+
+	· Company class:
+		Initialize Lists
+
+	· BusinessUnit class:
+		Initialize Lists
+
+	* - Package main.java.event
+
+	· Event class:
+		Initialize Lists
 
 	* - Package test.java
 

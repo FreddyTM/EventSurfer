@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import main.java.persistence.PersistenceManager;
@@ -21,7 +22,7 @@ public class Company {
 	private String telefono;
 	private String mail;
 	private String web;
-	private List<BusinessUnit> businessUnits;
+	private List<BusinessUnit> businessUnits = new ArrayList<BusinessUnit>();
 	
 	
 	public Company(int id, String nombre, String direccion, String provincia,

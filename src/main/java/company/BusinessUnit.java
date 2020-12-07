@@ -23,9 +23,9 @@ public class BusinessUnit {
 	private String cpostal;
 	private String telefono;
 	private String mail;
-	private List<User> users;
-	private List<Area> areas;
-	private List<Event> events;
+	private List<User> users = new ArrayList<User>();
+	private List<Area> areas = new ArrayList<Area>();
+	private List<Event> events = new ArrayList<Event>();
 	
 	public BusinessUnit(int id, Company company, String nombre, String direccion,
 			String provincia, String estado, String cpostal, String telefono, String mail) {			

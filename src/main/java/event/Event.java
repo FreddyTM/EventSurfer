@@ -25,7 +25,7 @@ public class Event {
 	private String titulo;
 	private String descripcion;
 	private String eventState;
-	private List<EventUpdate> updates;
+	private List<EventUpdate> updates = new ArrayList<EventUpdate>();
 	
 	
 	public Event(int id, BusinessUnit bUnit, Area area, String eventType, String titulo,
