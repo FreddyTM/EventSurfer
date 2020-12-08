@@ -567,7 +567,21 @@ Ver 0.0.22
 		Add testGetBusinessUnitByName() --empty--
 		Add testGetBusinessUnitById() --empty--
 
+	· EventTest class (new)
 
+		Add testSaveEventToDB() --empty--
+		Add testAddNewEvent() --empty--
+		Add testUpdateEventToDB() --empty--
+		Add testGetEventsFromDB() --empty--
+		Add testGetEventById() --empty--
+
+	· EventUpdateTest class (new)
+
+		Add testSaveEventUpdateToDB() --empty--
+		Add testAddNewEventUpdate() --empty--
+		Add testUpdateEventUpdateToDB() --empty--
+		Add testGetEventUpdatesFromDB() --empty--
+		Add testGetEventUpdatesByUserId() --empty--
 
 
 
