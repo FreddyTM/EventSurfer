@@ -134,24 +134,24 @@ public class BusinessUnit {
 		}	
 	}
 	
-	/**
-	 * Actualiza los datos de una unidad de negocio que ya esté en la lista de unidades de negocio
-	 * de la empresa, si la actualización de dichos datos en la base de datos se realiza con éxito
-	 * @param conn conexión con la base de datos
-	 * @param bUnit unidad de negocio que contiene los datos que se actualizan
-	 */
-	public void updateBusinessUnit(Connection conn, BusinessUnit bUnit) {
-		if (updateBusinessUnitToDB(conn, bUnit)) {
-			this.company = bUnit.getCompany();
-			this.nombre = bUnit.getNombre();
-			this.direccion = bUnit.getDireccion();
-			this.provincia = bUnit.getProvincia();
-			this.estado = bUnit.getEstado();
-			this.cpostal = bUnit.getCpostal();
-			this.telefono = bUnit.getTelefono();
-			this.mail = bUnit.getMail();
-		}
-	}
+//	/**
+//	 * Actualiza los datos de una unidad de negocio que ya esté en la lista de unidades de negocio
+//	 * de la empresa, si la actualización de dichos datos en la base de datos se realiza con éxito
+//	 * @param conn conexión con la base de datos
+//	 * @param bUnit unidad de negocio que contiene los datos que se actualizan
+//	 */
+//	public void updateBusinessUnit(Connection conn, BusinessUnit bUnit) {
+//		if (updateBusinessUnitToDB(conn, bUnit)) {
+//			this.company = bUnit.getCompany();
+//			this.nombre = bUnit.getNombre();
+//			this.direccion = bUnit.getDireccion();
+//			this.provincia = bUnit.getProvincia();
+//			this.estado = bUnit.getEstado();
+//			this.cpostal = bUnit.getCpostal();
+//			this.telefono = bUnit.getTelefono();
+//			this.mail = bUnit.getMail();
+//		}
+//	}
 	
 	/**
 	 * Obtiene la lista de BusinessUnits del objeto Company pasado por parámetro

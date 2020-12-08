@@ -538,8 +538,38 @@ Ver 0.0.21
 		Add testGetUserById() --ok--
 		Add testCheckUserPassword() --ok--
 
+Ver 0.0.22
+
+	* - Package main.java.company
+
+	· BusinessUnit class:
+
+		Delete updateBusinessUnit()	
+
+	* - Package test.java
+
+	· AreaTest class (new)
+
+		Add testSaveAreaToDB() --empty--
+		Add testSaveBUnitAreaToDB() --empty--
+		Add testAddNewArea() --empty--
+		Add testUpdateAreaToDB() --empty--
+		Add testGetAreasFromDB() --empty--
+		Add testGetAreaByName() --empty--
+		Add testGetAreaById() --empty--
+
+	· BusinessUnitTest class (new)
+
+		Add testSaveBUnitToDB() --empty--
+		Add testAddNewBusinessUnit() --empty--
+		Add testUpdateBusinessUnitToDB() --empty--
+		Add testGetBusinessUnitsFromDB() --empty--
+		Add testGetBusinessUnitByName() --empty--
+		Add testGetBusinessUnitById() --empty--
 
 
-		*** CHECK HASH METHODS USER CLASS***
+
+
+
 		
 
