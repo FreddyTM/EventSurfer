@@ -552,7 +552,7 @@ Ver 0.0.22
 
 		Add testSaveAreaToDB() --not tested--
 		Add testSaveBUnitAreaToDB() --not tested--
-		Add testAddNewArea() --empty--
+		Add testAddNewArea() --not tested--
 		Add testUpdateAreaToDB() --empty--
 		Add testGetAreasFromDB() --empty--
 		Add testGetAreaByName() --not tested--

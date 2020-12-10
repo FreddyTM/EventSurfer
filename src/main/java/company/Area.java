@@ -84,10 +84,10 @@ public class Area {
 	 * recupera el id asignado en el registro de la base de datos y lo almacena
 	 * en el id del objeto Area. Tras ello, inserta un nuevo registro en la
 	 * tabla b_unit_area con los id del area y de la unidad de negocio a la que pertenece
-	 * @param conn
-	 * @param bUnit
-	 * @param area
-	 * @return
+	 * @param conn conexión a la base de datos
+	 * @param bUnit unidad de negocio a la que pertenece el area nueva
+	 * @param area area nueva
+	 * @return el area nueva insertada
 	 */
 	public Area addNewArea (Connection conn, BusinessUnit bUnit, Area area) {
 		if (saveAreaToDB(conn, area)) {
