@@ -2,20 +2,44 @@ package test.java;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Connection;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+import main.java.company.Area;
+import main.java.company.BusinessUnit;
+import main.java.company.Company;
+import main.java.company.User;
+import main.java.persistence.PersistenceManager;
+
+@TestMethodOrder(OrderAnnotation.class)
 class AreaTest {
 
+	private static Connection conn;
+	private static Company company = new Company();
+	private static BusinessUnit bUnit = new BusinessUnit();
+	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		PersistenceManager.setUrl("jdbc:postgresql://localhost:5432/devsurferdb");
+		PersistenceManager.setUser("surferadmin");
+		PersistenceManager.setPassword("surferpass");
+		conn = PersistenceManager.getConnection();
+		company.setId(1);
+		bUnit.setId(1);
+		bUnit.setCompany(company);
 	}
 
 	@AfterAll
 	static void tearDownAfterClass() throws Exception {
+		PersistenceManager.closeDatabase(conn);
 	}
 
 	@BeforeEach
@@ -27,13 +51,20 @@ class AreaTest {
 	}
 
 	@Test
+	@Order(1)
 	void testSaveAreaToDB() {
-		fail("Not yet implemented");
+		Area area = new Area();
+		area.setArea("RECEPCIÓN");
+		area.setDescripcion("Recepción del centro de trabajo");
+		assertTrue(new Area().saveAreaToDB(conn, area));
+		area.setId(PersistenceManager.getLastElementIdFromDB(conn, Area.TABLE_NAME));
+		bUnit.getAreas().add(area);
 	}
 
 	@Test
+	@Order(4)
 	void testSaveBUnitAreaToDB() {
-		fail("Not yet implemented");
+		assertTrue(new Area().saveBUnitAreaToDB(conn, bUnit, bUnit.getAreas().get(0)));
 	}
 
 	@Test
@@ -52,13 +83,16 @@ class AreaTest {
 	}
 
 	@Test
+	@Order(3)
 	void testGetAreaByName() {
-		fail("Not yet implemented");
+		assertEquals("Recepción del centro de trabajo", new Area().getAreaByName(bUnit, "RECEPCIÓN").getDescripcion());
 	}
 
 	@Test
+	@Order(2)
 	void testGetAreaById() {
-		fail("Not yet implemented");
+		int id = bUnit.getAreas().get(0).getId();
+		assertNotNull(new Area().getAreaById(bUnit, id));
 	}
 
 }
