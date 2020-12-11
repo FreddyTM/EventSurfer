@@ -80,6 +80,7 @@ class AreaTest {
 	}
 
 	@Test
+	@Order(6)
 	void testUpdateAreaToDB() {
 		fail("Not yet implemented");
 	}
