@@ -560,7 +560,7 @@ Ver 0.0.22
 
 	· BusinessUnitTest class (new)
 
-		Add testSaveBUnitToDB() --empty--
+		Add testSaveBUnitToDB() --not tested yet--
 		Add testAddNewBusinessUnit() --empty--
 		Add testUpdateBusinessUnitToDB() --empty--
 		Add testGetBusinessUnitsFromDB() --empty--

@@ -115,16 +115,16 @@ class UserTest {
 	}
 
 	@Test
-	//@Order(6)
-	@Disabled("waiting for previous test to work fine")
+	@Order(5)
+	//@Disabled("waiting for previous test to work fine")
 	void testGetUserByAlias() {
 		assertNotNull(new User().getUserByAlias(bUnit, "FakeManager"));
-		assertEquals("Nombre", new User().getUserByAlias(bUnit, "FakeManager").getNombre());
+		assertEquals("MiNombre", new User().getUserByAlias(bUnit, "FakeManager").getNombre());
 	}
 
 	@Test
-	//@Order(5)
-	@Disabled("waiting for previous test to work fine")
+	@Order(6)
+	//@Disabled("waiting for previous test to work fine")
 	void testGetUserById() {
 		assertNotNull(new User().getUserById(bUnit, 3));
 		assertEquals("OtroNombre", new User().getUserById(bUnit, 3).getNombre());
