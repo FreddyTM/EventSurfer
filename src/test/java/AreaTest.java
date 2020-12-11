@@ -82,12 +82,19 @@ class AreaTest {
 	@Test
 	@Order(6)
 	void testUpdateAreaToDB() {
-		fail("Not yet implemented");
+		Area oldArea = new Area().getAreaByName(bUnit, "VESTÍBULO PRINCIPAL");
+		Area newArea = new Area();
+		newArea.setId(oldArea.getId());
+		newArea.setArea("COMEDOR");
+		newArea.setDescripcion("Comedor del centro de trabajo");
+		assertTrue(new Area().updateAreaToDB(conn, newArea));
+		oldArea = newArea;
 	}
 
 	@Test
+	@Order(7)
 	void testGetAreasFromDB() {
-		fail("Not yet implemented");
+		assertNotNull(new Area().getAreasFromDB(conn, bUnit));
 	}
 
 	@Test

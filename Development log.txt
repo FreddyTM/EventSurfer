@@ -550,13 +550,13 @@ Ver 0.0.22
 
 	· AreaTest class (new)
 
-		Add testSaveAreaToDB() --not tested--
-		Add testSaveBUnitAreaToDB() --not tested--
-		Add testAddNewArea() --not tested--
-		Add testUpdateAreaToDB() --empty--
-		Add testGetAreasFromDB() --empty--
-		Add testGetAreaByName() --not tested--
-		Add testGetAreaById() --not tested--
+		Add testSaveAreaToDB() --ok--
+		Add testSaveBUnitAreaToDB() --ok--
+		Add testAddNewArea() --ok--
+		Add testUpdateAreaToDB() --ok--
+		Add testGetAreasFromDB() --ok--
+		Add testGetAreaByName() --ok--
+		Add testGetAreaById() --ok--
 
 	· BusinessUnitTest class (new)
 
