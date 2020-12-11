@@ -68,8 +68,15 @@ class AreaTest {
 	}
 
 	@Test
+	@Order(5)
 	void testAddNewArea() {
-		fail("Not yet implemented");
+		Area area = new Area();
+		area.setArea("VESTÍBULO PRINCIPAL");
+		area.setDescripcion("Vestíbulo principal del centro de trabajo");
+		assertNotNull(new Area().addNewArea(conn, bUnit, area));
+		assertNotEquals(0, area.getId());
+		assertEquals(2, area.getId());
+		bUnit.getAreas().add(area);
 	}
 
 	@Test
