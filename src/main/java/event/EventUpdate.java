@@ -175,6 +175,40 @@ public class EventUpdate {
 		}
 		return returnList;
 	}
+	
+	/**
+	 * Devuelve una lista de actualizaciones de evento que hayan sido realizadas por el 
+	 * usuario cuyo alias se pasa por parámetro
+	 * @param event evento del que se buscan las actualizaciones
+	 * @param userAlias alias del usuario que ha hecho las actualizaciones del evento
+	 * @return Lista de actualizaciones de evento realizadas por el usuario
+	 */
+	public List<EventUpdate> getEventUpdatesByUserAlias(Event event, String userAlias) {
+		List<EventUpdate> updatesList = event.getUpdates();
+		List<EventUpdate> returnList = new ArrayList<EventUpdate>();
+		for (EventUpdate eUpdate: updatesList) {
+			if (eUpdate.getUser().getUserAlias() == userAlias) {
+				returnList.add(eUpdate);
+			}
+		}
+		return returnList;
+	}
+	
+	/**
+	 * Devuelve el EventUpdate al que pertenece el id pasado por parámetro
+	 * @param event Evento del que se busca la actualización
+	 * @param id Id del EventUpdate
+	 * @return EventUpdate con el id entrado por parámetro (null si no existe)
+	 */
+	public EventUpdate getEventUpdateById(Event event, int id) {
+		List<EventUpdate> updatesList = event.getUpdates();
+		for (EventUpdate eUpdate: updatesList) {
+			if (eUpdate.getId() == id) {
+				return eUpdate;
+			}
+		}
+		return null;
+	}
 
 	public int getId() {
 		return id;
@@ -223,8 +257,5 @@ public class EventUpdate {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-
-	
-	
+		
 }

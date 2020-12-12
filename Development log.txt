@@ -529,6 +529,8 @@ Ver 0.0.21
 		Add testAddNewEventType() --ok--
 
 	· UserTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
 
 		Add testSaveUserToDB() --ok--
 		Add testAddNewUser() --ok--
@@ -544,11 +546,19 @@ Ver 0.0.22
 
 	· BusinessUnit class:
 
-		Delete updateBusinessUnit()	
+		Delete updateBusinessUnit()
+
+	* - Package main.java.event
+
+	· EventUpdate class:
+		Add getEventUpdatesByUserAlias()
+		Add getEventUpdateById()
 
 	* - Package test.java
 
 	· AreaTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
 
 		Add testSaveAreaToDB() --ok--
 		Add testSaveBUnitAreaToDB() --ok--
@@ -559,6 +569,8 @@ Ver 0.0.22
 		Add testGetAreaById() --ok--
 
 	· BusinessUnitTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
 
 		Add testSaveBUnitToDB() --ok--
 		Add testAddNewBusinessUnit() --ok--
@@ -568,6 +580,8 @@ Ver 0.0.22
 		Add testGetBusinessUnitById() --ok--
 
 	· EventTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
 
 		Add testSaveEventToDB() --ok--
 		Add testAddNewEvent() --ok--
@@ -576,12 +590,14 @@ Ver 0.0.22
 		Add testGetEventById() --ok--
 
 	· EventUpdateTest class (new)
+		Preconditions:
+		Method order: @TestMethodOrder(OrderAnnotation.class)
 
-		Add testSaveEventUpdateToDB() --empty--
-		Add testAddNewEventUpdate() --empty--
-		Add testUpdateEventUpdateToDB() --empty--
-		Add testGetEventUpdatesFromDB() --empty--
-		Add testGetEventUpdatesByUserId() --empty--
+		Add testSaveEventUpdateToDB() --not tested yet--
+		Add testAddNewEventUpdate() --not tested yet--
+		Add testUpdateEventUpdateToDB() --not tested yet--
+		Add testGetEventUpdatesFromDB() --not tested yet--
+		Add testGetEventUpdatesByUserId() --not tested yet--
 
 
 

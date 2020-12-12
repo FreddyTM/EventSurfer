@@ -68,8 +68,7 @@ class EventTest {
 		event.setArea(bUnit.getAreas().get(0));
 		event.setEventType("GOTERAS");
 		event.setTitulo("Goteras frente al mostrador");
-		event.setDescripcion("Aparecen dos goteras frente al mostrador de recepción "
-				+ "tras el pasado día de lluvias. Se colocan cubos para recoger el agua");
+		event.setDescripcion("Aparecen dos goteras frente al mostrador de recepción");
 		event.setEventState("ABIERTA");
 		assertTrue(new Event().saveEventToDB(conn, event));
 		event.setId(PersistenceManager.getLastElementIdFromDB(conn, Event.TABLE_NAME));
