@@ -53,7 +53,7 @@ public class Event {
 	 */
 	public boolean saveEventToDB(Connection conn, Event event) {
 		PreparedStatement pstm = null;
-		String sql = "INSERT INTO event (b_unit_id, area_id, event_type_id, titulo, "
+		String sql = "INSERT INTO \"event\" (b_unit_id, area_id, event_type_id, titulo, "
 				+ "descripcion, event_state_id) "
 				+ "VALUES (?, ?, ?, ?, ?, ?);";
 		try {
@@ -106,7 +106,7 @@ public class Event {
 				+ "event_type_id = ?, "
 				+ "titulo = ?, "
 				+ "descripcion = ?, "
-				+ "event_state_id = ?, "
+				+ "event_state_id = ? "
 				+ "WHERE id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);

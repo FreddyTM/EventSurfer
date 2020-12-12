@@ -569,11 +569,11 @@ Ver 0.0.22
 
 	· EventTest class (new)
 
-		Add testSaveEventToDB() --empty--
-		Add testAddNewEvent() --empty--
-		Add testUpdateEventToDB() --empty--
-		Add testGetEventsFromDB() --empty--
-		Add testGetEventById() --empty--
+		Add testSaveEventToDB() --ok--
+		Add testAddNewEvent() --ok--
+		Add testUpdateEventToDB() --ok--
+		Add testGetEventsFromDB() --ok--
+		Add testGetEventById() --ok--
 
 	· EventUpdateTest class (new)
 
