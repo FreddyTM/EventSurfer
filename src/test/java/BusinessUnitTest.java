@@ -64,28 +64,59 @@ class BusinessUnitTest {
 	}
 
 	@Test
+	@Order(2)
 	void testAddNewBusinessUnit() {
-		fail("Not yet implemented");
+		BusinessUnit bUnit = new BusinessUnit();
+		bUnit.setCompany(company);
+		bUnit.setNombre("TIENDA 2");
+		bUnit.setDireccion("Calle Inexistente, 24 Girona");
+		bUnit.setProvincia("Girona");
+		bUnit.setEstado("Catalunya");
+		bUnit.setCpostal("17999");
+		bUnit.setTelefono("888776655");
+		bUnit.setMail("tienda2@empactual.com");
+		assertNotNull(new BusinessUnit().addNewBusinessUnit(conn, bUnit));
+		assertNotEquals(0, bUnit.getId());
+		assertEquals(3, bUnit.getId());
+		company.getBusinessUnits().add(bUnit);
 	}
 
 	@Test
+	@Order(6)
 	void testUpdateBusinessUnitToDB() {
-		fail("Not yet implemented");
+		BusinessUnit oldBunit = new BusinessUnit().getBusinessUnitByName(company, "TIENDA 1");
+		BusinessUnit newBunit = new BusinessUnit();
+		newBunit.setId(oldBunit.getId());
+		newBunit.setCompany(company);
+		newBunit.setNombre("NUEVA TIENDA 1");
+		newBunit.setDireccion("Calle Falsa, 36 Tarragona");
+		newBunit.setProvincia("Tarragona");
+		newBunit.setEstado("Catalunya");
+		newBunit.setCpostal("43999");
+		newBunit.setTelefono("777665544");
+		newBunit.setMail("nuevatienda1@empactual.com");
+		assertTrue(new BusinessUnit().updateBusinessUnitToDB(conn, newBunit));
+		oldBunit = newBunit;
 	}
 
 	@Test
+	@Order(3)
 	void testGetBusinessUnitsFromDB() {
-		fail("Not yet implemented");
+		assertNotNull(new BusinessUnit().getBusinessUnitsFromDB(conn, company));
 	}
 
 	@Test
+	@Order(4)
 	void testGetBusinessUnitByName() {
-		fail("Not yet implemented");
+		assertNotNull(new BusinessUnit().getBusinessUnitByName(company, "TIENDA 1"));
+		assertEquals("Girona", new BusinessUnit().getBusinessUnitByName(company, "TIENDA 2").getProvincia());
 	}
 
 	@Test
+	@Order(5)
 	void testGetBusinessUnitById() {
-		fail("Not yet implemented");
+		assertNotNull(new BusinessUnit().getBusinessUnitById(company, 3));
+		assertEquals("08999", new BusinessUnit().getBusinessUnitById(company, 2).getCpostal());
 	}
 
 }

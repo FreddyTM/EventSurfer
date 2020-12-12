@@ -560,12 +560,12 @@ Ver 0.0.22
 
 	· BusinessUnitTest class (new)
 
-		Add testSaveBUnitToDB() --not tested yet--
-		Add testAddNewBusinessUnit() --empty--
-		Add testUpdateBusinessUnitToDB() --empty--
-		Add testGetBusinessUnitsFromDB() --empty--
-		Add testGetBusinessUnitByName() --empty--
-		Add testGetBusinessUnitById() --empty--
+		Add testSaveBUnitToDB() --ok--
+		Add testAddNewBusinessUnit() --ok--
+		Add testUpdateBusinessUnitToDB() --ok--
+		Add testGetBusinessUnitsFromDB() --ok--
+		Add testGetBusinessUnitByName() --ok--
+		Add testGetBusinessUnitById() --ok--
 
 	· EventTest class (new)
 
