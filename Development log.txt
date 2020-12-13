@@ -553,6 +553,7 @@ Ver 0.0.22
 	· EventUpdate class:
 		Add getEventUpdatesByUserAlias()
 		Add getEventUpdateById()
+		Update getEventUpdatesByUserAlias()
 
 	* - Package test.java
 
@@ -593,12 +594,14 @@ Ver 0.0.22
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
-		Add testSaveEventUpdateToDB() --not tested yet--
-		Add testAddNewEventUpdate() --not tested yet--
-		Add testUpdateEventUpdateToDB() --not tested yet--
-		Add testGetEventUpdatesFromDB() --not tested yet--
-		Add testGetEventUpdatesByUserId() --not tested yet--
-
+		Add testSaveEventUpdateToDB() --ok--
+		Add testAddNewEventUpdate() --ok--
+		Add testUpdateEventUpdateToDB() --ok--
+		Add testGetEventUpdatesFromDB() --ok--
+		Add testGetEventUpdatesByUserId() --ok--
+		Add testGetEventUpdateById() --ok--
+		
+	· BASIC TESTING COMPLETED
 
 
 		

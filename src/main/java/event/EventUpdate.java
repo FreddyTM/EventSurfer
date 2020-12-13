@@ -187,7 +187,7 @@ public class EventUpdate {
 		List<EventUpdate> updatesList = event.getUpdates();
 		List<EventUpdate> returnList = new ArrayList<EventUpdate>();
 		for (EventUpdate eUpdate: updatesList) {
-			if (eUpdate.getUser().getUserAlias() == userAlias) {
+			if (eUpdate.getUser().getUserAlias().equals(userAlias)) {
 				returnList.add(eUpdate);
 			}
 		}

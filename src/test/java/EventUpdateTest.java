@@ -40,15 +40,7 @@ class EventUpdateTest {
 		conn = PersistenceManager.getConnection();
 		company.setId(1);
 		bUnit.setId(1);
-		bUnit.setCompany(company);
-		bUnit.setAreas(new Area().getAreasFromDB(conn, bUnit));
-		//conn = PersistenceManager.getConnection();
-		//Debug
-		System.out.println(conn != null);
-		System.out.println(bUnit != null);
-		bUnit.setEvents(new Event().getEventsFromDB(conn, bUnit));
-		//conn = PersistenceManager.getConnection();
-		bUnit.setUsers(new User().getUsersFromDB(conn, bUnit));
+		bUnit.setCompany(company);		
 		EventType evType = new EventType();
 		evType.loadData(conn);
 		TypesStatesContainer.setEvType(evType);
@@ -58,6 +50,9 @@ class EventUpdateTest {
 		UserType uType = new UserType();
 		uType.loadData(conn);
 		TypesStatesContainer.setuType(uType);
+		bUnit.setAreas(new Area().getAreasFromDB(conn, bUnit));
+		bUnit.setEvents(new Event().getEventsFromDB(conn, bUnit));
+		bUnit.setUsers(new User().getUsersFromDB(conn, bUnit));
 	}
 
 	@AfterAll
@@ -106,16 +101,17 @@ class EventUpdateTest {
 	}
 
 	@Test
-	@Order(6)
+	@Order(7)
 	void testUpdateEventUpdateToDB() {
 		Event event = bUnit.getEvents().get(1);
 		EventUpdate oldEupdate = new EventUpdate().getEventUpdateById(event, 2);
 		EventUpdate newEupdate = new EventUpdate();
 		newEupdate.setId(oldEupdate.getId());
+		newEupdate.setEvent(event);
 		newEupdate.setFechaHora(PersistenceManager.getTimestampNow());
 		newEupdate.setDescripcion("Retiramos la mesa al almacén y desmontamos la pata rota");
 		newEupdate.setAutor("Pepe Gotera");
-		newEupdate.setUser(bUnit.getUsers().get(2));
+		newEupdate.setUser(oldEupdate.getUser());
 		assertTrue(new EventUpdate().updateEventUpdateToDB(conn, newEupdate));
 		oldEupdate = newEupdate;
 	}
@@ -134,6 +130,8 @@ class EventUpdateTest {
 	void testGetEventUpdatesByUserAlias() {
 		Event event1 = bUnit.getEvents().get(0);
 		Event event2 = bUnit.getEvents().get(1);
+		event1.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event1));
+		event2.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event2));
 		assertEquals(1, new EventUpdate().getEventUpdatesByUserAlias(event1, "FakeManager").size());
 		assertEquals("Juan Palomo", new EventUpdate().getEventUpdatesByUserAlias(event1, "FakeManager").get(0).getAutor());
 		assertEquals(1, new EventUpdate().getEventUpdatesByUserAlias(event2, "BigFakeUser").size());
@@ -145,10 +143,25 @@ class EventUpdateTest {
 	void testGetEventUpdatesByUserId() {
 		Event event1 = bUnit.getEvents().get(0);
 		Event event2 = bUnit.getEvents().get(1);
+		event1.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event1));
+		event2.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event2));
 		assertEquals(1, new EventUpdate().getEventUpdatesByUserId(event1, 2).size());
 		assertEquals("Juan Palomo", new EventUpdate().getEventUpdatesByUserId(event1, 2).get(0).getAutor());
 		assertEquals(1, new EventUpdate().getEventUpdatesByUserId(event2, 3).size());
 		assertEquals("Pepe Gotera", new EventUpdate().getEventUpdatesByUserId(event2, 3).get(0).getAutor());
+	}
+	
+	@Test
+	@Order(6)
+	void testGetEventUpdateById() {
+		Event event1 = bUnit.getEvents().get(0);
+		Event event2 = bUnit.getEvents().get(1);
+		event1.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event1));
+		event2.setUpdates(new EventUpdate().getEventUpdatesFromDB(conn, event2));
+		assertNotNull(new EventUpdate().getEventUpdateById(event1, 1));
+		assertEquals("Juan Palomo", new EventUpdate().getEventUpdateById(event1, 1).getAutor());
+		assertNotNull(new EventUpdate().getEventUpdateById(event2, 2));
+		assertEquals("Pepe Gotera", new EventUpdate().getEventUpdateById(event2, 2).getAutor());
 	}
 
 }
