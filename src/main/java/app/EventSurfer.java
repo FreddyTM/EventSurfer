@@ -12,30 +12,49 @@ import main.java.types_states.TypesStatesContainer;
 import main.java.types_states.UserType;
 
 
-//VERSION 0.0.15
+//VERSION 0.0.22
 
 
-public class AppDummy {
+public class EventSurfer {
 
-	//Connection connection;
+	Connection connection;
 	
 	public static void main(String[] args) {
-		AppDummy appDummy = new AppDummy();
-		appDummy.go(args);
+		EventSurfer eventSurfer = new EventSurfer();
+		eventSurfer.go(args);
 	}
 	
 	public void go(String[] args) {
 		
 		//connectToDatabase();
-		System.out.println(args.length);
+		//System.out.println(args.length);
 		if (args.length == 1) {
-			loadData(args[0]);
+			connection = connectToDatabase(args[0]);
+			while(connection == null) {
+				//Error screen with reconnect button
+			}
+			//Login screen
+			//Add PersistenceManager method to find user and its business unit
+			//Instantiate a CurrentSession with company, business unit, user
+			//and last db update of business unit data.
+			
+			//Until code is completed
+			System.out.println("So far so good");
+			PersistenceManager.closeDatabase(connection);
 		} else {
-			loadData("");
+			connection = connectToDatabase("");
+			while(connection == null) {
+				//Error screen with reconnect button
+			}
+			//Login screen
+
+			//Until code is completed
+			System.out.println("So far so good");
+			PersistenceManager.closeDatabase(connection);
 		}
 	}
 	
-	public void connectToDatabase () {
+	public void checkConnectToDatabase () {
 		Connection connection = null;
 		String url = "jdbc:postgresql://localhost:5432/surferdb";
 		String user = "surferadmin";
@@ -79,10 +98,11 @@ public class AppDummy {
 	//LOCAL_DB - Local database
 	//LOCAL_TEST_DB - Local test database
 	//REMOTE_DB - Remote database (Heroku)
-	public void loadData(String database) {
+	public Connection connectToDatabase(String database) {
 		String url = null;
 		String user = null;
 		String password = null;
+		Connection connection = null;
 		
 		switch(database) {
 		case "LOCAL_DB":
@@ -104,21 +124,16 @@ public class AppDummy {
 			user = "surferadmin";
 			password = "surferpass";
 		}
-		//connection = PersistenceManager.openDatabase(url, user, password);
-		//PersistenceManager.loadData(connection);
 		
 		PersistenceManager.setUrl(url);
 		PersistenceManager.setUser(user);
 		PersistenceManager.setPassword(password);
-		Connection connection = PersistenceManager.getConnection();
-		PersistenceManager.loadData(connection);
+		connection = PersistenceManager.getConnection();
+		return connection;
 		
-		//Debug
-		//System.out.println(PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
+		//PersistenceManager.loadData(connection);	
+		//PersistenceManager.closeDatabase(connection);
 		
-		PersistenceManager.closeDatabase(connection);
-		
-		//System.out.println (PersistenceManager.passHash("8salas15pelis*"));
 	}
 
 }
