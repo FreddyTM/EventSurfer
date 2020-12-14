@@ -46,7 +46,14 @@ public class EventSurfer {
 			while(connection == null) {
 				//Error screen with reconnect button
 			}
-			//Login screen
+			if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
+				//admin password sin cambiar
+				System.out.println("Password sin cambiar");
+				//update admin data screen
+			} else if (PersistenceManager.checkDefaultAdminPassword(connection) == 1)
+				//admin password cambiado
+				System.out.println("Password cambiado");
+				//Login screen
 
 			//Until code is completed
 			System.out.println("So far so good");

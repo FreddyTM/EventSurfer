@@ -24,37 +24,37 @@ import main.java.types_states.UserType;
 
 public class PersistenceManager {
 	
-	private static String url;
-	private static String user;
-	private static String password;
+	private static String url; //URL de la base de datos
+	private static String user; //usuario de la base de datos
+	private static String password; //contraseña del usuario de la base de datos
 
-	/**
-	 * Abre una conexión con la base de datos
-	 * @param url URL de la base de datos
-	 * @param user usuario que accede a la base de datos
-	 * @param password contraseña del usuario
-	 * @return conexión con la base de datos
-	 */
-	public static Connection openDatabase (String url, String user, String password) {
-		
-		Connection connection = null;
-		String dbName = url.substring(url.lastIndexOf("/"));;
-		
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
-		
-		return connection;
-	}
+//	/**
+//	 * Abre una conexión con la base de datos
+//	 * @param url URL de la base de datos
+//	 * @param user usuario de la base de datos
+//	 * @param password contraseña del usuario de la base de datos
+//	 * @return conexión con la base de datos
+//	 */
+//	public static Connection openDatabase (String url, String user, String password) {
+//		
+//		Connection connection = null;
+//		String dbName = url.substring(url.lastIndexOf("/"));;
+//		
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(url, user, password);
+//			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
+//		
+//		return connection;
+//	}
 
 	/**
 	 * Cierra la conexión con la base de datos
@@ -205,10 +205,10 @@ public class PersistenceManager {
 	
 	
 	/**
-	 * Carga los datos de la base de datos al abrir la aplicación
+	 * Carga todos los datos de la base de datos
 	 * @param conn conexión con la base de datos
 	 */
-	public static void loadData (Connection conn) {
+	public static void loadAllData (Connection conn) {
 		
 		//Lista de tipos de usuario
 		UserType userTypeList = new UserType();
@@ -245,6 +245,39 @@ public class PersistenceManager {
 				event.setUpdates(eUpdate);
 			}
 		}
+	}
+	
+	/**
+	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
+	 * o lo ha cambiado.
+	 * @param conn conexión con la base de datos
+	 * @return 0. password sin cambiar, 1. password cambiado, -1 error de comprobación
+	 */
+	public static int checkDefaultAdminPassword(Connection conn) {
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT user_password "
+				+ "FROM \"user\" "
+				+ "WHERE id = 1;";
+		try {
+			stm = conn.createStatement();
+			results = getResultSet(stm, sql);
+			while(results.next()) {
+				String password = results.getString(1);
+				if (password.equals("surferpass")) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			closeResultSet(results);
+			closeStatement(stm);
+		}
+		return -1;
 	}
 
 	public static String getUrl() {

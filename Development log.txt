@@ -616,3 +616,20 @@ ver 0.0.23
 		Update go()
 		Add connection attribute
 
+	* - Package main.java.persistence
+
+	· CurrentSession class:
+		Add attributes:
+			session, dateTimeReference, connection
+		Add private constructor
+		Add getInstance()
+
+	· PersistenceManager class:
+		Rename loadData() >> loadAllData()
+		Delete openDatabase()
+		Add checkDefaultAdminPassword()
+
+	* - Package test.java
+
+	· PersistenceManagerTest class:
+		Add testCheckDefaultAdminPassword()
