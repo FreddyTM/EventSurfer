@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import main.java.company.Company;
+import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
@@ -30,35 +32,39 @@ public class EventSurfer {
 		//System.out.println(args.length);
 		if (args.length == 1) {
 			connection = connectToDatabase(args[0]);
-			while(connection == null) {
-				//Error screen with reconnect button
-			}
+
+		} else {
+			connection = connectToDatabase("");			
+		}
+		
+		CurrentSession session = CurrentSession.getInstance();
+		session.setCompany(new Company().getCompanyFromDB(connection));
+		while(connection == null) {
+			//Error screen with reconnect button
+		}
+		if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
+			//admin password sin cambiar
+			System.out.println("Password sin cambiar");
+			//update admin data screen
+			//User id será 1, el administrador por defecto
+			//BUnit id será 1, la unidad de negocio por defecto
+			//session.cargaDatos(Company company, int bUnitId, int userId)
+		} else if (PersistenceManager.checkDefaultAdminPassword(connection) == 1) {
+			//admin password cambiado
+			System.out.println("Password cambiado");
 			//Login screen
 			//Add PersistenceManager method to find user and its business unit
 			//Instantiate a CurrentSession with company, business unit, user
 			//and last db update of business unit data.
 			
-			//Until code is completed
-			System.out.println("So far so good");
-			PersistenceManager.closeDatabase(connection);
-		} else {
-			connection = connectToDatabase("");
-			while(connection == null) {
-				//Error screen with reconnect button
-			}
-			if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
-				//admin password sin cambiar
-				System.out.println("Password sin cambiar");
-				//update admin data screen
-			} else if (PersistenceManager.checkDefaultAdminPassword(connection) == 1)
-				//admin password cambiado
-				System.out.println("Password cambiado");
-				//Login screen
-
-			//Until code is completed
-			System.out.println("So far so good");
-			PersistenceManager.closeDatabase(connection);
+			//En botón login
+			//int bUnitId = PersistenceManager.getBunitIdFromUser()
+			//int userId = PersistenceManager.getUserId()
+			//session.CargarDatos(Company company, int bUnitId, int userId)
 		}
+		//Until code is completed
+		System.out.println("So far so good");
+		PersistenceManager.closeDatabase(connection);
 	}
 	
 	public void checkConnectToDatabase () {

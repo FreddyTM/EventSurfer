@@ -628,8 +628,12 @@ ver 0.0.23
 		Rename loadData() >> loadAllData()
 		Delete openDatabase()
 		Add checkDefaultAdminPassword()
+		Add getBunitIdFromUser()
+		Add getUserId()
 
 	* - Package test.java
 
 	· PersistenceManagerTest class:
 		Add testCheckDefaultAdminPassword()
+		Add testGetBunitIdFromUser()
+		Add testGetUserId()
