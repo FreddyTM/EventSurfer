@@ -623,9 +623,12 @@ ver 0.0.23
 			session, dateTimeReference, connection
 		Add private constructor
 		Add getInstance()
+		Add loadAllData()
+		Add loadCurrentSessionData() --empty--
 
 	· PersistenceManager class:
 		Rename loadData() >> loadAllData()
+		Move loadAllData() to CurrentSession
 		Delete openDatabase()
 		Add checkDefaultAdminPassword()
 		Add getBunitIdFromUser()
