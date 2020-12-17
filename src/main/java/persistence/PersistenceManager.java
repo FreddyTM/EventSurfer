@@ -156,7 +156,8 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * Devuelve el id del último tipo de evento de la tabla event_type
+	 * Devuelve el id del último tipo de evento de la tabla indicada
+	 * @param tableName nombre de la tabla en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @return id del último tipo de evento
 	 */
@@ -194,9 +195,6 @@ public class PersistenceManager {
 		Timestamp tNow = new Timestamp(dNow.getTime());
 		return tNow;
 	}
-	
-	
-	
 	
 	/**
 	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
@@ -264,6 +262,13 @@ public class PersistenceManager {
 		return 0;
 	}
 	
+	/**
+	 * Obtiene el id del usuario si el usuario existe
+	 * @param conn conexión con la base de datos
+	 * @param alias alias del usuario
+	 * @param password password del usuario
+	 * @return id del usuario, 0 si el usuario no existe
+	 */
 	public static int getUserId (Connection conn, String alias, String password) {
 		PreparedStatement pstm = null;
 		ResultSet results = null;

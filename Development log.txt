@@ -624,7 +624,7 @@ ver 0.0.23
 		Add private constructor
 		Add getInstance()
 		Add loadAllData()
-		Add loadCurrentSessionData() --empty--
+		Add loadCurrentSessionData() 
 
 	· PersistenceManager class:
 		Rename loadData() >> loadAllData()

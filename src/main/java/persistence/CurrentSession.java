@@ -17,6 +17,7 @@ import main.java.types_states.UserType;
 
 public class CurrentSession {
 
+	//Instancia única de la sesión en curso para toda la aplicación
 	private static CurrentSession session;
 	//Usuario que inicia sesión en la aplicación
 	private User user;
@@ -24,7 +25,7 @@ public class CurrentSession {
 	private BusinessUnit bUnit;
 	//Empresa a la que pertenece la unidad de negocio
 	private Company company;
-	//Registra la fecha y hora actuales en el momento de instanciar el objeto
+	//Registra la fecha y hora en el momento de cargar los datos de la sesión
 	//CurrentSession. Se actualiza con la fecha y hora en que se produzcan
 	//cambios en la base de datos que afecten a company, a bUnit, o a cualquiera
 	//de los objetos que contiene bUnit
@@ -39,7 +40,7 @@ public class CurrentSession {
 //	}
 	
 	private CurrentSession() {
-		//dateTimeReference = PersistenceManager.getTimestampNow();
+
 	}
 	
 	public static CurrentSession getInstance() {
@@ -57,21 +58,17 @@ public class CurrentSession {
 		
 		//Lista de tipos de usuario
 		UserType userTypeList = new UserType();
-		userTypeList.loadData(conn);
-		
+		userTypeList.loadData(conn);		
 		//Lista de tipos de eventos
 		EventType eventTypeList = new EventType();
-		eventTypeList.loadData(conn);
-		
+		eventTypeList.loadData(conn);		
 		//Lista de estados de eventos
 		EventState eventStateList = new EventState();
-		eventStateList.loadData(conn);
-		
+		eventStateList.loadData(conn);	
 		//Mandamos las listas a un objeto contenedor
 		TypesStatesContainer.setuType(userTypeList);
 		TypesStatesContainer.setEvType(eventTypeList);
-		TypesStatesContainer.setEvState(eventStateList);
-		
+		TypesStatesContainer.setEvState(eventStateList);	
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos las unidades de negocio de la compañía
@@ -90,10 +87,48 @@ public class CurrentSession {
 				event.setUpdates(eUpdate);
 			}
 		}
+		//Registramos fecha y hora de la carga de datos de la sesión
+		dateTimeReference = PersistenceManager.getTimestampNow();
 	}
 	
 	public void loadCurrentSessionData(Connection conn, int bUnitId, int userId) {
-		
+		//Lista de tipos de usuario
+		UserType userTypeList = new UserType();
+		userTypeList.loadData(conn);	
+		//Lista de tipos de eventos
+		EventType eventTypeList = new EventType();
+		eventTypeList.loadData(conn);	
+		//Lista de estados de eventos
+		EventState eventStateList = new EventState();
+		eventStateList.loadData(conn);		
+		//Mandamos las listas a un objeto contenedor
+		TypesStatesContainer.setuType(userTypeList);
+		TypesStatesContainer.setEvType(eventTypeList);
+		TypesStatesContainer.setEvState(eventStateList);
+		//Cargamos datos de la compañía
+		company = new Company().getCompanyFromDB(conn);
+		//Cargamos la unidad de negocio que tiene el id bUnitId
+		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
+		for (BusinessUnit bUnit: bUnitList) {
+			if (bUnit.getId() == bUnitId) {
+				company.getBusinessUnits().add(bUnit);
+				this.bUnit = bUnit;
+			}
+		}
+		//Cargamos sus usuarios, areas y eventos de la unidad de negocio
+		List<User> userList = new User().getUsersFromDB(conn, bUnit);
+		bUnit.setUsers(userList);
+		user = new User().getUserById(bUnit, userId);
+		List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
+		bUnit.setAreas(areaList);
+		List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
+		bUnit.setEvents(eventList);
+		for (Event event: bUnit.getEvents()) {
+			List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+			event.setUpdates(eUpdate);
+		}
+		//Registramos fecha y hora de la carga de datos de la sesión
+		dateTimeReference = PersistenceManager.getTimestampNow();
 	}
 
 	public Company getCompany() {

@@ -37,30 +37,31 @@ public class EventSurfer {
 			connection = connectToDatabase("");			
 		}
 		
-		CurrentSession session = CurrentSession.getInstance();
-		session.setCompany(new Company().getCompanyFromDB(connection));
 		while(connection == null) {
 			//Error screen with reconnect button
 		}
+		CurrentSession session = CurrentSession.getInstance();
 		if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
 			//update admin data screen
+			
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
-			//session.cargaDatos(Company company, int bUnitId, int userId)
+			session.loadCurrentSessionData(connection, 1, 1);
 		} else if (PersistenceManager.checkDefaultAdminPassword(connection) == 1) {
 			//admin password cambiado
 			System.out.println("Password cambiado");
 			//Login screen
+			
 			//Add PersistenceManager method to find user and its business unit
 			//Instantiate a CurrentSession with company, business unit, user
 			//and last db update of business unit data.
 			
 			//En botón login
-			//int bUnitId = PersistenceManager.getBunitIdFromUser()
+			//int bUnitId = PersistenceManager.getBunitIdFromUser(connection, alias, password);
 			//int userId = PersistenceManager.getUserId()
-			//session.CargarDatos(Company company, int bUnitId, int userId)
+			//session.loadCurrentSessionData(connection, int bUnitId, int userId)
 		}
 		//Until code is completed
 		System.out.println("So far so good");
