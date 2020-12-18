@@ -1,6 +1,8 @@
 package main.java.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -133,6 +135,25 @@ public class CurrentSession {
 
 	public Company getCompany() {
 		return company;
+	}
+	
+	public boolean updateLastModification(Connection conn, int tableId, Timestamp timestamp) {
+		PreparedStatement pstm = null;
+		String sql = "UPDATE last_modification "
+				+ "SET datetime = ? "
+				+ "WHERE table_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setTimestamp(1, timestamp);
+			pstm.setInt(2, tableId);
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
 	}
 
 	public void setCompany(Company company) {
