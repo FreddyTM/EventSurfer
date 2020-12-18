@@ -93,6 +93,14 @@ public class CurrentSession {
 		dateTimeReference = PersistenceManager.getTimestampNow();
 	}
 	
+	/**
+	 * Carga los datos de la unidad de negocio a la que pertenece el usuario
+	 * que abre la sesión. La unidad de negocio y el usuario se almacenan en
+	 * los atributos de la clase
+	 * @param conn conexión con la base de datos
+	 * @param bUnitId id de la unidad de negocio
+	 * @param userId id del usuario que abre la sesión
+	 */
 	public void loadCurrentSessionData(Connection conn, int bUnitId, int userId) {
 		//Lista de tipos de usuario
 		UserType userTypeList = new UserType();
@@ -114,12 +122,14 @@ public class CurrentSession {
 		for (BusinessUnit bUnit: bUnitList) {
 			if (bUnit.getId() == bUnitId) {
 				company.getBusinessUnits().add(bUnit);
+				//Asignamos la unidad de negocio a bUnit
 				this.bUnit = bUnit;
 			}
 		}
 		//Cargamos sus usuarios, areas y eventos de la unidad de negocio
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
 		bUnit.setUsers(userList);
+		//Asignamos el usuario que abre sesión a user
 		user = new User().getUserById(bUnit, userId);
 		List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
 		bUnit.setAreas(areaList);
@@ -133,10 +143,15 @@ public class CurrentSession {
 		dateTimeReference = PersistenceManager.getTimestampNow();
 	}
 
-	public Company getCompany() {
-		return company;
-	}
-	
+	/**
+	 * Actualiza la tabla last_modification, registrando la fecha y la hora
+	 * en la que se produce la actualización de alguna de las otras tablas
+	 * de la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param tableId id de la tabla que se ha actualizado
+	 * @param timestamp fecha y hora de la actualización
+	 * @return true si la actualización se realiza con éxito, false si no
+	 */
 	public boolean updateLastModification(Connection conn, int tableId, Timestamp timestamp) {
 		PreparedStatement pstm = null;
 		String sql = "UPDATE last_modification "
@@ -154,6 +169,10 @@ public class CurrentSession {
 		} finally {
 			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	public Company getCompany() {
+		return company;
 	}
 
 	public void setCompany(Company company) {
@@ -191,6 +210,5 @@ public class CurrentSession {
 	public void setConn(Connection conn) {
 		this.connection = conn;
 	}
-	
-	
+		
 }
