@@ -136,6 +136,40 @@ public class Company {
 	}
 	
 	/**
+	 * Refresca los datos de la compañía recargándolos de la
+	 * base de datos
+	 * @param conn conexión con la base de datos
+	 * @return true si se refrescan los datos, false si no
+	 */
+	public boolean refresh(Connection conn) {
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT nombre, direccion, provincia, estado, "
+				+ "cpostal, telefono, mail, web "
+				+ "FROM company;";
+		try {
+			stm = conn.createStatement();
+			results = stm.executeQuery(sql);
+			while (results.next()) {
+				this.nombre = results.getString(1);
+				this.direccion = results.getString(2);
+				this.provincia = results.getString(3);
+				this.estado = results.getString(4);
+				this.cpostal = results.getString(5);
+				this.telefono = results.getString(6);
+				this.mail = results.getString(7);
+				this.web = results.getString(8);
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closeStatement(stm);
+		}
+	}
+	
+	/**
 	 * Añade una unidad de negocio a la lista de unidades de negocio si la inserción de
 	 * la unidad de negocio en la base de datos se hace con éxito
 	 * @param conn conexión con la base de datos

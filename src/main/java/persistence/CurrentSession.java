@@ -182,13 +182,14 @@ public class CurrentSession {
 		
 		@Override
 		public void run() {
+			Connection conn = session.getConnection();
 			Timestamp tempDateTime = session.getDateTimeReference();
 			Statement stm = null;
 			ResultSet results = null;
 			String sql = "SELECT * "
 					+ "FROM last_modification";
 			try {
-				stm = session.getConnection().createStatement();
+				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
 				while (results.next()) {
 					String tableName = results.getString(1);
@@ -197,7 +198,8 @@ public class CurrentSession {
 						//Actualizar objetos correspondientes a table_name
 						//Llamadas a métodos refresh de las clases
 						switch(tableName) {
-						
+							case "company":
+								session.getCompany().refresh(conn);
 						}				
 						//Actualizamos el timestamp temporal para que acabe registrando
 						//el mayor valor que se encuentre en el Resultset

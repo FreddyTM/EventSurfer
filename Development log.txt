@@ -646,6 +646,7 @@ ver 0.0.23
 
 	· Company class:
 		Add TABLE_NAME attribute
+		Add refresh()
 
 	* - Package test.java
 
