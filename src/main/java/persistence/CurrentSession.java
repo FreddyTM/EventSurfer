@@ -2,9 +2,12 @@ package main.java.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.TimerTask;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
@@ -42,7 +45,7 @@ public class CurrentSession {
 //	}
 	
 	private CurrentSession() {
-
+		
 	}
 	
 	public static CurrentSession getInstance() {
@@ -148,19 +151,19 @@ public class CurrentSession {
 	 * en la que se produce la actualización de alguna de las otras tablas
 	 * de la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param tableId id de la tabla que se ha actualizado
+	 * @param tableName nombre de la tabla que se ha actualizado
 	 * @param timestamp fecha y hora de la actualización
 	 * @return true si la actualización se realiza con éxito, false si no
 	 */
-	public boolean updateLastModification(Connection conn, int tableId, Timestamp timestamp) {
+	public boolean updateLastModification(Connection conn, String tableName, Timestamp timestamp) {
 		PreparedStatement pstm = null;
 		String sql = "UPDATE last_modification "
 				+ "SET datetime = ? "
-				+ "WHERE table_id = ?;";
+				+ "WHERE table_name = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setTimestamp(1, timestamp);
-			pstm.setInt(2, tableId);
+			pstm.setString(2, tableName);
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -169,6 +172,48 @@ public class CurrentSession {
 		} finally {
 			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	//Clase que realiza la comprobación de las tablas que se han actualizado
+	//con posterioridad a la última carga de datos de la sesión en curso
+	class TimerJob extends TimerTask {
+		
+		CurrentSession session = CurrentSession.getInstance();
+		
+		@Override
+		public void run() {
+			Timestamp tempDateTime = session.getDateTimeReference();
+			Statement stm = null;
+			ResultSet results = null;
+			String sql = "SELECT * "
+					+ "FROM last_modification";
+			try {
+				stm = session.getConnection().createStatement();
+				results = PersistenceManager.getResultSet(stm, sql);
+				while (results.next()) {
+					String tableName = results.getString(1);
+					Timestamp dateTimeDb = results.getTimestamp(2);
+					if (session.getDateTimeReference().before(dateTimeDb) ) {
+						//Actualizar objetos correspondientes a table_name
+						//Llamadas a métodos refresh de las clases
+						switch(tableName) {
+						
+						}				
+						//Actualizamos el timestamp temporal para que acabe registrando
+						//el mayor valor que se encuentre en el Resultset
+						if(tempDateTime.before(dateTimeDb)) {
+							tempDateTime = dateTimeDb;
+						}
+					}
+				}
+				//Actualizamos dateTimeReference de la sesión
+				session.setDateTimeReference(tempDateTime);;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 	public Company getCompany() {
@@ -203,12 +248,12 @@ public class CurrentSession {
 		this.dateTimeReference = dateTimeReference;
 	}
 
-	public Connection getConn() {
+	public Connection getConnection() {
 		return connection;
 	}
 
-	public void setConn(Connection conn) {
-		this.connection = conn;
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 		
 }

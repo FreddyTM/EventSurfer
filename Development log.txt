@@ -627,6 +627,10 @@ ver 0.0.23
 		Add loadCurrentSessionData() 
 		Add updateLastModification()
 
+	· TimerJob class (new inner CurrentSession class):
+		Add run()
+		Update run() --switch to refresh objects not finished yet--
+
 	· PersistenceManager class:
 		Rename loadData() >> loadAllData()
 		Move loadAllData() to CurrentSession
@@ -639,6 +643,9 @@ ver 0.0.23
 
 	· Area class:
 		Update getAreasFromDB()
+
+	· Company class:
+		Add TABLE_NAME attribute
 
 	* - Package test.java
 

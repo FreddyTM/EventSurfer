@@ -13,6 +13,7 @@ import main.java.persistence.PersistenceManager;
 
 public class Company {
 	
+	public static final String TABLE_NAME = "company";
 	private int id;
 	private String nombre;
 	private String direccion;
