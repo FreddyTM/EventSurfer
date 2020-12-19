@@ -625,6 +625,7 @@ ver 0.0.23
 		Add getInstance()
 		Add loadAllData()
 		Add loadCurrentSessionData() 
+		Add updateLastModification()
 
 	· PersistenceManager class:
 		Rename loadData() >> loadAllData()
@@ -633,6 +634,11 @@ ver 0.0.23
 		Add checkDefaultAdminPassword()
 		Add getBunitIdFromUser()
 		Add getUserId()
+
+	* - Package main.java.company
+
+	· Area class:
+		Update getAreasFromDB()
 
 	* - Package test.java
 

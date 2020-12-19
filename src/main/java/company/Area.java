@@ -151,7 +151,7 @@ public class Area {
 				area = new Area();
 				area.setId(results.getInt(1));
 				area.setArea(results.getString(2));
-				area.setArea(results.getString(3));
+				area.setDescripcion(results.getString(3));
 				areaList.add(area);				
 			}
 		} catch (SQLException e) {
