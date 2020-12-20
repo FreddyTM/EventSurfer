@@ -196,10 +196,24 @@ public class CurrentSession {
 					Timestamp dateTimeDb = results.getTimestamp(2);
 					if (session.getDateTimeReference().before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
-						//Llamadas a métodos refresh de las clases
+						//Llamadas a métodos loadData o refresh de las clases
 						switch(tableName) {
+							case "user_type":
+								UserType userTypeList = new UserType();
+								userTypeList.loadData(conn);
+								TypesStatesContainer.setuType(userTypeList);
+							case "event_type":
+								EventType eventTypeList = new EventType();
+								eventTypeList.loadData(conn);
+								TypesStatesContainer.setEvType(eventTypeList);
+							case "event_state":
+								EventState eventStateList = new EventState();
+								eventStateList.loadData(conn);
+								TypesStatesContainer.setEvState(eventStateList);
 							case "company":
 								session.getCompany().refresh(conn);
+							case "business_unit":
+								
 						}				
 						//Actualizamos el timestamp temporal para que acabe registrando
 						//el mayor valor que se encuentre en el Resultset

@@ -648,6 +648,9 @@ ver 0.0.23
 		Add TABLE_NAME attribute
 		Add refresh()
 
+	· BusinessUnit class:
+		Add refresh() --empty--
+
 	* - Package test.java
 
 	· PersistenceManagerTest class:

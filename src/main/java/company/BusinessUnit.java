@@ -195,6 +195,10 @@ public class BusinessUnit {
 		return bUnitsList;
 	}
 	
+	public boolean refresh(Connection conn) {
+		return false;
+	}
+	
 	
 	/**
 	 * Añade un usuario a la lista de usuarios si la inserción del usuario en la base de
