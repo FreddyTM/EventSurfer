@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Timer;
 import java.util.TimerTask;
 
 import main.java.company.Area;
@@ -45,7 +46,9 @@ public class CurrentSession {
 //	}
 	
 	private CurrentSession() {
-		
+		Timer timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 60000, 60000);
 	}
 	
 	public static CurrentSession getInstance() {
@@ -196,24 +199,58 @@ public class CurrentSession {
 					Timestamp dateTimeDb = results.getTimestamp(2);
 					if (session.getDateTimeReference().before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
-						//Llamadas a métodos loadData o refresh de las clases
+						//Llamadas a métodos de recarga de datos de las clases
 						switch(tableName) {
 							case "user_type":
 								UserType userTypeList = new UserType();
 								userTypeList.loadData(conn);
 								TypesStatesContainer.setuType(userTypeList);
+								break;
 							case "event_type":
 								EventType eventTypeList = new EventType();
 								eventTypeList.loadData(conn);
 								TypesStatesContainer.setEvType(eventTypeList);
+								break;
 							case "event_state":
 								EventState eventStateList = new EventState();
 								eventStateList.loadData(conn);
 								TypesStatesContainer.setEvState(eventStateList);
+								break;
 							case "company":
 								session.getCompany().refresh(conn);
+								break;
 							case "business_unit":
-								
+								session.getbUnit().refresh(conn);
+								break;
+							case "user":
+								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
+								session.getbUnit().setUsers(userList);
+								for (User user: session.getbUnit().getUsers()) {
+									if (session.getUser().getId() == user.getId()) {
+										session.setUser(user);
+									}
+								}
+								break;
+							case "area":
+								List<Area> areaList = new Area().getAreasFromDB(conn, session.getbUnit());
+								session.getbUnit().setAreas(areaList);
+								break;
+							case "event":
+								List<Event> eventList = new Event().getEventsFromDB(conn, session.getbUnit());
+								session.getbUnit().setEvents(eventList);
+								for (Event event: session.getbUnit().getEvents()) {
+									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+									event.setUpdates(eUpdate);
+								}
+								break;
+							case "event_update":
+								for (Event event: session.getbUnit().getEvents()) {
+									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+									event.setUpdates(eUpdate);
+								}
+								break;
+							default:
+								//Throw exception unknown table
 						}				
 						//Actualizamos el timestamp temporal para que acabe registrando
 						//el mayor valor que se encuentre en el Resultset

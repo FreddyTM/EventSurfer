@@ -195,8 +195,37 @@ public class BusinessUnit {
 		return bUnitsList;
 	}
 	
+	/**
+	 * Refresca los datos de la unidad de negocio recargándolos de
+	 * la base de datos
+	 * @param conn conexión con la base de datos
+	 * @return true si se refrescan los datos, false si no
+	 */
 	public boolean refresh(Connection conn) {
-		return false;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT nombre, direccion, provincia, estado, "
+				+ "cpostal, telefono, mail "
+				+ "FROM business_unit "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, id);
+			results = pstm.executeQuery();
+			while (results.next()) {
+				this.nombre = results.getString(1);
+				this.direccion = results.getString(2);
+				this.provincia = results.getString(3);
+				this.estado = results.getString(4);
+				this.cpostal = results.getString(5);
+				this.telefono = results.getString(6);
+				this.mail = results.getString(7);
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	

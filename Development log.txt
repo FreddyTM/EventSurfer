@@ -629,7 +629,7 @@ ver 0.0.23
 
 	· TimerJob class (new inner CurrentSession class):
 		Add run()
-		Update run() --switch to refresh objects not finished yet--
+		Update run()
 
 	· PersistenceManager class:
 		Rename loadData() >> loadAllData()
@@ -649,7 +649,7 @@ ver 0.0.23
 		Add refresh()
 
 	· BusinessUnit class:
-		Add refresh() --empty--
+		Add refresh() 
 
 	* - Package test.java
 
