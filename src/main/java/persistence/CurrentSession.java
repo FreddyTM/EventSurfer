@@ -181,11 +181,14 @@ public class CurrentSession {
 	//con posterioridad a la última carga de datos de la sesión en curso
 	class TimerJob extends TimerTask {
 		
-		CurrentSession session = CurrentSession.getInstance();
+		//CurrentSession session = CurrentSession.getInstance();
 		
 		@Override
 		public void run() {
 			Connection conn = session.getConnection();
+			if (conn == null) {
+				conn = PersistenceManager.getConnection();
+			}
 			Timestamp tempDateTime = session.getDateTimeReference();
 			Statement stm = null;
 			ResultSet results = null;
