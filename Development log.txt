@@ -256,6 +256,7 @@ Ver 0.0.13
 	* - Package event
 
 	· Refactor class name BasicEvent to Event
+
 	· Event class:
 		Update attributes:
 		id, bUnit, eventType, titulo, descripcion, eventState, updates
@@ -657,3 +658,21 @@ ver 0.0.23
 		Add testCheckDefaultAdminPassword()
 		Add testGetBunitIdFromUser()
 		Add testGetUserId()
+
+	· BASIC DATABASE MODIFICATION CONTROL COMPLETED
+
+ver 0.1.0
+
+	· FIRST GUI ELEMENTS	
+
+	* - Package main.java.app
+		Add attributes:
+			session, frame
+		Add EventSurfer() constructor
+		Add initialize()
+
+	* - Package main.java.gui
+
+	· Login class --empty--
+
+	· DefaultAdmin class --empty--

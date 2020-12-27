@@ -1,9 +1,12 @@
 
 package main.java.app;
 
+import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import javax.swing.JFrame;
 
 import main.java.company.Company;
 import main.java.persistence.CurrentSession;
@@ -20,10 +23,31 @@ import main.java.types_states.UserType;
 public class EventSurfer {
 
 	Connection connection;
+	CurrentSession session;
+	private JFrame frame;
 	
 	public static void main(String[] args) {
-		EventSurfer eventSurfer = new EventSurfer();
-		eventSurfer.go(args);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EventSurfer eventSurfer = new EventSurfer();
+					eventSurfer.frame.setVisible(true);
+					eventSurfer.go(args);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public EventSurfer() {
+		initialize();
+	}
+	
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void go(String[] args) {
@@ -40,7 +64,7 @@ public class EventSurfer {
 		while(connection == null) {
 			//Error screen with reconnect button
 		}
-		CurrentSession session = CurrentSession.getInstance();
+		session = CurrentSession.getInstance();
 		if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
