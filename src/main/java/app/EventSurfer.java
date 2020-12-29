@@ -1,30 +1,42 @@
 
 package main.java.app;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import main.java.company.Company;
+import main.java.gui.DefaultAdmin;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
 import main.java.types_states.UserType;
+import java.awt.Font;
 
 
 //VERSION 0.0.22
 
 
-public class EventSurfer {
+public class EventSurfer extends JFrame{
 
 	Connection connection;
 	CurrentSession session;
 	private JFrame frame;
+	private JPanel upPanel;
+	private JPanel downPanel;
+	private JPanel centerPanel;
+	private JPanel leftPanel;
+	private JPanel rightPanel;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -41,13 +53,23 @@ public class EventSurfer {
 	}
 	
 	public EventSurfer() {
+		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
 		initialize();
 	}
 	
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new JFrame("EVENTSURFER");
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		frame.setExtendedState(frame.getExtendedState() | frame.MAXIMIZED_BOTH);
+		frame.getContentPane().setLayout(new BorderLayout());
+		frame.setBounds(300, 300, 1000, 700);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			  public void windowClosing(WindowEvent e) {
+				  session.getTimer().cancel();
+				  System.exit(0);
+			  }
+			});
 	}
 	
 	public void go(String[] args) {
@@ -69,6 +91,8 @@ public class EventSurfer {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
 			//update admin data screen
+			centerPanel = new DefaultAdmin();
+			frame.add(centerPanel, BorderLayout.CENTER);
 			
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto

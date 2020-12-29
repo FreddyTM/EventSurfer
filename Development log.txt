@@ -666,13 +666,26 @@ ver 0.1.0
 	· FIRST GUI ELEMENTS	
 
 	* - Package main.java.app
+		
+	· EventSurfer class:
 		Add attributes:
-			session, frame
+			session, frame, upPanel, downPanel, centerPanel, leftPanel, rightPanel
 		Add EventSurfer() constructor
 		Add initialize()
+
+	* - Package main.java.persistence
+
+	· CurrentSession class:
+		Add attribute timer
+
 
 	* - Package main.java.gui
 
 	· Login class --empty--
 
-	· DefaultAdmin class --empty--
+	· DefaultAdmin class:
+		Add attributes:
+			currentPassField, newPassField, confirmNewPassField, aliasField, nameField, lastNameField
+		Add labels:
+			changePassTxt, currentPassLabel, newPassLabel, confirmPassLabel, aliasLabel, nameLabel,
+			lastNameLabel, maxCharsLabel, maxCharsLabel2, maxCharsLabel3, maxCharsLabel4

@@ -37,6 +37,7 @@ public class CurrentSession {
 	//de los objetos que contiene bUnit
 	private volatile Timestamp dateTimeReference;
 	private Connection connection;
+	private Timer timer;
 	
 //	private CurrentSession(Company company, BusinessUnit bUnit, User user) {
 //		this.company = company;
@@ -46,7 +47,7 @@ public class CurrentSession {
 //	}
 	
 	private CurrentSession() {
-		Timer timer = new Timer();
+		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 60000, 60000);
 	}
@@ -310,6 +311,10 @@ public class CurrentSession {
 
 	public void setConnection(Connection connection) {
 		this.connection = connection;
+	}
+
+	public Timer getTimer() {
+		return timer;
 	}
 		
 }
