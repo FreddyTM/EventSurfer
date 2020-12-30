@@ -12,8 +12,10 @@ import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import main.java.company.Company;
+import main.java.company.User;
 import main.java.gui.DefaultAdmin;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
@@ -27,11 +29,11 @@ import java.awt.Font;
 //VERSION 0.0.22
 
 
-public class EventSurfer extends JFrame{
+public class EventSurfer {
 
 	Connection connection;
 	CurrentSession session;
-	private JFrame frame;
+	private JFrame frame = new JFrame("EVENTSURFER");
 	private JPanel upPanel;
 	private JPanel downPanel;
 	private JPanel centerPanel;
@@ -53,12 +55,11 @@ public class EventSurfer extends JFrame{
 	}
 	
 	public EventSurfer() {
-		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
+		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
 		initialize();
 	}
 	
 	private void initialize() {
-		frame = new JFrame("EVENTSURFER");
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		frame.setExtendedState(frame.getExtendedState() | frame.MAXIMIZED_BOTH);
 		frame.getContentPane().setLayout(new BorderLayout());
@@ -67,6 +68,12 @@ public class EventSurfer extends JFrame{
 		frame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 				  session.getTimer().cancel();
+				  try {
+					connection.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				  System.exit(0);
 			  }
 			});
@@ -87,17 +94,22 @@ public class EventSurfer extends JFrame{
 			//Error screen with reconnect button
 		}
 		session = CurrentSession.getInstance();
-		if (PersistenceManager.checkDefaultAdminPassword(connection) == 0) {
+		User user = PersistenceManager.getDefaultAdminUser(connection);
+		user.setId(1);
+		if ((user.getPassword().equals("surferpass"))) {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
-			//update admin data screen
-			centerPanel = new DefaultAdmin();
-			frame.add(centerPanel, BorderLayout.CENTER);
-			
+			//update admin data screen			
+			DefaultAdmin adminPanel = new DefaultAdmin(connection, user, session);
+			adminPanel.getAliasField().setText(user.getUserAlias());
+			adminPanel.getNameField().setText(user.getNombre());
+			adminPanel.getLastNameField().setText(user.getApellido());
+			centerPanel = adminPanel;
+			frame.add(centerPanel, BorderLayout.CENTER);		
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
-			session.loadCurrentSessionData(connection, 1, 1);
-		} else if (PersistenceManager.checkDefaultAdminPassword(connection) == 1) {
+			//session.loadCurrentSessionData(connection, 1, 1);
+		} else {
 			//admin password cambiado
 			System.out.println("Password cambiado");
 			//Login screen
@@ -113,7 +125,7 @@ public class EventSurfer extends JFrame{
 		}
 		//Until code is completed
 		System.out.println("So far so good");
-		PersistenceManager.closeDatabase(connection);
+		//PersistenceManager.closeDatabase(connection);
 	}
 	
 	public void checkConnectToDatabase () {

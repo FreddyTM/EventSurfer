@@ -129,6 +129,12 @@ public class User {
 		}
 	}
 	
+	public boolean updateDefaultAdminUserToDb (Connection conn, User user) {
+		
+		
+		return false;
+	}
+	
 	/**
 	 * Obtiene la lista de usuarios del objeto BusinessUnit pasado por parámetro
 	 * @param conn conexión con la base de datos

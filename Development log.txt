@@ -661,9 +661,7 @@ ver 0.0.23
 
 	· BASIC DATABASE MODIFICATION CONTROL COMPLETED
 
-ver 0.1.0
-
-	· FIRST GUI ELEMENTS	
+ver 0.1.0 (FIRST GUI ELEMENTS)	
 
 	* - Package main.java.app
 		
@@ -672,6 +670,11 @@ ver 0.1.0
 			session, frame, upPanel, downPanel, centerPanel, leftPanel, rightPanel
 		Add EventSurfer() constructor
 		Add initialize()
+		Update go()
+		Update initialize()
+
+	· User class:
+		Add updateDefaultAdminUserToDb() --empty--
 
 	* - Package main.java.persistence
 
@@ -685,7 +688,16 @@ ver 0.1.0
 
 	· DefaultAdmin class:
 		Add attributes:
-			currentPassField, newPassField, confirmNewPassField, aliasField, nameField, lastNameField
+			currentPassField, newPassField, confirmNewPassField, aliasField, nameField, lastNameField,
+			conn, user, session
 		Add labels:
 			changePassTxt, currentPassLabel, newPassLabel, confirmPassLabel, aliasLabel, nameLabel,
 			lastNameLabel, maxCharsLabel, maxCharsLabel2, maxCharsLabel3, maxCharsLabel4
+		Add button updateButton
+		Update updateButton listener
+
+	* - Package main.java.persistence
+
+	· PersistenceManager class:
+		Add getDefaultAdminUser()
+		Delete checkDefaultAdminPassword() --not yet--

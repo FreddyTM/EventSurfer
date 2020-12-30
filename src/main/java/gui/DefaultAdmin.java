@@ -5,10 +5,17 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
-import java.awt.Color;
 import javax.swing.UIManager;
+
+import main.java.company.User;
+import main.java.persistence.CurrentSession;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.awt.event.ActionEvent;
 
 public class DefaultAdmin extends JPanel {
 	private JPasswordField currentPassField;
@@ -17,11 +24,17 @@ public class DefaultAdmin extends JPanel {
 	private JTextField aliasField;
 	private JTextField nameField;
 	private JTextField lastNameField;
+	private Connection conn;
+	private User user;
+	private CurrentSession session;
 
 	/**
 	 * Create the panel.
 	 */
-	public DefaultAdmin() {
+	public DefaultAdmin(Connection conn, User user, CurrentSession session) {
+		this.conn = conn ;
+		this.user = user;
+		this.session = session;
 		setLayout(null);
 		
 		JTextPane changePassTxt = new JTextPane();
@@ -113,10 +126,75 @@ public class DefaultAdmin extends JPanel {
 		maxCharsLabel3.setBounds(570, 400, 150, 25);
 		add(maxCharsLabel3);
 		
-		JLabel maxCharsLabel4 = new JLabel("Max: 20 caracteres");
+		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
 		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		maxCharsLabel4.setBounds(570, 450, 150, 25);
 		add(maxCharsLabel4);
+		
+		JButton updateButton = new JButton("Actualizar datos");
+		updateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Update user data from fields
+				
+				//Update user to database
+				
+				//load data to session
+				//User id será 1, el administrador por defecto
+				//BUnit id será 1, la unidad de negocio por defecto
+				session.loadCurrentSessionData(conn, 1, 1);
+			}
+		});
+		updateButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		updateButton.setBounds(750, 550, 200, 25);
+		add(updateButton);
 
+	}
+
+	public JPasswordField getCurrentPassField() {
+		return currentPassField;
+	}
+
+	public void setCurrentPassField(JPasswordField currentPassField) {
+		this.currentPassField = currentPassField;
+	}
+
+	public JPasswordField getNewPassField() {
+		return newPassField;
+	}
+
+	public void setNewPassField(JPasswordField newPassField) {
+		this.newPassField = newPassField;
+	}
+
+	public JPasswordField getConfirmNewPassField() {
+		return confirmNewPassField;
+	}
+
+	public void setConfirmNewPassField(JPasswordField confirmNewPassField) {
+		this.confirmNewPassField = confirmNewPassField;
+	}
+
+	public JTextField getAliasField() {
+		return aliasField;
+	}
+
+	public void setAliasField(JTextField aliasField) {
+		this.aliasField = aliasField;
+	}
+
+	public JTextField getNameField() {
+		return nameField;
+	}
+
+	public void setNameField(JTextField nameField) {
+		this.nameField = nameField;
+	}
+
+	public JTextField getLastNameField() {
+		return lastNameField;
+	}
+
+	public void setLastNameField(JTextField lastNameField) {
+		this.lastNameField = lastNameField;
 	}
 }
