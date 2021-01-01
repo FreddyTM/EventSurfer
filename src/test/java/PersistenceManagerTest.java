@@ -18,8 +18,24 @@ import main.java.persistence.PersistenceManager;
 
 class PersistenceManagerTest {
 
+	private static Connection connection;
+	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+		String devUser = "surferadmin";
+		String devPassword = "surferpass";
+		try {
+			Class.forName("org.postgresql.Driver");
+			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+		} catch (ClassNotFoundException ex) {
+			System.out.println("No se encuentra el controlador JDBC ("
+			+ ex.getMessage() +")");
+		} catch (SQLException e) {
+			System.out.println("Error: " + e.getMessage());
+			System.out.println("Estado: " + e.getSQLState());
+			System.out.println("Código: " + e.getErrorCode());
+		}
 	}
 
 	@AfterAll
@@ -52,21 +68,21 @@ class PersistenceManagerTest {
 
 	@Test
 	void testGetResultSetStatementString() {
-		Connection connection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
+//		Connection connection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
 		Statement statement = null;
 		//ResultSet results = null;
 		String sql = "SELECT * FROM event_state;";
@@ -84,21 +100,21 @@ class PersistenceManagerTest {
 
 	@Test
 	void testGetResultSetPreparedStatementString() {
-		Connection connection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
+//		Connection connection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
 		PreparedStatement pstm = null;
 		String sql = "SELECT id FROM \"?\" "
 				+ "ORDER BY id DESC LIMIT 1;";
@@ -115,65 +131,70 @@ class PersistenceManagerTest {
 
 	@Test
 	void testGetLastElementIdFromDB() {
-		Connection connection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
+//		Connection connection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
 		assertEquals(1, PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
 	}
 	
 	@Test
 	void testCheckDefaultAdminPassword() {
-		Connection connection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
+//		Connection connection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
 		assertEquals(0, PersistenceManager.checkDefaultAdminPassword(connection));
 	}
 	
 	@Test
-	void testGetBunitIdFromUser () {
-		Connection connection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		try {
-			Class.forName("org.postgresql.Driver");
-			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
-		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
-			+ ex.getMessage() +")");
-		} catch (SQLException e) {
-			System.out.println("Error: " + e.getMessage());
-			System.out.println("Estado: " + e.getSQLState());
-			System.out.println("Código: " + e.getErrorCode());
-		}
+	void testGetBunitIdFromUser() {
+//		Connection connection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//			connection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//		} catch (ClassNotFoundException ex) {
+//			System.out.println("No se encuentra el controlador JDBC ("
+//			+ ex.getMessage() +")");
+//		} catch (SQLException e) {
+//			System.out.println("Error: " + e.getMessage());
+//			System.out.println("Estado: " + e.getSQLState());
+//			System.out.println("Código: " + e.getErrorCode());
+//		}
 		assertEquals(1, PersistenceManager.getBunitIdFromUser(connection, "FakeManager",
 				"oLrDVVZRUGSoVgyy5uxj2x8p@&7avEEIADyB&EZhhldg4KgN#q"));
 		assertEquals(0, PersistenceManager.getBunitIdFromUser(connection, "FakeManager",
 				"sdophjis0ih0sthjs"));
+	}
+	
+	@Test
+	void testGetDefaultAdminUser() {
+		assertNotNull(PersistenceManager.getDefaultAdminUser(connection));
 	}
 
 }

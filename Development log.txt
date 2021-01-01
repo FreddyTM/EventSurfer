@@ -703,3 +703,15 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 	· PersistenceManager class:
 		Add getDefaultAdminUser()
 		Delete checkDefaultAdminPassword() --not yet--
+
+	* - Package main.java.test
+
+	· PersistenceManagerTest class:
+		Add attribute connection
+		Update setUpBeforeClass()
+		Update testGetResultSetStatementString()
+		Update testGetResultSetPreparedStatementString()
+		Update testGetLastElementIdFromDB()
+		Update testCheckDefaultAdminPassword()
+		Update testGetBunitIdFromUser()
+		Add testGetDefaultAdminUser() --not tested yet--
