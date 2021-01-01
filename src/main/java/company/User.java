@@ -129,9 +129,35 @@ public class User {
 		}
 	}
 	
+	/**
+	 * Actualiza la contraseña, y opcionalmente el alias, el nombre y el apellido
+	 * del usuario administrador por defecto si la contraseña por defecto de dicho
+	 * usuario no ha sido cambiada
+	 * @param conn conexión con la base de datos
+	 * @param user usuario administrador por defecto
+	 * @return true si la actualización se hizo con éxito, false si no 
+	 */
 	public boolean updateDefaultAdminUserToDb (Connection conn, User user) {
-		
-		
+		PreparedStatement pstm = null;
+		String sql = "UPDATE \"user\" "
+				+ "SET "
+				+ "user_alias = ?, "
+				+ "nombre = ?, "
+				+ "apellido = ?, "
+				+ "user_password = ?,"
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, user.getUserAlias());
+			pstm.setString(2, user.getNombre());
+			pstm.setString(3, user.getApellido());
+			pstm.setString(4, user.getPassword());
+			pstm.setInt(5, user.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	

@@ -112,9 +112,14 @@ public class DefaultAdmin extends JPanel {
 		lastNameField.setBounds(260, 450, 300, 25);
 		add(lastNameField);
 		
+		JLabel minCharsLabel = new JLabel("Min: 8 caracteres");
+		minCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		minCharsLabel.setBounds(570, 240, 380, 25);
+		add(minCharsLabel);
+		
 		JLabel maxCharsLabel = new JLabel("Max: 25 caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel.setBounds(570, 250, 380, 25);
+		maxCharsLabel.setBounds(570, 260, 380, 25);
 		add(maxCharsLabel);
 		
 		JLabel maxCharsLabel2 = new JLabel("Max: 20 caracteres");
@@ -132,6 +137,11 @@ public class DefaultAdmin extends JPanel {
 		maxCharsLabel4.setBounds(570, 450, 150, 25);
 		add(maxCharsLabel4);
 		
+		JLabel errorInfoLabel = new JLabel("");
+		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorInfoLabel.setBounds(50, 552, 670, 25);
+		add(errorInfoLabel);
+		
 		JButton updateButton = new JButton("Actualizar datos");
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -145,7 +155,7 @@ public class DefaultAdmin extends JPanel {
 					user.setApellido(lastNameField.getText());
 					user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
 					//Update user to database
-					
+					user.updateDefaultAdminUserToDb(conn, user);
 					//load data to session
 					//User id será 1, el administrador por defecto
 					//BUnit id será 1, la unidad de negocio por defecto
@@ -156,7 +166,6 @@ public class DefaultAdmin extends JPanel {
 		updateButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		updateButton.setBounds(750, 550, 200, 25);
 		add(updateButton);
-
 	}
 	
 	/**
@@ -172,12 +181,11 @@ public class DefaultAdmin extends JPanel {
 			return false;
 		}
 		
-		
 		//FALTA COMPROBAR TAMAÑO MÍNIMO CONTRASEÑA, Y LABEL PARA ANUNCIARLO
 		
 		//Comprobamos que la nueva contraseña no excede el tamaño máximo
 		String newPassword = String.valueOf(newPassField.getPassword());
-		if (newPassword.length() > 25) {
+		if (newPassword.length() < 8 || newPassword.length() > 25) {
 			//Throw exception
 			
 			return false;
