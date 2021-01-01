@@ -39,7 +39,8 @@ public class DefaultAdmin extends JPanel {
 		
 		JTextPane changePassTxt = new JTextPane();
 		changePassTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
-		changePassTxt.setText("ES NECESARIO CAMBIAR EL PASSWORD DEL ADMINISTRADOR POR DEFECTO.\r\nMODIFICAR EL RESTO DE DATOS ES OPCIONAL");
+		changePassTxt.setText("ES NECESARIO CAMBIAR EL PASSWORD DEL ADMINISTRADOR POR DEFECTO.\r\n"
+				+ "MODIFICAR EL RESTO DE DATOS ES OPCIONAL");
 		changePassTxt.setBackground(UIManager.getColor("Panel.background"));
 		changePassTxt.setEditable(false);
 		changePassTxt.setBounds(50, 75, 900, 60);
@@ -111,9 +112,9 @@ public class DefaultAdmin extends JPanel {
 		lastNameField.setBounds(260, 450, 300, 25);
 		add(lastNameField);
 		
-		JLabel maxCharsLabel = new JLabel("Max: 25 caracteres");
+		JLabel maxCharsLabel = new JLabel("Max: 25 caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel.setBounds(570, 250, 150, 25);
+		maxCharsLabel.setBounds(570, 250, 380, 25);
 		add(maxCharsLabel);
 		
 		JLabel maxCharsLabel2 = new JLabel("Max: 20 caracteres");
@@ -134,20 +135,70 @@ public class DefaultAdmin extends JPanel {
 		JButton updateButton = new JButton("Actualizar datos");
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Update user data from fields
-				
-				//Update user to database
-				
-				//load data to session
-				//User id será 1, el administrador por defecto
-				//BUnit id será 1, la unidad de negocio por defecto
-				session.loadCurrentSessionData(conn, 1, 1);
+				if (testData()) {
+					//Actualizamos usuario con los datos del formulario
+					//Excepto bUnit, userType y activo que no deben cambiar
+					//User id será 1, el administrador por defecto
+					user.setId(1);
+					user.setUserAlias(aliasField.getText());
+					user.setNombre(nameField.getText());
+					user.setApellido(lastNameField.getText());
+					user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
+					//Update user to database
+					
+					//load data to session
+					//User id será 1, el administrador por defecto
+					//BUnit id será 1, la unidad de negocio por defecto
+					session.loadCurrentSessionData(conn, 1, 1);
+				}
 			}
 		});
 		updateButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		updateButton.setBounds(750, 550, 200, 25);
 		add(updateButton);
 
+	}
+	
+	/**
+	 * Comprueba la corrección de los datos introducidos en el formulario
+	 * @return true si son correctos, false si no lo son
+	 */
+	public boolean testData() {
+		//comprobamos que la contraseña introducida es correcta
+		String currentPassword = String.valueOf(currentPassField.getPassword());
+		if (!user.getPassword().equals(currentPassword)) {
+			//Throw exception
+			
+			return false;
+		}
+		
+		
+		//FALTA COMPROBAR TAMAÑO MÍNIMO CONTRASEÑA, Y LABEL PARA ANUNCIARLO
+		
+		//Comprobamos que la nueva contraseña no excede el tamaño máximo
+		String newPassword = String.valueOf(newPassField.getPassword());
+		if (newPassword.length() > 25) {
+			//Throw exception
+			
+			return false;
+		}
+		//Comprobamos que la nueva contraseña y la confirmación son iguales
+		String confirmPassword = String.valueOf(confirmNewPassField.getPassword());
+		if (newPassword.length() != confirmPassword.length()) {
+			//Throw exception
+			
+			return false;
+		}
+		//Comprobamos que la contraseña solo incluye caracteres permitidos
+		String charList = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
+				+ "0123456789"
+				+ "*!$%&@#^";
+		if(!newPassword.contains(charList)) {
+			//Throw exception
+			
+			return false;
+		}
+		return true;
 	}
 
 	public JPasswordField getCurrentPassField() {

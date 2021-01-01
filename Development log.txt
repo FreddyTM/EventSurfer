@@ -695,6 +695,7 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 			lastNameLabel, maxCharsLabel, maxCharsLabel2, maxCharsLabel3, maxCharsLabel4
 		Add button updateButton
 		Update updateButton listener
+		Add checkData()
 
 	* - Package main.java.persistence
 

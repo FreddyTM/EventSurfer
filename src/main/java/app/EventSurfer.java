@@ -95,7 +95,7 @@ public class EventSurfer {
 		}
 		session = CurrentSession.getInstance();
 		User user = PersistenceManager.getDefaultAdminUser(connection);
-		user.setId(1);
+		//user.setId(1);
 		if ((user.getPassword().equals("surferpass"))) {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
