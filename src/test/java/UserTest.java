@@ -137,5 +137,17 @@ class UserTest {
 		user.setPassword(user.passwordHash("Pass123+"));
 		assertTrue(new User().checkUserPassword(user, "Pass123+"));
 	}
+	
+	@Test
+	@Order(8)
+	void testUpdateDefaultAdminUserToDb() {
+		User user = new User();
+		user.setId(1);
+		user.setUserAlias("NewDefaultAdmin");
+		user.setNombre("NewAdminName");
+		user.setApellido("NewAdminLastName");
+		user.setPassword("NewSurferPass");
+		assertTrue(user.updateDefaultAdminUserToDb(conn, user));
+	}
 
 }

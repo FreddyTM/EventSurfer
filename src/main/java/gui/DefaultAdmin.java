@@ -24,6 +24,7 @@ public class DefaultAdmin extends JPanel {
 	private JTextField aliasField;
 	private JTextField nameField;
 	private JTextField lastNameField;
+	private JLabel errorInfoLabel;
 	private Connection conn;
 	private User user;
 	private CurrentSession session;
@@ -137,7 +138,7 @@ public class DefaultAdmin extends JPanel {
 		maxCharsLabel4.setBounds(570, 450, 150, 25);
 		add(maxCharsLabel4);
 		
-		JLabel errorInfoLabel = new JLabel("");
+		errorInfoLabel = new JLabel("");
 		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		errorInfoLabel.setBounds(50, 552, 670, 25);
 		add(errorInfoLabel);
@@ -176,25 +177,20 @@ public class DefaultAdmin extends JPanel {
 		//comprobamos que la contraseña introducida es correcta
 		String currentPassword = String.valueOf(currentPassField.getPassword());
 		if (!user.getPassword().equals(currentPassword)) {
-			//Throw exception
-			
+			errorInfoLabel.setText("CONTRASEÑA ACTUAL INCORRECTA");
 			return false;
 		}
-		
-		//FALTA COMPROBAR TAMAÑO MÍNIMO CONTRASEÑA, Y LABEL PARA ANUNCIARLO
 		
 		//Comprobamos que la nueva contraseña no excede el tamaño máximo
 		String newPassword = String.valueOf(newPassField.getPassword());
 		if (newPassword.length() < 8 || newPassword.length() > 25) {
-			//Throw exception
-			
+			errorInfoLabel.setText("LONGITUD DE NUEVA CONTRASEÑA INCORRECTA");
 			return false;
 		}
 		//Comprobamos que la nueva contraseña y la confirmación son iguales
 		String confirmPassword = String.valueOf(confirmNewPassField.getPassword());
-		if (newPassword.length() != confirmPassword.length()) {
-			//Throw exception
-			
+		if (!newPassword.equals(confirmPassword)) {
+			errorInfoLabel.setText("LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN");
 			return false;
 		}
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
@@ -202,8 +198,7 @@ public class DefaultAdmin extends JPanel {
 				+ "0123456789"
 				+ "*!$%&@#^";
 		if(!newPassword.contains(charList)) {
-			//Throw exception
-			
+			errorInfoLabel.setText("LA NUEVA CONTRASEÑA INCLUYE CARACTERES NO PERMITIDOS");
 			return false;
 		}
 		return true;

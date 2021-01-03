@@ -680,6 +680,10 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 
 	· CurrentSession class:
 		Add attribute timer
+		Update constructor
+		Update TimerJob class run()
+		Update loadAllData()
+		Update loadCurrentSessionData()
 
 
 	* - Package main.java.gui
@@ -715,3 +719,7 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 		Update testCheckDefaultAdminPassword()
 		Update testGetBunitIdFromUser()
 		Add testGetDefaultAdminUser() --not tested yet--
+
+	· UserTest class:
+		Add testUpdateDefaultAdminUserToDb() --not tested yet--
+

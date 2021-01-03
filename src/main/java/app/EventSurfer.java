@@ -67,7 +67,9 @@ public class EventSurfer {
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
-				  session.getTimer().cancel();
+				  if(session.getTimer() != null) {
+					  session.getTimer().cancel();
+				  }		  
 				  try {
 					connection.close();
 				} catch (SQLException e1) {

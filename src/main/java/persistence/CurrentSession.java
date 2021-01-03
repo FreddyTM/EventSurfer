@@ -47,9 +47,9 @@ public class CurrentSession {
 //	}
 	
 	private CurrentSession() {
-		timer = new Timer();
-		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 60000, 60000);
+//		timer = new Timer();
+//		TimerTask task = new TimerJob();
+//		timer.scheduleAtFixedRate(task, 60000, 60000);
 	}
 	
 	public static CurrentSession getInstance() {
@@ -98,6 +98,10 @@ public class CurrentSession {
 		}
 		//Registramos fecha y hora de la carga de datos de la sesión
 		dateTimeReference = PersistenceManager.getTimestampNow();
+		
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 60000, 60000);
 	}
 	
 	/**
@@ -148,6 +152,10 @@ public class CurrentSession {
 		}
 		//Registramos fecha y hora de la carga de datos de la sesión
 		dateTimeReference = PersistenceManager.getTimestampNow();
+		
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 60000, 60000);
 	}
 
 	/**
@@ -201,7 +209,8 @@ public class CurrentSession {
 				while (results.next()) {
 					String tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
-					if (session.getDateTimeReference().before(dateTimeDb) ) {
+					//if (session.getDateTimeReference().before(dateTimeDb) ) {
+					if (tempDateTime.before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
 						//Llamadas a métodos de recarga de datos de las clases
 						switch(tableName) {
