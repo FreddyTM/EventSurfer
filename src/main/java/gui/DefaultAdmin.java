@@ -174,17 +174,23 @@ public class DefaultAdmin extends JPanel {
 	 * @return true si son correctos, false si no lo son
 	 */
 	public boolean testData() {
-		//comprobamos que la contraseña introducida es correcta
+		//Comprobamos que la contraseña actual introducida es correcta
 		String currentPassword = String.valueOf(currentPassField.getPassword());
 		if (!user.getPassword().equals(currentPassword)) {
 			errorInfoLabel.setText("CONTRASEÑA ACTUAL INCORRECTA");
 			return false;
 		}
 		
-		//Comprobamos que la nueva contraseña no excede el tamaño máximo
+		//Comprobamos que la contraseña nueva no es igual a la antigua
 		String newPassword = String.valueOf(newPassField.getPassword());
+		if (user.getPassword().equals(newPassword)) {
+			errorInfoLabel.setText("LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA ANTIGUA");
+		}
+		
+		//Comprobamos que la nueva contraseña no excede el tamaño máximo
+		newPassword = String.valueOf(newPassField.getPassword());
 		if (newPassword.length() < 8 || newPassword.length() > 25) {
-			errorInfoLabel.setText("LONGITUD DE NUEVA CONTRASEÑA INCORRECTA");
+			errorInfoLabel.setText("LA LONGITUD DE LA NUEVA CONTRASEÑA ES INCORRECTA");
 			return false;
 		}
 		//Comprobamos que la nueva contraseña y la confirmación son iguales
@@ -194,11 +200,9 @@ public class DefaultAdmin extends JPanel {
 			return false;
 		}
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
-		String charList = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
-				+ "0123456789"
-				+ "*!$%&@#^";
-		if(!newPassword.contains(charList)) {
-			errorInfoLabel.setText("LA NUEVA CONTRASEÑA INCLUYE CARACTERES NO PERMITIDOS");
+		if(!user.isAValidPassword(newPassword)) {
+			errorInfoLabel.setText("LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
+					+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL");
 			return false;
 		}
 		return true;

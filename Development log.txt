@@ -675,6 +675,7 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 
 	· User class:
 		Add updateDefaultAdminUserToDb() --not tested yet--
+		Add isAValidPassword() --not tested yet--
 
 	* - Package main.java.persistence
 
@@ -700,7 +701,8 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 			errorInfoLabel
 		Add button updateButton
 		Update updateButton listener
-		Add checkData()
+		Add testData()
+		Update testData()
 
 	* - Package main.java.persistence
 

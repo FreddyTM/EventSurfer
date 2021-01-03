@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.TypesStatesContainer;
@@ -248,6 +250,19 @@ public class User {
 	}
 	
 	/**
+	 * Comprueba que la contraseña introducida cumple las restricciones para ser correcta
+	 * Caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]
+	 * @param password contraseña a validar
+	 * @return true si la contraseña es correcta, false si no lo es
+	 */
+	public boolean isAValidPassword(String password) {
+		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*!$%&@#^])(?=\\S+$)$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(password);
+		return matcher.matches();
+	}
+	
+	/**
 	 * Genera un hash de 50 caracteres a partir de un String
 	 * @param input String de entrada
 	 * @return hash de 50 caracteres
@@ -274,10 +289,6 @@ public class User {
 		String charList = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 				+ "0123456789"
 				+ "*!$%&@#^";
-		//Debug
-//		System.out.println("-----------------------------");
-//		System.out.println("charList.lenght(): " + charList.length());
-//		System.out.println("input size: " + size);
 		int factor = 0;
 		if (size <=10) {
 			factor = 7;
@@ -292,18 +303,11 @@ public class User {
 		} else {
 			factor = 3;
 		}
-		//Debug
-//		System.out.println("factor: " + factor);
+
 		for (int i = 0; i < input.length(); i++) {
 			char inChar = input.charAt(i);
-			//Debug
-//			System.out.println ("Char: " + inChar);
 			int charIndex = charList.indexOf(inChar);
-			//Debug
-//			System.out.println("charIndex prefactor: " + charIndex);
 			charIndex = charIndex + factor;
-			//Debug
-//			System.out.println("charIndex postfactor: " + charIndex);
 			if (charIndex == charList.length()) {
 				charIndex = 0;
 			} else if (charIndex > charList.length()) {
