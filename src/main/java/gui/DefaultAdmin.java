@@ -140,7 +140,7 @@ public class DefaultAdmin extends JPanel {
 		
 		errorInfoLabel = new JLabel("");
 		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		errorInfoLabel.setBounds(50, 552, 670, 25);
+		errorInfoLabel.setBounds(50, 500, 900, 25);
 		add(errorInfoLabel);
 		
 		JButton updateButton = new JButton("Actualizar datos");
@@ -181,14 +181,8 @@ public class DefaultAdmin extends JPanel {
 			return false;
 		}
 		
-		//Comprobamos que la contraseña nueva no es igual a la antigua
-		String newPassword = String.valueOf(newPassField.getPassword());
-		if (user.getPassword().equals(newPassword)) {
-			errorInfoLabel.setText("LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA ANTIGUA");
-		}
-		
 		//Comprobamos que la nueva contraseña no excede el tamaño máximo
-		newPassword = String.valueOf(newPassField.getPassword());
+		String newPassword = String.valueOf(newPassField.getPassword());
 		if (newPassword.length() < 8 || newPassword.length() > 25) {
 			errorInfoLabel.setText("LA LONGITUD DE LA NUEVA CONTRASEÑA ES INCORRECTA");
 			return false;
@@ -199,6 +193,12 @@ public class DefaultAdmin extends JPanel {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN");
 			return false;
 		}
+		
+		//Comprobamos que la contraseña nueva no es igual a la antigua
+		if (currentPassword.equals(newPassword) && currentPassword.equals(confirmPassword)) {
+			errorInfoLabel.setText("LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA ANTIGUA");
+		}
+		
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
 		if(!user.isAValidPassword(newPassword)) {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"

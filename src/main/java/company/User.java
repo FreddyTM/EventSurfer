@@ -146,7 +146,7 @@ public class User {
 				+ "user_alias = ?, "
 				+ "nombre = ?, "
 				+ "apellido = ?, "
-				+ "user_password = ?,"
+				+ "user_password = ? "
 				+ "WHERE id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
@@ -256,7 +256,7 @@ public class User {
 	 * @return true si la contraseña es correcta, false si no lo es
 	 */
 	public boolean isAValidPassword(String password) {
-		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*!$%&@#^])(?=\\S+$)$";
+		String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*!$%&@#^])(?=\\S+$).{8,25}$";
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(password);
 		return matcher.matches();
