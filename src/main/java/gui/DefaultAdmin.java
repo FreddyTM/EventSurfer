@@ -197,6 +197,7 @@ public class DefaultAdmin extends JPanel {
 		//Comprobamos que la contraseña nueva no es igual a la antigua
 		if (currentPassword.equals(newPassword) && currentPassword.equals(confirmPassword)) {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA ANTIGUA");
+			return false;
 		}
 		
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
@@ -205,6 +206,7 @@ public class DefaultAdmin extends JPanel {
 					+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL");
 			return false;
 		}
+	
 		return true;
 	}
 

@@ -680,7 +680,8 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 	* - Package main.java.persistence
 
 	· CurrentSession class:
-		Add attribute timer
+		Add attributes:
+			timer, frame
 		Update constructor
 		Update TimerJob class run()
 		Update loadAllData()

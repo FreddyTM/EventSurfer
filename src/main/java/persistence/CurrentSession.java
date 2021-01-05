@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JFrame;
+
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
@@ -36,6 +38,8 @@ public class CurrentSession {
 	//cambios en la base de datos que afecten a company, a bUnit, o a cualquiera
 	//de los objetos que contiene bUnit
 	private volatile Timestamp dateTimeReference;
+	//Ventana del programa
+	private JFrame frame;
 	private Connection connection;
 	private Timer timer;
 	
@@ -324,6 +328,14 @@ public class CurrentSession {
 
 	public Timer getTimer() {
 		return timer;
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
 	}
 		
 }

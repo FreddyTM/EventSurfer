@@ -107,7 +107,8 @@ public class EventSurfer {
 			adminPanel.getNameField().setText(user.getNombre());
 			adminPanel.getLastNameField().setText(user.getApellido());
 			centerPanel = adminPanel;
-			frame.add(centerPanel, BorderLayout.CENTER);		
+			frame.add(centerPanel, BorderLayout.CENTER);
+			session.setFrame(frame);
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
 			//session.loadCurrentSessionData(connection, 1, 1);
