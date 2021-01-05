@@ -726,3 +726,9 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 	· UserTest class:
 		Add testUpdateDefaultAdminUserToDb() --not tested yet--
 
+ver 0.1.1
+
+	* - Package main.java.persistence
+
+	· CurrentSession class:
+		Add userLogin() --not finished yet--
