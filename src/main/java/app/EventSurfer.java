@@ -117,6 +117,9 @@ public class EventSurfer {
 			System.out.println("Password cambiado");
 			//Login screen
 			
+			//Check login
+			
+			
 			//Add PersistenceManager method to find user and its business unit
 			//Instantiate a CurrentSession with company, business unit, user
 			//and last db update of business unit data.

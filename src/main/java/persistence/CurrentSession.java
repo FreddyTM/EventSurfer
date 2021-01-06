@@ -76,7 +76,7 @@ public class CurrentSession {
 				+ "AND user_password = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setString(1, password);
+			pstm.setString(1, alias);
 			pstm.setString(2, password);
 			while(results.next()) {
 				userId = results.getInt(1);

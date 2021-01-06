@@ -732,3 +732,14 @@ ver 0.1.1
 
 	· CurrentSession class:
 		Add userLogin() --not finished yet--
+
+	* - Package main.java.gui
+
+	· Login class:
+		Add attributes:
+			connection, session, userField, passwordField
+		Update constructor
+
+https://javapointers.com/java/java-se/key-listener/
+https://stackoverrun.com/es/q/3705777
+https://docs.oracle.com/javase/tutorial/uiswing/events/keylistener.html
