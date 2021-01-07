@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import main.java.company.Company;
 import main.java.company.User;
 import main.java.gui.DefaultAdmin;
+import main.java.gui.Login;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
@@ -116,7 +117,10 @@ public class EventSurfer {
 			//admin password cambiado
 			System.out.println("Password cambiado");
 			//Login screen
-			
+			Login loginPanel = new Login(connection, session);
+			centerPanel = loginPanel;
+			frame.add(centerPanel, BorderLayout.CENTER);
+			session.setFrame(frame);
 			//Check login
 			
 			

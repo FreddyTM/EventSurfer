@@ -62,67 +62,7 @@ public class CurrentSession {
 		}
 		return session;
 	}
-	
-	public boolean userLogin(Connection conn, String alias, String password) {
-		int userId = 0;
-		int bUnitId = 0;
-		int userTypeId = 0;
-		boolean activo = false;
-		PreparedStatement pstm = null;
-		ResultSet results = null;
-		String sql = "SELECT id, b_unit_id, user_type_id, activo "
-				+ "FROM \"user\" "
-				+ "WHERE user_alias = ? "
-				+ "AND user_password = ?;";
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setString(1, alias);
-			pstm.setString(2, password);
-			while(results.next()) {
-				userId = results.getInt(1);
-				bUnitId = results.getInt(2);
-				userTypeId = results.getInt(3);
-				activo = results.getBoolean(4);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		//Usuario no existe o contraseña incorrecta
-		if (userId == 0) {
-			//Mensaje de error en el login panel
-			return false;
-		}
-		//Usuario inactivo
-		if (activo == false) {
-			//Mensaje de error en el login panel
-			return false;
-		}
-		switch (userTypeId) {
-			//Usuario administrador
-			case 1:
-				//Pasar userTypeId por parámetro al panel
-				
-				break;
-			//Usuario manager
-			case 2:
-				//Pasar userTypeId por parámetro al panel
-				
-				break;
-			//Usuario user
-			case 3:
-				//Pasar userTypeId por parámetro al panel
-				
-				
-				break;
-			//Otros usuarios no contemplados todavía
-			default:
-				//Do nothing
-		}
 		
-		
-		return true;
-	}
-	
 	/**
 	 * Carga todos los datos de la base de datos
 	 * @param conn conexión con la base de datos

@@ -728,10 +728,17 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 
 ver 0.1.1
 
+	* - Package main.java.app
+
+	· EventSurfer class:
+		Update go()	
+
+
 	* - Package main.java.persistence
 
 	· CurrentSession class:
 		Add userLogin() --not finished yet--
+		Delete userLogin()
 
 	* - Package main.java.gui
 
@@ -739,6 +746,7 @@ ver 0.1.1
 		Add attributes:
 			connection, session, userField, passwordField
 		Update constructor
+		Add userLogin() --not finished yet--
 
 	· DefaultAdmin class:
 		Add 'Enter' KeyListeners to JFields and JButton
