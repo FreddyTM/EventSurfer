@@ -2,6 +2,8 @@ package main.java.gui;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
@@ -16,6 +18,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DefaultAdmin extends JPanel {
 	private JPasswordField currentPassField;
@@ -44,6 +48,7 @@ public class DefaultAdmin extends JPanel {
 				+ "MODIFICAR EL RESTO DE DATOS ES OPCIONAL");
 		changePassTxt.setBackground(UIManager.getColor("Panel.background"));
 		changePassTxt.setEditable(false);
+		changePassTxt.setFocusable(false);
 		changePassTxt.setBounds(50, 75, 900, 60);
 		add(changePassTxt);
 		
@@ -86,31 +91,82 @@ public class DefaultAdmin extends JPanel {
 		currentPassField = new JPasswordField();
 		currentPassField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		currentPassField.setBounds(260, 200, 300, 25);
+		currentPassField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					newPassField.requestFocusInWindow();
+				}
+			}
+		});
 		add(currentPassField);
 		
 		newPassField = new JPasswordField();
 		newPassField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		newPassField.setBounds(260, 250, 300, 25);
+		newPassField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					confirmNewPassField.requestFocusInWindow();
+				}
+			}
+		});
 		add(newPassField);
 		
 		confirmNewPassField = new JPasswordField();
 		confirmNewPassField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		confirmNewPassField.setBounds(260, 300, 300, 25);
+		confirmNewPassField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					aliasField.requestFocusInWindow();
+				}
+			}
+		});
 		add(confirmNewPassField);
 		
 		aliasField = new JTextField();
 		aliasField.setBounds(260, 350, 300, 25);
-		add(aliasField);
 		aliasField.setColumns(10);
-		
+		aliasField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					nameField.requestFocusInWindow();
+				}
+			}
+		});
+		add(aliasField);
+				
 		nameField = new JTextField();
 		nameField.setColumns(10);
 		nameField.setBounds(260, 400, 300, 25);
+		nameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					lastNameField.requestFocusInWindow();
+				}
+			}
+		});
 		add(nameField);
+		
+		//Declaramos aquí el botón para que pueda obtener el foco de lastNameField
+		JButton updateButton = new JButton("Actualizar datos");;
 		
 		lastNameField = new JTextField();
 		lastNameField.setColumns(10);
 		lastNameField.setBounds(260, 450, 300, 25);
+		lastNameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					updateButton.requestFocusInWindow();
+				}
+			}
+		});
 		add(lastNameField);
 		
 		JLabel minCharsLabel = new JLabel("Min: 8 caracteres");
@@ -143,27 +199,26 @@ public class DefaultAdmin extends JPanel {
 		errorInfoLabel.setBounds(50, 500, 900, 25);
 		add(errorInfoLabel);
 		
-		JButton updateButton = new JButton("Actualizar datos");
+		//updateButton = new JButton("Actualizar datos");
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (testData()) {
-					//Actualizamos usuario con los datos del formulario
-					//Excepto bUnit, userType y activo que no deben cambiar
-					//User id será 1, el administrador por defecto
-					user.setId(1);
-					user.setUserAlias(aliasField.getText());
-					user.setNombre(nameField.getText());
-					user.setApellido(lastNameField.getText());
-					user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
-					//Update user to database
-					user.updateDefaultAdminUserToDb(conn, user);
-					//load data to session
-					//User id será 1, el administrador por defecto
-					//BUnit id será 1, la unidad de negocio por defecto
-					session.loadCurrentSessionData(conn, 1, 1);
+					updateData();
+					//Activar nuevo panel
 				}
 			}
 		});
+		updateButton.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if (testData()) {
+						updateData();
+						//Activar nuevo panel
+					}
+				}
+			}
+		});		
 		updateButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		updateButton.setBounds(750, 550, 200, 25);
 		add(updateButton);
@@ -208,6 +263,26 @@ public class DefaultAdmin extends JPanel {
 		}
 	
 		return true;
+	}
+	
+	/**
+	 * Actualizamos usuario con los datos del formulario
+	 */
+	public void updateData() {
+		//Excepto bUnit, userType y activo que no deben cambiar
+		//User id será 1, el administrador por defecto
+		user.setId(1);
+		user.setUserAlias(aliasField.getText());
+		user.setNombre(nameField.getText());
+		user.setApellido(lastNameField.getText());
+		user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
+		//Update user to database
+		if (user.updateDefaultAdminUserToDb(conn, user)) {
+			//load data to session
+			//User id será 1, el administrador por defecto
+			//BUnit id será 1, la unidad de negocio por defecto
+			session.loadCurrentSessionData(conn, 1, 1);
+		}
 	}
 
 	public JPasswordField getCurrentPassField() {

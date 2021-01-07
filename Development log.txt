@@ -740,6 +740,6 @@ ver 0.1.1
 			connection, session, userField, passwordField
 		Update constructor
 
-https://javapointers.com/java/java-se/key-listener/
-https://stackoverrun.com/es/q/3705777
-https://docs.oracle.com/javase/tutorial/uiswing/events/keylistener.html
+	· DefaultAdmin class:
+		Add 'Enter' KeyListeners to JFields and JButton
+		Add updateData()
