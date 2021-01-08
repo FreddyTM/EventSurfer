@@ -43,17 +43,8 @@ public class CurrentSession {
 	private Connection connection;
 	private Timer timer;
 	
-//	private CurrentSession(Company company, BusinessUnit bUnit, User user) {
-//		this.company = company;
-//		this.bUnit = bUnit;
-//		this.user = user;
-//		
-//	}
-	
 	private CurrentSession() {
-//		timer = new Timer();
-//		TimerTask task = new TimerJob();
-//		timer.scheduleAtFixedRate(task, 60000, 60000);
+		
 	}
 	
 	public static CurrentSession getInstance() {
@@ -64,10 +55,12 @@ public class CurrentSession {
 	}
 		
 	/**
-	 * Carga todos los datos de la base de datos
+	 * Carga todos los datos de la base de datos. La compañía,
+	 * la unidad de negocio y el usuario se almacenan en los
+	 * atributos de la clase
 	 * @param conn conexión con la base de datos
 	 */
-	public void loadAllData (Connection conn) {
+	public void loadAllData (Connection conn, int bUnitId, int userId) {
 		
 		//Lista de tipos de usuario
 		UserType userTypeList = new UserType();
@@ -87,6 +80,12 @@ public class CurrentSession {
 		//Cargamos las unidades de negocio de la compañía
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		company.setBusinessUnits(bUnitList);
+		for (BusinessUnit bUnit: bUnitList) {
+			if (bUnit.getId() == bUnitId) {
+				//Asignamos la unidad de negocio a bUnit
+				this.bUnit = bUnit;
+			}
+		}
 		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
 		for (BusinessUnit bUnit: company.getBusinessUnits()) {
 			List<User> userList = new User().getUsersFromDB(conn, bUnit);
@@ -100,9 +99,11 @@ public class CurrentSession {
 				event.setUpdates(eUpdate);
 			}
 		}
+		//Asignamos el usuario que abre sesión a user
+		user = new User().getUserById(bUnit, userId);
 		//Registramos fecha y hora de la carga de datos de la sesión
 		dateTimeReference = PersistenceManager.getTimestampNow();
-		
+		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 60000, 60000);
@@ -110,8 +111,8 @@ public class CurrentSession {
 	
 	/**
 	 * Carga los datos de la unidad de negocio a la que pertenece el usuario
-	 * que abre la sesión. La unidad de negocio y el usuario se almacenan en
-	 * los atributos de la clase
+	 * que abre la sesión. La compañía, la unidad de negocio y el usuario
+	 * se almacenan en los atributos de la clase
 	 * @param conn conexión con la base de datos
 	 * @param bUnitId id de la unidad de negocio
 	 * @param userId id del usuario que abre la sesión
@@ -156,7 +157,7 @@ public class CurrentSession {
 		}
 		//Registramos fecha y hora de la carga de datos de la sesión
 		dateTimeReference = PersistenceManager.getTimestampNow();
-		
+		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 60000, 60000);
@@ -194,8 +195,6 @@ public class CurrentSession {
 	//con posterioridad a la última carga de datos de la sesión en curso
 	class TimerJob extends TimerTask {
 		
-		//CurrentSession session = CurrentSession.getInstance();
-		
 		@Override
 		public void run() {
 			Connection conn = session.getConnection();
@@ -213,7 +212,6 @@ public class CurrentSession {
 				while (results.next()) {
 					String tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
-					//if (session.getDateTimeReference().before(dateTimeDb) ) {
 					if (tempDateTime.before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
 						//Llamadas a métodos de recarga de datos de las clases
@@ -267,7 +265,7 @@ public class CurrentSession {
 								}
 								break;
 							default:
-								//Throw exception unknown table
+								//Error. Tabla desconocida
 						}				
 						//Actualizamos el timestamp temporal para que acabe registrando
 						//el mayor valor que se encuentre en el Resultset

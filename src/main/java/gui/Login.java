@@ -155,28 +155,25 @@ public class Login extends JPanel {
 			return false;
 		}
 		switch (userTypeId) {
-			//Usuario administrador
-			case 1:
+			case 1: //Usuario administrador
+				session.loadAllData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
 				
 				break;
-			//Usuario manager
-			case 2:
+			case 2: //Usuario manager
+				session.loadCurrentSessionData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
 				
 				break;
-			//Usuario user
-			case 3:
+			case 3: //Usuario user
+				session.loadCurrentSessionData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
 				
-				
 				break;
-			//Otros usuarios no contemplados todavía
-			default:
+			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
 		}
-		
-		
+				
 		return true;
 	}
 
@@ -208,7 +205,7 @@ public class Login extends JPanel {
 		return passwordField;
 	}
 
-	public void setPasswordField(JTextField passwordField) {
+	public void setPasswordField(JPasswordField passwordField) {
 		this.passwordField = passwordField;
 	}
 }

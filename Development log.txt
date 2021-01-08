@@ -739,6 +739,8 @@ ver 0.1.1
 	· CurrentSession class:
 		Add userLogin() --not finished yet--
 		Delete userLogin()
+		Update loadAllData()
+		Update loadCurrentSessionData()
 
 	* - Package main.java.gui
 
@@ -746,7 +748,8 @@ ver 0.1.1
 		Add attributes:
 			connection, session, userField, passwordField
 		Update constructor
-		Add userLogin() --not finished yet--
+		Add userLogin()
+		Update userLogin()
 
 	· DefaultAdmin class:
 		Add 'Enter' KeyListeners to JFields and JButton
