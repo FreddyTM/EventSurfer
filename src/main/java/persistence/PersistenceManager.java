@@ -45,9 +45,9 @@ public class PersistenceManager {
 			user = null;
 			password = null;
 		default:
-			url = "jdbc:postgresql://localhost:5432/devsurferdb";
-			user = "surferadmin";
-			password = "surferpass";
+			url = null;
+			user = null;
+			password = null;
 		}
 		
 		setUrl(url);
@@ -78,11 +78,19 @@ public class PersistenceManager {
 	 */
 	public static Connection getConnection () {		
 		Connection connection = null;
-		String dbName = url.substring(url.lastIndexOf("/"));;
+		String dbName = null;
+		if (url != null) {
+			dbName = url.substring(url.lastIndexOf("/"));
+			;
+		}
 		try {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
+			if (url != null) {
+				System.out.println("Connexión a " + dbName + " establecida con éxito\n");
+			} else {
+				System.out.println("Error de onnexión a " + dbName + "\n");
+			}
 		} catch (ClassNotFoundException ex) {
 			System.out.println("No se encuentra el controlador JDBC ("
 			+ ex.getMessage() +")");
@@ -269,70 +277,70 @@ public class PersistenceManager {
 //		}
 //	}
 	
-	/**
-	 * Obtiene el id de la unidad de negocio a la que pertenece el usuario, si el
-	 * usuario existe
-	 * @param conn conexión con la base de datos
-	 * @param alias alias del usuario
-	 * @param password password del usuario
-	 * @return id de la unidad de negocio, o 0 si el usuario no existe
-	 */
-	public static int getBunitIdFromUser (Connection conn, String alias, String password) {
-		PreparedStatement pstm = null;
-		ResultSet results = null;
-		String sql = "SELECT b_unit_id "
-				+ "	FROM \"user\" "
-				+ "WHERE user_alias = ? "
-				+ "AND user_password = ?;";
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setString(1,  alias);
-			pstm.setString(2, new User().passwordHash(password));
-			results = pstm.executeQuery();
-			if (results.next()) {
-				return results.getInt(1);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
-		}
-		return 0;
-	}
-	
-	/**
-	 * Obtiene el id del usuario si el usuario existe
-	 * @param conn conexión con la base de datos
-	 * @param alias alias del usuario
-	 * @param password password del usuario
-	 * @return id del usuario, 0 si el usuario no existe
-	 */
-	public static int getUserId (Connection conn, String alias, String password) {
-		PreparedStatement pstm = null;
-		ResultSet results = null;
-		String sql = "SELECT id "
-				+ "	FROM \"user\" "
-				+ "WHERE user_alias = ? "
-				+ "AND user_password = ?;";
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setString(1,  alias);
-			pstm.setString(2, new User().passwordHash(password));
-			results = pstm.executeQuery();
-			if (results.next()) {
-				return results.getInt(1);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
-		}
-		return 0;
-	}
+//	/**
+//	 * Obtiene el id de la unidad de negocio a la que pertenece el usuario, si el
+//	 * usuario existe
+//	 * @param conn conexión con la base de datos
+//	 * @param alias alias del usuario
+//	 * @param password password del usuario
+//	 * @return id de la unidad de negocio, o 0 si el usuario no existe
+//	 */
+//	public static int getBunitIdFromUser (Connection conn, String alias, String password) {
+//		PreparedStatement pstm = null;
+//		ResultSet results = null;
+//		String sql = "SELECT b_unit_id "
+//				+ "	FROM \"user\" "
+//				+ "WHERE user_alias = ? "
+//				+ "AND user_password = ?;";
+//		try {
+//			pstm = conn.prepareStatement(sql);
+//			pstm.setString(1,  alias);
+//			pstm.setString(2, new User().passwordHash(password));
+//			results = pstm.executeQuery();
+//			if (results.next()) {
+//				return results.getInt(1);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			PersistenceManager.closeResultSet(results);
+//			PersistenceManager.closePrepStatement(pstm);
+//		}
+//		return 0;
+//	}
+//	
+//	/**
+//	 * Obtiene el id del usuario si el usuario existe
+//	 * @param conn conexión con la base de datos
+//	 * @param alias alias del usuario
+//	 * @param password password del usuario
+//	 * @return id del usuario, 0 si el usuario no existe
+//	 */
+//	public static int getUserId (Connection conn, String alias, String password) {
+//		PreparedStatement pstm = null;
+//		ResultSet results = null;
+//		String sql = "SELECT id "
+//				+ "	FROM \"user\" "
+//				+ "WHERE user_alias = ? "
+//				+ "AND user_password = ?;";
+//		try {
+//			pstm = conn.prepareStatement(sql);
+//			pstm.setString(1,  alias);
+//			pstm.setString(2, new User().passwordHash(password));
+//			results = pstm.executeQuery();
+//			if (results.next()) {
+//				return results.getInt(1);
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			PersistenceManager.closeResultSet(results);
+//			PersistenceManager.closePrepStatement(pstm);
+//		}
+//		return 0;
+//	}
 
 	public static String getUrl() {
 		return url;

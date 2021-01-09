@@ -734,7 +734,9 @@ ver 0.1.1
 		Update attribute frame from JFrame class to AppWindow class
 		Delete attributes (moved to AppWindow class)
 			upPanel, downPanel, centerPanel, leftPanel, rightPanel
-		Update go()	
+		Update go()
+		Delete connectToDatabase()
+		Delete checkConnectToDatabase()
 
 
 	* - Package main.java.persistence
@@ -753,6 +755,7 @@ ver 0.1.1
 		Update connectToDatabase()
 		Delete getDefaultAdminUser() (moved to User class)
 		Delete checkDefaultAdminPassword() (moved to User class)
+		Update getConnection()
 
 	* - Package main.java.company
 
@@ -784,6 +787,7 @@ ver 0.1.1
 	· PersistenceManagerTest class:
 		Delete testGetDefaultAdminUser() (moved to UserTest class)
 		Delete testCheckDefaultAdminPassword() (moved to UserTest class)
+		Add testConnectToDatabase() --ok--
 
 	· UserTest class:
 		Add testGetDefaultAdminUser() --ok--
