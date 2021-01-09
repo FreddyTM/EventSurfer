@@ -87,7 +87,7 @@ public class EventSurfer {
 			connection = PersistenceManager.connectToDatabase(args[0]);
 
 		} else {
-			connection = PersistenceManager.connectToDatabase("");			
+			connection = PersistenceManager.connectToDatabase("LOCAL_TEST_DB");			
 		}
 		
 		while(connection == null) {
