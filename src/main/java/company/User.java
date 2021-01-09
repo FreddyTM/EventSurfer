@@ -132,6 +132,37 @@ public class User {
 	}
 	
 	/**
+	 * Obtiene el alias, nombre, apellido y password del usuario administrador por defecto
+	 * para comprobar si su password ha sido cambiado. En la primera ejecución del programa
+	 * Es obligatorio cambiar este password, y opcional cambiar el alias, nombre y apellido. 
+	 * @param conn conexión con la base de datos
+	 * @return usuario administrador por defecto incluyendo solo alias, nombre, apellido y
+	 * password. El resto de datos no son necesarios porque ya son conocidos.
+	 */
+	public User getDefaultAdminUser (Connection conn) {
+		Statement stm = null;
+		ResultSet results = null;
+		User user = new User();
+		String sql = "SELECT user_alias, nombre, apellido, user_password "
+				+ "FROM \"user\" "
+				+ "WHERE id = 1;";
+		try {
+			stm = conn.createStatement();
+			results = PersistenceManager.getResultSet(stm, sql);
+			while (results.next()) {
+				user.setUserAlias(results.getString(1));
+				user.setNombre(results.getString(2));
+				user.setApellido(results.getString(3));
+				user.setPassword(results.getString(4));
+			}
+			return user;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
 	 * Actualiza la contraseña, y opcionalmente el alias, el nombre y el apellido
 	 * del usuario administrador por defecto si la contraseña por defecto de dicho
 	 * usuario no ha sido cambiada

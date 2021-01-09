@@ -140,6 +140,12 @@ class UserTest {
 	
 	@Test
 	@Order(8)
+	void testGetDefaultAdminUser() {
+		assertNotNull(new User().getDefaultAdminUser(conn));
+	}
+	
+	@Test
+	@Order(9)
 	void testUpdateDefaultAdminUserToDb() {
 		User user = new User();
 		user.setId(1);
