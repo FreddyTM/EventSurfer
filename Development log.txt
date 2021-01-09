@@ -752,11 +752,15 @@ ver 0.1.1
 		Add connectToDatabase()
 		Update connectToDatabase()
 		Delete getDefaultAdminUser() (moved to User class)
+		Delete checkDefaultAdminPassword() (moved to User class)
 
 	* - Package main.java.company
 
 	· User class:
 		Add getDefaultAdminUser()
+		Add checkDefaultAdminPassword()
+		Add getBunitIdFromUser()
+		Add getUserId()
 
 	* - Package main.java.gui
 
@@ -779,6 +783,9 @@ ver 0.1.1
 
 	· PersistenceManagerTest class:
 		Delete testGetDefaultAdminUser() (moved to UserTest class)
+		Delete testCheckDefaultAdminPassword() (moved to UserTest class)
 
 	· UserTest class:
 		Add testGetDefaultAdminUser()
+		Add testCheckDefaultAdminPassword()
+		Add testGetBunitIdFromUser();

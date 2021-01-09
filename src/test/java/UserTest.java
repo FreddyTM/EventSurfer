@@ -155,5 +155,30 @@ class UserTest {
 		user.setPassword("NewSurferPass");
 		assertTrue(user.updateDefaultAdminUserToDb(conn, user));
 	}
+	
+	@Test
+	@Order(10)
+	void testCheckDefaultAdminPassword() {
+		User user = new User();
+		assertEquals(0, user.checkDefaultAdminPassword(conn));
+	}
+	
+	@Test
+	@Order(10)
+	void testGetBunitIdFromUser() {
+		User user = new User();
+		assertEquals(1, user.getBunitIdFromUser(conn, "BigFakeUser", "NuevoPassword"));
+		assertEquals(0, user.getBunitIdFromUser(conn, "BigFakeUser", "unPassword"));
+		assertEquals(0, user.getBunitIdFromUser(conn, "ADMIN", "NuevoPassword"));
+	}
+	
+	@Test
+	@Order(11)
+	void testGetUserId() {
+		User user = new User();
+		assertEquals(3, user.getUserId(conn, "BigFakeUser", "NuevoPassword"));
+		assertEquals(0, user.getUserId(conn, "BigFakeUser", "unPassword"));
+		assertEquals(0, user.getUserId(conn, "ADMIN", "NuevoPassword"));
+	}
 
 }

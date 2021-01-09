@@ -236,6 +236,104 @@ public class User {
 	}
 	
 	/**
+	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
+	 * o lo ha cambiado.
+	 * @param conn conexión con la base de datos
+	 * @return 0. password sin cambiar, 1. password cambiado, -1 error de comprobación
+	 */
+	public int checkDefaultAdminPassword(Connection conn) {
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT user_password "
+				+ "FROM \"user\" "
+				+ "WHERE id = 1;";
+		try {
+			stm = conn.createStatement();
+			results = PersistenceManager.getResultSet(stm, sql);
+			while(results.next()) {
+				String password = results.getString(1);
+				if (password.equals("surferpass")) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
+		}
+		return -1;
+	}
+	
+	/**
+	 * Obtiene el id de la unidad de negocio a la que pertenece el usuario, si el
+	 * usuario existe
+	 * @param conn conexión con la base de datos
+	 * @param alias alias del usuario
+	 * @param password password del usuario
+	 * @return id de la unidad de negocio, o 0 si el usuario no existe
+	 */
+	public int getBunitIdFromUser (Connection conn, String alias, String password) {
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT b_unit_id "
+				+ "	FROM \"user\" "
+				+ "WHERE user_alias = ? "
+				+ "AND user_password = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1,  alias);
+			pstm.setString(2, new User().passwordHash(password));
+			results = pstm.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return 0;
+	}
+	
+	/**
+	 * Obtiene el id del usuario si el usuario existe
+	 * @param conn conexión con la base de datos
+	 * @param alias alias del usuario
+	 * @param password password del usuario
+	 * @return id del usuario, 0 si el usuario no existe
+	 */
+	public int getUserId (Connection conn, String alias, String password) {
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT id "
+				+ "	FROM \"user\" "
+				+ "WHERE user_alias = ? "
+				+ "AND user_password = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1,  alias);
+			pstm.setString(2, new User().passwordHash(password));
+			results = pstm.executeQuery();
+			if (results.next()) {
+				return results.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return 0;
+	}
+	
+	/**
 	 * Devuelve el usuario al que pertenece el alias entrado por parámetro
 	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
 	 * @param alias alias del usuario buscado
@@ -358,14 +456,6 @@ public class User {
 	public void prueba(BusinessUnit bUnit) {
 		
 	}
-
-//	public Connection getConnection() {
-//		return connection;
-//	}
-//	
-//	public void setConnection(Connection connection) {
-//		this.connection = connection;
-//	}
 	
 	public int getId() {
 		return id;
