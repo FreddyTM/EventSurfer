@@ -287,7 +287,7 @@ public class User {
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1,  alias);
 			pstm.setString(2, new User().passwordHash(password));
-			results = pstm.executeQuery();
+			results = PersistenceManager.getResultSet(pstm, sql);
 			if (results.next()) {
 				return results.getInt(1);
 			}
@@ -319,7 +319,7 @@ public class User {
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1,  alias);
 			pstm.setString(2, new User().passwordHash(password));
-			results = pstm.executeQuery();
+			results = PersistenceManager.getResultSet(pstm, sql);
 			if (results.next()) {
 				return results.getInt(1);
 			}

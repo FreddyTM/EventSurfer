@@ -757,9 +757,9 @@ ver 0.1.1
 	* - Package main.java.company
 
 	· User class:
-		Add getDefaultAdminUser()
-		Add checkDefaultAdminPassword()
-		Add getBunitIdFromUser()
+		Add getDefaultAdminUser() 
+		Add checkDefaultAdminPassword() 
+		Add getBunitIdFromUser() 
 		Add getUserId()
 
 	* - Package main.java.gui
@@ -786,6 +786,7 @@ ver 0.1.1
 		Delete testCheckDefaultAdminPassword() (moved to UserTest class)
 
 	· UserTest class:
-		Add testGetDefaultAdminUser()
-		Add testCheckDefaultAdminPassword()
-		Add testGetBunitIdFromUser();
+		Add testGetDefaultAdminUser() --ok--
+		Add testCheckDefaultAdminPassword() --ok--
+		Add testGetBunitIdFromUser(); --ok--
+		Add testGetUserId() --ok--

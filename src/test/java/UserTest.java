@@ -146,6 +146,13 @@ class UserTest {
 	
 	@Test
 	@Order(9)
+	void testCheckDefaultAdminPassword() {
+		User user = new User();
+		assertEquals(0, user.checkDefaultAdminPassword(conn));
+	}
+	
+	@Test
+	@Order(10)
 	void testUpdateDefaultAdminUserToDb() {
 		User user = new User();
 		user.setId(1);
@@ -157,14 +164,7 @@ class UserTest {
 	}
 	
 	@Test
-	@Order(10)
-	void testCheckDefaultAdminPassword() {
-		User user = new User();
-		assertEquals(0, user.checkDefaultAdminPassword(conn));
-	}
-	
-	@Test
-	@Order(10)
+	@Order(11)
 	void testGetBunitIdFromUser() {
 		User user = new User();
 		assertEquals(1, user.getBunitIdFromUser(conn, "BigFakeUser", "NuevoPassword"));
@@ -173,7 +173,7 @@ class UserTest {
 	}
 	
 	@Test
-	@Order(11)
+	@Order(12)
 	void testGetUserId() {
 		User user = new User();
 		assertEquals(3, user.getUserId(conn, "BigFakeUser", "NuevoPassword"));
