@@ -76,7 +76,7 @@ public class EventSurfer {
 				  PersistenceManager.closeDatabase(connection);
 				  System.exit(0);
 			  }
-			});
+		});
 	}
 	
 	public void go(String[] args) {
@@ -84,17 +84,17 @@ public class EventSurfer {
 		//connectToDatabase();
 		//System.out.println(args.length);
 		if (args.length == 1) {
-			connection = connectToDatabase(args[0]);
+			connection = PersistenceManager.connectToDatabase(args[0]);
 
 		} else {
-			connection = connectToDatabase("");			
+			connection = PersistenceManager.connectToDatabase("");			
 		}
 		
 		while(connection == null) {
 			//Error screen with reconnect button
 		}
 		session = CurrentSession.getInstance();
-		User user = PersistenceManager.getDefaultAdminUser(connection);
+		User user = new User().getDefaultAdminUser(connection);
 		//user.setId(1);
 		if ((user.getPassword().equals("surferpass"))) {
 			//admin password sin cambiar
@@ -178,41 +178,41 @@ public class EventSurfer {
 		}
 	}
 	
-	//LOCAL_DB - Local database
-	//LOCAL_TEST_DB - Local test database
-	//REMOTE_DB - Remote database (Heroku)
-	public Connection connectToDatabase(String database) {
-		String url = null;
-		String user = null;
-		String password = null;
-		Connection connection = null;
-		
-		switch(database) {
-		case "LOCAL_DB":
-			url = "jdbc:postgresql://localhost:5432/surferdb";
-			user = "surferadmin";
-			password = "surferpass";
-			break;
-		case "LOCAL_TEST_DB":
-			url = "jdbc:postgresql://localhost:5432/devsurferdb";
-			user = "surferadmin";
-			password = "surferpass";
-			break;
-		case "REMOTE_DB":
-			url = null;
-			user = null;
-			password = null;
-		default:
-			url = "jdbc:postgresql://localhost:5432/devsurferdb";
-			user = "surferadmin";
-			password = "surferpass";
-		}
-		
-		PersistenceManager.setUrl(url);
-		PersistenceManager.setUser(user);
-		PersistenceManager.setPassword(password);
-		connection = PersistenceManager.getConnection();
-		return connection;
-	}
+//	//LOCAL_DB - Local database
+//	//LOCAL_TEST_DB - Local test database
+//	//REMOTE_DB - Remote database (Heroku)
+//	public Connection connectToDatabase(String database) {
+//		String url = null;
+//		String user = null;
+//		String password = null;
+//		Connection connection = null;
+//		
+//		switch(database) {
+//		case "LOCAL_DB":
+//			url = "jdbc:postgresql://localhost:5432/surferdb";
+//			user = "surferadmin";
+//			password = "surferpass";
+//			break;
+//		case "LOCAL_TEST_DB":
+//			url = "jdbc:postgresql://localhost:5432/devsurferdb";
+//			user = "surferadmin";
+//			password = "surferpass";
+//			break;
+//		case "REMOTE_DB":
+//			url = null;
+//			user = null;
+//			password = null;
+//		default:
+//			url = "jdbc:postgresql://localhost:5432/devsurferdb";
+//			user = "surferadmin";
+//			password = "surferpass";
+//		}
+//		
+//		PersistenceManager.setUrl(url);
+//		PersistenceManager.setUser(user);
+//		PersistenceManager.setPassword(password);
+//		connection = PersistenceManager.getConnection();
+//		return connection;
+//	}
 
 }

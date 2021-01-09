@@ -41,7 +41,9 @@ public class CurrentSession {
 	private volatile Timestamp dateTimeReference;
 	//Ventana del programa
 	private AppWindow frame;
+	//Conexión con la base de datos
 	private Connection connection;
+	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
 	
 	private CurrentSession() {

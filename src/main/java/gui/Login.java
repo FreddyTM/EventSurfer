@@ -132,6 +132,7 @@ public class Login extends JPanel {
 			pstm = conn.prepareStatement(sql);
 			pstm.setString(1, alias);
 			pstm.setString(2, password);
+			results = pstm.executeQuery();
 			while(results.next()) {
 				userId = results.getInt(1);
 				bUnitId = results.getInt(2);
