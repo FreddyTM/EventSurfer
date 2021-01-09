@@ -205,38 +205,38 @@ public class PersistenceManager {
 		return tNow;
 	}
 	
-	/**
-	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
-	 * o lo ha cambiado.
-	 * @param conn conexión con la base de datos
-	 * @return 0. password sin cambiar, 1. password cambiado, -1 error de comprobación
-	 */
-	public static int checkDefaultAdminPassword(Connection conn) {
-		Statement stm = null;
-		ResultSet results = null;
-		String sql = "SELECT user_password "
-				+ "FROM \"user\" "
-				+ "WHERE id = 1;";
-		try {
-			stm = conn.createStatement();
-			results = getResultSet(stm, sql);
-			while(results.next()) {
-				String password = results.getString(1);
-				if (password.equals("surferpass")) {
-					return 0;
-				} else {
-					return 1;
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			closeResultSet(results);
-			closeStatement(stm);
-		}
-		return -1;
-	}
+//	/**
+//	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
+//	 * o lo ha cambiado.
+//	 * @param conn conexión con la base de datos
+//	 * @return 0. password sin cambiar, 1. password cambiado, -1 error de comprobación
+//	 */
+//	public static int checkDefaultAdminPassword(Connection conn) {
+//		Statement stm = null;
+//		ResultSet results = null;
+//		String sql = "SELECT user_password "
+//				+ "FROM \"user\" "
+//				+ "WHERE id = 1;";
+//		try {
+//			stm = conn.createStatement();
+//			results = getResultSet(stm, sql);
+//			while(results.next()) {
+//				String password = results.getString(1);
+//				if (password.equals("surferpass")) {
+//					return 0;
+//				} else {
+//					return 1;
+//				}
+//			}
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			closeResultSet(results);
+//			closeStatement(stm);
+//		}
+//		return -1;
+//	}
 	
 //	/**
 //	 * Obtiene el alias, nombre, apellido y password del usuario administrador por defecto
