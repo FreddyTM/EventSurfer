@@ -192,9 +192,9 @@ class PersistenceManagerTest {
 				"sdophjis0ih0sthjs"));
 	}
 	
-	@Test
-	void testGetDefaultAdminUser() {
-		assertNotNull(PersistenceManager.getDefaultAdminUser(connection));
-	}
+//	@Test
+//	void testGetDefaultAdminUser() {
+//		assertNotNull(PersistenceManager.getDefaultAdminUser(connection));
+//	}
 
 }

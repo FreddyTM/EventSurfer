@@ -20,33 +20,42 @@ public class PersistenceManager {
 	private static String user; //usuario de la base de datos
 	private static String password; //contraseña del usuario de la base de datos
 
-//	/**
-//	 * Abre una conexión con la base de datos
-//	 * @param url URL de la base de datos
-//	 * @param user usuario de la base de datos
-//	 * @param password contraseña del usuario de la base de datos
-//	 * @return conexión con la base de datos
-//	 */
-//	public static Connection openDatabase (String url, String user, String password) {
-//		
-//		Connection connection = null;
-//		String dbName = url.substring(url.lastIndexOf("/"));;
-//		
-//		try {
-//			Class.forName("org.postgresql.Driver");
-//			connection = DriverManager.getConnection(url, user, password);
-//			System.out.println("Connexión a " + dbName + " establecida con éxito\n");
-//		} catch (ClassNotFoundException ex) {
-//			System.out.println("No se encuentra el controlador JDBC ("
-//			+ ex.getMessage() +")");
-//		} catch (SQLException e) {
-//			System.out.println("Error: " + e.getMessage());
-//			System.out.println("Estado: " + e.getSQLState());
-//			System.out.println("Código: " + e.getErrorCode());
-//		}
-//		
-//		return connection;
-//	}
+	//LOCAL_DB - Local database
+	//LOCAL_TEST_DB - Local test database
+	//REMOTE_DB - Remote database (Heroku)
+	public static Connection connectToDatabase(String database) {
+		String url = null;
+		String user = null;
+		String password = null;
+		Connection connection = null;
+		
+		switch(database) {
+		case "LOCAL_DB":
+			url = "jdbc:postgresql://localhost:5432/surferdb";
+			user = "surferadmin";
+			password = "surferpass";
+			break;
+		case "LOCAL_TEST_DB":
+			url = "jdbc:postgresql://localhost:5432/devsurferdb";
+			user = "surferadmin";
+			password = "surferpass";
+			break;
+		case "REMOTE_DB":
+			url = null;
+			user = null;
+			password = null;
+		default:
+			url = "jdbc:postgresql://localhost:5432/devsurferdb";
+			user = "surferadmin";
+			password = "surferpass";
+		}
+		
+		setUrl(url);
+		setUser(user);
+		setPassword(password);
+		connection = getConnection();
+		return connection;
+	}
 
 	/**
 	 * Cierra la conexión con la base de datos
@@ -229,36 +238,36 @@ public class PersistenceManager {
 		return -1;
 	}
 	
-	/**
-	 * Obtiene el alias, nombre, apellido y password del usuario administrador por defecto
-	 * para comprobar si su password ha sido cambiado. En la primera ejecución del programa
-	 * Es obligatorio cambiar este password, y opcional cambiar el alias, nombre y apellido. 
-	 * @param conn conexión con la base de datos
-	 * @return usuario administrador por defecto incluyendo solo alias, nombre, apellido y
-	 * password. El resto de datos no son necesarios porque ya son conocidos.
-	 */
-	public static User getDefaultAdminUser (Connection conn) {
-		Statement stm = null;
-		ResultSet results = null;
-		User user = new User();
-		String sql = "SELECT user_alias, nombre, apellido, user_password "
-				+ "FROM \"user\" "
-				+ "WHERE id = 1;";
-		try {
-			stm = conn.createStatement();
-			results = getResultSet(stm, sql);
-			while (results.next()) {
-				user.setUserAlias(results.getString(1));
-				user.setNombre(results.getString(2));
-				user.setApellido(results.getString(3));
-				user.setPassword(results.getString(4));
-			}
-			return user;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	/**
+//	 * Obtiene el alias, nombre, apellido y password del usuario administrador por defecto
+//	 * para comprobar si su password ha sido cambiado. En la primera ejecución del programa
+//	 * Es obligatorio cambiar este password, y opcional cambiar el alias, nombre y apellido. 
+//	 * @param conn conexión con la base de datos
+//	 * @return usuario administrador por defecto incluyendo solo alias, nombre, apellido y
+//	 * password. El resto de datos no son necesarios porque ya son conocidos.
+//	 */
+//	public static User getDefaultAdminUser (Connection conn) {
+//		Statement stm = null;
+//		ResultSet results = null;
+//		User user = new User();
+//		String sql = "SELECT user_alias, nombre, apellido, user_password "
+//				+ "FROM \"user\" "
+//				+ "WHERE id = 1;";
+//		try {
+//			stm = conn.createStatement();
+//			results = getResultSet(stm, sql);
+//			while (results.next()) {
+//				user.setUserAlias(results.getString(1));
+//				user.setNombre(results.getString(2));
+//				user.setApellido(results.getString(3));
+//				user.setPassword(results.getString(4));
+//			}
+//			return user;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	
 	/**
 	 * Obtiene el id de la unidad de negocio a la que pertenece el usuario, si el

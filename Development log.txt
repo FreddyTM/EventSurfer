@@ -746,6 +746,17 @@ ver 0.1.1
 		Update loadCurrentSessionData()
 		Update TimerJob class run()
 		Update attribute frame from JFrame class to AppWindow class
+		Delete connectToDatabase() (moved to PersistenceManager class)
+
+	· PersistenceManager class:
+		Add connectToDatabase()
+		Update connectToDatabase()
+		Delete getDefaultAdminUser() (moved to User class)
+
+	* - Package main.java.company
+
+	· User class:
+		Add getDefaultAdminUser()
 
 	* - Package main.java.gui
 
@@ -763,3 +774,11 @@ ver 0.1.1
 	· AppWindow class (new):
 		Add attributes:
 			upPanel, downPanel, centerPanel, leftPanel, rightPanel
+
+	* - Package main.java.test
+
+	· PersistenceManagerTest class:
+		Delete testGetDefaultAdminUser() (moved to UserTest class)
+
+	· UserTest class:
+		Add testGetDefaultAdminUser()
