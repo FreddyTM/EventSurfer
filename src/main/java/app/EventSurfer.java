@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import main.java.company.Company;
 import main.java.company.User;
+import main.java.gui.AppWindow;
 import main.java.gui.DefaultAdmin;
 import main.java.gui.Login;
 import main.java.persistence.CurrentSession;
@@ -34,12 +35,13 @@ public class EventSurfer {
 
 	Connection connection;
 	CurrentSession session;
-	private JFrame frame = new JFrame("EVENTSURFER");
-	private JPanel upPanel;
-	private JPanel downPanel;
-	private JPanel centerPanel;
-	private JPanel leftPanel;
-	private JPanel rightPanel;
+	private AppWindow frame = new AppWindow("EVENTSURFER");
+	//private JFrame frame = new JFrame("EVENTSURFER");
+//	private JPanel upPanel;
+//	private JPanel downPanel;
+//	private JPanel centerPanel;
+//	private JPanel leftPanel;
+//	private JPanel rightPanel;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -71,12 +73,7 @@ public class EventSurfer {
 				  if(session.getTimer() != null) {
 					  session.getTimer().cancel();
 				  }		  
-				  try {
-					connection.close();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				  PersistenceManager.closeDatabase(connection);
 				  System.exit(0);
 			  }
 			});
@@ -107,8 +104,9 @@ public class EventSurfer {
 			adminPanel.getAliasField().setText(user.getUserAlias());
 			adminPanel.getNameField().setText(user.getNombre());
 			adminPanel.getLastNameField().setText(user.getApellido());
-			centerPanel = adminPanel;
-			frame.add(centerPanel, BorderLayout.CENTER);
+			//centerPanel = adminPanel;
+			frame.setCenterPanel(adminPanel);
+			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
 			session.setFrame(frame);
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
@@ -118,8 +116,9 @@ public class EventSurfer {
 			System.out.println("Password cambiado");
 			//Login screen
 			Login loginPanel = new Login(connection, session);
-			centerPanel = loginPanel;
-			frame.add(centerPanel, BorderLayout.CENTER);
+			//centerPanel = loginPanel;
+			frame.setCenterPanel(loginPanel);
+			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
 			session.setFrame(frame);
 			//Check login
 			
@@ -214,10 +213,6 @@ public class EventSurfer {
 		PersistenceManager.setPassword(password);
 		connection = PersistenceManager.getConnection();
 		return connection;
-		
-		//PersistenceManager.loadData(connection);	
-		//PersistenceManager.closeDatabase(connection);
-		
 	}
 
 }

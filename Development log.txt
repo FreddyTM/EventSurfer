@@ -5,39 +5,39 @@ Ver 0.0.1:
 
 	* - Package app (new)
 
-	· AppDummy class --empty--
+	· AppDummy class (new): --empty--
 
 	* - Package event (new)
 
-	· BasicEvent class: (new)
+	· BasicEvent class (new):
 		Add attributes
-		id (static), title, List <UpdateVerent> updates.
+			id (static), title, List <UpdateVerent> updates.
 		Add constructor
 		id autoincrement, title max length 200, LinkedList updates.
 
-	· EventStatus enum class: (new)
+	· EventStatus enum class (new):
 		EventStatus elements:
 		OPEN, IN_PROCESS, CLOSED.
 
-	· UpdateVerent class: (new)
+	· UpdateEvent class (new):
 		Add attributes:
-		date, status, basicEventId, id (static), description.
+			date, status, basicEventId, id (static), description.
 		Add constructor
 		date (current date & time), status OPEN, basic event id, id autoincrement.
 
 	* - Package company (new)
 
-	· Company class: (new)
+	· Company class (new):
 		Company attributes: name, List <Workplace> workplaces.
 
-	· Workplace class: (new)
+	· Workplace class (new):
 		Workplace attributes: name, List <User> users, List <String> zones.
 
-	· User class: (new)
+	· User class (new):
 		Add attributes:
-		firstName, lastName, login, password, userType.
+			firstName, lastName, login, password, userType.
 
-	· UserType enum class: (new)
+	· UserType enum class (new):
 		UserType elements:
 		SYSADMIN, ADMIN, USER.
 	
@@ -64,7 +64,7 @@ Ver 0.0.4
 	
 	* - Package persistence (new)
 
-	· PersistenceManager class: (new)
+	· PersistenceManager class (new):
 		Add openDatabase()
 		Add closeDatabase()
 
@@ -78,9 +78,9 @@ Ver 0.0.5
 
 	* - Package types_states (new)
 	
-	· UserType class: (new)
+	· UserType class (new):
 		Add attributes:
-		Connection connection, Map <Integer, String> userTypes
+			Connection connection, Map <Integer, String> userTypes
 		Add constructor, setters & getters
 
 		Add numeroTiposDeUsuario()
@@ -111,9 +111,9 @@ Ver 0.0.7
 
 	* - Package types_states
 
-	· EventType class: (new)
+	· EventType class (new):
 		Add attributes:
-		Connection connection, Map <Integer, String> eventTypes
+			Connection connection, Map <Integer, String> eventTypes
 		Add constructor, setters & getters
 
 		Add getNumberOfEventTypes()
@@ -138,9 +138,9 @@ Ver 0.0.8
 	· EventType class, UserType class:
 		Update loadData() to use PersistenceManager.getResultSet()
 
-	· EventState class: (new)
+	· EventState class (new):
 		Add attributes:
-		Connection connection, Map <Integer, String> eventStates
+			Connection connection, Map <Integer, String> eventStates
 		Add constructor, setters & getters
 
 		Add getNumberOfEventStates()
@@ -155,20 +155,20 @@ Ver 0.0.9
 
 	· Company class:
 		Update attributes:
-		connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, web, businessUnits
+			connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, web, businessUnits
 		Add constructor, setters & getters
 
 	· BusinessUnit class:
 		Update attributes:
-		connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, users, areas
+			connection, id, nombre, direccion, provincia, estado, cpostal, telefono, mail, users, areas
 		Add constructor, setters & getters
 
 		Add addUser() --empty--
 		Add addUsers() --empty--
 
-	· Area class: (new)
+	· Area class (new):
 		Add attributes:
-		connection, id, area, descripcion
+			connection, id, area, descripcion
 		Add constructor, setters & getters
 
 Ver 0.0.10
@@ -177,7 +177,7 @@ Ver 0.0.10
 
 	· User class:
 		Update attributes:
-		connection, id, bUnit, userType, userAlias, nombre, apellido, password, activo
+			connection, id, bUnit, userType, userAlias, nombre, apellido, password, activo
 		Add constructor, setters & getters
 		
 		Add saveToDB()
@@ -185,9 +185,9 @@ Ver 0.0.10
 
 	* - Package types_states
 
-	· EventsStatesContainer class: (new)
+	· EventsStatesContainer class (new):
 		Add attributes
-		evState, evType, uType
+			evState, evType, uType
 		Add constructor, setters & getters
 
 Ver 0.0.11
@@ -205,7 +205,7 @@ Ver 0.0.11
 	
 	· PersistenceManager class:
 		Add static attributes:
-		url, user, password
+			url, user, password
 		Add setters & getters
 
 		Add getConnection()
@@ -259,12 +259,12 @@ Ver 0.0.13
 
 	· Event class:
 		Update attributes:
-		id, bUnit, eventType, titulo, descripcion, eventState, updates
+			id, bUnit, eventType, titulo, descripcion, eventState, updates
 		Add constructor, setters & getters
 
 	· UpdateVerent class
 		Update attributes:
-		id, event, fechaHora, descripcion, autor
+			id, event, fechaHora, descripcion, autor
 		Add constructor, setters & getters
 		
 Ver 0.0.14
@@ -382,7 +382,7 @@ Ver 0.0.18
 
 	* - Package persistence
 
-	· CurrentSession class: (new)
+	· CurrentSession class (new):
 		Add attributes:
 		company, bUnit, user
 		Add constructor, setters & getters
@@ -481,7 +481,7 @@ Ver 0.0.21
 
 	* - Package test.java
 
-	· CompanyTest class (new)
+	· CompanyTest class (new):
 		Add empty methods: 
 		testUpdateCompany(),  testAddBusinessUnit()
 		
@@ -489,7 +489,7 @@ Ver 0.0.21
 		testGetCompanyFromDB() --ok--
 		testUpdateCompanyToDB() --ok--
 
-	· PersistenceManagerTest class (new)
+	· PersistenceManagerTest class (new):
 		Preconditions:
 		Empty database with initial default values
 
@@ -499,7 +499,7 @@ Ver 0.0.21
 		Add testGetResultSetPreparedStatementString() --ok--
 		Add testGetLastElementIdFromDB() --ok--
 
-	· EventStateTest class (new)
+	· EventStateTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -508,7 +508,7 @@ Ver 0.0.21
 		Add testGetEventState() --ok--
 		Add testLoadData() --ok--
 
-	· UserTypeTest class (new)
+	· UserTypeTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -517,7 +517,7 @@ Ver 0.0.21
 		Add testGetUserType() --ok--
 		Add testLoadData() --ok--
 
-	· EventTypeTest class (new)
+	· EventTypeTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 		Empty table event_type, id index start at 1
@@ -529,7 +529,7 @@ Ver 0.0.21
 		Add testSaveEventTypeToDB() --ok--
 		Add testAddNewEventType() --ok--
 
-	· UserTest class (new)
+	· UserTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -557,7 +557,7 @@ Ver 0.0.22
 
 	* - Package test.java
 
-	· AreaTest class (new)
+	· AreaTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -569,7 +569,7 @@ Ver 0.0.22
 		Add testGetAreaByName() --ok--
 		Add testGetAreaById() --ok--
 
-	· BusinessUnitTest class (new)
+	· BusinessUnitTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -580,7 +580,7 @@ Ver 0.0.22
 		Add testGetBusinessUnitByName() --ok--
 		Add testGetBusinessUnitById() --ok--
 
-	· EventTest class (new)
+	· EventTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -590,7 +590,7 @@ Ver 0.0.22
 		Add testGetEventsFromDB() --ok--
 		Add testGetEventById() --ok--
 
-	· EventUpdateTest class (new)
+	· EventUpdateTest class (new):
 		Preconditions:
 		Method order: @TestMethodOrder(OrderAnnotation.class)
 
@@ -731,6 +731,9 @@ ver 0.1.1
 	* - Package main.java.app
 
 	· EventSurfer class:
+		Update attribute frame from JFrame class to AppWindow class
+		Delete attributes (moved to AppWindow class)
+			upPanel, downPanel, centerPanel, leftPanel, rightPanel
 		Update go()	
 
 
@@ -741,6 +744,8 @@ ver 0.1.1
 		Delete userLogin()
 		Update loadAllData()
 		Update loadCurrentSessionData()
+		Update TimerJob class run()
+		Update attribute frame from JFrame class to AppWindow class
 
 	* - Package main.java.gui
 
@@ -754,3 +759,7 @@ ver 0.1.1
 	· DefaultAdmin class:
 		Add 'Enter' KeyListeners to JFields and JButton
 		Add updateData()
+
+	· AppWindow class (new):
+		Add attributes:
+			upPanel, downPanel, centerPanel, leftPanel, rightPanel

@@ -18,6 +18,7 @@ import main.java.company.Company;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.gui.AppWindow;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
@@ -39,7 +40,7 @@ public class CurrentSession {
 	//de los objetos que contiene bUnit
 	private volatile Timestamp dateTimeReference;
 	//Ventana del programa
-	private JFrame frame;
+	private AppWindow frame;
 	private Connection connection;
 	private Timer timer;
 	
@@ -59,6 +60,11 @@ public class CurrentSession {
 	 * la unidad de negocio y el usuario se almacenan en los
 	 * atributos de la clase
 	 * @param conn conexión con la base de datos
+	 * @param bUnitId unidad de negocio a la que pertenece el usuario
+	 * que identificamos con el parámetro userId
+	 * @param userId id del usuario. Será un usuario administrador,
+	 * ya que es el único tipo de usuario que tiene acceso a los datos
+	 * de todas las unidades de negocio
 	 */
 	public void loadAllData (Connection conn, int bUnitId, int userId) {
 		
@@ -137,6 +143,7 @@ public class CurrentSession {
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		for (BusinessUnit bUnit: bUnitList) {
 			if (bUnit.getId() == bUnitId) {
+				//Añadimos a la compañía la unidad de negocio a la que pertenece el usuario
 				company.getBusinessUnits().add(bUnit);
 				//Asignamos la unidad de negocio a bUnit
 				this.bUnit = bUnit;
@@ -202,6 +209,7 @@ public class CurrentSession {
 				conn = PersistenceManager.getConnection();
 			}
 			Timestamp tempDateTime = session.getDateTimeReference();
+			String tableName = "";
 			Statement stm = null;
 			ResultSet results = null;
 			String sql = "SELECT * "
@@ -210,7 +218,7 @@ public class CurrentSession {
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
 				while (results.next()) {
-					String tableName = results.getString(1);
+					tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
 					if (tempDateTime.before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
@@ -276,6 +284,11 @@ public class CurrentSession {
 				}
 				//Actualizamos dateTimeReference de la sesión
 				session.setDateTimeReference(tempDateTime);;
+				
+				//Actualizar el panel que esté visible si su información ha cambiado
+				//1º - Identificar panel visible
+				//2º - Comprobar si el panel visible tiene datos de la tabla que ha cambiado
+				//3º - Recargar datos del panel visible
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -328,11 +341,11 @@ public class CurrentSession {
 		return timer;
 	}
 
-	public JFrame getFrame() {
+	public AppWindow getFrame() {
 		return frame;
 	}
 
-	public void setFrame(JFrame frame) {
+	public void setFrame(AppWindow frame) {
 		this.frame = frame;
 	}
 		
