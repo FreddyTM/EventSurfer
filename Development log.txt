@@ -778,10 +778,12 @@ ver 0.1.1
 	· DefaultAdmin class:
 		Add 'Enter' KeyListeners to JFields and JButton
 		Add updateData()
+		Update updateData()
 
 	· AppWindow class (new):
 		Add attributes:
 			upPanel, downPanel, centerPanel, leftPanel, rightPanel, conn, session
+		Add constructor, setters & getters
 		Add initialize()
 		Update initialize()
 
@@ -797,3 +799,13 @@ ver 0.1.1
 		Add testCheckDefaultAdminPassword() --ok--
 		Add testGetBunitIdFromUser(); --ok--
 		Add testGetUserId() --ok--
+
+ver 0.1.2
+
+	* - Package main.java.gui
+
+	· ToolBoxPanel class (new):
+		Add attributes userType, panelType, session, toolBar
+		Add constructor, setters & getters
+		Add initialize() --empty--
+	
