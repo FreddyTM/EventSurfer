@@ -3,6 +3,7 @@ package main.java.gui;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
+import main.java.company.User;
 import main.java.persistence.CurrentSession;
 
 import java.sql.Connection;
@@ -58,10 +59,10 @@ public class Login extends JPanel {
 		passLabel.setBounds(100, 250, 150, 25);
 		add(passLabel);
 		
-		JLabel errorLabel = new JLabel("");
-		errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		errorLabel.setBounds(50, 300, 700, 25);
-		add(errorLabel);
+		JLabel errorInfoLabel = new JLabel("");
+		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorInfoLabel.setBounds(50, 300, 700, 25);
+		add(errorInfoLabel);
 		
 		userField = new JTextField();
 		userField.setBounds(260, 200, 300, 25);
@@ -94,20 +95,24 @@ public class Login extends JPanel {
 		});
 		add(passwordField);
 		
-		String loginUser = userField.getText();
-		String loginPassword = String.valueOf(passwordField.getPassword());
+//		String loginUser = userField.getText();
+//		String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
 		
 		//acceptButton = new JButton("Aceptar");
 		acceptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				userLogin(conn, loginUser, loginPassword, errorLabel);
+				String loginUser = userField.getText();
+				String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
+				userLogin(conn, loginUser, loginPassword, errorInfoLabel);
 			}
 		});
 		acceptButton.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					userLogin(conn, loginUser, loginPassword, errorLabel);
+					String loginUser = userField.getText();
+					String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
+					userLogin(conn, loginUser, loginPassword, errorInfoLabel);
 				}
 			}
 		});
@@ -159,17 +164,17 @@ public class Login extends JPanel {
 			case 1: //Usuario administrador
 				session.loadAllData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
-				
+				//label.setText("ENTRANDO AL PROGRAMA (admin)");
 				break;
 			case 2: //Usuario manager
 				session.loadCurrentSessionData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
-				
+				//label.setText("ENTRANDO AL PROGRAMA (manager)");
 				break;
 			case 3: //Usuario user
 				session.loadCurrentSessionData(conn, bUnitId, userId);
 				//Pasar userTypeId por parámetro al panel
-				
+				//label.setText("ENTRANDO AL PROGRAMA (user)");
 				break;
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing

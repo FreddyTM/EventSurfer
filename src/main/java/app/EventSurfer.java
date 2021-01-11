@@ -19,6 +19,7 @@ import main.java.company.User;
 import main.java.gui.AppWindow;
 import main.java.gui.DefaultAdmin;
 import main.java.gui.Login;
+import main.java.gui.ToolBoxPanel;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
@@ -95,6 +96,9 @@ public class EventSurfer {
 		frame = new AppWindow("EVENTSURFER", connection, session);
 		frame.setVisible(true);
 		User user = new User().getDefaultAdminUser(connection);
+//		ToolBoxPanel toolPanel = new ToolBoxPanel(0, 0, session);
+//		frame.setLeftPanel(toolPanel);
+//		frame.add(frame.getLeftPanel(), BorderLayout.WEST);
 		//user.setId(1);
 		if ((user.getPassword().equals("surferpass"))) {
 			//admin password sin cambiar

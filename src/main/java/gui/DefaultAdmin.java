@@ -205,6 +205,7 @@ public class DefaultAdmin extends JPanel {
 				if (testData()) {
 					updateData();
 					//Activar nuevo panel
+					errorInfoLabel.setText("ENTRANDO AL PROGRAMA");
 				}
 			}
 		});
@@ -215,6 +216,7 @@ public class DefaultAdmin extends JPanel {
 					if (testData()) {
 						updateData();
 						//Activar nuevo panel
+						errorInfoLabel.setText("ENTRANDO AL PROGRAMA");
 					}
 				}
 			}
@@ -282,6 +284,8 @@ public class DefaultAdmin extends JPanel {
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
 			session.loadCurrentSessionData(conn, 1, 1);
+			//Pasar userTypeId por parámetro al panel
+			//Cargar paneles
 		}
 	}
 
