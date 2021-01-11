@@ -35,7 +35,7 @@ public class EventSurfer {
 
 	Connection connection;
 	CurrentSession session;
-	private AppWindow frame = new AppWindow("EVENTSURFER");
+	private AppWindow frame;
 	//private JFrame frame = new JFrame("EVENTSURFER");
 //	private JPanel upPanel;
 //	private JPanel downPanel;
@@ -48,7 +48,7 @@ public class EventSurfer {
 			public void run() {
 				try {
 					EventSurfer eventSurfer = new EventSurfer();
-					eventSurfer.frame.setVisible(true);
+					//eventSurfer.frame.setVisible(true);
 					eventSurfer.go(args);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,31 +58,29 @@ public class EventSurfer {
 	}
 	
 	public EventSurfer() {
-		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
-		initialize();
+//		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
+//		initialize();
 	}
 	
-	private void initialize() {
-		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		frame.setExtendedState(frame.getExtendedState() | frame.MAXIMIZED_BOTH);
-		frame.getContentPane().setLayout(new BorderLayout());
-		frame.setBounds(300, 300, 1000, 700);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addWindowListener(new WindowAdapter() {
-			  public void windowClosing(WindowEvent e) {
-				  if(session.getTimer() != null) {
-					  session.getTimer().cancel();
-				  }		  
-				  PersistenceManager.closeDatabase(connection);
-				  System.exit(0);
-			  }
-		});
-	}
+//	private void initialize() {
+//		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//		frame.setExtendedState(frame.getExtendedState() | frame.MAXIMIZED_BOTH);
+//		frame.getContentPane().setLayout(new BorderLayout());
+//		frame.setBounds(300, 300, 1000, 700);
+//		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.addWindowListener(new WindowAdapter() {
+//			  public void windowClosing(WindowEvent e) {
+//				  if(session.getTimer() != null) {
+//					  session.getTimer().cancel();
+//				  }		  
+//				  PersistenceManager.closeDatabase(connection);
+//				  System.exit(0);
+//			  }
+//		});
+//	}
 	
 	public void go(String[] args) {
 		
-		//connectToDatabase();
-		//System.out.println(args.length);
 		if (args.length == 1) {
 			connection = PersistenceManager.connectToDatabase(args[0]);
 
@@ -94,6 +92,8 @@ public class EventSurfer {
 			//Error screen with reconnect button
 		}
 		session = CurrentSession.getInstance();
+		frame = new AppWindow("EVENTSURFER", connection, session);
+		frame.setVisible(true);
 		User user = new User().getDefaultAdminUser(connection);
 		//user.setId(1);
 		if ((user.getPassword().equals("surferpass"))) {
@@ -137,46 +137,46 @@ public class EventSurfer {
 		//PersistenceManager.closeDatabase(connection);
 	}
 	
-	public void checkConnectToDatabase () {
-		Connection connection = null;
-		String url = "jdbc:postgresql://localhost:5432/surferdb";
-		String user = "surferadmin";
-		String password = "surferpass";
-		
-		Connection devConnection = null;
-		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
-		String devUser = "surferadmin";
-		String devPassword = "surferpass";
-		
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException ex) {
-				System.out.println("No se encuentra el controlador JDBC ("
-				+ ex.getMessage() +")");
-		}
-		
-		try{
-			//Obtenim una connexió des de DriverManager
-			connection = DriverManager.getConnection(url, user, password);
-			System.out.println("Connexió a surferdb realitzada usant"
-			+ " DriverManager");
-			connection.close();
-			 
-		} catch (SQLException ex) {
-			System.out.println("Error " + ex.getMessage());
-		}
-		
-		try{
-			//Obtenim una connexió des de DriverManager
-			devConnection = DriverManager.getConnection(devUrl, devUser, devPassword);
-			System.out.println("Connexió a devsurferdb realitzada usant"
-			+ " DriverManager");
-			devConnection.close();
-			 
-		} catch (SQLException ex) {
-			System.out.println("Error " + ex.getMessage());
-		}
-	}
+//	public void checkConnectToDatabase () {
+//		Connection connection = null;
+//		String url = "jdbc:postgresql://localhost:5432/surferdb";
+//		String user = "surferadmin";
+//		String password = "surferpass";
+//		
+//		Connection devConnection = null;
+//		String devUrl = "jdbc:postgresql://localhost:5432/devsurferdb";
+//		String devUser = "surferadmin";
+//		String devPassword = "surferpass";
+//		
+//		try {
+//			Class.forName("org.postgresql.Driver");
+//		} catch (ClassNotFoundException ex) {
+//				System.out.println("No se encuentra el controlador JDBC ("
+//				+ ex.getMessage() +")");
+//		}
+//		
+//		try{
+//			//Obtenim una connexió des de DriverManager
+//			connection = DriverManager.getConnection(url, user, password);
+//			System.out.println("Connexió a surferdb realitzada usant"
+//			+ " DriverManager");
+//			connection.close();
+//			 
+//		} catch (SQLException ex) {
+//			System.out.println("Error " + ex.getMessage());
+//		}
+//		
+//		try{
+//			//Obtenim una connexió des de DriverManager
+//			devConnection = DriverManager.getConnection(devUrl, devUser, devPassword);
+//			System.out.println("Connexió a devsurferdb realitzada usant"
+//			+ " DriverManager");
+//			devConnection.close();
+//			 
+//		} catch (SQLException ex) {
+//			System.out.println("Error " + ex.getMessage());
+//		}
+//	}
 	
 //	//LOCAL_DB - Local database
 //	//LOCAL_TEST_DB - Local test database

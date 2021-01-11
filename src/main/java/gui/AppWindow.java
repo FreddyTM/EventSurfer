@@ -1,10 +1,19 @@
 package main.java.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import main.java.persistence.CurrentSession;
+import main.java.persistence.PersistenceManager;
 
 public class AppWindow extends JFrame {
 	
@@ -13,7 +22,16 @@ public class AppWindow extends JFrame {
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private CurrentSession session;
+	private Connection conn;
 
+	public AppWindow(String title, Connection conn, CurrentSession session) {
+		super(title);
+		this.conn = conn;
+		this.session = session;
+		initialize();
+	}
+	
 	public AppWindow() throws HeadlessException {
 		// TODO Auto-generated constructor stub
 	}
@@ -32,6 +50,25 @@ public class AppWindow extends JFrame {
 		super(title, gc);
 		// TODO Auto-generated constructor stub
 	}
+	
+	private void initialize() {
+		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		getContentPane().setLayout(new BorderLayout());
+		setBounds(300, 300, 1000, 700);
+		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			  public void windowClosing(WindowEvent e) {
+				  if(session.getTimer() != null) {
+					  session.getTimer().cancel();
+				  }		  
+				  PersistenceManager.closeDatabase(conn);
+				  System.exit(0);
+			  }
+		});
+	}
+	
 
 	public JPanel getUpPanel() {
 		return upPanel;

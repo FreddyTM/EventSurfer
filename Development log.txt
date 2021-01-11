@@ -737,6 +737,7 @@ ver 0.1.1
 		Update go()
 		Delete connectToDatabase()
 		Delete checkConnectToDatabase()
+		Delete initialize()
 
 
 	* - Package main.java.persistence
@@ -780,7 +781,9 @@ ver 0.1.1
 
 	· AppWindow class (new):
 		Add attributes:
-			upPanel, downPanel, centerPanel, leftPanel, rightPanel
+			upPanel, downPanel, centerPanel, leftPanel, rightPanel, conn, session
+		Add initialize()
+		Update initialize()
 
 	* - Package main.java.test
 
