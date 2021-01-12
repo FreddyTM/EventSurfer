@@ -164,7 +164,11 @@ public class Login extends JPanel {
 			case 1: //Usuario administrador
 				//Cargamos datos de la sesión
 				session.loadAllData(conn, bUnitId, userId);
+				//AppWindow oldWindow = session.getFrame();
+				//session.setFrame(new AppWindow("EVENTSURFER", conn, session));
+				//oldWindow.setVisible(false);
 				session.getFrame().setUpWindow(userTypeId);
+				//session.getFrame().setVisible(true);
 //				session.getFrame().revalidate();
 //				session.getFrame().repaint();
 				break;
