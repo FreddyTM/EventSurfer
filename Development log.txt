@@ -804,11 +804,6 @@ ver 0.1.2
 
 	* - Package main.java.gui
 
-	· ToolBoxPanel class (new):
-		Add attributes userType, panelType, session, toolBar
-		Add constructor, setters & getters
-		Add initialize() --empty--
-
 	· DefaultAdmin class:
 		Add startSession()
 		Update updateData()
