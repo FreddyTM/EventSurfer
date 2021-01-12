@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.java.persistence.CurrentSession;
@@ -22,6 +23,8 @@ public class AppWindow extends JFrame {
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JLabel infoLabel;
+	private TabbedDesk desk;
 	private CurrentSession session;
 	private Connection conn;
 
@@ -67,6 +70,24 @@ public class AppWindow extends JFrame {
 				  System.exit(0);
 			  }
 		});
+	}
+	
+	public void setUpWindow(int userType){
+		//this.removeAll();
+		//Añadimos barra de información
+		downPanel = new JPanel();
+		infoLabel = new JLabel("PANEL DE INFORMACIÓN");
+		infoLabel.setFocusable(false);
+		infoLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+		downPanel.add(infoLabel);
+		this.add(downPanel, BorderLayout.SOUTH);
+		//Añadimos panel central con pestañas
+		desk = new TabbedDesk();
+		centerPanel = new JPanel();
+		centerPanel.add(desk);
+		this.add(centerPanel, BorderLayout.CENTER);
+		revalidate();
+		repaint();
 	}
 	
 

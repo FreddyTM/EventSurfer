@@ -808,4 +808,15 @@ ver 0.1.2
 		Add attributes userType, panelType, session, toolBar
 		Add constructor, setters & getters
 		Add initialize() --empty--
+
+	· TabbedDesk class (new);
+		Add constructor, setters & getters
+		Add attributes:
+			eventPane, eventTypePane, areaPane, userPane, bUnitPane, companyPane
+
+	· DefaultAdmin class:
+		Add startSession()
+		Update updateData()
 	
+	· Login class:
+		Update userLogin()

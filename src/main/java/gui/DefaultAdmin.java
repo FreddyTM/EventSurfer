@@ -278,15 +278,24 @@ public class DefaultAdmin extends JPanel {
 		user.setNombre(nameField.getText());
 		user.setApellido(lastNameField.getText());
 		user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
-		//Update user to database
+		//Actualizamos datos de usuario en la base de datos
+		//Si se actualizan correctamente, iniciamos sesión
 		if (user.updateDefaultAdminUserToDb(conn, user)) {
-			//load data to session
-			//User id será 1, el administrador por defecto
-			//BUnit id será 1, la unidad de negocio por defecto
-			session.loadCurrentSessionData(conn, 1, 1);
-			//Pasar userTypeId por parámetro al panel
-			//Cargar paneles
+			startSession();
 		}
+	}
+	
+	/**
+	 * Inicia sesión y arma la ventana principal de la aplicación
+	 */
+	public void startSession() {
+		//Cargamos datos de la sesión
+		//User id será 1, el administrador por defecto
+		//BUnit id será 1, la unidad de negocio por defecto
+		session.loadCurrentSessionData(conn, 1, 1);
+		//Pasar userTypeId por parámetro al panel (admin = 1)
+		//Cargar paneles
+		session.getFrame().setUpWindow(1);
 	}
 
 	public JPasswordField getCurrentPassField() {

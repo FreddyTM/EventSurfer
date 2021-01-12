@@ -162,19 +162,25 @@ public class Login extends JPanel {
 		}
 		switch (userTypeId) {
 			case 1: //Usuario administrador
+				//Cargamos datos de la sesión
 				session.loadAllData(conn, bUnitId, userId);
-				//Pasar userTypeId por parámetro al panel
-				//label.setText("ENTRANDO AL PROGRAMA (admin)");
+				session.getFrame().setUpWindow(userTypeId);
+//				session.getFrame().revalidate();
+//				session.getFrame().repaint();
 				break;
 			case 2: //Usuario manager
+				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				//Pasar userTypeId por parámetro al panel
-				//label.setText("ENTRANDO AL PROGRAMA (manager)");
+				session.getFrame().setUpWindow(userTypeId);
+//				session.getFrame().revalidate();
+//				session.getFrame().repaint();
 				break;
 			case 3: //Usuario user
+				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				//Pasar userTypeId por parámetro al panel
-				//label.setText("ENTRANDO AL PROGRAMA (user)");
+				session.getFrame().setUpWindow(userTypeId);
+//				session.getFrame().revalidate();
+//				session.getFrame().repaint();
 				break;
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
