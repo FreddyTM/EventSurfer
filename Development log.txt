@@ -813,3 +813,8 @@ ver 0.1.2
 
 	· AppWindow class:
 		Add setUpWindow();
+
+	* - Package main.java.persistence
+
+	· PersistenceManager class:
+		Update connectToDatabase() --add remote db credentials--
