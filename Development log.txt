@@ -814,6 +814,8 @@ ver 0.1.2
 	· AppWindow class:
 		Add setUpWindow();
 
+	· Selector class (new) --empty--
+
 	* - Package main.java.persistence
 
 	· PersistenceManager class:
