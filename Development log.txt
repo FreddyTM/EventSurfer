@@ -818,6 +818,11 @@ ver 0.1.2
 		Add constructor
 		Update constructor
 
+	* - Package main.java.app
+
+	· EventSurfer class:
+		Update go()
+
 	* - Package main.java.persistence
 
 	· PersistenceManager class:

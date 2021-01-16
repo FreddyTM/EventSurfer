@@ -110,19 +110,22 @@ public class EventSurfer {
 			//centerPanel = adminPanel;
 			frame.setCenterPanel(adminPanel);
 			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
+			
 			session.setFrame(frame);
+			
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
 			//session.loadCurrentSessionData(connection, 1, 1);
 		} else {
 			//admin password cambiado
 			System.out.println("Password cambiado");
+			session.setFrame(frame);
 			//Login screen
 			Login loginPanel = new Login(connection, session);
 			//centerPanel = loginPanel;
 			frame.setCenterPanel(loginPanel);
 			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
-			session.setFrame(frame);
+			//session.setFrame(frame);
 			//Check login
 			
 			

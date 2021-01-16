@@ -76,6 +76,9 @@ public class AppWindow extends JFrame {
 		centerPanel.removeAll();
 		//Añadimos barra de información
 		downPanel = new JPanel();
+		centerPanel = new JPanel();
+		leftPanel = new Selector();
+		
 		infoLabel = new JLabel("PANEL DE INFORMACIÓN");
 		infoLabel.setFocusable(false);
 		infoLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -84,13 +87,14 @@ public class AppWindow extends JFrame {
 		//Añadimos panel central con pestañas
 		//desk = new TabbedDesk();
 		//centerPanel.removeAll();
-		revalidate();
-		repaint();
-		centerPanel = new JPanel();
+//		revalidate();
+//		repaint();
+
 		//centerPanel.add(desk);
 		this.add(centerPanel, BorderLayout.CENTER);
-		revalidate();
-		repaint();
+		this.add(leftPanel, BorderLayout.WEST);
+		this.revalidate();
+		this.repaint();
 	}
 	
 
