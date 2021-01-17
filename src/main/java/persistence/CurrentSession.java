@@ -40,7 +40,7 @@ public class CurrentSession {
 	//de los objetos que contiene bUnit
 	private volatile Timestamp dateTimeReference;
 	//Ventana del programa
-	private AppWindow frame;
+	//private AppWindow frame;
 	//Conexión con la base de datos
 	private Connection connection;
 	//Temporizador de comprobación de cambios en la base de datos
@@ -343,12 +343,12 @@ public class CurrentSession {
 		return timer;
 	}
 
-	public AppWindow getFrame() {
-		return frame;
-	}
-
-	public void setFrame(AppWindow frame) {
-		this.frame = frame;
-	}
+//	public AppWindow getFrame() {
+//		return frame;
+//	}
+//
+//	public void setFrame(AppWindow frame) {
+//		this.frame = frame;
+//	}
 		
 }
