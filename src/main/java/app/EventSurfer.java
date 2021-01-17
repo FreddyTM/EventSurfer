@@ -103,7 +103,7 @@ public class EventSurfer {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");
 			//update admin data screen			
-			DefaultAdmin adminPanel = new DefaultAdmin(connection, user, session);
+			DefaultAdmin adminPanel = new DefaultAdmin(connection, user, session, frame);
 			adminPanel.getAliasField().setText(user.getUserAlias());
 			adminPanel.getNameField().setText(user.getNombre());
 			adminPanel.getLastNameField().setText(user.getApellido());
@@ -111,7 +111,7 @@ public class EventSurfer {
 			frame.setCenterPanel(adminPanel);
 			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
 			
-			session.setFrame(frame);
+			//session.setFrame(frame);
 			
 			//User id será 1, el administrador por defecto
 			//BUnit id será 1, la unidad de negocio por defecto
@@ -119,9 +119,9 @@ public class EventSurfer {
 		} else {
 			//admin password cambiado
 			System.out.println("Password cambiado");
-			session.setFrame(frame);
+			//session.setFrame(frame);
 			//Login screen
-			Login loginPanel = new Login(connection, session);
+			Login loginPanel = new Login(connection, session, frame);
 			//centerPanel = loginPanel;
 			frame.setCenterPanel(loginPanel);
 			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);

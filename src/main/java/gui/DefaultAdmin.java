@@ -32,14 +32,16 @@ public class DefaultAdmin extends JPanel {
 	private Connection conn;
 	private User user;
 	private CurrentSession session;
+	private AppWindow frame;
 
 	/**
 	 * Create the panel.
 	 */
-	public DefaultAdmin(Connection conn, User user, CurrentSession session) {
+	public DefaultAdmin(Connection conn, User user, CurrentSession session, AppWindow frame) {
 		this.conn = conn ;
 		this.user = user;
 		this.session = session;
+		this.frame = frame;
 		setLayout(null);
 		
 		JTextPane changePassTxt = new JTextPane();
@@ -295,7 +297,7 @@ public class DefaultAdmin extends JPanel {
 		session.loadCurrentSessionData(conn, 1, 1);
 		//Pasar userTypeId por parámetro al panel (admin = 1)
 		//Cargar paneles
-		session.getFrame().setUpWindow(1);
+		frame.setUpWindow(1);
 	}
 
 	public JPasswordField getCurrentPassField() {
@@ -344,5 +346,45 @@ public class DefaultAdmin extends JPanel {
 
 	public void setLastNameField(JTextField lastNameField) {
 		this.lastNameField = lastNameField;
+	}
+
+	public JLabel getErrorInfoLabel() {
+		return errorInfoLabel;
+	}
+
+	public void setErrorInfoLabel(JLabel errorInfoLabel) {
+		this.errorInfoLabel = errorInfoLabel;
+	}
+
+	public Connection getConn() {
+		return conn;
+	}
+
+	public void setConn(Connection conn) {
+		this.conn = conn;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public CurrentSession getSession() {
+		return session;
+	}
+
+	public void setSession(CurrentSession session) {
+		this.session = session;
+	}
+
+	public AppWindow getFrame() {
+		return frame;
+	}
+
+	public void setFrame(AppWindow frame) {
+		this.frame = frame;
 	}
 }

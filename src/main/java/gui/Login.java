@@ -29,12 +29,15 @@ public class Login extends JPanel {
 	
 	private Connection conn;
 	private CurrentSession session;
+	private AppWindow frame;
+	private JPanel basePanel;
 	private JTextField userField;
 	private JPasswordField passwordField;
 	
-	public Login(Connection conn, CurrentSession session) {
+	public Login(Connection conn, CurrentSession session, AppWindow frame) {
 		this.conn = conn;
-		this.session = session;		
+		this.session = session;
+		this.setFrame(frame);
 		setLayout(null);
 		
 		JTextPane userLoginTxt = new JTextPane();
@@ -167,7 +170,7 @@ public class Login extends JPanel {
 				//AppWindow oldWindow = session.getFrame();
 				//session.setFrame(new AppWindow("EVENTSURFER", conn, session));
 				//oldWindow.setVisible(false);
-				session.getFrame().setUpWindow(userTypeId);
+				frame.setUpWindow(userTypeId);
 				//session.getFrame().setVisible(true);
 //				session.getFrame().revalidate();
 //				session.getFrame().repaint();
@@ -175,14 +178,14 @@ public class Login extends JPanel {
 			case 2: //Usuario manager
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				session.getFrame().setUpWindow(userTypeId);
+				frame.setUpWindow(userTypeId);
 //				session.getFrame().revalidate();
 //				session.getFrame().repaint();
 				break;
 			case 3: //Usuario user
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				session.getFrame().setUpWindow(userTypeId);
+				frame.setUpWindow(userTypeId);
 //				session.getFrame().revalidate();
 //				session.getFrame().repaint();
 				break;
@@ -207,6 +210,22 @@ public class Login extends JPanel {
 
 	public void setSession(CurrentSession session) {
 		this.session = session;
+	}
+
+	public AppWindow getFrame() {
+		return frame;
+	}
+
+	public void setFrame(AppWindow frame) {
+		this.frame = frame;
+	}
+
+	public JPanel getBasePanel() {
+		return basePanel;
+	}
+
+	public void setBasePanel(JPanel basePanel) {
+		this.basePanel = basePanel;
 	}
 
 	public JTextField getUserField() {

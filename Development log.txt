@@ -805,13 +805,16 @@ ver 0.1.2
 	* - Package main.java.gui
 
 	· DefaultAdmin class:
+		Add attribute frame
 		Add startSession()
 		Update updateData()
 	
 	· Login class:
+		Add attribute frame
 		Update userLogin()
 
 	· AppWindow class:
+		Add attribute basePanel;
 		Add setUpWindow();
 
 	· Selector class (new):
@@ -827,3 +830,6 @@ ver 0.1.2
 
 	· PersistenceManager class:
 		Update connectToDatabase() --add remote db credentials--
+
+	· CurrentSession class:
+		Remove attribute frame

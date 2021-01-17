@@ -23,6 +23,7 @@ public class AppWindow extends JFrame {
 	private JPanel centerPanel;
 	private JPanel leftPanel;
 	private JPanel rightPanel;
+	private JPanel basePanel;
 	private JLabel infoLabel;
 	//private TabbedDesk desk;
 	private CurrentSession session;
@@ -57,9 +58,17 @@ public class AppWindow extends JFrame {
 	private void initialize() {
 		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		getContentPane().setLayout(new BorderLayout());
-		setBounds(300, 300, 1000, 700);
-		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		basePanel = new JPanel();
+		basePanel.setLayout(new BorderLayout());
+		basePanel.setBounds(300, 300, 1000, 700);
+		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		getContentPane().add(basePanel);
+		//getContentPane().setLayout(new BorderLayout());	
+		//setBounds(300, 300, 1000, 700);
+		//getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
+		
+		
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
