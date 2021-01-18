@@ -1,6 +1,8 @@
 package main.java.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
@@ -9,9 +11,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
@@ -57,17 +63,20 @@ public class AppWindow extends JFrame {
 	
 	private void initialize() {
 		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		//setBounds(300, 300, 1000, 700);
 		
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		//setPreferredSize(new Dimension(1000, 700));
+		setMinimumSize(new Dimension(1000, 700));
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
-		basePanel.setBounds(300, 300, 1000, 700);
+		basePanel.setBounds(0, 0, 1000, 700);
 		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		getContentPane().add(basePanel);
 		//getContentPane().setLayout(new BorderLayout());	
-		//setBounds(300, 300, 1000, 700);
+
 		//getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
-		
+		//setBounds(300, 300, 1000, 700);
 		
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
@@ -83,10 +92,17 @@ public class AppWindow extends JFrame {
 	
 	public void setUpWindow(int userType){
 		centerPanel.removeAll();
+		centerPanel.setVisible(false);
 		//Añadimos barra de información
 		downPanel = new JPanel();
+		downPanel.setBackground(Color.WHITE);
 		centerPanel = new JPanel();
 		leftPanel = new Selector();
+		leftPanel.setBackground(Color.WHITE);
+		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+//		Border leftPanelBorder = leftPanel.getBorder();
+//		Border blackline = BorderFactory.createLineBorder(Color.black);
+//		leftPanel.setBorder(new CompoundBorder(blackline, leftPanelBorder));
 		
 		infoLabel = new JLabel("PANEL DE INFORMACIÓN");
 		infoLabel.setFocusable(false);

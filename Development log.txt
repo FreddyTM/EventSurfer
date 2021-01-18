@@ -816,6 +816,8 @@ ver 0.1.2
 	· AppWindow class:
 		Add attribute basePanel;
 		Add setUpWindow();
+		Update initialize()
+		Update setUpWindow()
 
 	· Selector class (new):
 		Add constructor
