@@ -866,9 +866,11 @@ ver 0.1.4 COMPANYUI
 			Update setUpWindow()
 
 		· DefaultAdmin class:
+			Update constructor
 			Update startSession()
 
 		· Login class:
+			Update constructor
 			Update userLogin()
 
 		· CompanyUI class (new):

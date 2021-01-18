@@ -50,7 +50,7 @@ public class DefaultAdmin extends JPanel {
 		changePassTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		changePassTxt.setText("ES NECESARIO CAMBIAR EL PASSWORD DEL ADMINISTRADOR POR DEFECTO.\r\n"
 				+ "MODIFICAR EL RESTO DE DATOS ES OPCIONAL");
-		changePassTxt.setBackground(UIManager.getColor("Panel.background"));
+		changePassTxt.setBackground(UIManager.getColor(this.getBackground()));
 		changePassTxt.setEditable(false);
 		changePassTxt.setFocusable(false);
 		changePassTxt.setBounds(50, 75, 900, 60);

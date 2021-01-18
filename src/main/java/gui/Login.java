@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -48,7 +49,7 @@ public class Login extends JPanel {
 		userLoginTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		userLoginTxt.setEditable(false);
 		userLoginTxt.setFocusable(false);
-		userLoginTxt.setBackground(SystemColor.menu);
+		userLoginTxt.setBackground(UIManager.getColor(this.getBackground()));
 		userLoginTxt.setBounds(100, 110, 650, 30);
 		add(userLoginTxt);
 		
