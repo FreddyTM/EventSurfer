@@ -134,6 +134,7 @@ public class DefaultAdmin extends JPanel {
 		aliasField = new JTextField();
 		aliasField.setBounds(260, 350, 300, 25);
 		aliasField.setColumns(10);
+		aliasField.setText(user.getUserAlias());
 		aliasField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -147,6 +148,7 @@ public class DefaultAdmin extends JPanel {
 		nameField = new JTextField();
 		nameField.setColumns(10);
 		nameField.setBounds(260, 400, 300, 25);
+		nameField.setText(user.getNombre());
 		nameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -163,6 +165,7 @@ public class DefaultAdmin extends JPanel {
 		lastNameField = new JTextField();
 		lastNameField.setColumns(10);
 		lastNameField.setBounds(260, 450, 300, 25);
+		lastNameField.setText(user.getApellido());
 		lastNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {

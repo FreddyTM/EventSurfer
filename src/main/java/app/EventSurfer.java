@@ -82,9 +82,9 @@ public class EventSurfer {
 			System.out.println("Password sin cambiar");
 			//update admin data screen			
 			DefaultAdmin adminPanel = new DefaultAdmin(connection, user, session, frame);
-			adminPanel.getAliasField().setText(user.getUserAlias());
-			adminPanel.getNameField().setText(user.getNombre());
-			adminPanel.getLastNameField().setText(user.getApellido());
+			//adminPanel.getAliasField().setText(user.getUserAlias());
+			//adminPanel.getNameField().setText(user.getNombre());
+			//adminPanel.getLastNameField().setText(user.getApellido());
 			//centerPanel = adminPanel;
 			//frame.setCenterPanel(adminPanel);
 			frame.getBasePanel().add(adminPanel, BorderLayout.CENTER);
