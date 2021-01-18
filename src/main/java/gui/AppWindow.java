@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -63,14 +64,18 @@ public class AppWindow extends JFrame {
 	
 	private void initialize() {
 		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		//setBounds(300, 300, 1000, 700);
+		Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+	    int appWidth = 1000;
+	    int appHeight = 700;
+		setPreferredSize(new Dimension(appWidth, appHeight));
+		setBounds(center.x - appWidth / 2, center.y - appHeight / 2, appWidth, appHeight);
+		//setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		
-		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		//setPreferredSize(new Dimension(1000, 700));
-		setMinimumSize(new Dimension(1000, 700));
+		//setMinimumSize(new Dimension(1000, 700));
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
-		basePanel.setBounds(0, 0, 1000, 700);
+		//basePanel.setBounds(300, 300, 1000, 700);
 		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		getContentPane().add(basePanel);
 		//getContentPane().setLayout(new BorderLayout());	
@@ -91,12 +96,13 @@ public class AppWindow extends JFrame {
 	}
 	
 	public void setUpWindow(int userType){
-		centerPanel.removeAll();
-		centerPanel.setVisible(false);
+		basePanel.removeAll();
+		//centerPanel.setVisible(false);
 		//Añadimos barra de información
 		downPanel = new JPanel();
 		downPanel.setBackground(Color.WHITE);
 		centerPanel = new JPanel();
+		centerPanel.add(new JLabel("CENTER PANEL INTO CENTER REGION OF BASEPANEL"));
 		leftPanel = new Selector();
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -115,9 +121,10 @@ public class AppWindow extends JFrame {
 //		revalidate();
 //		repaint();
 
-		//centerPanel.add(desk);
-		this.add(centerPanel, BorderLayout.CENTER);
-		this.add(leftPanel, BorderLayout.WEST);
+
+		basePanel.add(centerPanel, BorderLayout.CENTER);
+		basePanel.add(leftPanel, BorderLayout.WEST);
+		
 		this.revalidate();
 		this.repaint();
 	}
@@ -161,6 +168,38 @@ public class AppWindow extends JFrame {
 
 	public void setRightPanel(JPanel rightPanel) {
 		this.rightPanel = rightPanel;
+	}
+
+	public JPanel getBasePanel() {
+		return basePanel;
+	}
+
+	public void setBasePanel(JPanel basePanel) {
+		this.basePanel = basePanel;
+	}
+
+	public JLabel getInfoLabel() {
+		return infoLabel;
+	}
+
+	public void setInfoLabel(JLabel infoLabel) {
+		this.infoLabel = infoLabel;
+	}
+
+	public CurrentSession getSession() {
+		return session;
+	}
+
+	public void setSession(CurrentSession session) {
+		this.session = session;
+	}
+
+	public Connection getConn() {
+		return conn;
+	}
+
+	public void setConn(Connection conn) {
+		this.conn = conn;
 	}
 
 }

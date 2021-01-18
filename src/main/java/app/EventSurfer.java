@@ -3,29 +3,13 @@ package main.java.app;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import main.java.company.Company;
 import main.java.company.User;
 import main.java.gui.AppWindow;
 import main.java.gui.DefaultAdmin;
 import main.java.gui.Login;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
-import main.java.types_states.EventState;
-import main.java.types_states.EventType;
-import main.java.types_states.TypesStatesContainer;
-import main.java.types_states.UserType;
-import java.awt.Font;
 
 
 //VERSION 0.0.22
@@ -36,12 +20,6 @@ public class EventSurfer {
 	Connection connection;
 	CurrentSession session;
 	private AppWindow frame;
-	//private JFrame frame = new JFrame("EVENTSURFER");
-//	private JPanel upPanel;
-//	private JPanel downPanel;
-//	private JPanel centerPanel;
-//	private JPanel leftPanel;
-//	private JPanel rightPanel;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -108,8 +86,8 @@ public class EventSurfer {
 			adminPanel.getNameField().setText(user.getNombre());
 			adminPanel.getLastNameField().setText(user.getApellido());
 			//centerPanel = adminPanel;
-			frame.setCenterPanel(adminPanel);
-			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
+			//frame.setCenterPanel(adminPanel);
+			frame.getBasePanel().add(adminPanel, BorderLayout.CENTER);
 			
 			//session.setFrame(frame);
 			
@@ -123,8 +101,8 @@ public class EventSurfer {
 			//Login screen
 			Login loginPanel = new Login(connection, session, frame);
 			//centerPanel = loginPanel;
-			frame.setCenterPanel(loginPanel);
-			frame.add(frame.getCenterPanel(), BorderLayout.CENTER);
+			//frame.setCenterPanel(loginPanel);
+			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
 			//session.setFrame(frame);
 			//Check login
 			

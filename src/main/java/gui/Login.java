@@ -13,6 +13,8 @@ import java.sql.SQLException;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -23,6 +25,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 public class Login extends JPanel {
 
@@ -98,15 +101,12 @@ public class Login extends JPanel {
 		});
 		add(passwordField);
 		
-//		String loginUser = userField.getText();
-//		String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
-		
-		//acceptButton = new JButton("Aceptar");
 		acceptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String loginUser = userField.getText();
 				String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
 				userLogin(conn, loginUser, loginPassword, errorInfoLabel);
+				frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 			}
 		});
 		acceptButton.addKeyListener(new KeyAdapter() {
@@ -116,6 +116,7 @@ public class Login extends JPanel {
 					String loginUser = userField.getText();
 					String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
 					userLogin(conn, loginUser, loginPassword, errorInfoLabel);
+					frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 				}
 			}
 		});
@@ -167,27 +168,17 @@ public class Login extends JPanel {
 			case 1: //Usuario administrador
 				//Cargamos datos de la sesión
 				session.loadAllData(conn, bUnitId, userId);
-				//AppWindow oldWindow = session.getFrame();
-				//session.setFrame(new AppWindow("EVENTSURFER", conn, session));
-				//oldWindow.setVisible(false);
 				frame.setUpWindow(userTypeId);
-				//session.getFrame().setVisible(true);
-//				session.getFrame().revalidate();
-//				session.getFrame().repaint();
 				break;
 			case 2: //Usuario manager
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
 				frame.setUpWindow(userTypeId);
-//				session.getFrame().revalidate();
-//				session.getFrame().repaint();
 				break;
 			case 3: //Usuario user
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
 				frame.setUpWindow(userTypeId);
-//				session.getFrame().revalidate();
-//				session.getFrame().repaint();
 				break;
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
