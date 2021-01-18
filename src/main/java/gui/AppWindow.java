@@ -62,7 +62,7 @@ public class AppWindow extends JFrame {
 		// TODO Auto-generated constructor stub
 	}
 	
-	private void initialize() {
+	public void initialize() {
 		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
 	    int appWidth = 1000;
@@ -98,30 +98,34 @@ public class AppWindow extends JFrame {
 	public void setUpWindow(int userType){
 		basePanel.removeAll();
 		//centerPanel.setVisible(false);
-		//Añadimos barra de información
-		downPanel = new JPanel();
-		downPanel.setBackground(Color.WHITE);
+
 		centerPanel = new JPanel();
 		centerPanel.add(new JLabel("CENTER PANEL INTO CENTER REGION OF BASEPANEL"));
-		leftPanel = new Selector();
+		leftPanel = new Selector(this);
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 //		Border leftPanelBorder = leftPanel.getBorder();
 //		Border blackline = BorderFactory.createLineBorder(Color.black);
 //		leftPanel.setBorder(new CompoundBorder(blackline, leftPanelBorder));
 		
+		//Añadimos barra de información
+		if (downPanel != null) {
+			downPanel.removeAll();
+		}
+		downPanel = new JPanel();
+		downPanel.setBackground(Color.WHITE);
 		infoLabel = new JLabel("PANEL DE INFORMACIÓN");
 		infoLabel.setFocusable(false);
 		infoLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		downPanel.add(infoLabel);
-		this.add(downPanel, BorderLayout.SOUTH);
+		//this.add(downPanel, BorderLayout.SOUTH);
 		//Añadimos panel central con pestañas
 		//desk = new TabbedDesk();
 		//centerPanel.removeAll();
 //		revalidate();
 //		repaint();
 
-
+		basePanel.add(downPanel, BorderLayout.SOUTH);
 		basePanel.add(centerPanel, BorderLayout.CENTER);
 		basePanel.add(leftPanel, BorderLayout.WEST);
 		

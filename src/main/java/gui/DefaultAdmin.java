@@ -15,6 +15,8 @@ import main.java.persistence.CurrentSession;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.awt.event.ActionEvent;
@@ -201,13 +203,14 @@ public class DefaultAdmin extends JPanel {
 		errorInfoLabel.setBounds(50, 500, 900, 25);
 		add(errorInfoLabel);
 		
-		//updateButton = new JButton("Actualizar datos");
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (testData()) {
-					updateData();
-					//Activar nuevo panel
-					errorInfoLabel.setText("ENTRANDO AL PROGRAMA");
+					if (updateData()) {
+						startSession();
+					} else {
+						errorInfoLabel.setText("ERROR. DATOS NO ACTUALIZADOS");
+					}
 				}
 			}
 		});
@@ -216,9 +219,11 @@ public class DefaultAdmin extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					if (testData()) {
-						updateData();
-						//Activar nuevo panel
-						errorInfoLabel.setText("ENTRANDO AL PROGRAMA");
+						if (updateData()) {
+							startSession();
+						} else {
+							errorInfoLabel.setText("ERROR. DATOS NO ACTUALIZADOS");
+						}
 					}
 				}
 			}
@@ -272,7 +277,7 @@ public class DefaultAdmin extends JPanel {
 	/**
 	 * Actualizamos usuario con los datos del formulario
 	 */
-	public void updateData() {
+	public boolean updateData() {
 		//Excepto bUnit, userType y activo que no deben cambiar
 		//User id será 1, el administrador por defecto
 		user.setId(1);
@@ -283,8 +288,9 @@ public class DefaultAdmin extends JPanel {
 		//Actualizamos datos de usuario en la base de datos
 		//Si se actualizan correctamente, iniciamos sesión
 		if (user.updateDefaultAdminUserToDb(conn, user)) {
-			startSession();
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -297,6 +303,7 @@ public class DefaultAdmin extends JPanel {
 		session.loadCurrentSessionData(conn, 1, 1);
 		//Pasar userTypeId por parámetro al panel (admin = 1)
 		//Cargar paneles
+		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		frame.setUpWindow(1);
 	}
 

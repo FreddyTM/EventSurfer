@@ -604,7 +604,7 @@ Ver 0.0.22
 	· BASIC TESTING COMPLETED
 
 
-ver 0.0.23
+ver 0.0.23 BASIC DATABASE MODIFICATION CONTROL COMPLETED
 
 	* - Package main.java.app
 		
@@ -661,7 +661,7 @@ ver 0.0.23
 
 	· BASIC DATABASE MODIFICATION CONTROL COMPLETED
 
-ver 0.1.0 (FIRST GUI ELEMENTS)	
+ver 0.1.0 FIRST GUI ELEMENTS
 
 	* - Package main.java.app
 		
@@ -726,7 +726,7 @@ ver 0.1.0 (FIRST GUI ELEMENTS)
 	· UserTest class:
 		Add testUpdateDefaultAdminUserToDb() --not tested yet--
 
-ver 0.1.1
+ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 
 	* - Package main.java.app
 
@@ -800,7 +800,7 @@ ver 0.1.1
 		Add testGetBunitIdFromUser(); --ok--
 		Add testGetUserId() --ok--
 
-ver 0.1.2
+ver 0.1.2 APPWINDOW BUILD, SELECTOR BUILD
 
 	* - Package main.java.gui
 
@@ -835,3 +835,26 @@ ver 0.1.2
 
 	· CurrentSession class:
 		Remove attribute frame
+
+ver 0.1.3
+
+		* - Package main.java.gui
+
+		· AppWindow class:
+			Update setUpWindow()	
+
+		· DefaultAdmin class:
+			Update constructor --update listeners--	
+
+		· Login class:
+			Update constructor
+	
+		· Selector class:
+			Update constructor --update listeners--
+			Add attributes
+				logOutAction
+			Add attributes
+				eventButton, eventTypeButton, areaButton, userButton, bUnitButton, companyButton, logOutButton
+				
+		· LogOutAction class (new inner Selector class):
+			Update actionPerformed()

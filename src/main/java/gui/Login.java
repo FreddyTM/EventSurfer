@@ -104,9 +104,15 @@ public class Login extends JPanel {
 		acceptButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String loginUser = userField.getText();
-				String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
-				userLogin(conn, loginUser, loginPassword, errorInfoLabel);
-				frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+				String password = String.valueOf(passwordField.getPassword());
+				if (password.equals("")) {
+					errorInfoLabel.setText("USUARIO O CONTRASEÑA ERRÓNEOS");
+				} else {
+					String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
+					if (userLogin(conn, loginUser, loginPassword, errorInfoLabel)) {
+						frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+					}
+				}
 			}
 		});
 		acceptButton.addKeyListener(new KeyAdapter() {
@@ -114,9 +120,15 @@ public class Login extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					String loginUser = userField.getText();
-					String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
-					userLogin(conn, loginUser, loginPassword, errorInfoLabel);
-					frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+					String password = String.valueOf(passwordField.getPassword());
+					if (password.equals("")) {
+						errorInfoLabel.setText("USUARIO O CONTRASEÑA ERRÓNEOS");
+					} else {
+						String loginPassword = (new User().passwordHash(String.valueOf(passwordField.getPassword())));
+						if (userLogin(conn, loginUser, loginPassword, errorInfoLabel)) {
+							frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+						}
+					}
 				}
 			}
 		});
