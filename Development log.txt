@@ -878,4 +878,5 @@ ver 0.1.4 COMPANYUI
 
 	· CompanyUI class (new):
 		Add constructor, setters & getters
-		Add attribute session
+		Add attributes
+			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField, webField
