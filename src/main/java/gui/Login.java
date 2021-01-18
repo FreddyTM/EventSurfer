@@ -180,17 +180,17 @@ public class Login extends JPanel {
 			case 1: //Usuario administrador
 				//Cargamos datos de la sesión
 				session.loadAllData(conn, bUnitId, userId);
-				frame.setUpWindow(userTypeId);
+				frame.setUpWindow();
 				break;
 			case 2: //Usuario manager
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				frame.setUpWindow(userTypeId);
+				frame.setUpWindow();
 				break;
 			case 3: //Usuario user
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);
-				frame.setUpWindow(userTypeId);
+				frame.setUpWindow();
 				break;
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing

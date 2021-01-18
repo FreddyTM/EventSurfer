@@ -304,7 +304,7 @@ public class DefaultAdmin extends JPanel {
 		//Pasar userTypeId por parámetro al panel (admin = 1)
 		//Cargar paneles
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		frame.setUpWindow(1);
+		frame.setUpWindow();
 	}
 
 	public JPasswordField getCurrentPassField() {

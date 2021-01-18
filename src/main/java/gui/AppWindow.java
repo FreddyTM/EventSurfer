@@ -95,7 +95,7 @@ public class AppWindow extends JFrame {
 		});
 	}
 	
-	public void setUpWindow(int userType){
+	public void setUpWindow(){
 		basePanel.removeAll();
 		//centerPanel.setVisible(false);
 
