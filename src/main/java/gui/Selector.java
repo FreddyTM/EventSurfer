@@ -24,14 +24,19 @@ public class Selector extends JPanel {
 	AppWindow frame;
 	
 	private final Action logOutAction = new LogOutAction();
-	JButton eventButton;
-	JButton eventTypeButton;
-	JButton areaButton;
-	JButton userButton;
-	JButton bUnitButton;
-	JButton companyButton;
-	JButton logOutButton;
+	private final Action CompanyAction = new CompanyAction();
+	private JButton eventButton;
+	private JButton eventTypeButton;
+	private JButton areaButton;
+	private JButton userButton;
+	private JButton bUnitButton;
+	private JButton companyButton;
+	private JButton logOutButton;
 
+
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public Selector(AppWindow frame) {
 		this.frame = frame;
 		
@@ -77,6 +82,7 @@ public class Selector extends JPanel {
 		add(bUnitButton);
 		
 		companyButton = new JButton();
+		companyButton.setAction(CompanyAction);
 		companyButton.setMargin(new Insets(2,2,2,2));
 		companyButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		companyButton.setText("EMPRESA");
@@ -133,6 +139,14 @@ public class Selector extends JPanel {
 			frame.getDownPanel().setVisible(true);
 			frame.revalidate();
 			frame.repaint();
+		}
+	}
+	private class CompanyAction extends AbstractAction {
+		public CompanyAction() {
+			putValue(NAME, "CompanyAction");
+			putValue(SHORT_DESCRIPTION, "Show Company screen");
+		}
+		public void actionPerformed(ActionEvent e) {
 		}
 	}
 }

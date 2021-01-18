@@ -51,10 +51,10 @@ Ver 0.0.2
 
 Ver 0.0.3
 
-	· Add Verelopment log to project folder (Verelopment log.txt)
+	· Add Development log to project folder (Development log.txt)
 
 	· AppDummy class:
-		Add jdbc connection to Versurferdb database (localhost).
+		Add jdbc connection to devsurferdb database (localhost).
 
 	* - Package Company
 
@@ -411,7 +411,7 @@ Ver 0.0.19
 	· EventUpdate class:
 		Add getEventUpdateByUserId()
 
-Ver 0.0.20
+Ver 0.0.20 BASIC READ, INSERT & UPDATE METHODS COMPLETED
 
 	* - Package persistence
 
@@ -434,11 +434,10 @@ Ver 0.0.20
 		Delete Connection attribute
 		Update getCompanyFromDB()
 
-	· BASIC READ, INSERT & UPDATE METHODS COMPLETED
 
-Ver 0.0.21
+Ver 0.0.21 BEGIN BASIC TESTING
 
-	· Rename of existing packages >> main.java.*
+	· Rename existing packages >> main.java.*
 
 	· New test package test.java
 
@@ -541,7 +540,7 @@ Ver 0.0.21
 		Add testGetUserById() --ok--
 		Add testCheckUserPassword() --ok--
 
-Ver 0.0.22
+Ver 0.0.22 BASIC TESTING COMPLETED
 
 	* - Package main.java.company
 
@@ -600,8 +599,6 @@ Ver 0.0.22
 		Add testGetEventUpdatesFromDB() --ok--
 		Add testGetEventUpdatesByUserId() --ok--
 		Add testGetEventUpdateById() --ok--
-		
-	· BASIC TESTING COMPLETED
 
 
 ver 0.0.23 BASIC DATABASE MODIFICATION CONTROL COMPLETED
@@ -659,7 +656,6 @@ ver 0.0.23 BASIC DATABASE MODIFICATION CONTROL COMPLETED
 		Add testGetBunitIdFromUser()
 		Add testGetUserId()
 
-	· BASIC DATABASE MODIFICATION CONTROL COMPLETED
 
 ver 0.1.0 FIRST GUI ELEMENTS
 
@@ -686,7 +682,6 @@ ver 0.1.0 FIRST GUI ELEMENTS
 		Update TimerJob class run()
 		Update loadAllData()
 		Update loadCurrentSessionData()
-
 
 	* - Package main.java.gui
 
@@ -726,6 +721,7 @@ ver 0.1.0 FIRST GUI ELEMENTS
 	· UserTest class:
 		Add testUpdateDefaultAdminUserToDb() --not tested yet--
 
+
 ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 
 	* - Package main.java.app
@@ -738,7 +734,6 @@ ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 		Delete connectToDatabase()
 		Delete checkConnectToDatabase()
 		Delete initialize()
-
 
 	* - Package main.java.persistence
 
@@ -800,6 +795,7 @@ ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 		Add testGetBunitIdFromUser(); --ok--
 		Add testGetUserId() --ok--
 
+
 ver 0.1.2 APPWINDOW BUILD, SELECTOR BUILD
 
 	* - Package main.java.gui
@@ -836,7 +832,7 @@ ver 0.1.2 APPWINDOW BUILD, SELECTOR BUILD
 	· CurrentSession class:
 		Remove attribute frame
 
-ver 0.1.3
+ver 0.1.3 SELECTOR'S LOGOUT BUTTON FULLY FUNCTIONAL
 
 		* - Package main.java.gui
 
@@ -858,3 +854,23 @@ ver 0.1.3
 				
 		· LogOutAction class (new inner Selector class):
 			Update actionPerformed()
+
+ver 0.1.4 COMPANYUI
+
+		* - Package main.java.gui
+
+		· CompanyAction class (new inner Selector class):
+			Update actionPerformed()
+
+		· AppWindow class:
+			Update setUpWindow()
+
+		· DefaultAdmin class:
+			Update startSession()
+
+		· Login class:
+			Update userLogin()
+
+		· CompanyUI class (new):
+			Add constructor, setters & getters
+			Add attribute session
