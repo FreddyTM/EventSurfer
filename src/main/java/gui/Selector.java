@@ -3,6 +3,9 @@ package main.java.gui;
 import java.awt.LayoutManager;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import main.java.persistence.CurrentSession;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,13 +35,14 @@ public class Selector extends JPanel {
 	private JButton bUnitButton;
 	private JButton companyButton;
 	private JButton logOutButton;
-
+	private CurrentSession session;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public Selector(AppWindow frame) {
+	public Selector(AppWindow frame, CurrentSession session) {
 		this.frame = frame;
+		this.session = session;
 		
 		setLayout(new GridLayout(8, 0, 10, 10));
 		setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -120,33 +124,44 @@ public class Selector extends JPanel {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Acción del botón Log Out. Permite salir a la pantalla de login para entrar
+	 * al programa con un usuario distinto
+	 */
 	private class LogOutAction extends AbstractAction {
 		public LogOutAction() {
 			putValue(NAME, "LogOutAction");
 			putValue(SHORT_DESCRIPTION, "Back to login screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//logOutButton.setBackground(Color.ORANGE);
-			//System.out.println(frame != null);
-			
 			frame.getBasePanel().removeAll();
 			frame.getBasePanel().setVisible(false);
-			frame.getDownPanel().removeAll();
-			frame.getDownPanel().setVisible(false);
+//			frame.getDownPanel().removeAll();
+//			frame.getDownPanel().setVisible(false);
 			frame.initialize();
 			Login loginPanel = new Login(frame.getConn(), frame.getSession(), frame);
 			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
-			frame.getDownPanel().setVisible(true);
+//			frame.getDownPanel().setVisible(true);
 			frame.revalidate();
 			frame.repaint();
 		}
 	}
+	
+	/**
+	 * Acción del botón Empresa. Muestra los datos de la empresa.
+	 */
 	private class CompanyAction extends AbstractAction {
 		public CompanyAction() {
 			putValue(NAME, "CompanyAction");
 			putValue(SHORT_DESCRIPTION, "Show Company screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			BorderLayout layout = (BorderLayout) frame.getBasePanel().getLayout();
+			frame.getBasePanel().remove(layout.getLayoutComponent(BorderLayout.CENTER));
+			CompanyUI companyUI = new CompanyUI(session);
+			frame.getBasePanel().add(companyUI, BorderLayout.CENTER);
+			frame.revalidate();
+			frame.repaint();
 		}
 	}
 }

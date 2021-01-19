@@ -862,11 +862,17 @@ ver 0.1.4 COMPANYUI
 	· CompanyAction class (new inner Selector class):
 		Update actionPerformed()
 
+	· LogOutAction class (inner Selector class):
+		Update actionPerformed()
+
 	· EventSurfer class:
 		Update go()
 
 	· AppWindow class:
 		Update setUpWindow()
+
+	· Selector class:
+		Add attribute session
 
 	· DefaultAdmin class:
 		Update constructor
@@ -880,3 +886,6 @@ ver 0.1.4 COMPANYUI
 		Add constructor, setters & getters
 		Add attributes
 			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField, webField
+		Add attributes
+			editButton, cancelButton, oKButton, errorInfoLabel, labelList, textFieldList, textFieldContentList
+		Add testData()

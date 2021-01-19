@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,6 +16,10 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.persistence.CurrentSession;
+import javax.swing.JButton;
+import javax.swing.AbstractAction;
+import java.awt.event.ActionEvent;
+import javax.swing.Action;
 
 public class CompanyUI extends JPanel {
 
@@ -26,6 +32,15 @@ public class CompanyUI extends JPanel {
 	private JTextField telephoneField;
 	private JTextField mailField;
 	private JTextField webField;
+	private JButton editButton;
+	private JButton cancelButton;
+	private JButton oKButton;
+	JLabel errorInfoLabel;
+	private List<JLabel> labelList = new ArrayList<JLabel>();
+	private List<JTextField> textFieldList = new ArrayList<JTextField>();
+	private List<String> textFieldContentList = new ArrayList<String>();
+	private final Action editAction = new EditAction();
+	private final Action cancelAction = new CancelAction();
 	
 	/**
 	 * @wbp.parser.constructor
@@ -105,6 +120,8 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(nameField);
+		textFieldContentList.add(session.getCompany().getNombre());
 		add(nameField);
 		
 		addressField = new JTextField();
@@ -120,6 +137,8 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(addressField);
+		textFieldContentList.add(session.getCompany().getDireccion());
 		add(addressField);
 		
 		provinceField = new JTextField();
@@ -135,6 +154,8 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(provinceField);
+		textFieldContentList.add(session.getCompany().getProvincia());
 		add(provinceField);
 		
 		stateField = new JTextField();
@@ -150,12 +171,14 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(stateField);
+		textFieldContentList.add(session.getCompany().getEstado());
 		add(stateField);
 		
 		postalcodeField = new JTextField();
 		postalcodeField.setColumns(10);
 		postalcodeField.setBounds(260, 325, 100, 25);
-		postalcodeField.setText(session.getCompany().getEstado());
+		postalcodeField.setText(session.getCompany().getCpostal());
 		postalcodeField.setEditable(false);
 		postalcodeField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -165,12 +188,14 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(postalcodeField);
+		textFieldContentList.add(session.getCompany().getCpostal());
 		add(postalcodeField);
 		
 		telephoneField = new JTextField();
 		telephoneField.setColumns(10);
 		telephoneField.setBounds(260, 375, 100, 25);
-		telephoneField.setText(session.getCompany().getEstado());
+		telephoneField.setText(session.getCompany().getTelefono());
 		telephoneField.setEditable(false);
 		telephoneField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -180,12 +205,14 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(telephoneField);
+		textFieldContentList.add(session.getCompany().getTelefono());
 		add(telephoneField);
 		
 		mailField = new JTextField();
 		mailField.setColumns(10);
 		mailField.setBounds(260, 425, 400, 25);
-		mailField.setText(session.getCompany().getEstado());
+		mailField.setText(session.getCompany().getMail());
 		mailField.setEditable(false);
 		mailField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -195,38 +222,158 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
+		textFieldList.add(mailField);
+		textFieldContentList.add(session.getCompany().getMail());
 		add(mailField);
 		
 		webField = new JTextField();
 		webField.setColumns(10);
 		webField.setBounds(260, 475, 400, 25);
-		webField.setText(session.getCompany().getEstado());
+		webField.setText(session.getCompany().getWeb());
 		webField.setEditable(false);
 		webField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					//lastNameField.requestFocusInWindow();
+					oKButton.requestFocusInWindow();
 				}
 			}
 		});
+		textFieldList.add(webField);
+		textFieldContentList.add(session.getCompany().getWeb());
 		add(webField);
 		
+		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
+		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel.setBounds(670, 125, 150, 25);
+		maxCharsLabel.setVisible(false);
+		labelList.add(maxCharsLabel);
+		add(maxCharsLabel);
+		
+		JLabel maxCharsLabel2 = new JLabel("Max: 150 caracteres");
+		maxCharsLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel2.setBounds(670, 175, 150, 25);
+		maxCharsLabel2.setVisible(false);
+		labelList.add(maxCharsLabel2);
+		add(maxCharsLabel2);
+		
+		JLabel maxCharsLabel3 = new JLabel("Max: 50 caracteres");
+		maxCharsLabel3.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel3.setBounds(470, 227, 150, 25);
+		maxCharsLabel3.setVisible(false);
+		labelList.add(maxCharsLabel3);
+		add(maxCharsLabel3);
+		
+		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
+		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel4.setBounds(470, 277, 150, 25);
+		maxCharsLabel4.setVisible(false);
+		labelList.add(maxCharsLabel4);
+		add(maxCharsLabel4);
+		
+		JLabel maxCharsLabel5 = new JLabel("Max: 8 caracteres");
+		maxCharsLabel5.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel5.setBounds(370, 327, 150, 25);
+		maxCharsLabel5.setVisible(false);
+		labelList.add(maxCharsLabel5);
+		add(maxCharsLabel5);
+		
+		JLabel maxCharsLabel6 = new JLabel("Max: 15 caracteres");
+		maxCharsLabel6.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel6.setBounds(370, 377, 150, 25);
+		maxCharsLabel6.setVisible(false);
+		labelList.add(maxCharsLabel6);
+		add(maxCharsLabel6);
+		
+		JLabel maxCharsLabel7 = new JLabel("Max: 100 caracteres");
+		maxCharsLabel7.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel7.setBounds(670, 425, 150, 25);
+		maxCharsLabel7.setVisible(false);
+		labelList.add(maxCharsLabel7);
+		add(maxCharsLabel7);
+		
+		JLabel maxCharsLabel8 = new JLabel("Max: 200 caracteres");
+		maxCharsLabel8.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel8.setBounds(670, 475, 150, 25);
+		maxCharsLabel8.setVisible(false);
+		labelList.add(maxCharsLabel8);
+		add(maxCharsLabel8);
+		
+		errorInfoLabel = new JLabel("");
+		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorInfoLabel.setBounds(50, 530, 770, 25);
+		add(errorInfoLabel);
+		
+		oKButton = new JButton("Aceptar");
+		oKButton.setBounds(731, 580, 89, 23);
+		oKButton.setEnabled(false);
+		add(oKButton);
+		
+		cancelButton = new JButton("Cancelar");
+		cancelButton.setAction(cancelAction);
+		cancelButton.setBounds(632, 580, 89, 23);
+		cancelButton.setEnabled(false);
+		add(cancelButton);
+		
+		editButton = new JButton();
+		editButton.setAction(editAction);
+		editButton.setBounds(531, 580, 89, 23);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			editButton.setEnabled(false);
+		}
+		add(editButton);
 	}
 
-	public CompanyUI(LayoutManager layout) {
-		super(layout);
-		// TODO Auto-generated constructor stub
+	/**
+	 * Comprueba la corrección de los datos introducidos en el formulario
+	 * @return true si son correctos, false si no lo son
+	 */
+	public boolean testData() {
+		
+		
+		return true;
 	}
-
-	public CompanyUI(boolean isDoubleBuffered) {
-		super(isDoubleBuffered);
-		// TODO Auto-generated constructor stub
+	
+	/**
+	 * Acción del botón Editar. Habilita la edición de la información del formulario, el botón
+	 * de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan
+	 */
+	private class EditAction extends AbstractAction {
+		public EditAction() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Enable edit data");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editButton.setEnabled(false);
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			for (JLabel label : labelList) {
+				label.setVisible(true);
+			}
+			for (JTextField tField : textFieldList) {
+				tField.setEditable(true);
+			}
+		}
 	}
-
-	public CompanyUI(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-		// TODO Auto-generated constructor stub
+	private class CancelAction extends AbstractAction {
+		public CancelAction() {
+			putValue(NAME, "Cancelar");
+			putValue(SHORT_DESCRIPTION, "Cancel edit data");
+		}
+		public void actionPerformed(ActionEvent e) {
+			editButton.setEnabled(true);
+			oKButton.setEnabled(false);
+			cancelButton.setEnabled(false);
+			for (JLabel label : labelList) {
+				label.setVisible(false);
+			}
+			for (JTextField tField : textFieldList) {
+				tField.setEditable(false);
+			}
+			for (int i = 0; i < textFieldList.size(); i++) {
+				textFieldList.get(i).setText(textFieldContentList.get(i));
+			}
+			
+		}
 	}
-
 }
