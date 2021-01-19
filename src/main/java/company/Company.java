@@ -89,7 +89,7 @@ public class Company {
 	 * @param conn conexión con la base de datos
 	 * @param company empresa que contiene los datos que se actualizan
 	 */
-	public void updateCompany (Connection conn, Company company) {
+	public boolean updateCompany (Connection conn, Company company) {
 		if (updateCompanyToDB(conn, company)) {
 			this.nombre = company.getNombre();
 			this.direccion = company.getDireccion();
@@ -99,7 +99,9 @@ public class Company {
 			this.telefono = company.getTelefono();
 			this.mail = company.getMail();
 			this.web = company.getWeb();
+			return true;
 		}
+		return false;
 	}
 	
 	/**

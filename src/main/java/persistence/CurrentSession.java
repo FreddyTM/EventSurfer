@@ -200,9 +200,11 @@ public class CurrentSession {
 		}
 	}
 	
-	//Clase que realiza la comprobación de las tablas que se han actualizado
-	//con posterioridad a la última carga de datos de la sesión en curso
-	class TimerJob extends TimerTask {
+	/**
+	 * Clase que realiza la comprobación de las tablas que se han actualizado
+	 * con posterioridad a la última carga de datos de la sesión en curso
+	*/
+	private class TimerJob extends TimerTask {
 		
 		@Override
 		public void run() {
@@ -343,12 +345,4 @@ public class CurrentSession {
 		return timer;
 	}
 
-//	public AppWindow getFrame() {
-//		return frame;
-//	}
-//
-//	public void setFrame(AppWindow frame) {
-//		this.frame = frame;
-//	}
-		
 }
