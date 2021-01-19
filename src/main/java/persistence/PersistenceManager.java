@@ -213,6 +213,32 @@ public class PersistenceManager {
 		return tNow;
 	}
 	
+	/**
+	 * Actualiza la tabla last_modification de la base de datos con la fecha y la hora
+	 * en la que se ha modificado o insertado algún dato en la tabla pasada por parámetro.
+	 * @param conn conexión a la base de datos
+	 * @param tableName tabla en la que ha habido algún tipo de modificación o inserción
+	 * @param tNow fecha y hora de la modificación o inserción
+	 * @return true si la actualización de la tabla last_modification se completa con éxito,
+	 * false si no se completa
+	 */
+	public boolean updateTimeStampToDB(Connection conn, String tableName, Timestamp tNow) {
+		PreparedStatement pstm = null;
+		String sql = "UPDATE last_modification "
+				+ "SET fecha_hora = ? "
+				+ "WHERE table_name = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setTimestamp(1, tNow);
+			pstm.setString(2, tableName);
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 //	/**
 //	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
 //	 * o lo ha cambiado.

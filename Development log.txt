@@ -899,6 +899,9 @@ ver 0.1.4 COMPANYUI
 		Update updateCompany()
 
 	* - Package main.java.persistence
+
 	· TimerJob class (CurrentSession inner class):
 		Make class private
 
+	· PersistenceManager class:
+		Add updateTimeStampToDB()
