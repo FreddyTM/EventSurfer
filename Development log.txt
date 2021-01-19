@@ -859,10 +859,13 @@ ver 0.1.4 COMPANYUI
 
 	* - Package main.java.gui
 
+	· LogOutAction class (inner Selector class):
+		Update actionPerformed()
+
 	· CompanyAction class (new inner Selector class):
 		Update actionPerformed()
 
-	· LogOutAction class (inner Selector class):
+	· OKAction class (new inner Selector class):
 		Update actionPerformed()
 
 	· EventSurfer class:
@@ -889,3 +892,13 @@ ver 0.1.4 COMPANYUI
 		Add attributes
 			editButton, cancelButton, oKButton, errorInfoLabel, labelList, textFieldList, textFieldContentList
 		Add testData()
+
+	* - Package main.java.company
+
+	· Company class:
+		Update updateCompany()
+
+	* - Package main.java.persistence
+	· TimerJob class (CurrentSession inner class):
+		Make class private
+

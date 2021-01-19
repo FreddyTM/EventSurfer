@@ -30,7 +30,7 @@ public class CompanyUI extends JPanel {
 	private JTextField addressField;
 	private JTextField provinceField;
 	private JTextField stateField;
-	private JTextField postalcodeField;
+	private JTextField postalCodeField;
 	private JTextField telephoneField;
 	private JTextField mailField;
 	private JTextField webField;
@@ -43,6 +43,7 @@ public class CompanyUI extends JPanel {
 	private List<String> textFieldContentList = new ArrayList<String>();
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
+	private final Action oKAction = new OKAction();
 	
 	/**
 	 * @wbp.parser.constructor
@@ -169,7 +170,7 @@ public class CompanyUI extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					postalcodeField.requestFocusInWindow();
+					postalCodeField.requestFocusInWindow();
 				}
 			}
 		});
@@ -177,12 +178,12 @@ public class CompanyUI extends JPanel {
 		textFieldContentList.add(session.getCompany().getEstado());
 		add(stateField);
 		
-		postalcodeField = new JTextField();
-		postalcodeField.setColumns(10);
-		postalcodeField.setBounds(260, 325, 100, 25);
-		postalcodeField.setText(session.getCompany().getCpostal());
-		postalcodeField.setEditable(false);
-		postalcodeField.addKeyListener(new KeyAdapter() {
+		postalCodeField = new JTextField();
+		postalCodeField.setColumns(10);
+		postalCodeField.setBounds(260, 325, 100, 25);
+		postalCodeField.setText(session.getCompany().getCpostal());
+		postalCodeField.setEditable(false);
+		postalCodeField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -190,9 +191,9 @@ public class CompanyUI extends JPanel {
 				}
 			}
 		});
-		textFieldList.add(postalcodeField);
+		textFieldList.add(postalCodeField);
 		textFieldContentList.add(session.getCompany().getCpostal());
-		add(postalcodeField);
+		add(postalCodeField);
 		
 		telephoneField = new JTextField();
 		telephoneField.setColumns(10);
@@ -301,17 +302,18 @@ public class CompanyUI extends JPanel {
 		labelList.add(maxCharsLabel8);
 		add(maxCharsLabel8);
 		
-		errorInfoLabel = new JLabel("");
+		errorInfoLabel = new JLabel();
 		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		errorInfoLabel.setBounds(50, 530, 770, 25);
 		add(errorInfoLabel);
 		
-		oKButton = new JButton("Aceptar");
+		oKButton = new JButton();
+		oKButton.setAction(oKAction);
 		oKButton.setBounds(731, 580, 89, 23);
 		oKButton.setEnabled(false);
 		add(oKButton);
 		
-		cancelButton = new JButton("Cancelar");
+		cancelButton = new JButton();
 		cancelButton.setAction(cancelAction);
 		cancelButton.setBounds(632, 580, 89, 23);
 		cancelButton.setEnabled(false);
@@ -351,7 +353,7 @@ public class CompanyUI extends JPanel {
 			error = true;
 		}
 		if (company.getCpostal().length() > 8) {
-			postalcodeField.setBackground(Color.YELLOW);
+			postalCodeField.setBackground(Color.YELLOW);
 			error = true;
 		}
 		if (company.getTelefono().length() > 15) {
@@ -375,30 +377,39 @@ public class CompanyUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Editar. Habilita la edición de la información del formulario, el botón
-	 * de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan
+	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
+	 * del formulario, el botón de Cancelar para que los cambios no se registren y el de Aceptar para
+	 * que sí lo hagan.
 	 */
 	private class EditAction extends AbstractAction {
 		public EditAction() {
 			putValue(NAME, "Editar");
-			putValue(SHORT_DESCRIPTION, "Enable edit data");
+			putValue(SHORT_DESCRIPTION, "Enable data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			//Activar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
 				label.setVisible(true);
 			}
+			//Datos editables
 			for (JTextField tField : textFieldList) {
 				tField.setEditable(true);
 			}
 		}
 	}
+	
+	/**
+	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Descarta los cambios
+	 * en los datos introducidos en el formulario. No se graban en la base de datos ni en el objeto Company.
+	 * Se habilita el botón Editar. Se recupera la información que figuraba anteriormente en el formulario.
+	 */
 	private class CancelAction extends AbstractAction {
 		public CancelAction() {
 			putValue(NAME, "Cancelar");
-			putValue(SHORT_DESCRIPTION, "Cancel edit data");
+			putValue(SHORT_DESCRIPTION, "Cancel data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
 			editButton.setEnabled(true);
@@ -414,6 +425,44 @@ public class CompanyUI extends JPanel {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
 			
+		}
+	}
+	
+	/**
+	 * Acción del botón Aceptar. 
+	 */
+	private class OKAction extends AbstractAction {
+		public OKAction() {
+			putValue(NAME, "Aceptar");
+			putValue(SHORT_DESCRIPTION, "Execute data edit");
+		}
+		public void actionPerformed(ActionEvent e) {
+			Company updatedCompany = new Company();
+			updatedCompany.setId(1);
+			updatedCompany.setNombre(nameField.getText());
+			updatedCompany.setDireccion(addressField.getText());
+			updatedCompany.setProvincia(provinceField.getText());
+			updatedCompany.setEstado(stateField.getText());
+			updatedCompany.setCpostal(postalCodeField.getText());
+			updatedCompany.setMail(mailField.getText());
+			updatedCompany.setWeb(webField.getText());
+			if (testData(updatedCompany)) {
+				if (session.getCompany().updateCompany(session.getConnection(), updatedCompany)) {
+					editButton.setEnabled(true);
+					oKButton.setEnabled(false);
+					cancelButton.setEnabled(false);
+					for (JLabel label : labelList) {
+						label.setVisible(false);
+					}
+					for (JTextField tField : textFieldList) {
+						tField.setEditable(false);
+					}
+					textFieldContentList.clear();
+					for (int i = 0; i < textFieldList.size(); i++) {
+						textFieldContentList.add(textFieldList.get(i).getText());
+					}
+				}
+			}
 		}
 	}
 }
