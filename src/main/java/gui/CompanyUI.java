@@ -1,5 +1,6 @@
 package main.java.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.KeyAdapter;
@@ -15,6 +16,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import main.java.company.Company;
 import main.java.persistence.CurrentSession;
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
@@ -328,9 +330,47 @@ public class CompanyUI extends JPanel {
 	 * Comprueba la corrección de los datos introducidos en el formulario
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean testData() {
-		
-		
+	public boolean testData(Company company) {
+		//Comprobamos que los datos no exceden el tamaño máximo
+		Boolean error = false;
+		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO";
+		if (company.getNombre().length() > 100) {
+			nameField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getDireccion().length() > 150) {
+			addressField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getProvincia().length() > 50) {
+			provinceField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getEstado().length() > 50) {
+			stateField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getCpostal().length() > 8) {
+			postalcodeField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getTelefono().length() > 15) {
+			telephoneField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getMail().length() > 100) {
+			mailField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		if (company.getWeb().length() > 200) {
+			webField.setBackground(Color.YELLOW);
+			error = true;
+		}
+		//Si hay un error, mensaje de error y retornamos false
+		if (error) {
+			errorInfoLabel.setText(errorText);
+			return false;
+		}
 		return true;
 	}
 	
