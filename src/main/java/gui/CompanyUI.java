@@ -402,6 +402,7 @@ public class CompanyUI extends JPanel {
 			//Datos editables
 			for (JTextField tField : textFieldList) {
 				tField.setEditable(true);
+				tField.setBackground(Color.WHITE);
 			}
 		}
 	}
@@ -425,6 +426,7 @@ public class CompanyUI extends JPanel {
 				label.setVisible(false);
 			}
 			for (JTextField tField : textFieldList) {
+				tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				tField.setEditable(false);
 			}
 			for (int i = 0; i < textFieldList.size(); i++) {
@@ -457,7 +459,16 @@ public class CompanyUI extends JPanel {
 			//Si los datos están validados
 			if (testData(updatedCompany)) {
 				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
-				if (session.getCompany().updateCompany(session.getConnection(), updatedCompany)) {
+				//if (session.getCompany().updateCompanyToDB(session.getConnection(), updatedCompany)) {
+				if (new Company().updateCompanyToDB(session.getConnection(), updatedCompany)) {
+					session.getCompany().setNombre(updatedCompany.getNombre());
+					session.getCompany().setDireccion(updatedCompany.getDireccion());
+					session.getCompany().setProvincia(updatedCompany.getProvincia());
+					session.getCompany().setEstado(updatedCompany.getEstado());
+					session.getCompany().setCpostal(updatedCompany.getCpostal());
+					session.getCompany().setTelefono(updatedCompany.getTelefono());
+					session.getCompany().setMail(updatedCompany.getMail());
+					session.getCompany().setWeb(updatedCompany.getWeb());
 					//Registramos fecha y hora de la actualización de los datos de la tabla company
 					tNow = PersistenceManager.getTimestampNow();
 					//Actualizamos los datos de la tabla last_modification
@@ -475,6 +486,7 @@ public class CompanyUI extends JPanel {
 					}
 					for (JTextField tField : textFieldList) {
 						tField.setEditable(false);
+						tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 					}
 					textFieldContentList.clear();
 					for (int i = 0; i < textFieldList.size(); i++) {

@@ -70,6 +70,7 @@ public class EventSurfer {
 			//Error screen with reconnect button
 		}
 		session = CurrentSession.getInstance();
+		session.setConnection(connection);
 		frame = new AppWindow("EVENTSURFER", connection, session);
 		frame.setVisible(true);
 		User user = new User().getDefaultAdminUser(connection);

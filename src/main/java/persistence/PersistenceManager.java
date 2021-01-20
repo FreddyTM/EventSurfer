@@ -120,7 +120,9 @@ public class PersistenceManager {
 	 */
 	public static void closePrepStatement (PreparedStatement pstm) {
 		try {
-			pstm.close();
+			if (pstm != null) {
+				pstm.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
