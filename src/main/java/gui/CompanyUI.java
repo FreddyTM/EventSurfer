@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import javax.swing.UIManager;
 
 import main.java.company.Company;
 import main.java.persistence.CurrentSession;
+import main.java.persistence.PersistenceManager;
+
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
@@ -437,6 +440,7 @@ public class CompanyUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Execute data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Objeto que recoge los datos actualizados
 			Company updatedCompany = new Company();
 			updatedCompany.setId(1);
 			updatedCompany.setNombre(nameField.getText());
@@ -446,21 +450,28 @@ public class CompanyUI extends JPanel {
 			updatedCompany.setCpostal(postalCodeField.getText());
 			updatedCompany.setMail(mailField.getText());
 			updatedCompany.setWeb(webField.getText());
+			//Si los datos están validados
 			if (testData(updatedCompany)) {
+				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
 				if (session.getCompany().updateCompany(session.getConnection(), updatedCompany)) {
-					editButton.setEnabled(true);
-					oKButton.setEnabled(false);
-					cancelButton.setEnabled(false);
-					for (JLabel label : labelList) {
-						label.setVisible(false);
+					Timestamp tNow = PersistenceManager.getTimestampNow();
+					//Si se registra en la base de datos la actualización de la tabla company
+					if(PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow)) {
+						editButton.setEnabled(true);
+						oKButton.setEnabled(false);
+						cancelButton.setEnabled(false);
+						for (JLabel label : labelList) {
+							label.setVisible(false);
+						}
+						for (JTextField tField : textFieldList) {
+							tField.setEditable(false);
+						}
+						textFieldContentList.clear();
+						for (int i = 0; i < textFieldList.size(); i++) {
+							textFieldContentList.add(textFieldList.get(i).getText());
+						}
 					}
-					for (JTextField tField : textFieldList) {
-						tField.setEditable(false);
-					}
-					textFieldContentList.clear();
-					for (int i = 0; i < textFieldList.size(); i++) {
-						textFieldContentList.add(textFieldList.get(i).getText());
-					}
+
 				}
 			}
 		}

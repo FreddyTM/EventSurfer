@@ -891,6 +891,8 @@ ver 0.1.4 COMPANYUI
 			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField, webField
 		Add attributes
 			editButton, cancelButton, oKButton, errorInfoLabel, labelList, textFieldList, textFieldContentList
+		Add attributes
+			editAction, cancelAction, oKAction
 		Add testData()
 
 	* - Package main.java.company

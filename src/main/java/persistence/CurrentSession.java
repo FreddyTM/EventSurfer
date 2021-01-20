@@ -50,6 +50,7 @@ public class CurrentSession {
 		
 	}
 	
+	//Solo existe una instancia de CurrentSession para toda la aplicación
 	public static CurrentSession getInstance() {
 		if (session == null) {
 			session = new CurrentSession();
@@ -212,7 +213,11 @@ public class CurrentSession {
 			if (conn == null) {
 				conn = PersistenceManager.getConnection();
 			}
-			Timestamp tempDateTime = session.getDateTimeReference();
+			//Registramos el timestamp de la sessión y lo asignamos a una variable
+			//temporal que registrará los incrementos que puedan existir en la 
+			//base de datos
+			Timestamp sessionDateTime = session.getDateTimeReference();
+			Timestamp tempDateTime = session.getDateTimeReference();;
 			String tableName = "";
 			Statement stm = null;
 			ResultSet results = null;
@@ -221,12 +226,14 @@ public class CurrentSession {
 			try {
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
+				//Para cada tabla, comprobamos su timestamp
 				while (results.next()) {
 					tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
-					if (tempDateTime.before(dateTimeDb) ) {
+					//Si el timestamp de la tabla es posterior al de la sesión, se ha
+					//producido una actualización que no tenemos registrada.
+					if (sessionDateTime.before(dateTimeDb) ) {
 						//Actualizar objetos correspondientes a table_name
-						//Llamadas a métodos de recarga de datos de las clases
 						switch(tableName) {
 							case "user_type":
 								UserType userTypeList = new UserType();
@@ -244,14 +251,18 @@ public class CurrentSession {
 								TypesStatesContainer.setEvState(eventStateList);
 								break;
 							case "company":
+								//Actualizamos la compañía de la sesión
 								session.getCompany().refresh(conn);
 								break;
 							case "business_unit":
+								//Actualizamos la unidad de negocio de la sesión
 								session.getbUnit().refresh(conn);
 								break;
 							case "user":
 								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
+								//Asignamos la lista de usuarios actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setUsers(userList);
+								//Reasignamos el usuario de la sesión
 								for (User user: session.getbUnit().getUsers()) {
 									if (session.getUser().getId() == user.getId()) {
 										session.setUser(user);
@@ -260,17 +271,22 @@ public class CurrentSession {
 								break;
 							case "area":
 								List<Area> areaList = new Area().getAreasFromDB(conn, session.getbUnit());
+								//Asignamos la lista de areas actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setAreas(areaList);
 								break;
 							case "event":
 								List<Event> eventList = new Event().getEventsFromDB(conn, session.getbUnit());
+								//Asignamos la lista de eventos actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setEvents(eventList);
+								//Asignamos a cada evento de la unidad de negocio sus actualizaciones
 								for (Event event: session.getbUnit().getEvents()) {
 									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 									event.setUpdates(eUpdate);
 								}
 								break;
 							case "event_update":
+								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 
+								//la unidad de negocio de la sesión
 								for (Event event: session.getbUnit().getEvents()) {
 									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 									event.setUpdates(eUpdate);
@@ -280,14 +296,17 @@ public class CurrentSession {
 								//Error. Tabla desconocida
 						}				
 						//Actualizamos el timestamp temporal para que acabe registrando
-						//el mayor valor que se encuentre en el Resultset
+						//el mayor valor que encuentre en todo el Resultset
 						if(tempDateTime.before(dateTimeDb)) {
 							tempDateTime = dateTimeDb;
 						}
 					}
 				}
-				//Actualizamos dateTimeReference de la sesión
-				session.setDateTimeReference(tempDateTime);;
+				//Si el timestamp de la sesión es anterior al timestamp temporal tras comprobar las actualizaciones
+				if (sessionDateTime.before(tempDateTime)) {
+					//Actualizamos timestamp de la sesión con el valor del timestamp temporal
+					session.setDateTimeReference(tempDateTime);
+				}
 				
 				//Actualizar el panel que esté visible si su información ha cambiado
 				//1º - Identificar panel visible
