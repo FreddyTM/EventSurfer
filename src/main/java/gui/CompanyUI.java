@@ -451,6 +451,7 @@ public class CompanyUI extends JPanel {
 			updatedCompany.setProvincia(provinceField.getText());
 			updatedCompany.setEstado(stateField.getText());
 			updatedCompany.setCpostal(postalCodeField.getText());
+			updatedCompany.setTelefono(telephoneField.getText());
 			updatedCompany.setMail(mailField.getText());
 			updatedCompany.setWeb(webField.getText());
 			//Si los datos están validados
