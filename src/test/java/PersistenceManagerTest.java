@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import main.java.company.Company;
 import main.java.persistence.PersistenceManager;
 
 class PersistenceManagerTest {
@@ -148,6 +151,28 @@ class PersistenceManagerTest {
 //			System.out.println("Código: " + e.getErrorCode());
 //		}
 		assertEquals(1, PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
+	}
+	
+	@Test
+	void testUpdateTimeStampToDB() {
+		Timestamp tNow = PersistenceManager.getTimestampNow();
+		Timestamp readTimestamp = null;
+		assertTrue(PersistenceManager.updateTimeStampToDB(connection, Company.TABLE_NAME, tNow));
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT fecha_hora "
+				+ "FROM last_modification "
+				+ "WHERE table_name = 'company';";
+		try {
+			stm = connection.createStatement();
+			results = stm.executeQuery(sql);
+			while(results.next()) {
+				readTimestamp = results.getTimestamp(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		assertEquals(tNow, readTimestamp);
 	}
 	
 //	@Test

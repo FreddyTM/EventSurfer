@@ -905,3 +905,8 @@ ver 0.1.4 COMPANYUI
 
 	· PersistenceManager class:
 		Add updateTimeStampToDB()
+
+	* - Package main.java.test
+
+	· PersistenceManagerTest class:
+		Add testUpdateTimeStampToDB() --ok--

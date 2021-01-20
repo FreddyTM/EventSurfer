@@ -222,7 +222,7 @@ public class PersistenceManager {
 	 * @return true si la actualización de la tabla last_modification se completa con éxito,
 	 * false si no se completa
 	 */
-	public boolean updateTimeStampToDB(Connection conn, String tableName, Timestamp tNow) {
+	public static boolean updateTimeStampToDB(Connection conn, String tableName, Timestamp tNow) {
 		PreparedStatement pstm = null;
 		String sql = "UPDATE last_modification "
 				+ "SET fecha_hora = ? "
