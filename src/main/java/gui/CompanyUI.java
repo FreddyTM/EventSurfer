@@ -29,6 +29,7 @@ import javax.swing.Action;
 public class CompanyUI extends JPanel {
 
 	private CurrentSession session;
+	Timestamp tNow = PersistenceManager.getTimestampNow();
 	private JTextField nameField;
 	private JTextField addressField;
 	private JTextField provinceField;
@@ -393,6 +394,7 @@ public class CompanyUI extends JPanel {
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			errorInfoLabel.setText("");
 			//Activar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
 				label.setVisible(true);
@@ -418,6 +420,7 @@ public class CompanyUI extends JPanel {
 			editButton.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
+			errorInfoLabel.setText("");
 			for (JLabel label : labelList) {
 				label.setVisible(false);
 			}
@@ -454,24 +457,32 @@ public class CompanyUI extends JPanel {
 			if (testData(updatedCompany)) {
 				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
 				if (session.getCompany().updateCompany(session.getConnection(), updatedCompany)) {
-					Timestamp tNow = PersistenceManager.getTimestampNow();
-					//Si se registra en la base de datos la actualización de la tabla company
-					if(PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow)) {
-						editButton.setEnabled(true);
-						oKButton.setEnabled(false);
-						cancelButton.setEnabled(false);
-						for (JLabel label : labelList) {
-							label.setVisible(false);
-						}
-						for (JTextField tField : textFieldList) {
-							tField.setEditable(false);
-						}
-						textFieldContentList.clear();
-						for (int i = 0; i < textFieldList.size(); i++) {
-							textFieldContentList.add(textFieldList.get(i).getText());
-						}
+					//Registramos fecha y hora de la actualización de los datos de la tabla company
+					tNow = PersistenceManager.getTimestampNow();
+					//Actualizamos los datos de la tabla last_modification
+					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow);
+					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla company
+					//no queda registrada
+					if(!changeRegister) {
+						errorInfoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+					}
+					editButton.setEnabled(true);
+					oKButton.setEnabled(false);
+					cancelButton.setEnabled(false);
+					for (JLabel label : labelList) {
+						label.setVisible(false);
+					}
+					for (JTextField tField : textFieldList) {
+						tField.setEditable(false);
+					}
+					textFieldContentList.clear();
+					for (int i = 0; i < textFieldList.size(); i++) {
+						textFieldContentList.add(textFieldList.get(i).getText());
 					}
 
+				//Error de actualización de los datos en la base de datos
+				} else {
+					errorInfoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 				}
 			}
 		}
