@@ -683,7 +683,7 @@ ver 0.1.0 FIRST GUI ELEMENTS
 		Update loadAllData()
 		Update loadCurrentSessionData()
 
-	* - Package main.java.gui
+	* - Package main.java.gui (new)
 
 	· Login class --empty--
 
@@ -865,9 +865,6 @@ ver 0.1.4 COMPANYUI
 	· CompanyAction class (new inner Selector class):
 		Update actionPerformed()
 
-	· OKAction class (new inner Selector class):
-		Update actionPerformed()
-
 	· EventSurfer class:
 		Update go()
 
@@ -876,6 +873,8 @@ ver 0.1.4 COMPANYUI
 
 	· Selector class:
 		Add attribute session
+		Add showPanel()
+		Add hidePanel()
 
 	· DefaultAdmin class:
 		Update constructor
@@ -894,6 +893,22 @@ ver 0.1.4 COMPANYUI
 		Add attributes
 			editAction, cancelAction, oKAction
 		Add testData()
+
+	· OKAction class (new inner CompanyUI class):
+		Update actionPerformed()
+
+	· EditAction class (new inner CompanyUI class):
+		Update actionPerformed()
+
+	· CancelAction class (new inner CompanyUI class):
+		Update actionPerformed()
+
+	* - Package main.java.gui.listener (new)
+
+	· VisibilityListener class (new):
+		Add attribute timer
+		Update constructor
+		Update componentHidden
 
 	* - Package main.java.company
 

@@ -408,9 +408,10 @@ public class CompanyUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Descarta los cambios
-	 * en los datos introducidos en el formulario. No se graban en la base de datos ni en el objeto Company.
-	 * Se habilita el botón Editar. Se recupera la información que figuraba anteriormente en el formulario.
+	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar.
+	 * Descarta los cambios en los datos introducidos en el formulario. No se graban en la base de datos ni en el
+	 * objeto company. Se recupera la información que figuraba anteriormente en el formulario. Se borra cualquier
+	 * mensaje de error mostrado anteriormente
 	 */
 	private class CancelAction extends AbstractAction {
 		public CancelAction() {
@@ -422,13 +423,16 @@ public class CompanyUI extends JPanel {
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
 			errorInfoLabel.setText("");
+			//Quitar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
 				label.setVisible(false);
 			}
+			//Datos no editables
 			for (JTextField tField : textFieldList) {
 				tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				tField.setEditable(false);
 			}
+			//Recuperar valores previos a la edición de los datos
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
@@ -437,7 +441,12 @@ public class CompanyUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Aceptar. 
+	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilita el
+	 * botón Editar. Se intenta guardar los datos de la compañía actualizados en la base de datos.
+	 * Si se consigue, se actualiza el objeto company con dichos datos. Si no se consigue, no se actualiza
+	 * el objeto company con los datos y se muestra un mensaje de error. Se intenta guardar el registro
+	 * de la actualización de datos en la base de datos si dicha actualización tuvo éxito. Si no se consigue
+	 * se muestra un mensaje de error
 	 */
 	private class OKAction extends AbstractAction {
 		public OKAction() {
@@ -492,7 +501,6 @@ public class CompanyUI extends JPanel {
 					for (int i = 0; i < textFieldList.size(); i++) {
 						textFieldContentList.add(textFieldList.get(i).getText());
 					}
-
 				//Error de actualización de los datos en la base de datos
 				} else {
 					errorInfoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");

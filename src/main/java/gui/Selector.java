@@ -24,8 +24,8 @@ import javax.swing.Action;
 
 public class Selector extends JPanel {
 	
-	AppWindow frame;
-	
+	private AppWindow frame;
+	private CurrentSession session;
 	private final Action logOutAction = new LogOutAction();
 	private final Action CompanyAction = new CompanyAction();
 	private JButton eventButton;
@@ -35,7 +35,7 @@ public class Selector extends JPanel {
 	private JButton bUnitButton;
 	private JButton companyButton;
 	private JButton logOutButton;
-	private CurrentSession session;
+
 
 	/**
 	 * @wbp.parser.constructor
@@ -109,19 +109,42 @@ public class Selector extends JPanel {
 		add(logOutButton);
 	}
 	
-	public Selector(LayoutManager layout) {
-		super(layout);
-		// TODO Auto-generated constructor stub
+//	public Selector(LayoutManager layout) {
+//		super(layout);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public Selector(boolean isDoubleBuffered) {
+//		super(isDoubleBuffered);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public Selector(LayoutManager layout, boolean isDoubleBuffered) {
+//		super(layout, isDoubleBuffered);
+//		// TODO Auto-generated constructor stub
+//	}
+	
+	/**
+	 * Asigna el panel entrado por parámetro al centerPanel del frame, lo coloca
+	 * en la zona central del basePanel y lo hace visible
+	 * @param frame ventana de la aplicación
+	 * @param panel panel a mostrar
+	 */
+	public void showPanel(AppWindow frame, JPanel panel) {
+		frame.setCenterPanel(panel);
+		frame.getBasePanel().add(frame.getCenterPanel(), BorderLayout.CENTER);
+		frame.revalidate();
+		frame.repaint();
 	}
-
-	public Selector(boolean isDoubleBuffered) {
-		super(isDoubleBuffered);
-		// TODO Auto-generated constructor stub
-	}
-
-	public Selector(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-		// TODO Auto-generated constructor stub
+	
+	/**
+	 * Quita la visibilidad del centerPanel y lo elimina del basePanel
+	 * @param frame ventana de la aplicación
+	 * @param panel panel a eliminar
+	 */
+	public void hidePanel(AppWindow frame, JPanel panel) {
+		panel.setVisible(false);
+		frame.getBasePanel().remove(panel);
 	}
 
 	/**
@@ -134,16 +157,20 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Back to login screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Vaciamos el panel base y le quitamos visibilidad
 			frame.getBasePanel().removeAll();
 			frame.getBasePanel().setVisible(false);
-//			frame.getDownPanel().removeAll();
-//			frame.getDownPanel().setVisible(false);
+			//Reseteamos la pantalla de la aplicación para cargar de nuevo el panel de login
 			frame.initialize();
 			Login loginPanel = new Login(frame.getConn(), frame.getSession(), frame);
-			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
-//			frame.getDownPanel().setVisible(true);
-			frame.revalidate();
-			frame.repaint();
+//			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
+			
+//			frame.setCenterPanel(loginPanel);
+//			frame.getBasePanel().add(frame.getCenterPanel(), BorderLayout.CENTER);
+//			frame.revalidate();
+//			frame.repaint();
+			
+			showPanel(frame, loginPanel);
 		}
 	}
 	
@@ -156,12 +183,24 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show Company screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-			BorderLayout layout = (BorderLayout) frame.getBasePanel().getLayout();
-			frame.getBasePanel().remove(layout.getLayoutComponent(BorderLayout.CENTER));
+//			BorderLayout layout = (BorderLayout) frame.getBasePanel().getLayout();
+//			frame.getBasePanel().remove(layout.getLayoutComponent(BorderLayout.CENTER));
+			
+			//Quitamos visibilidad del panel central y lo quitamos del panel base
+//			frame.getCenterPanel().setVisible(false);
+//			frame.getBasePanel().remove(frame.getCenterPanel());
+			hidePanel(frame, frame.getCenterPanel());
+			
+			
 			CompanyUI companyUI = new CompanyUI(session);
-			frame.getBasePanel().add(companyUI, BorderLayout.CENTER);
-			frame.revalidate();
-			frame.repaint();
+//			frame.getBasePanel().add(companyUI, BorderLayout.CENTER);
+			
+//			frame.setCenterPanel(companyUI);
+//			frame.getBasePanel().add(frame.getCenterPanel(), BorderLayout.CENTER);
+//			frame.revalidate();
+//			frame.repaint();
+			
+			showPanel(frame, companyUI);			
 		}
 	}
 }
