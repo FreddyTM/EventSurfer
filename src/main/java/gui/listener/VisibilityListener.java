@@ -7,9 +7,11 @@ import java.util.Timer;
 public class VisibilityListener implements ComponentListener {
 
 	Timer timer;
+	String panel;
 	
-	public VisibilityListener(Timer timer) {
+	public VisibilityListener(Timer timer, String panel) {
 		this.timer = timer;
+		this.panel = panel;
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class VisibilityListener implements ComponentListener {
 	public void componentHidden(ComponentEvent e) {
 		  if(timer != null) {
 			  timer.cancel();
+			  System.out.println("Se ha cerrado la ventana " + panel);
 		  }
 
 	}

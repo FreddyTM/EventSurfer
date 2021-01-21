@@ -903,12 +903,15 @@ ver 0.1.4 COMPANYUI
 	· CancelAction class (new inner CompanyUI class):
 		Update actionPerformed()
 
+	· TimerJob class (new inner CompanyUI class):
+		Update run()
+
 	* - Package main.java.gui.listener (new)
 
 	· VisibilityListener class (new):
 		Add attribute timer
 		Update constructor
-		Update componentHidden
+		Update componentHidden()
 
 	* - Package main.java.company
 
@@ -916,6 +919,10 @@ ver 0.1.4 COMPANYUI
 		Update updateCompany()
 
 	* - Package main.java.persistence
+
+	· CurrentSession class:
+		Update loadAllData()
+		Update loadCurrentSessionData()
 
 	· TimerJob class (CurrentSession inner class):
 		Make class private
@@ -927,3 +934,9 @@ ver 0.1.4 COMPANYUI
 
 	· PersistenceManagerTest class:
 		Add testUpdateTimeStampToDB() --ok--
+
+	* - Package main.java.app
+
+	· EventSurfer class:
+		Delete attributes
+			session, frame
