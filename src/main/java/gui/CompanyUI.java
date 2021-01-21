@@ -347,13 +347,13 @@ public class CompanyUI extends JPanel {
 		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 0, 30000);
+		timer.scheduleAtFixedRate(task, 1000, 30000);
 		
 		/*
 		 * Añadimos un listener al panel para que detenga la comprobación de las actualizaciones de la base 
 		 * de datos que hace la clase TimerJob en cuanto el panel deje de estar visible.
 		 */
-		this.addComponentListener(new VisibilityListener(timer, "Empresa"));
+		//this.addComponentListener(new VisibilityListener(timer, "Empresa"));
 	}
 
 	/**
@@ -542,14 +542,17 @@ public class CompanyUI extends JPanel {
 
 		@Override
 		public void run() {
-			if (cancelButton.isEnabled() && oKButton.isEnabled()) {
+			if (!CompanyUI.this.isShowing()) {
+				CompanyUI.this.timer.cancel();
+				 System.out.println("Se ha cerrado la ventana Empresa");
+			}
+			if (cancelButton.isEnabled() && oKButton.isEnabled() && CompanyUI.this.isShowing()) {
 				//Do nothing
 				//No se comprueba la actualización de los datos si los estamos editando
 			} else {
 				//Se comprueba la actualización de los datos si no los estamos editando
 				System.out.println("Comprobando actualización de datos de la compañía");
 			}
-			
 		}
 		
 	}
