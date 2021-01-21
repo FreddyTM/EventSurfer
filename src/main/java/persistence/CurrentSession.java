@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,6 +47,8 @@ public class CurrentSession {
 	private Connection connection;
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
+	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
+	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
 	
 	private CurrentSession() {
 		
@@ -173,33 +177,33 @@ public class CurrentSession {
 		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 
-	/**
-	 * Actualiza la tabla last_modification, registrando la fecha y la hora
-	 * en la que se produce la actualización de alguna de las otras tablas
-	 * de la base de datos
-	 * @param conn conexión con la base de datos
-	 * @param tableName nombre de la tabla que se ha actualizado
-	 * @param timestamp fecha y hora de la actualización
-	 * @return true si la actualización se realiza con éxito, false si no
-	 */
-	public boolean updateLastModification(Connection conn, String tableName, Timestamp timestamp) {
-		PreparedStatement pstm = null;
-		String sql = "UPDATE last_modification "
-				+ "SET datetime = ? "
-				+ "WHERE table_name = ?;";
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setTimestamp(1, timestamp);
-			pstm.setString(2, tableName);
-			pstm.executeUpdate();
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			PersistenceManager.closePrepStatement(pstm);
-		}
-	}
+//	/**
+//	 * Actualiza la tabla last_modification, registrando la fecha y la hora
+//	 * en la que se produce la actualización de alguna de las otras tablas
+//	 * de la base de datos
+//	 * @param conn conexión con la base de datos
+//	 * @param tableName nombre de la tabla que se ha actualizado
+//	 * @param timestamp fecha y hora de la actualización
+//	 * @return true si la actualización se realiza con éxito, false si no
+//	 */
+//	public boolean updateLastModification(Connection conn, String tableName, Timestamp timestamp) {
+//		PreparedStatement pstm = null;
+//		String sql = "UPDATE last_modification "
+//				+ "SET datetime = ? "
+//				+ "WHERE table_name = ?;";
+//		try {
+//			pstm = conn.prepareStatement(sql);
+//			pstm.setTimestamp(1, timestamp);
+//			pstm.setString(2, tableName);
+//			pstm.executeUpdate();
+//			return true;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			return false;
+//		} finally {
+//			PersistenceManager.closePrepStatement(pstm);
+//		}
+//	}
 	
 	/**
 	 * Clase que realiza la comprobación de las tablas que se han actualizado
@@ -240,24 +244,29 @@ public class CurrentSession {
 								UserType userTypeList = new UserType();
 								userTypeList.loadData(conn);
 								TypesStatesContainer.setuType(userTypeList);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event_type":
 								EventType eventTypeList = new EventType();
 								eventTypeList.loadData(conn);
 								TypesStatesContainer.setEvType(eventTypeList);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event_state":
 								EventState eventStateList = new EventState();
 								eventStateList.loadData(conn);
 								TypesStatesContainer.setEvState(eventStateList);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "company":
 								//Actualizamos la compañía de la sesión
 								session.getCompany().refresh(conn);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "business_unit":
 								//Actualizamos la unidad de negocio de la sesión
 								session.getbUnit().refresh(conn);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "user":
 								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
@@ -269,11 +278,13 @@ public class CurrentSession {
 										session.setUser(user);
 									}
 								}
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":
 								List<Area> areaList = new Area().getAreasFromDB(conn, session.getbUnit());
 								//Asignamos la lista de areas actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setAreas(areaList);
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event":
 								List<Event> eventList = new Event().getEventsFromDB(conn, session.getbUnit());
@@ -284,6 +295,7 @@ public class CurrentSession {
 									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 									event.setUpdates(eUpdate);
 								}
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event_update":
 								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 
@@ -292,6 +304,7 @@ public class CurrentSession {
 									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 									event.setUpdates(eUpdate);
 								}
+								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							default:
 								//Error. Tabla desconocida
@@ -363,6 +376,14 @@ public class CurrentSession {
 
 	public Timer getTimer() {
 		return timer;
+	}
+
+	public Map <String, Timestamp> getEventStates() {
+		return updatedTables;
+	}
+
+	public void setEventStates(Map <String, Timestamp> eventStates) {
+		this.updatedTables = eventStates;
 	}
 
 }

@@ -891,7 +891,7 @@ ver 0.1.4 COMPANYUI
 		Add attributes
 			editButton, cancelButton, oKButton, errorInfoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
-			editAction, cancelAction, oKAction
+			editAction, cancelAction, oKAction, panelVisible
 		Add testData()
 
 	· OKAction class (new inner CompanyUI class):
@@ -921,11 +921,13 @@ ver 0.1.4 COMPANYUI
 	* - Package main.java.persistence
 
 	· CurrentSession class:
+		Add attribute updatedTables
 		Update loadAllData()
 		Update loadCurrentSessionData()
 
 	· TimerJob class (CurrentSession inner class):
 		Make class private
+		Update run()
 
 	· PersistenceManager class:
 		Add updateTimeStampToDB()

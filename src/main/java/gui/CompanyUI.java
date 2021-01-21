@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.company.Company;
-import main.java.gui.listener.VisibilityListener;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 
@@ -33,6 +32,7 @@ public class CompanyUI extends JPanel {
 	Timestamp tNow = PersistenceManager.getTimestampNow();
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
+	private boolean panelVisible;
 	private JTextField nameField;
 	private JTextField addressField;
 	private JTextField provinceField;
@@ -58,6 +58,7 @@ public class CompanyUI extends JPanel {
 	public CompanyUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
+		panelVisible = true;
 		
 		JTextPane companyTxt = new JTextPane();
 		companyTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -348,12 +349,21 @@ public class CompanyUI extends JPanel {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 1000, 30000);
-		
-		/*
-		 * Añadimos un listener al panel para que detenga la comprobación de las actualizaciones de la base 
-		 * de datos que hace la clase TimerJob en cuanto el panel deje de estar visible.
-		 */
-		//this.addComponentListener(new VisibilityListener(timer, "Empresa"));
+
+	}
+	
+	/**
+	 * Actualiza los datos de la compañía que se visualizan en pantalla
+	 */
+	public void populateTextFields() {
+		nameField.setText(session.getCompany().getNombre());
+		addressField.setText(session.getCompany().getDireccion());
+		provinceField.setText(session.getCompany().getProvincia());
+		stateField.setText(session.getCompany().getEstado());
+		postalCodeField.setText(session.getCompany().getCpostal());
+		telephoneField.setText(session.getCompany().getTelefono());
+		mailField.setText(session.getCompany().getMail());
+		webField.setText(session.getCompany().getWeb());
 	}
 
 	/**
@@ -536,22 +546,25 @@ public class CompanyUI extends JPanel {
 	/**
 	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
 	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel se encuentra en modo
-	 * de edición de los datos, no se produce la comprobación porque no es necesaria.
+	 * de edición de los datos, o no está visible, no se produce la comprobación porque no es necesaria.
 	 */
 	private class TimerJob extends TimerTask {
 
 		@Override
 		public void run() {
 			if (!CompanyUI.this.isShowing()) {
+				CompanyUI.this.panelVisible = false;
+				this.cancel();
 				CompanyUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Empresa");
 			}
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && CompanyUI.this.isShowing()) {
 				//Do nothing
 				//No se comprueba la actualización de los datos si los estamos editando
-			} else {
+			} else if (CompanyUI.this.panelVisible == true){
 				//Se comprueba la actualización de los datos si no los estamos editando
 				System.out.println("Comprobando actualización de datos de la compañía");
+				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 			}
 		}
 		

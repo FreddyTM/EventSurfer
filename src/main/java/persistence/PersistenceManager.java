@@ -237,6 +237,8 @@ public class PersistenceManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
 		return true;
 	}
