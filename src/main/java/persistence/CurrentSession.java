@@ -115,7 +115,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 60000, 60000);
+		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 	
 	/**
@@ -170,7 +170,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 60000, 60000);
+		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 
 	/**
@@ -209,6 +209,7 @@ public class CurrentSession {
 		
 		@Override
 		public void run() {
+			System.out.println("Comprobando actualización de datos de la sesión");
 			Connection conn = session.getConnection();
 			if (conn == null) {
 				conn = PersistenceManager.getConnection();

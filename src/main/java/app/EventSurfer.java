@@ -18,8 +18,8 @@ import main.java.persistence.PersistenceManager;
 public class EventSurfer {
 
 	Connection connection;
-	CurrentSession session;
-	private AppWindow frame;
+	//CurrentSession session;
+	//private AppWindow frame;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -69,9 +69,9 @@ public class EventSurfer {
 		while(connection == null) {
 			//Error screen with reconnect button
 		}
-		session = CurrentSession.getInstance();
+		CurrentSession session = CurrentSession.getInstance();
 		session.setConnection(connection);
-		frame = new AppWindow("EVENTSURFER", connection, session);
+		AppWindow frame = new AppWindow("EVENTSURFER", connection, session);
 		frame.setVisible(true);
 		User user = new User().getDefaultAdminUser(connection);
 //		ToolBoxPanel toolPanel = new ToolBoxPanel(0, 0, session);
