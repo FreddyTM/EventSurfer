@@ -572,6 +572,9 @@ public class CompanyUI extends JPanel {
 				//Debug
 				System.out.println(session.getUpdatedTables().size());
 				
+				//Añadir if (session.getUpdatedTables().size() > 0) para no hacer comprobaciones innecesarias
+				//Añadir updatedTables.clear() en CurrentSession para vaciar el mapa tras cada comprobación de la DB
+				
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					
@@ -579,8 +582,14 @@ public class CompanyUI extends JPanel {
 					System.out.println(updatedTable.getKey());
 					System.out.println(updatedTable.getValue());
 					
-					if (updatedTable.getKey() == Company.TABLE_NAME) {
+					if (updatedTable.getKey().equals(Company.TABLE_NAME)) {
+						//Asignamos el nuevo contenido a los textfields
 						CompanyUI.this.populateTextFields();
+						//renovamos la lista de contenidos de los textfields
+						textFieldContentList.clear();
+						for (int i = 0; i < textFieldList.size(); i++) {
+							textFieldContentList.add(textFieldList.get(i).getText());
+						}
 						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
 						updatedTable.getValue().toString());
 					}
