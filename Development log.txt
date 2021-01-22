@@ -889,7 +889,7 @@ ver 0.1.4 COMPANYUI
 		Add attributes
 			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField, webField
 		Add attributes
-			editButton, cancelButton, oKButton, errorInfoLabel, labelList, textFieldList, textFieldContentList
+			editButton, cancelButton, oKButton, infoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
 			editAction, cancelAction, oKAction, panelVisible
 		Add testData()

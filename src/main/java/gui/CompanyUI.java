@@ -6,7 +6,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -44,7 +46,7 @@ public class CompanyUI extends JPanel {
 	private JButton editButton;
 	private JButton cancelButton;
 	private JButton oKButton;
-	JLabel errorInfoLabel;
+	private JLabel infoLabel;
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
 	private List<String> textFieldContentList = new ArrayList<String>();
@@ -309,10 +311,10 @@ public class CompanyUI extends JPanel {
 		labelList.add(maxCharsLabel8);
 		add(maxCharsLabel8);
 		
-		errorInfoLabel = new JLabel();
-		errorInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		errorInfoLabel.setBounds(50, 530, 770, 25);
-		add(errorInfoLabel);
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel.setBounds(50, 530, 770, 25);
+		add(infoLabel);
 		
 		oKButton = new JButton();
 		oKButton.setAction(oKAction);
@@ -408,7 +410,7 @@ public class CompanyUI extends JPanel {
 		}
 		//Si hay un error, mensaje de error y retornamos false
 		if (error) {
-			errorInfoLabel.setText(errorText);
+			infoLabel.setText(errorText);
 			return false;
 		}
 		return true;
@@ -428,7 +430,7 @@ public class CompanyUI extends JPanel {
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
-			errorInfoLabel.setText("");
+			infoLabel.setText("");
 			//Activar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
 				label.setVisible(true);
@@ -456,7 +458,7 @@ public class CompanyUI extends JPanel {
 			editButton.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
-			errorInfoLabel.setText("");
+			infoLabel.setText("");
 			//Quitar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
 				label.setVisible(false);
@@ -519,7 +521,9 @@ public class CompanyUI extends JPanel {
 					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla company
 					//no queda registrada
 					if(!changeRegister) {
-						errorInfoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+						infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+					} else {
+						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + tNow);
 					}
 					editButton.setEnabled(true);
 					oKButton.setEnabled(false);
@@ -537,7 +541,7 @@ public class CompanyUI extends JPanel {
 					}
 				//Error de actualización de los datos en la base de datos
 				} else {
-					errorInfoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+					infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 				}
 			}
 		}
@@ -565,6 +569,13 @@ public class CompanyUI extends JPanel {
 				//Se comprueba la actualización de los datos si no los estamos editando
 				System.out.println("Comprobando actualización de datos de la compañía");
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
+				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					if (updatedTable.getKey() == Company.TABLE_NAME) {
+						CompanyUI.this.populateTextFields();
+						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
+						updatedTable.getValue().toString());
+					}
+				}
 			}
 		}
 		

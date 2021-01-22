@@ -115,7 +115,7 @@ public class CurrentSession {
 		//Asignamos el usuario que abre sesión a user
 		user = new User().getUserById(bUnit, userId);
 		//Registramos fecha y hora de la carga de datos de la sesión
-		dateTimeReference = PersistenceManager.getTimestampNow();
+		dateTimeReference = PersistenceManager.getLatestTimestampFromDb(connection);
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
@@ -170,41 +170,13 @@ public class CurrentSession {
 			event.setUpdates(eUpdate);
 		}
 		//Registramos fecha y hora de la carga de datos de la sesión
-		dateTimeReference = PersistenceManager.getTimestampNow();
+		dateTimeReference = PersistenceManager.getLatestTimestampFromDb(connection);
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 
-//	/**
-//	 * Actualiza la tabla last_modification, registrando la fecha y la hora
-//	 * en la que se produce la actualización de alguna de las otras tablas
-//	 * de la base de datos
-//	 * @param conn conexión con la base de datos
-//	 * @param tableName nombre de la tabla que se ha actualizado
-//	 * @param timestamp fecha y hora de la actualización
-//	 * @return true si la actualización se realiza con éxito, false si no
-//	 */
-//	public boolean updateLastModification(Connection conn, String tableName, Timestamp timestamp) {
-//		PreparedStatement pstm = null;
-//		String sql = "UPDATE last_modification "
-//				+ "SET datetime = ? "
-//				+ "WHERE table_name = ?;";
-//		try {
-//			pstm = conn.prepareStatement(sql);
-//			pstm.setTimestamp(1, timestamp);
-//			pstm.setString(2, tableName);
-//			pstm.executeUpdate();
-//			return true;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			return false;
-//		} finally {
-//			PersistenceManager.closePrepStatement(pstm);
-//		}
-//	}
-	
 	/**
 	 * Clase que realiza la comprobación de las tablas que se han actualizado
 	 * con posterioridad a la última carga de datos de la sesión en curso
@@ -229,15 +201,26 @@ public class CurrentSession {
 			String sql = "SELECT * "
 					+ "FROM last_modification";
 			try {
+				//Debug
+				System.out.println("Dentro del try");
+				
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
 				//Para cada tabla, comprobamos su timestamp
 				while (results.next()) {
+					
+					//Debug
+					System.out.println("Dentro del while");
+					
 					tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
 					//Si el timestamp de la tabla es posterior al de la sesión, se ha
 					//producido una actualización que no tenemos registrada.
 					if (sessionDateTime.before(dateTimeDb) ) {
+						
+						//Debug
+						System.out.println("Dentro del if");
+						
 						//Actualizar objetos correspondientes a table_name
 						switch(tableName) {
 							case "user_type":
@@ -259,9 +242,17 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "company":
+								
+								//Debug
+								System.out.println("Dentro del case company");
+								
 								//Actualizamos la compañía de la sesión
 								session.getCompany().refresh(conn);
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+								
+								//Debug
+								System.out.println("Tamaño del Map: " + CurrentSession.this.updatedTables.size());
+								
 								break;
 							case "business_unit":
 								//Actualizamos la unidad de negocio de la sesión
@@ -384,6 +375,14 @@ public class CurrentSession {
 
 	public void setEventStates(Map <String, Timestamp> eventStates) {
 		this.updatedTables = eventStates;
+	}
+
+	public Map<String, Timestamp> getUpdatedTables() {
+		return updatedTables;
+	}
+
+	public void setUpdatedTables(Map<String, Timestamp> updatedTables) {
+		this.updatedTables = updatedTables;
 	}
 
 }

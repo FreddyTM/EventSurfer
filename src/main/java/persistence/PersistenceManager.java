@@ -216,6 +216,40 @@ public class PersistenceManager {
 	}
 	
 	/**
+	 * Devuelve la fecha y la hora de la última actualización de datos en alguna
+	 * de las tablas de la base de datos
+	 * @param conn conexión con la base de datos
+	 * @return timestamp con la fecha y la hora, null si falla la consulta
+	 */
+	public static Timestamp getLatestTimestampFromDb(Connection conn) {
+		Timestamp lastUpdate = null;
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT fecha_hora "
+				+ "FROM last_modification";
+		try {
+			stm = conn.createStatement();
+			results = getResultSet(stm, sql);
+			while (results.next()) {
+				Timestamp temp = results.getTimestamp(1);
+				if (lastUpdate == null) {
+					lastUpdate = temp;
+				}
+				if (temp.after(lastUpdate)) {
+					lastUpdate = temp;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
+		}
+		return lastUpdate;
+	}
+	
+	/**
 	 * Actualiza la tabla last_modification de la base de datos con la fecha y la hora
 	 * en la que se ha modificado o insertado algún dato en la tabla pasada por parámetro.
 	 * @param conn conexión a la base de datos
