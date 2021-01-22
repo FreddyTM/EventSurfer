@@ -150,7 +150,7 @@ class PersistenceManagerTest {
 //			System.out.println("Estado: " + e.getSQLState());
 //			System.out.println("Código: " + e.getErrorCode());
 //		}
-		assertEquals(1, PersistenceManager.getLastElementIdFromDB(connection, "business_unit"));
+		assertEquals(3, PersistenceManager.getLastElementIdFromDB(connection, "user_type"));
 	}
 	
 	@Test
@@ -173,6 +173,13 @@ class PersistenceManagerTest {
 			e.printStackTrace();
 		}
 		assertEquals(tNow, readTimestamp);
+	}
+	
+	@Test
+	void testGetLatestTimestampFromDb() {
+		assertNotNull(PersistenceManager.getLatestTimestampFromDb(connection));
+		Timestamp tNow = PersistenceManager.getTimestampNow();
+		assertTrue(tNow.after(PersistenceManager.getLatestTimestampFromDb(connection)));
 	}
 	
 //	@Test

@@ -936,9 +936,12 @@ ver 0.1.4 COMPANYUI
 
 	· PersistenceManagerTest class:
 		Add testUpdateTimeStampToDB() --ok--
+		Add test testGetLatestTimestampFromDb() --ok--
 
 	* - Package main.java.app
 
 	· EventSurfer class:
 		Delete attributes
 			session, frame
+
+	
