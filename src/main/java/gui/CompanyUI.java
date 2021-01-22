@@ -568,8 +568,17 @@ public class CompanyUI extends JPanel {
 			} else if (CompanyUI.this.panelVisible == true){
 				//Se comprueba la actualización de los datos si no los estamos editando
 				System.out.println("Comprobando actualización de datos de la compañía");
+				
+				//Debug
+				System.out.println(session.getUpdatedTables().size());
+				
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					
+					//Debug
+					System.out.println(updatedTable.getKey());
+					System.out.println(updatedTable.getValue());
+					
 					if (updatedTable.getKey() == Company.TABLE_NAME) {
 						CompanyUI.this.populateTextFields();
 						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +

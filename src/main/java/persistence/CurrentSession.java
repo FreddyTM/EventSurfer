@@ -248,9 +248,15 @@ public class CurrentSession {
 								
 								//Actualizamos la compañía de la sesión
 								session.getCompany().refresh(conn);
+								
+								//Debug
+								System.out.println(session.getCompany().getNombre());
+								
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								
 								//Debug
+								System.out.println(tableName);
+								System.out.println(dateTimeDb.toString());
 								System.out.println("Tamaño del Map: " + CurrentSession.this.updatedTables.size());
 								
 								break;
