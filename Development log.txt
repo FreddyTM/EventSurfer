@@ -885,14 +885,16 @@ ver 0.1.4 COMPANYUI FULLY FUNCTIONAL
 		Update userLogin()
 
 	· CompanyUI class (new):
-		Add constructor, setters & getters
+		Add constructor
+		Update constructor
 		Add attributes
 			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField, webField
 		Add attributes
 			editButton, cancelButton, oKButton, infoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
-			editAction, cancelAction, oKAction, panelVisible
+			editAction, cancelAction, oKAction, panelVisible, timer, tNow
 		Add testData()
+		Add populateTextFields()
 
 	· OKAction class (new inner CompanyUI class):
 		Update actionPerformed()
@@ -945,4 +947,31 @@ ver 0.1.4 COMPANYUI FULLY FUNCTIONAL
 		Delete attributes
 			session, frame
 
-	
+ver 0.1.5 BUSINESSUNITUI
+
+	* - Package main.java.app
+
+	· EventSurfer class:
+		Update setUpWindow() --show app version--
+
+	* - Package main.java.gui
+
+	· BusinessUnitUI class (new):
+		Add constructor
+		Update constructor
+		Add attributes
+			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField
+		Add attributes
+			editButton, cancelButton, oKButton, infoLabel, labelList, textFieldList, textFieldContentList
+		Add attributes
+			editAction, cancelAction, oKAction, panelVisible, timer, tNow
+		Add testData()
+		Add populateTextFields()
+		Update testData()
+		Update populateTextFields()
+
+	· OKAction class (new inner BusinessUnitUI class):
+		Update actionPerformed()
+
+	· TimerJob class (new inner BusinessUnitUI class):
+		Update run()

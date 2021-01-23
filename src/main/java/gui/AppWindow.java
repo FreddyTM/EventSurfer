@@ -97,37 +97,18 @@ public class AppWindow extends JFrame {
 	
 	public void setUpWindow(){
 		basePanel.removeAll();
-		//centerPanel.setVisible(false);
 
 		centerPanel = new JPanel();
-		centerPanel.add(new JLabel("CENTER PANEL INTO CENTER REGION OF BASEPANEL"));
+		JLabel welcome = new JLabel("EVENT SURFER 0.1.5");
+		welcome.setFont(new Font("Tahoma", Font.BOLD, 50));
+		JLabel emptyLabel = new JLabel();
+		emptyLabel.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 800));
+		centerPanel.add(emptyLabel);
+		centerPanel.add(welcome);
+
 		leftPanel = new Selector(this, session);
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-//		Border leftPanelBorder = leftPanel.getBorder();
-//		Border blackline = BorderFactory.createLineBorder(Color.black);
-//		leftPanel.setBorder(new CompoundBorder(blackline, leftPanelBorder));
-		
-//		//Añadimos barra de información
-//		if (downPanel != null) {
-//			downPanel.removeAll();
-//		}
-		
-//		downPanel = new JPanel();
-//		downPanel.setBackground(Color.WHITE);
-//		infoLabel = new JLabel("PANEL DE INFORMACIÓN");
-//		infoLabel.setFocusable(false);
-//		infoLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
-//		downPanel.add(infoLabel);
-		
-		//this.add(downPanel, BorderLayout.SOUTH);
-		//Añadimos panel central con pestañas
-		//desk = new TabbedDesk();
-		//centerPanel.removeAll();
-//		revalidate();
-//		repaint();
-
-//		basePanel.add(downPanel, BorderLayout.SOUTH);
 		
 		basePanel.add(centerPanel, BorderLayout.CENTER);
 		basePanel.add(leftPanel, BorderLayout.WEST);
