@@ -6,8 +6,10 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -31,6 +33,7 @@ import main.java.company.BusinessUnit;
 //import main.java.gui.CompanyUI.TimerJob;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import javax.swing.JComboBox;
 
 public class BusinessUnitUI extends JPanel {
 	
@@ -46,7 +49,7 @@ public class BusinessUnitUI extends JPanel {
 	private JTextField postalCodeField;
 	private JTextField telephoneField;
 	private JTextField mailField;
-	//private JTextField webField;
+	JComboBox comboBox;
 	private JButton editButton;
 	private JButton cancelButton;
 	private JButton oKButton;
@@ -76,64 +79,81 @@ public class BusinessUnitUI extends JPanel {
 		bUnitTxt.setBounds(50, 50, 380, 30);
 		add(bUnitTxt);
 		
+		JLabel selectLabel = new JLabel("Unidades de negocio");
+		selectLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		selectLabel.setBounds(50, 125, 200, 25);
+		add(selectLabel);
+		
 		JLabel companyLabel = new JLabel("Empresa");
 		companyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		companyLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		companyLabel.setBounds(50, 125, 200, 25);
+		companyLabel.setBounds(50, 175, 200, 25);
 		add(companyLabel);
 		
 		JLabel nameLabel = new JLabel("Nombre");
 		nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		nameLabel.setBounds(50, 175, 200, 25);
+		nameLabel.setBounds(50, 225, 200, 25);
 		add(nameLabel);
 		
 		JLabel addressLabel = new JLabel("Dirección");
 		addressLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		addressLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		addressLabel.setBounds(50, 225, 200, 25);
+		addressLabel.setBounds(50, 275, 200, 25);
 		add(addressLabel);
 		
 		JLabel provinceLabel = new JLabel("Provincia");
 		provinceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		provinceLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		provinceLabel.setBounds(50, 275, 200, 25);
+		provinceLabel.setBounds(50, 325, 200, 25);
 		add(provinceLabel);
 		
 		JLabel stateLabel = new JLabel("Estado");
 		stateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		stateLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		stateLabel.setBounds(50, 325, 200, 25);
+		stateLabel.setBounds(50, 375, 200, 25);
 		add(stateLabel);
 		
 		JLabel postalCodeLabel = new JLabel("Código postal");
 		postalCodeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		postalCodeLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		postalCodeLabel.setBounds(50, 375, 200, 25);
+		postalCodeLabel.setBounds(50, 425, 200, 25);
 		add(postalCodeLabel);
 		
 		JLabel telephoneLabel = new JLabel("Teléfono");
 		telephoneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		telephoneLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		telephoneLabel.setBounds(50, 425, 200, 25);
+		telephoneLabel.setBounds(50, 475, 200, 25);
 		add(telephoneLabel);
 		
 		JLabel mailLabel = new JLabel("E-mail");
 		mailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		mailLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		mailLabel.setBounds(50, 475, 200, 25);
+		mailLabel.setBounds(50, 525, 200, 25);
 		add(mailLabel);
 		
 		JLabel companyValueLabel = new JLabel();
 		//companyValueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		companyValueLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		companyValueLabel.setBounds(260, 125, 400, 25);
+		companyValueLabel.setBounds(260, 175, 400, 25);
 		companyValueLabel.setText(session.getCompany().getNombre());
 		add(companyValueLabel);
 		
+		String[] comboList = getComboBoxItemsFromSession();
+		comboBox = new JComboBox(comboList);
+		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+		comboBox.setBounds(260, 130, 400, 22);
+		comboBox.setEditable(false);
+		comboBox.setBackground(Color.WHITE);
+		add(comboBox);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			comboBox.setEnabled(false);
+		}
+		
 		nameField = new JTextField();
 		nameField.setColumns(10);
-		nameField.setBounds(260, 175, 400, 25);
+		nameField.setBounds(260, 225, 400, 25);
 		nameField.setText(session.getbUnit().getNombre());
 		nameField.setEditable(false);
 		nameField.addKeyListener(new KeyAdapter() {
@@ -150,7 +170,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		addressField = new JTextField();
 		addressField.setColumns(10);
-		addressField.setBounds(260, 225, 400, 25);
+		addressField.setBounds(260, 275, 400, 25);
 		addressField.setText(session.getbUnit().getDireccion());
 		addressField.setEditable(false);
 		addressField.addKeyListener(new KeyAdapter() {
@@ -167,7 +187,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		provinceField = new JTextField();
 		provinceField.setColumns(10);
-		provinceField.setBounds(260, 275, 200, 25);
+		provinceField.setBounds(260, 325, 200, 25);
 		provinceField.setText(session.getbUnit().getProvincia());
 		provinceField.setEditable(false);
 		provinceField.addKeyListener(new KeyAdapter() {
@@ -184,7 +204,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		stateField = new JTextField();
 		stateField.setColumns(10);
-		stateField.setBounds(260, 325, 200, 25);
+		stateField.setBounds(260, 375, 200, 25);
 		stateField.setText(session.getbUnit().getEstado());
 		stateField.setEditable(false);
 		stateField.addKeyListener(new KeyAdapter() {
@@ -201,7 +221,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		postalCodeField = new JTextField();
 		postalCodeField.setColumns(10);
-		postalCodeField.setBounds(260, 375, 100, 25);
+		postalCodeField.setBounds(260, 425, 100, 25);
 		postalCodeField.setText(session.getbUnit().getCpostal());
 		postalCodeField.setEditable(false);
 		postalCodeField.addKeyListener(new KeyAdapter() {
@@ -218,7 +238,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		telephoneField = new JTextField();
 		telephoneField.setColumns(10);
-		telephoneField.setBounds(260, 425, 100, 25);
+		telephoneField.setBounds(260, 475, 100, 25);
 		telephoneField.setText(session.getbUnit().getTelefono());
 		telephoneField.setEditable(false);
 		telephoneField.addKeyListener(new KeyAdapter() {
@@ -235,7 +255,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		mailField = new JTextField();
 		mailField.setColumns(10);
-		mailField.setBounds(260, 475, 400, 25);
+		mailField.setBounds(260, 525, 400, 25);
 		mailField.setText(session.getbUnit().getMail());
 		mailField.setEditable(false);
 		mailField.addKeyListener(new KeyAdapter() {
@@ -269,49 +289,49 @@ public class BusinessUnitUI extends JPanel {
 		
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel.setBounds(670, 175, 150, 25);
+		maxCharsLabel.setBounds(670, 225, 150, 25);
 		maxCharsLabel.setVisible(false);
 		labelList.add(maxCharsLabel);
 		add(maxCharsLabel);
 		
 		JLabel maxCharsLabel2 = new JLabel("Max: 150 caracteres");
 		maxCharsLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel2.setBounds(670, 225, 150, 25);
+		maxCharsLabel2.setBounds(670, 275, 150, 25);
 		maxCharsLabel2.setVisible(false);
 		labelList.add(maxCharsLabel2);
 		add(maxCharsLabel2);
 		
 		JLabel maxCharsLabel3 = new JLabel("Max: 50 caracteres");
 		maxCharsLabel3.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel3.setBounds(470, 277, 150, 25);
+		maxCharsLabel3.setBounds(470, 327, 150, 25);
 		maxCharsLabel3.setVisible(false);
 		labelList.add(maxCharsLabel3);
 		add(maxCharsLabel3);
 		
 		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
 		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel4.setBounds(470, 327, 150, 25);
+		maxCharsLabel4.setBounds(470, 377, 150, 25);
 		maxCharsLabel4.setVisible(false);
 		labelList.add(maxCharsLabel4);
 		add(maxCharsLabel4);
 		
 		JLabel maxCharsLabel5 = new JLabel("Max: 8 caracteres");
 		maxCharsLabel5.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel5.setBounds(370, 377, 150, 25);
+		maxCharsLabel5.setBounds(370, 427, 150, 25);
 		maxCharsLabel5.setVisible(false);
 		labelList.add(maxCharsLabel5);
 		add(maxCharsLabel5);
 		
 		JLabel maxCharsLabel6 = new JLabel("Max: 15 caracteres");
 		maxCharsLabel6.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel6.setBounds(370, 425, 150, 25);
+		maxCharsLabel6.setBounds(370, 475, 150, 25);
 		maxCharsLabel6.setVisible(false);
 		labelList.add(maxCharsLabel6);
 		add(maxCharsLabel6);
 		
 		JLabel maxCharsLabel7 = new JLabel("Max: 100 caracteres");
 		maxCharsLabel7.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel7.setBounds(670, 475, 150, 25);
+		maxCharsLabel7.setBounds(670, 525, 150, 25);
 		maxCharsLabel7.setVisible(false);
 		labelList.add(maxCharsLabel7);
 		add(maxCharsLabel7);
@@ -325,28 +345,31 @@ public class BusinessUnitUI extends JPanel {
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 530, 770, 25);
+		infoLabel.setBounds(50, 580, 770, 25);
 		add(infoLabel);
 		
 		oKButton = new JButton();
 		oKButton.setAction(oKAction);
-		oKButton.setBounds(731, 580, 89, 23);
+		oKButton.setBounds(731, 630, 89, 23);
 		oKButton.setEnabled(false);
 		add(oKButton);
 		
 		cancelButton = new JButton();
 		cancelButton.setAction(cancelAction);
-		cancelButton.setBounds(632, 580, 89, 23);
+		cancelButton.setBounds(632, 630, 89, 23);
 		cancelButton.setEnabled(false);
 		add(cancelButton);
 		
 		editButton = new JButton();
 		editButton.setAction(editAction);
-		editButton.setBounds(531, 580, 89, 23);
+		editButton.setBounds(531, 630, 89, 23);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			editButton.setEnabled(false);
 		}
 		add(editButton);
+		
+		//ADD NEW BUTTON TO ADD NEW BUSINESSUNITS
+		
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -377,7 +400,6 @@ public class BusinessUnitUI extends JPanel {
 		postalCodeField.setText(session.getbUnit().getCpostal());
 		telephoneField.setText(session.getbUnit().getTelefono());
 		mailField.setText(session.getbUnit().getMail());
-		//webField.setText(session.getCompany().getWeb());
 	}
 	
 	/**
@@ -426,6 +448,40 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
+	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
+	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
+	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
+	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
+	 */
+	public String[] getComboBoxItemsFromSession() {
+		String[] comboList = new String[session.getCompany().getBusinessUnits().size()];
+		for (int i = 0; i < comboList.length; i++) {
+			comboList[i] = session.getCompany().getBusinessUnits().get(i).getNombre();
+		}
+		Arrays.sort(comboList);
+		return comboList;
+	}
+	
+	/**
+	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
+	 * del array que contiene la lista de unidades de negocio
+	 * @param array array con la lista de unidades de negocio
+	 * @return índice del elemento a seleccionar por defecto
+	 */
+	public int getSelectedIndexFromArray(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(session.getbUnit().getNombre())) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	//ADD ITEMLISTENER CLASS TO SET TO THE COMBOBOX
+	
+	//ADD NEW ADDNEWBUNIT ACTION
+	
+	/**
 	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
 	 * del formulario, el botón de Cancelar para que los cambios no se registren y el de Aceptar para
 	 * que sí lo hagan.
@@ -439,6 +495,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			comboBox.setEnabled(false);
 			infoLabel.setText("");
 			//Activar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
@@ -467,6 +524,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
+			comboBox.setEnabled(true);
 			infoLabel.setText("");
 			//Quitar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
@@ -536,6 +594,7 @@ public class BusinessUnitUI extends JPanel {
 					editButton.setEnabled(true);
 					oKButton.setEnabled(false);
 					cancelButton.setEnabled(false);
+					comboBox.setEnabled(true);
 					for (JLabel label : labelList) {
 						label.setVisible(false);
 					}
@@ -568,14 +627,14 @@ public class BusinessUnitUI extends JPanel {
 				BusinessUnitUI.this.panelVisible = false;
 				this.cancel();
 				BusinessUnitUI.this.timer.cancel();
-				 System.out.println("Se ha cerrado la ventana Empresa");
+				 System.out.println("Se ha cerrado la ventana Unidad de negocio");
 			}
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && BusinessUnitUI.this.isShowing()) {
 				//Do nothing
 				//No se comprueba la actualización de los datos si los estamos editando
 			} else if (BusinessUnitUI.this.panelVisible == true){
 				//Se comprueba la actualización de los datos si no los estamos editando
-				System.out.println("Comprobando actualización de datos de la compañía");
+				System.out.println("Comprobando actualización de datos de la unidad de negocio");
 				
 				//Debug
 				System.out.println(session.getUpdatedTables().size());
@@ -604,21 +663,4 @@ public class BusinessUnitUI extends JPanel {
 		}
 		
 	}
-
-//
-//	public BusinessUnitUI(LayoutManager layout) {
-//		super(layout);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public BusinessUnitUI(boolean isDoubleBuffered) {
-//		super(isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public BusinessUnitUI(LayoutManager layout, boolean isDoubleBuffered) {
-//		super(layout, isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
-
 }

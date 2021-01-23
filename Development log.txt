@@ -964,13 +964,21 @@ ver 0.1.5 BUSINESSUNITUI
 		Add attributes
 			editButton, cancelButton, oKButton, infoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
-			editAction, cancelAction, oKAction, panelVisible, timer, tNow
+			editAction, cancelAction, oKAction, panelVisible, timer, tNow, comboBox
 		Add testData()
 		Add populateTextFields()
+		Add getComboBoxItemsFromSession()
+		Add getSelectedIndexFromArray()
 		Update testData()
 		Update populateTextFields()
 
 	· OKAction class (new inner BusinessUnitUI class):
+		Update actionPerformed()
+
+	· EditAction class (new inner BusinessUnitUI class):
+		Update actionPerformed()
+
+	· CancelAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
 
 	· TimerJob class (new inner BusinessUnitUI class):

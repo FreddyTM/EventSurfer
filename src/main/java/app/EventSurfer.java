@@ -11,9 +11,7 @@ import main.java.gui.Login;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 
-
-//VERSION 0.0.22
-
+//VERSION 0.1.5
 
 public class EventSurfer {
 
@@ -36,27 +34,14 @@ public class EventSurfer {
 	}
 	
 	public EventSurfer() {
-//		frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
-//		initialize();
+
 	}
-	
-//	private void initialize() {
-//		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//		frame.setExtendedState(frame.getExtendedState() | frame.MAXIMIZED_BOTH);
-//		frame.getContentPane().setLayout(new BorderLayout());
-//		frame.setBounds(300, 300, 1000, 700);
-//		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.addWindowListener(new WindowAdapter() {
-//			  public void windowClosing(WindowEvent e) {
-//				  if(session.getTimer() != null) {
-//					  session.getTimer().cancel();
-//				  }		  
-//				  PersistenceManager.closeDatabase(connection);
-//				  System.exit(0);
-//			  }
-//		});
-//	}
-	
+
+	/**
+	 * Conecta con la base de datos e inicia la sesión y la ventana de la aplicación
+	 * @param args base de datos a la que conectar. Si no existe parámetro, se conecta
+	 * a la base de datos designada por defecto
+	 */
 	public void go(String[] args) {
 		
 		if (args.length == 1) {
@@ -74,10 +59,7 @@ public class EventSurfer {
 		AppWindow frame = new AppWindow("EVENTSURFER", connection, session);
 		frame.setVisible(true);
 		User user = new User().getDefaultAdminUser(connection);
-//		ToolBoxPanel toolPanel = new ToolBoxPanel(0, 0, session);
-//		frame.setLeftPanel(toolPanel);
-//		frame.add(frame.getLeftPanel(), BorderLayout.WEST);
-		//user.setId(1);
+
 		if ((user.getPassword().equals("surferpass"))) {
 			//admin password sin cambiar
 			System.out.println("Password sin cambiar");

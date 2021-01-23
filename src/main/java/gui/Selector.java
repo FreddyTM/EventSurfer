@@ -28,6 +28,7 @@ public class Selector extends JPanel {
 	private CurrentSession session;
 	private final Action logOutAction = new LogOutAction();
 	private final Action CompanyAction = new CompanyAction();
+	private final Action bUnitAction = new BunitAction();
 	private JButton eventButton;
 	private JButton eventTypeButton;
 	private JButton areaButton;
@@ -35,7 +36,6 @@ public class Selector extends JPanel {
 	private JButton bUnitButton;
 	private JButton companyButton;
 	private JButton logOutButton;
-
 
 	/**
 	 * @wbp.parser.constructor
@@ -79,6 +79,7 @@ public class Selector extends JPanel {
 		add(userButton);
 		
 		bUnitButton = new JButton();
+		bUnitButton.setAction(bUnitAction);
 		bUnitButton.setMargin(new Insets(2,2,2,2));
 		bUnitButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		bUnitButton.setText("<html><center>"+"UNIDADES" + "<br>" + "DE" + "<br>" + "NEGOCIO" + "</center></html>");
@@ -201,6 +202,17 @@ public class Selector extends JPanel {
 //			frame.repaint();
 			
 			showPanel(frame, companyUI);			
+		}
+	}
+	private class BunitAction extends AbstractAction {
+		public BunitAction() {
+			putValue(NAME, "BunitAction");
+			putValue(SHORT_DESCRIPTION, "Show BusinessUnit screen");
+		}
+		public void actionPerformed(ActionEvent e) {
+			hidePanel(frame, frame.getCenterPanel());
+			BusinessUnitUI bUnitUI = new BusinessUnitUI(session);
+			showPanel(frame, bUnitUI);
 		}
 	}
 }
