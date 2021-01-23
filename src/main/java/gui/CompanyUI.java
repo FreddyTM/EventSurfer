@@ -32,7 +32,7 @@ public class CompanyUI extends JPanel {
 
 	private CurrentSession session;
 	Timestamp tNow = PersistenceManager.getTimestampNow();
-	//Temporizador de comprobación de cambios en la base de datos
+	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	private boolean panelVisible;
 	private JTextField nameField;

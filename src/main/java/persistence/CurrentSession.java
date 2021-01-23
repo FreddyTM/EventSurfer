@@ -36,17 +36,20 @@ public class CurrentSession {
 	private BusinessUnit bUnit;
 	//Empresa a la que pertenece la unidad de negocio
 	private Company company;
-	//Registra la fecha y hora en el momento de cargar los datos de la sesión
-	//CurrentSession. Se actualiza con la fecha y hora en que se produzcan
-	//cambios en la base de datos que afecten a company, a bUnit, o a cualquiera
-	//de los objetos que contiene bUnit
-	private volatile Timestamp dateTimeReference;
-	//Ventana del programa
-	//private AppWindow frame;
 	//Conexión con la base de datos
 	private Connection connection;
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
+	
+	//ATRIBUTOS VOLATILE
+	//Se declaran volatile para que todos los temporizadores de actualización de datos
+	//del programa accedan a una copia única de las variables
+	
+	//Registra la fecha y hora de la última actualización que consta en la base de datos
+	//en el momento de iniciar la sesión. Se actualiza con la fecha y hora en que se produzcan
+	//cambios en la base de datos que afecten a company, a bUnit, o a cualquiera de los objetos
+	//que contiene bUnit.
+	private volatile Timestamp dateTimeReference;
 	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
 	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
 	
@@ -186,6 +189,7 @@ public class CurrentSession {
 		@Override
 		public void run() {
 			System.out.println("Comprobando actualización de datos de la sesión");
+			CurrentSession.this.updatedTables.clear();
 			Connection conn = session.getConnection();
 			if (conn == null) {
 				conn = PersistenceManager.getConnection();
