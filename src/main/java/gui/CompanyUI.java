@@ -523,7 +523,7 @@ public class CompanyUI extends JPanel {
 					if(!changeRegister) {
 						infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
 					} else {
-						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + tNow);
+						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 					}
 					editButton.setEnabled(true);
 					oKButton.setEnabled(false);
@@ -591,7 +591,8 @@ public class CompanyUI extends JPanel {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
 						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
-						updatedTable.getValue().toString());
+						//updatedTable.getValue().toString());
+						session.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}

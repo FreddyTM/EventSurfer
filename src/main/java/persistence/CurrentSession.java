@@ -6,6 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,6 +183,21 @@ public class CurrentSession {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 10000, 60000);
+	}
+	
+	/**
+	 * Da formato a la fecha y la hora del Timestamp pasado por parámetro
+	 * @param timestamp Timestamp a formatear
+	 * @param pattern patrón de formateo, si es null se usa el patrón por defecto del método
+	 * @return Timestamp formateado
+	 */
+	public String formatTimestamp(Timestamp timestamp, String pattern) {
+		if (pattern == null) {
+			pattern = "EEEE, dd-MM-yyyy HH:mm:ss";
+		}
+		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+		String niceTimestamp = formatter.format(timestamp);
+		return niceTimestamp;
 	}
 
 	/**

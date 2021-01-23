@@ -855,7 +855,7 @@ ver 0.1.3 SELECTOR'S LOGOUT BUTTON FULLY FUNCTIONAL
 	· LogOutAction class (new inner Selector class):
 		Update actionPerformed()
 
-ver 0.1.4 COMPANYUI
+ver 0.1.4 COMPANYUI FULLY FUNCTIONAL
 
 	* - Package main.java.gui
 
@@ -922,6 +922,7 @@ ver 0.1.4 COMPANYUI
 
 	· CurrentSession class:
 		Add attribute updatedTables
+		Add formatTimestamp()
 		Update loadAllData()
 		Update loadCurrentSessionData()
 
