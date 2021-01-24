@@ -387,7 +387,7 @@ public class BusinessUnitUI extends JPanel {
 		newButton.setAction(newAction);
 		newButton.setBounds(431, 630, 89, 23);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
-			editButton.setEnabled(false);
+			newButton.setEnabled(false);
 		}
 		add(newButton);
 		

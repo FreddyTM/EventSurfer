@@ -289,7 +289,7 @@ public class CurrentSession {
 							case "business_unit":
 								
 								//Debug
-								System.out.println("Dentro del case company");
+								System.out.println("Dentro del case business_unit");
 								
 								//Recargamos la lista de unidades de negocio de la base de datos
 								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);

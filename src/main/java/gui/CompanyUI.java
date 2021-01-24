@@ -576,7 +576,7 @@ public class CompanyUI extends JPanel {
 			} else if (CompanyUI.this.panelVisible == true){
 				
 				//Debug
-				System.out.println("Comprobando actualización de datos de la compañía");
+				System.out.println("Comprobando actualización de datos de la empresa");
 				System.out.println(session.getUpdatedTables().size());
 				
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos

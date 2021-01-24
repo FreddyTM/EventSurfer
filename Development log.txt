@@ -275,7 +275,7 @@ Ver 0.0.14
 
 	* - Package event 
 
-	· Refactor class name UpdateVerent to EventUpdate
+	· Refactor class name UpdateEvent to EventUpdate
 
 	· EventUpdate class
 		Add saveEventUpdateToDB()
@@ -293,7 +293,7 @@ Ver 0.0.15
 		Delete addUsers()
 		Add addArea()
 		Add updateBusinessUnitToDB()
-		Add adVerent() --empty--
+		Add addEvent() --empty--
 	
 	* - Package event
 	
@@ -368,7 +368,7 @@ Ver 0.0.18
 
 	· BusinessUnit class:
 		Update:
-		adVerent(), getBusinessUnitsFromDB()
+		addEvent(), getBusinessUnitsFromDB()
 		
 	* - Package company
 
@@ -439,7 +439,7 @@ Ver 0.0.21 BEGIN BASIC TESTING
 
 	· Rename existing packages >> main.java.*
 
-	· New test package test.java
+	· New test package main.java.test
 
 	* - Package main.java.app
 
@@ -480,13 +480,12 @@ Ver 0.0.21 BEGIN BASIC TESTING
 
 	* - Package test.java
 
-	· CompanyTest class (new):
-		Add empty methods: 
-		testUpdateCompany(),  testAddBusinessUnit()
+	· CompanyTest class (new): 
+		Add testUpdateCompany() --empty--
+		Add testAddBusinessUnit() --empty--
 		
-		Update
-		testGetCompanyFromDB() --ok--
-		testUpdateCompanyToDB() --ok--
+		Update testGetCompanyFromDB() --ok--
+		Update testUpdateCompanyToDB() --ok--
 
 	· PersistenceManagerTest class (new):
 		Preconditions:
@@ -679,9 +678,11 @@ ver 0.1.0 FIRST GUI ELEMENTS
 		Add attributes:
 			timer, frame
 		Update constructor
-		Update TimerJob class run()
 		Update loadAllData()
 		Update loadCurrentSessionData()
+
+	· TimerJob class (inner CurrentSession  class):
+		Update run()
 
 	* - Package main.java.gui (new)
 
@@ -738,7 +739,7 @@ ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 	* - Package main.java.persistence
 
 	· CurrentSession class:
-		Add userLogin() --not finished yet--
+		Add userLogin() 
 		Delete userLogin()
 		Update loadAllData()
 		Update loadCurrentSessionData()
@@ -975,9 +976,9 @@ ver 0.1.5 BUSINESSUNITUI
 		Add getSelectedIndexFromArray()
 		Update testData()
 		Update populateTextFields()
-
-	· CompanyUI class:
-		Update 
+	
+	· TimerJob class (BusinessUnitUI inner class):
+		Update run()
 
 	· OKAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
