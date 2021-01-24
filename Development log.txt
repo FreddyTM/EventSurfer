@@ -962,9 +962,9 @@ ver 0.1.5 BUSINESSUNITUI
 		Add attributes
 			session, nameField, addressField, provinceField, stateField, postalcodeField, telephoneField, mailField
 		Add attributes
-			editButton, cancelButton, oKButton, infoLabel, labelList, textFieldList, textFieldContentList
+			editButton, cancelButton, oKButton, newButton, infoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
-			editAction, cancelAction, oKAction, panelVisible, timer, tNow, comboBox
+			editAction, cancelAction, oKAction, newAction, panelVisible, timer, tNow, comboBox
 		Add testData()
 		Add populateTextFields()
 		Add getComboBoxItemsFromSession()
@@ -983,3 +983,6 @@ ver 0.1.5 BUSINESSUNITUI
 
 	· TimerJob class (new inner BusinessUnitUI class):
 		Update run()
+
+	· ComboListener class (new inner BusinessUnitUI class):
+		Update itemStateChanged()

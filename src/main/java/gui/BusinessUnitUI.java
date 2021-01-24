@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Array;
@@ -26,7 +28,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.company.BusinessUnit;
-
+import main.java.company.Company;
 //import main.java.gui.CompanyUI.CancelAction;
 //import main.java.gui.CompanyUI.EditAction;
 //import main.java.gui.CompanyUI.OKAction;
@@ -38,7 +40,7 @@ import javax.swing.JComboBox;
 public class BusinessUnitUI extends JPanel {
 	
 	private CurrentSession session;
-	Timestamp tNow = PersistenceManager.getTimestampNow();
+	private Timestamp tNow = PersistenceManager.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	private boolean panelVisible;
@@ -49,10 +51,11 @@ public class BusinessUnitUI extends JPanel {
 	private JTextField postalCodeField;
 	private JTextField telephoneField;
 	private JTextField mailField;
-	JComboBox comboBox;
+	private JComboBox comboBox;
 	private JButton editButton;
 	private JButton cancelButton;
 	private JButton oKButton;
+	private JButton newButton;
 	private JLabel infoLabel;
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
@@ -60,6 +63,7 @@ public class BusinessUnitUI extends JPanel {
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
+	private final Action newAction = new NewAction();
 
 	/**
 	 * @wbp.parser.constructor
@@ -134,7 +138,6 @@ public class BusinessUnitUI extends JPanel {
 		add(mailLabel);
 		
 		JLabel companyValueLabel = new JLabel();
-		//companyValueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		companyValueLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyValueLabel.setBounds(260, 175, 400, 25);
 		companyValueLabel.setText(session.getCompany().getNombre());
@@ -143,6 +146,7 @@ public class BusinessUnitUI extends JPanel {
 		String[] comboList = getComboBoxItemsFromSession();
 		comboBox = new JComboBox(comboList);
 		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+		comboBox.addItemListener(new ComboListener());
 		comboBox.setBounds(260, 130, 400, 22);
 		comboBox.setEditable(false);
 		comboBox.setBackground(Color.WHITE);
@@ -368,7 +372,13 @@ public class BusinessUnitUI extends JPanel {
 		}
 		add(editButton);
 		
-		//ADD NEW BUTTON TO ADD NEW BUSINESSUNITS
+		newButton = new JButton();
+		newButton.setAction(newAction);
+		newButton.setBounds(431, 630, 89, 23);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			editButton.setEnabled(false);
+		}
+		add(newButton);
 		
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
@@ -464,7 +474,7 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
-	 * del array que contiene la lista de unidades de negocio
+	 * del array pasado por parámetro
 	 * @param array array con la lista de unidades de negocio
 	 * @return índice del elemento a seleccionar por defecto
 	 */
@@ -479,7 +489,37 @@ public class BusinessUnitUI extends JPanel {
 	
 	//ADD ITEMLISTENER CLASS TO SET TO THE COMBOBOX
 	
+	/**
+	 * Listener que define el comportamiento del objeto comboBox 
+	 * Cada elemento se corresponde con las unidades de negocio de la compañía que se han cargado en la sesión.
+	 * Por el nombre seleccionado se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto
+	 * como unidad de negocio de la sessión, reemplazando al que hubiera hasta ese momento. 
+	 */
+	private class ComboListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			// TODO Auto-generated method stub
+			String item = (String) comboBox.getSelectedItem();
+			Company company = session.getCompany();
+			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
+			session.setbUnit(selectedBunit);
+			populateTextFields();
+		}
+		
+	}
+	
+	
 	//ADD NEW ADDNEWBUNIT ACTION
+	
+	private class NewAction extends AbstractAction {
+		public NewAction() {
+			putValue(NAME, "Nueva");
+			putValue(SHORT_DESCRIPTION, "Add new business unit");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
 	
 	/**
 	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
@@ -495,6 +535,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
 			//Activar visibilidad de etiquetas de longitud máxima de datos
@@ -524,6 +565,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
+			newButton.setEnabled(true);
 			comboBox.setEnabled(true);
 			infoLabel.setText("");
 			//Quitar visibilidad de etiquetas de longitud máxima de datos
@@ -663,4 +705,5 @@ public class BusinessUnitUI extends JPanel {
 		}
 		
 	}
+
 }
