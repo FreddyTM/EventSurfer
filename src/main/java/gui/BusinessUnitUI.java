@@ -150,7 +150,7 @@ public class BusinessUnitUI extends JPanel {
 		mailLabel.setBounds(50, 525, 200, 25);
 		add(mailLabel);
 		
-		JLabel companyValueLabel = new JLabel();
+		companyValueLabel = new JLabel();
 		companyValueLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyValueLabel.setBounds(260, 175, 400, 25);
 		companyValueLabel.setText(session.getCompany().getNombre());
@@ -514,8 +514,19 @@ public class BusinessUnitUI extends JPanel {
 		public void itemStateChanged(ItemEvent e) {
 			String item = (String) comboBox.getSelectedItem();
 			Company company = session.getCompany();
+			
+			//Debug
+			System.out.println(session.getCompany() == null);
+			System.out.println(session.getCompany().getNombre());
+			
 			//Recuperamos la unidad de negocio seleccionada
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
+			
+			//Debug
+			System.out.println(selectedBunit == null);
+			System.out.println(selectedBunit.getNombre());
+			System.out.println(selectedBunit.getCompany().getNombre());
+			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
 			bUnitShowing = selectedBunit;

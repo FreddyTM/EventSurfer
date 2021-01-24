@@ -973,7 +973,7 @@ ver 0.1.5 BUSINESSUNITUI
 		Add attributes
 			editAction, cancelAction, oKAction, newAction, panelVisible, timer, tNow, comboBox, comboList, okActionSelector
 		Add attributes
-			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW
+			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, companyValueLabel
 		Add testData()
 		Add populateTextFields()
 		Add getComboBoxItemsFromSession()
