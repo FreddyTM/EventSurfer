@@ -897,16 +897,16 @@ ver 0.1.4 COMPANYUI FULLY FUNCTIONAL
 		Add populateTextFields()
 
 	· OKAction class (new inner CompanyUI class):
-		Update actionPerformed()
+		Update actionPerformed() --ok--
 
 	· EditAction class (new inner CompanyUI class):
-		Update actionPerformed()
+		Update actionPerformed() --ok--
 
 	· CancelAction class (new inner CompanyUI class):
-		Update actionPerformed()
+		Update actionPerformed() --ok--
 
 	· TimerJob class (new inner CompanyUI class):
-		Update run()
+		Update run() --ok--
 
 	* - Package main.java.gui.listener (new)
 
@@ -952,7 +952,11 @@ ver 0.1.5 BUSINESSUNITUI
 	* - Package main.java.app
 
 	· EventSurfer class:
+		Update go() --clean code--
+
+	· AppWindow class:
 		Update setUpWindow() --show app version--
+		Update intialize() --clean code--
 
 	* - Package main.java.gui
 
@@ -976,13 +980,16 @@ ver 0.1.5 BUSINESSUNITUI
 		Update actionPerformed()
 
 	· EditAction class (new inner BusinessUnitUI class):
-		Update actionPerformed()
+		Update actionPerformed() --ok--
 
 	· CancelAction class (new inner BusinessUnitUI class):
+		Update actionPerformed() --ok--
+
+	· NewAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
 
 	· TimerJob class (new inner BusinessUnitUI class):
 		Update run()
 
 	· ComboListener class (new inner BusinessUnitUI class):
-		Update itemStateChanged()
+		Update itemStateChanged() --ok--

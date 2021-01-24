@@ -69,21 +69,12 @@ public class AppWindow extends JFrame {
 	    int appHeight = 700;
 		setPreferredSize(new Dimension(appWidth, appHeight));
 		setBounds(center.x - appWidth / 2, center.y - appHeight / 2, appWidth, appHeight);
-		//setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		
-		//setPreferredSize(new Dimension(1000, 700));
-		//setMinimumSize(new Dimension(1000, 700));
+
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
-		//basePanel.setBounds(300, 300, 1000, 700);
 		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		getContentPane().add(basePanel);
-		//getContentPane().setLayout(new BorderLayout());	
 
-		//getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 15));
-		//setBounds(300, 300, 1000, 700);
-		
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			  public void windowClosing(WindowEvent e) {
 				  if(session.getTimer() != null) {

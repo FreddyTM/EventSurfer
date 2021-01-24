@@ -34,6 +34,7 @@ public class CompanyUI extends JPanel {
 	Timestamp tNow = PersistenceManager.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
+	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	private JTextField nameField;
 	private JTextField addressField;
@@ -47,8 +48,12 @@ public class CompanyUI extends JPanel {
 	private JButton cancelButton;
 	private JButton oKButton;
 	private JLabel infoLabel;
+	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
+	//Lista de campos de datos asociados a las etiquetas informativas
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
+	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
+	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -369,7 +374,8 @@ public class CompanyUI extends JPanel {
 	}
 
 	/**
-	 * Comprueba la corrección de los datos introducidos en el formulario
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
+	 * dato incorrecto se resalta con el fondo del campo en amarillo
 	 * @return true si son correctos, false si no lo son
 	 */
 	public boolean testData(Company company) {

@@ -29,10 +29,6 @@ import javax.swing.UIManager;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
-//import main.java.gui.CompanyUI.CancelAction;
-//import main.java.gui.CompanyUI.EditAction;
-//import main.java.gui.CompanyUI.OKAction;
-//import main.java.gui.CompanyUI.TimerJob;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import javax.swing.JComboBox;
@@ -43,6 +39,7 @@ public class BusinessUnitUI extends JPanel {
 	private Timestamp tNow = PersistenceManager.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
+	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	private JTextField nameField;
 	private JTextField addressField;
@@ -57,8 +54,12 @@ public class BusinessUnitUI extends JPanel {
 	private JButton oKButton;
 	private JButton newButton;
 	private JLabel infoLabel;
+	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
+	//Lista de campos de datos asociados a las etiquetas informativas
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
+	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
+	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -413,7 +414,8 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Comprueba la corrección de los datos introducidos en el formulario
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
+	 * dato incorrecto se resalta con el fondo del campo en amarillo
 	 * @return true si son correctos, false si no lo son
 	 */
 	public boolean testData(BusinessUnit bUnit) {
@@ -499,12 +501,22 @@ public class BusinessUnitUI extends JPanel {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			// TODO Auto-generated method stub
 			String item = (String) comboBox.getSelectedItem();
 			Company company = session.getCompany();
+			//Recuperamos la unidad de negocio seleccionada
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
+			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
+			//Mostramos sus datos
 			populateTextFields();
+			//Vaciamos la lista de datos del caché de datos
+			textFieldContentList.clear();
+			//Añadimos los nuevos datos. Al cancelar la edición o la creación de una nueva unidad de negocio,
+			//podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
+			textFieldContentList.clear();
+			for (int i = 0; i < textFieldList.size(); i++) {
+				textFieldContentList.add(textFieldList.get(i).getText());
+			}
 		}
 		
 	}
@@ -518,6 +530,12 @@ public class BusinessUnitUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Add new business unit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			editButton.setEnabled(false);
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			newButton.setEnabled(false);
+			comboBox.setEnabled(false);
+			infoLabel.setText("");
 		}
 	}
 	
@@ -644,7 +662,9 @@ public class BusinessUnitUI extends JPanel {
 						tField.setEditable(false);
 						tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 					}
+					//Vaciamos la lista de datos del caché de datos
 					textFieldContentList.clear();
+					//Añadimos los nuevos datos
 					for (int i = 0; i < textFieldList.size(); i++) {
 						textFieldContentList.add(textFieldList.get(i).getText());
 					}
