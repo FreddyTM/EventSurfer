@@ -743,9 +743,11 @@ ver 0.1.1 - LOGIN & DEFAULTADMIN FULLY FUNCTIONAL
 		Delete userLogin()
 		Update loadAllData()
 		Update loadCurrentSessionData()
-		Update TimerJob class run()
 		Update attribute frame from JFrame class to AppWindow class
 		Delete connectToDatabase() (moved to PersistenceManager class)
+
+	· TimerJob class (inner CurrentSession  class):
+		Update run()
 
 	· PersistenceManager class:
 		Add connectToDatabase()
@@ -969,7 +971,9 @@ ver 0.1.5 BUSINESSUNITUI
 		Add attributes
 			editButton, cancelButton, oKButton, newButton, infoLabel, labelList, textFieldList, textFieldContentList
 		Add attributes
-			editAction, cancelAction, oKAction, newAction, panelVisible, timer, tNow, comboBox
+			editAction, cancelAction, oKAction, newAction, panelVisible, timer, tNow, comboBox, comboList, okActionSelector
+		Add attributes
+			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW
 		Add testData()
 		Add populateTextFields()
 		Add getComboBoxItemsFromSession()
@@ -1002,3 +1006,10 @@ ver 0.1.5 BUSINESSUNITUI
 
 	· TimerJob class (CurrentSession inner class):
 		Update run() --case business_unit--
+
+	* - Package main.java.exceptions (new)
+
+	· DatabaseError class (new):
+		Add attribute TITLE
+		Update constructor
+	

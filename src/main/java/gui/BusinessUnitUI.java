@@ -28,6 +28,7 @@ import javax.swing.UIManager;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
+import main.java.exceptions.DatabaseError;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import javax.swing.JComboBox;
@@ -62,6 +63,7 @@ public class BusinessUnitUI extends JPanel {
 	private JButton oKButton;
 	private JButton newButton;
 	private JLabel infoLabel;
+	private JLabel companyValueLabel;
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de campos de datos asociados a las etiquetas informativas
@@ -414,6 +416,7 @@ public class BusinessUnitUI extends JPanel {
 	 * Actualiza los datos de la compañía que se visualizan en pantalla
 	 */
 	public void populateTextFields() {
+		companyValueLabel.setText(session.getCompany().getNombre());
 		nameField.setText(session.getbUnit().getNombre());
 		addressField.setText(session.getbUnit().getDireccion());
 		provinceField.setText(session.getbUnit().getProvincia());
@@ -640,10 +643,21 @@ public class BusinessUnitUI extends JPanel {
 			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
 				//Debug
 				System.out.println("Acción de grabar nueva unidad de negocio");
+				
+				editButton.setEnabled(true);
+				oKButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				newButton.setEnabled(true);
+				comboBox.setEnabled(true);
+				
+				//Debug
+				
+				
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 				//Objeto que recoge los datos actualizados
 				BusinessUnit updatedBunit = new BusinessUnit();
 				updatedBunit.setId(session.getbUnit().getId());
+				updatedBunit.setCompany(session.getCompany());
 				updatedBunit.setNombre(nameField.getText());
 				updatedBunit.setDireccion(addressField.getText());
 				updatedBunit.setProvincia(provinceField.getText());
@@ -656,6 +670,7 @@ public class BusinessUnitUI extends JPanel {
 				if (testData(updatedBunit)) {
 					//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
 					if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+						session.getbUnit().setCompany(updatedBunit.getCompany());
 						session.getbUnit().setNombre(updatedBunit.getNombre());
 						session.getbUnit().setDireccion(updatedBunit.getDireccion());
 						session.getbUnit().setProvincia(updatedBunit.getProvincia());
