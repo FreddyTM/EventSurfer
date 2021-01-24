@@ -562,24 +562,22 @@ public class CompanyUI extends JPanel {
 
 		@Override
 		public void run() {
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!CompanyUI.this.isShowing()) {
 				CompanyUI.this.panelVisible = false;
 				this.cancel();
 				CompanyUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Empresa");
 			}
+			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && CompanyUI.this.isShowing()) {
 				//Do nothing
-				//No se comprueba la actualización de los datos si los estamos editando
+			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (CompanyUI.this.panelVisible == true){
-				//Se comprueba la actualización de los datos si no los estamos editando
-				System.out.println("Comprobando actualización de datos de la compañía");
 				
 				//Debug
+				System.out.println("Comprobando actualización de datos de la compañía");
 				System.out.println(session.getUpdatedTables().size());
-				
-				//Añadir if (session.getUpdatedTables().size() > 0) para no hacer comprobaciones innecesarias
-				//Añadir updatedTables.clear() en CurrentSession para vaciar el mapa tras cada comprobación de la DB
 				
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
@@ -588,6 +586,7 @@ public class CompanyUI extends JPanel {
 					System.out.println(updatedTable.getKey());
 					System.out.println(updatedTable.getValue());
 					
+					//Si en la tabla de actualizaciones aparece la clave Company.TABLE_NAME
 					if (updatedTable.getKey().equals(Company.TABLE_NAME)) {
 						//Asignamos el nuevo contenido a los textfields
 						CompanyUI.this.populateTextFields();

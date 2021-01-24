@@ -976,6 +976,9 @@ ver 0.1.5 BUSINESSUNITUI
 		Update testData()
 		Update populateTextFields()
 
+	· CompanyUI class:
+		Update 
+
 	· OKAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
 
@@ -993,3 +996,8 @@ ver 0.1.5 BUSINESSUNITUI
 
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--
+
+	* - Package main.java.persistence
+
+	· TimerJob class (CurrentSession inner class):
+		Update run() --case business_unit--

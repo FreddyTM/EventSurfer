@@ -2,13 +2,11 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +17,7 @@ import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +34,12 @@ import javax.swing.JComboBox;
 
 public class BusinessUnitUI extends JPanel {
 	
+	//Se asignan a la variable okActionSelector para determinar el comportamiento
+	//de la acción okAction
+	private static final int OK_ACTION_UNDEFINED = 0; //Por defecto
+	private static final int OK_ACTION_EDIT = 1;
+	private static final int OK_ACTION_NEW = 2;
+	
 	private CurrentSession session;
 	private Timestamp tNow = PersistenceManager.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
@@ -49,6 +54,9 @@ public class BusinessUnitUI extends JPanel {
 	private JTextField telephoneField;
 	private JTextField mailField;
 	private JComboBox comboBox;
+	//Lista de elementos que aparecen en comboBox
+	private String[] comboList;
+	private BusinessUnit bUnitShowing;
 	private JButton editButton;
 	private JButton cancelButton;
 	private JButton oKButton;
@@ -65,6 +73,8 @@ public class BusinessUnitUI extends JPanel {
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
 	private final Action newAction = new NewAction();
+	//Registra la acción a realizar por el botón aceptar
+	private int okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 
 	/**
 	 * @wbp.parser.constructor
@@ -144,7 +154,7 @@ public class BusinessUnitUI extends JPanel {
 		companyValueLabel.setText(session.getCompany().getNombre());
 		add(companyValueLabel);
 		
-		String[] comboList = getComboBoxItemsFromSession();
+		comboList = getComboBoxItemsFromSession();
 		comboBox = new JComboBox(comboList);
 		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 		comboBox.addItemListener(new ComboListener());
@@ -489,8 +499,6 @@ public class BusinessUnitUI extends JPanel {
 		return 0;
 	}
 	
-	//ADD ITEMLISTENER CLASS TO SET TO THE COMBOBOX
-	
 	/**
 	 * Listener que define el comportamiento del objeto comboBox 
 	 * Cada elemento se corresponde con las unidades de negocio de la compañía que se han cargado en la sesión.
@@ -507,6 +515,7 @@ public class BusinessUnitUI extends JPanel {
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
+			bUnitShowing = selectedBunit;
 			//Mostramos sus datos
 			populateTextFields();
 			//Vaciamos la lista de datos del caché de datos
@@ -521,21 +530,28 @@ public class BusinessUnitUI extends JPanel {
 		
 	}
 	
-	
-	//ADD NEW ADDNEWBUNIT ACTION
-	
+	/**
+	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
+	 * campos de texto y habilitamos su edición.
+	 */
 	private class NewAction extends AbstractAction {
 		public NewAction() {
 			putValue(NAME, "Nueva");
 			putValue(SHORT_DESCRIPTION, "Add new business unit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			okActionSelector = BusinessUnitUI.OK_ACTION_NEW;
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
+			//Vaciamos los campos de texto y habilitamos su edición
+			for (int i = 0; i < textFieldList.size(); i++) {
+				textFieldList.get(i).setText("");
+				textFieldList.get(i).setEnabled(true);
+			}
 		}
 	}
 	
@@ -550,6 +566,7 @@ public class BusinessUnitUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Enable data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			okActionSelector = BusinessUnitUI.OK_ACTION_EDIT;
 			editButton.setEnabled(false);
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
@@ -580,6 +597,7 @@ public class BusinessUnitUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Cancel data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 			editButton.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
@@ -617,62 +635,72 @@ public class BusinessUnitUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Execute data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Objeto que recoge los datos actualizados
-			BusinessUnit updatedBunit = new BusinessUnit();
-			updatedBunit.setId(session.getbUnit().getId());
-			updatedBunit.setNombre(nameField.getText());
-			updatedBunit.setDireccion(addressField.getText());
-			updatedBunit.setProvincia(provinceField.getText());
-			updatedBunit.setEstado(stateField.getText());
-			updatedBunit.setCpostal(postalCodeField.getText());
-			updatedBunit.setTelefono(telephoneField.getText());
-			updatedBunit.setMail(mailField.getText());
+			
+			//Selección de comportamiento
+			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
+				//Debug
+				System.out.println("Acción de grabar nueva unidad de negocio");
+			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
+				//Objeto que recoge los datos actualizados
+				BusinessUnit updatedBunit = new BusinessUnit();
+				updatedBunit.setId(session.getbUnit().getId());
+				updatedBunit.setNombre(nameField.getText());
+				updatedBunit.setDireccion(addressField.getText());
+				updatedBunit.setProvincia(provinceField.getText());
+				updatedBunit.setEstado(stateField.getText());
+				updatedBunit.setCpostal(postalCodeField.getText());
+				updatedBunit.setTelefono(telephoneField.getText());
+				updatedBunit.setMail(mailField.getText());
 
-			//Si los datos están validados
-			if (testData(updatedBunit)) {
-				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
-				if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-					session.getbUnit().setNombre(updatedBunit.getNombre());
-					session.getbUnit().setDireccion(updatedBunit.getDireccion());
-					session.getbUnit().setProvincia(updatedBunit.getProvincia());
-					session.getbUnit().setEstado(updatedBunit.getEstado());
-					session.getbUnit().setCpostal(updatedBunit.getCpostal());
-					session.getbUnit().setTelefono(updatedBunit.getTelefono());
-					session.getbUnit().setMail(updatedBunit.getMail());
+				//Si los datos están validados
+				if (testData(updatedBunit)) {
+					//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
+					if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+						session.getbUnit().setNombre(updatedBunit.getNombre());
+						session.getbUnit().setDireccion(updatedBunit.getDireccion());
+						session.getbUnit().setProvincia(updatedBunit.getProvincia());
+						session.getbUnit().setEstado(updatedBunit.getEstado());
+						session.getbUnit().setCpostal(updatedBunit.getCpostal());
+						session.getbUnit().setTelefono(updatedBunit.getTelefono());
+						session.getbUnit().setMail(updatedBunit.getMail());
 
-					//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-					tNow = PersistenceManager.getTimestampNow();
-					//Actualizamos los datos de la tabla last_modification
-					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
-					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-					//no queda registrada
-					if(!changeRegister) {
-						infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						tNow = PersistenceManager.getTimestampNow();
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+						} else {
+							infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						}
+						editButton.setEnabled(true);
+						oKButton.setEnabled(false);
+						cancelButton.setEnabled(false);
+						newButton.setEnabled(true);
+						comboBox.setEnabled(true);
+						for (JLabel label : labelList) {
+							label.setVisible(false);
+						}
+						for (JTextField tField : textFieldList) {
+							tField.setEditable(false);
+							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+						}
+						//Vaciamos la lista de datos del caché de datos
+						textFieldContentList.clear();
+						//Añadimos los nuevos datos
+						for (int i = 0; i < textFieldList.size(); i++) {
+							textFieldContentList.add(textFieldList.get(i).getText());
+						}
+					//Error de actualización de los datos en la base de datos
 					} else {
-						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 					}
-					editButton.setEnabled(true);
-					oKButton.setEnabled(false);
-					cancelButton.setEnabled(false);
-					comboBox.setEnabled(true);
-					for (JLabel label : labelList) {
-						label.setVisible(false);
-					}
-					for (JTextField tField : textFieldList) {
-						tField.setEditable(false);
-						tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-					}
-					//Vaciamos la lista de datos del caché de datos
-					textFieldContentList.clear();
-					//Añadimos los nuevos datos
-					for (int i = 0; i < textFieldList.size(); i++) {
-						textFieldContentList.add(textFieldList.get(i).getText());
-					}
-				//Error de actualización de los datos en la base de datos
-				} else {
-					infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 				}
 			}
+			//El selector de acción retorna al estado sin definir
+			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;	
 		}
 	}
 	
@@ -685,20 +713,21 @@ public class BusinessUnitUI extends JPanel {
 
 		@Override
 		public void run() {
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!BusinessUnitUI.this.isShowing()) {
 				BusinessUnitUI.this.panelVisible = false;
 				this.cancel();
 				BusinessUnitUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Unidad de negocio");
 			}
+			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && BusinessUnitUI.this.isShowing()) {
 				//Do nothing
-				//No se comprueba la actualización de los datos si los estamos editando
+			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (BusinessUnitUI.this.panelVisible == true){
-				//Se comprueba la actualización de los datos si no los estamos editando
-				System.out.println("Comprobando actualización de datos de la unidad de negocio");
-				
+
 				//Debug
+				System.out.println("Comprobando actualización de datos de la unidad de negocio");
 				System.out.println(session.getUpdatedTables().size());
 				
 				//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
@@ -708,7 +737,23 @@ public class BusinessUnitUI extends JPanel {
 					System.out.println(updatedTable.getKey());
 					System.out.println(updatedTable.getValue());
 					
+					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
 					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
+						//Localizar la unidad de negocio de la sesión que teníamos seleccionada
+						
+						//Buscamos en la lista de unidades de negocio actualizadas la que tiene
+						//el mismo id que el de la actual unidad de negocio de la sesión. Designamos dicha
+						//unidad de negocio como nueva unidad de negocio de la sesión
+						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
+							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
+							if (bUnit.getId() == bUnitShowing.getId()) {
+								session.setbUnit(bUnit);
+							}
+						}				
+						//Renovamos la lista de las unidades de negocio del comboBox
+						comboList = getComboBoxItemsFromSession();
+						comboBox.setModel(new DefaultComboBoxModel(comboList));
+						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 						//Asignamos el nuevo contenido a los textfields
 						BusinessUnitUI.this.populateTextFields();
 						//renovamos la lista de contenidos de los textfields
@@ -716,8 +761,11 @@ public class BusinessUnitUI extends JPanel {
 						for (int i = 0; i < textFieldList.size(); i++) {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
-						BusinessUnitUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
-						//updatedTable.getValue().toString());
+						//Informamos por pantalla de la actualización
+						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
+						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+						//que alguna unidad de negocio ha sido modificada o añadida
+						BusinessUnitUI.this.infoLabel.setText("DATOS DE LAS UNIDADES DE NEGOCIO ACTUALIZADOS: " +
 						session.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}

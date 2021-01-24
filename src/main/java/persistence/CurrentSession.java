@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -214,9 +215,9 @@ public class CurrentSession {
 			if (conn == null) {
 				conn = PersistenceManager.getConnection();
 			}
-			//Registramos el timestamp de la sessión y lo asignamos a una variable
-			//temporal que registrará los incrementos que puedan existir en la 
-			//base de datos
+			//Registramos el timestamp de la sessión y lo asignamos también a una
+			//variable temporal que registrará los incrementos que puedan existir 
+			//en la base de datos
 			Timestamp sessionDateTime = session.getDateTimeReference();
 			Timestamp tempDateTime = session.getDateTimeReference();;
 			String tableName = "";
@@ -271,11 +272,12 @@ public class CurrentSession {
 								System.out.println("Dentro del case company");
 								
 								//Actualizamos la compañía de la sesión
-								session.getCompany().refresh(conn);
+								company.refresh(conn);
 								
 								//Debug
 								System.out.println(session.getCompany().getNombre());
 								
+								//Añadimos la tabla a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								
 								//Debug
@@ -285,8 +287,15 @@ public class CurrentSession {
 								
 								break;
 							case "business_unit":
-								//Actualizamos la unidad de negocio de la sesión
-								session.getbUnit().refresh(conn);
+								
+								//Debug
+								System.out.println("Dentro del case company");
+								
+								//Recargamos la lista de unidades de negocio de la base de datos
+								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
+								//Asignamos la lista actualizada al objeto company de la sesión
+								company.setBusinessUnits(bUnits);
+								//Añadimos la tabla a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "user":
