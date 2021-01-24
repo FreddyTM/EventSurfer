@@ -1002,6 +1002,9 @@ ver 0.1.5 BUSINESSUNITUI
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--
 
+	· CompanyUI class:
+		Update testData()
+
 	* - Package main.java.persistence
 
 	· TimerJob class (CurrentSession inner class):

@@ -381,8 +381,8 @@ public class CompanyUI extends JPanel {
 	public boolean testData(Company company) {
 		//Comprobamos que los datos no exceden el tamaño máximo
 		Boolean error = false;
-		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO";
-		if (company.getNombre().length() > 100) {
+		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
+		if (company.getNombre().length() > 100 || company.getNombre().length() == 0) {
 			nameField.setBackground(Color.YELLOW);
 			error = true;
 		}

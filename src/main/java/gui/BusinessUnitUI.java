@@ -434,8 +434,8 @@ public class BusinessUnitUI extends JPanel {
 	public boolean testData(BusinessUnit bUnit) {
 		//Comprobamos que los datos no exceden el tamaño máximo
 		Boolean error = false;
-		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO";
-		if (bUnit.getNombre().length() > 100) {
+		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
+		if (bUnit.getNombre().length() > 100 || bUnit.getNombre().length() == 0) {
 			nameField.setBackground(Color.YELLOW);
 			error = true;
 		}
@@ -561,11 +561,22 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
-			//Vaciamos los campos de texto y habilitamos su edición
-			for (int i = 0; i < textFieldList.size(); i++) {
-				textFieldList.get(i).setText("");
-				textFieldList.get(i).setEnabled(true);
+			//Activar visibilidad de etiquetas de longitud máxima de datos
+			for (JLabel label : labelList) {
+				label.setVisible(true);
 			}
+			//Vaciamos los campos de texto y habilitamos su edición
+//			for (int i = 0; i < textFieldList.size(); i++) {
+//				textFieldList.get(i).setText("");
+//				textFieldList.get(i).setEnabled(true);
+//			}
+			for (JTextField tField : textFieldList) {
+				tField.setEditable(true);
+				tField.setText("");
+				tField.setBackground(Color.WHITE);
+			}
+			
+
 		}
 	}
 	
@@ -661,6 +672,44 @@ public class BusinessUnitUI extends JPanel {
 				newButton.setEnabled(true);
 				comboBox.setEnabled(true);
 				
+				//Creamos nuevo BusinessUnit a partir de los datos del formulario
+				BusinessUnit newBunit = new BusinessUnit();
+				newBunit.setCompany(session.getCompany());
+				newBunit.setNombre(nameField.getText());
+				newBunit.setDireccion(addressField.getText());
+				newBunit.setProvincia(provinceField.getText());
+				newBunit.setEstado(stateField.getText());
+				newBunit.setCpostal(postalCodeField.getText());
+				newBunit.setTelefono(telephoneField.getText());
+				newBunit.setMail(mailField.getText());
+				//Validamos los datos del formulario
+				if(testData(newBunit)) {
+					
+				}
+				
+				
+
+
+
+
+
+				
+				//Debug
+				System.out.println(newBunit.getCompany().getNombre());
+				
+				//Quitar visibilidad de etiquetas de longitud máxima de datos
+				for (JLabel label : labelList) {
+					label.setVisible(false);
+				}
+				//Datos no editables
+				for (JTextField tField : textFieldList) {
+					tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+					tField.setEditable(false);
+				}
+				//Recuperar valores previos a la edición de los datos
+				for (int i = 0; i < textFieldList.size(); i++) {
+					textFieldList.get(i).setText(textFieldContentList.get(i));
+				}
 				//Debug
 				
 				
