@@ -496,6 +496,11 @@ public class CompanyUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Execute data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			for (JTextField tField : textFieldList) {
+				tField.setBackground(Color.WHITE);
+			}			
 			//Objeto que recoge los datos actualizados
 			Company updatedCompany = new Company();
 			updatedCompany.setId(1);

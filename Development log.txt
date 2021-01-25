@@ -994,10 +994,7 @@ ver 0.1.5 BUSINESSUNITUI
 		Update actionPerformed() --ok--
 
 	· NewAction class (new inner BusinessUnitUI class):
-		Update actionPerformed()
-
-	· TimerJob class (new inner BusinessUnitUI class):
-		Update run()
+		Update actionPerformed() --ok--
 
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--

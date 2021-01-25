@@ -7,6 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -290,24 +291,7 @@ public class BusinessUnitUI extends JPanel {
 		textFieldList.add(mailField);
 		textFieldContentList.add(session.getbUnit().getMail());
 		add(mailField);
-		
-//		webField = new JTextField();
-//		webField.setColumns(10);
-//		webField.setBounds(260, 475, 400, 25);
-//		webField.setText(session.getCompany().getWeb());
-//		webField.setEditable(false);
-//		webField.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyPressed(KeyEvent e) {
-//				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//					oKButton.requestFocusInWindow();
-//				}
-//			}
-//		});
-//		textFieldList.add(webField);
-//		textFieldContentList.add(session.getCompany().getWeb());
-//		add(webField);
-		
+				
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		maxCharsLabel.setBounds(670, 225, 150, 25);
@@ -357,13 +341,6 @@ public class BusinessUnitUI extends JPanel {
 		labelList.add(maxCharsLabel7);
 		add(maxCharsLabel7);
 		
-//		JLabel maxCharsLabel8 = new JLabel("Max: 200 caracteres");
-//		maxCharsLabel8.setFont(new Font("Tahoma", Font.PLAIN, 15));
-//		maxCharsLabel8.setBounds(670, 475, 150, 25);
-//		maxCharsLabel8.setVisible(false);
-//		labelList.add(maxCharsLabel8);
-//		add(maxCharsLabel8);
-		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoLabel.setBounds(50, 580, 770, 25);
@@ -396,8 +373,7 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
-		
-		
+				
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
 		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
@@ -413,7 +389,6 @@ public class BusinessUnitUI extends JPanel {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 1000, 30000);
-
 	}
 	
 	/**
@@ -533,6 +508,7 @@ public class BusinessUnitUI extends JPanel {
 			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
+			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
 			bUnitShowing = selectedBunit;
 			//Mostramos sus datos
 			populateTextFields();
@@ -550,7 +526,8 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
-	 * campos de texto y habilitamos su edición.
+	 * campos de texto y habilitamos su edición para añadir la información de una nueva unidad de negocio.
+	 * Habilitamos el botón de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
 	 */
 	private class NewAction extends AbstractAction {
 		public NewAction() {
@@ -559,9 +536,10 @@ public class BusinessUnitUI extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = BusinessUnitUI.OK_ACTION_NEW;
-			editButton.setEnabled(false);
+			//Cambio de estado de los botones y el combobox
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			editButton.setEnabled(false);
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
@@ -570,17 +548,13 @@ public class BusinessUnitUI extends JPanel {
 				label.setVisible(true);
 			}
 			//Vaciamos los campos de texto y habilitamos su edición
-//			for (int i = 0; i < textFieldList.size(); i++) {
-//				textFieldList.get(i).setText("");
-//				textFieldList.get(i).setEnabled(true);
-//			}
 			for (JTextField tField : textFieldList) {
-				tField.setEditable(true);
-				tField.setText("");
-				tField.setBackground(Color.WHITE);
+				if (tField != companyField) {
+					tField.setEditable(true);
+					tField.setText("");
+					tField.setBackground(Color.WHITE);
+				}
 			}
-			
-
 		}
 	}
 	
@@ -596,9 +570,10 @@ public class BusinessUnitUI extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = BusinessUnitUI.OK_ACTION_EDIT;
-			editButton.setEnabled(false);
+			//Cambio de estado de los botones y el combobox
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
+			editButton.setEnabled(false);
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
@@ -629,11 +604,12 @@ public class BusinessUnitUI extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
+			//Cambio de estado de los botones y el combobox
 			editButton.setEnabled(true);
-			oKButton.setEnabled(false);
-			cancelButton.setEnabled(false);
 			newButton.setEnabled(true);
 			comboBox.setEnabled(true);
+			oKButton.setEnabled(false);
+			cancelButton.setEnabled(false);
 			infoLabel.setText("");
 			//Quitar visibilidad de etiquetas de longitud máxima de datos
 			for (JLabel label : labelList) {
@@ -666,19 +642,21 @@ public class BusinessUnitUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Execute data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			for (JTextField tField : textFieldList) {
+				if (tField != companyField) {
+					tField.setBackground(Color.WHITE);
+				}
+			}
 			
 			//Selección de comportamiento
+			
 			//Aceptamos la creación de una nueva unidad de negocio
 			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
 				//Debug
 				System.out.println("Acción de grabar nueva unidad de negocio");
-				
-				editButton.setEnabled(true);
-				oKButton.setEnabled(false);
-				cancelButton.setEnabled(false);
-				newButton.setEnabled(true);
-				comboBox.setEnabled(true);
-				
+
 				//Creamos nuevo BusinessUnit a partir de los datos del formulario
 				BusinessUnit newBunit = new BusinessUnit();
 				newBunit.setCompany(session.getCompany());
@@ -691,31 +669,47 @@ public class BusinessUnitUI extends JPanel {
 				newBunit.setMail(mailField.getText());
 				//Validamos los datos del formulario
 				if(testData(newBunit)) {
-					
-				}
-				
-				
-
-
-
-
-
-				
-				//Debug
-				System.out.println(newBunit.getCompany().getNombre());
-				
-				//Quitar visibilidad de etiquetas de longitud máxima de datos
-				for (JLabel label : labelList) {
-					label.setVisible(false);
-				}
-				//Datos no editables
-				for (JTextField tField : textFieldList) {
-					tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-					tField.setEditable(false);
-				}
-				//Recuperar valores previos a la edición de los datos
-				for (int i = 0; i < textFieldList.size(); i++) {
-					textFieldList.get(i).setText(textFieldContentList.get(i));
+					//Intentamos grabar la nueva unidad de negocio en la base de datos, retornando un objeto con idénticos
+					//datos que incluye también el id que le ha asignado dicha base de datos
+					BusinessUnit storedBunit = new BusinessUnit().addNewBusinessUnit(session.getConnection(), newBunit);
+					//Si el objeto retornado no es null, la grabación se ha realizado correctamente
+					if (storedBunit != null) {
+						//Añadimos la unidad de negocio a la lista de unidades de negocio de la compañía
+						session.getCompany().getBusinessUnits().add(storedBunit);
+						//Asignamos la nueva unidad de negocio como unidad de negocio de la sesión
+						session.setbUnit(storedBunit);
+						//Registramos que la nueva unidad de negocio es la que se está mostrando
+						bUnitShowing = storedBunit;
+						//Quitar visibilidad de etiquetas de longitud máxima de datos
+						for (JLabel label : labelList) {
+							label.setVisible(false);
+						}
+						//Datos no editables
+						for (JTextField tField : textFieldList) {
+							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+							tField.setEditable(false);
+						}
+						//Vaciamos la lista de datos del caché de datos
+						textFieldContentList.clear();
+						//Añadimos los nuevos datos
+						for (int i = 0; i < textFieldList.size(); i++) {
+							textFieldContentList.add(textFieldList.get(i).getText());
+						}
+						//Renovamos la lista de las unidades de negocio del comboBox
+						comboList = getComboBoxItemsFromSession();
+						//comboBox.removeAllItems();
+						comboBox.setModel(new DefaultComboBoxModel(comboList));
+						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+						//Cambio de estado de los botones y el combobox
+						editButton.setEnabled(true);
+						newButton.setEnabled(true);
+						comboBox.setEnabled(true);
+						oKButton.setEnabled(false);
+						cancelButton.setEnabled(false);
+						
+						//El selector de acción retorna al estado sin definir
+						okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
+					}
 				}
 				
 			//Guardamos los cambios de la unidad de negocio editada	
@@ -760,17 +754,15 @@ public class BusinessUnitUI extends JPanel {
 						} else {
 							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 						}
-						editButton.setEnabled(true);
-						oKButton.setEnabled(false);
-						cancelButton.setEnabled(false);
-						newButton.setEnabled(true);
-						comboBox.setEnabled(true);
+						
+						//Quitar visibilidad de etiquetas de longitud máxima de datos
 						for (JLabel label : labelList) {
 							label.setVisible(false);
 						}
+						//Datos no editables
 						for (JTextField tField : textFieldList) {
-							tField.setEditable(false);
 							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+							tField.setEditable(false);
 						}
 						//Vaciamos la lista de datos del caché de datos
 						textFieldContentList.clear();
@@ -778,14 +770,22 @@ public class BusinessUnitUI extends JPanel {
 						for (int i = 0; i < textFieldList.size(); i++) {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
+						//Cambio de estado de los botones y el combobox
+						editButton.setEnabled(true);
+						oKButton.setEnabled(false);
+						cancelButton.setEnabled(false);
+						newButton.setEnabled(true);
+						comboBox.setEnabled(true);
+						
+						//El selector de acción retorna al estado sin definir
+						okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;	
+						
 					//Error de actualización de los datos en la base de datos
 					} else {
 						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 					}
 				}
 			}
-			//El selector de acción retorna al estado sin definir
-			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;	
 		}
 	}
 	
