@@ -360,7 +360,7 @@ public class CompanyUI extends JPanel {
 	}
 	
 	/**
-	 * Actualiza los datos de la compañía que se visualizan en pantalla
+	 * Refresca los datos de la compañía de la sesión para que se visualicen en pantalla
 	 */
 	public void populateTextFields() {
 		nameField.setText(session.getCompany().getNombre());

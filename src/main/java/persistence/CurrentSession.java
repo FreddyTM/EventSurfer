@@ -108,6 +108,9 @@ public class CurrentSession {
 				this.bUnit = bUnit;
 			}
 		}
+		//Para localizar y asignar la BusinessUnit de la sesión, también debería funcionar
+		// this.bunit = new BusinessUnit().getBusinessUnitById (company, bUnitId);
+		
 		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
 		for (BusinessUnit bUnit: company.getBusinessUnits()) {
 			List<User> userList = new User().getUsersFromDB(conn, bUnit);

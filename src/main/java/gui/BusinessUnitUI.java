@@ -47,6 +47,7 @@ public class BusinessUnitUI extends JPanel {
 	private Timer timer;
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
+	private JTextField companyField;
 	private JTextField nameField;
 	private JTextField addressField;
 	private JTextField provinceField;
@@ -63,7 +64,6 @@ public class BusinessUnitUI extends JPanel {
 	private JButton oKButton;
 	private JButton newButton;
 	private JLabel infoLabel;
-	private JLabel companyValueLabel;
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de campos de datos asociados a las etiquetas informativas
@@ -150,11 +150,15 @@ public class BusinessUnitUI extends JPanel {
 		mailLabel.setBounds(50, 525, 200, 25);
 		add(mailLabel);
 		
-		companyValueLabel = new JLabel();
-		companyValueLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		companyValueLabel.setBounds(260, 175, 400, 25);
-		companyValueLabel.setText(session.getCompany().getNombre());
-		add(companyValueLabel);
+		companyField = new JTextField();
+		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+		companyField.setBounds(260, 175, 400, 25);
+		companyField.setText(session.getbUnit().getCompany().getNombre());
+		companyField.setEditable(false);
+		textFieldList.add(companyField);
+		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
+		add(companyField);
 		
 		comboList = getComboBoxItemsFromSession();
 		comboBox = new JComboBox(comboList);
@@ -413,10 +417,10 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Actualiza los datos de la compañía que se visualizan en pantalla
+	 * Refresca los datos de la unidad de negocio de la sesión para que se visualicen en pantalla
 	 */
 	public void populateTextFields() {
-		companyValueLabel.setText(session.getCompany().getNombre());
+		companyField.setText(session.getCompany().getNombre());
 		nameField.setText(session.getbUnit().getNombre());
 		addressField.setText(session.getbUnit().getDireccion());
 		provinceField.setText(session.getbUnit().getProvincia());
@@ -604,8 +608,10 @@ public class BusinessUnitUI extends JPanel {
 			}
 			//Datos editables
 			for (JTextField tField : textFieldList) {
-				tField.setEditable(true);
-				tField.setBackground(Color.WHITE);
+				if (tField != companyField) {
+					tField.setEditable(true);
+					tField.setBackground(Color.WHITE);
+				}
 			}
 		}
 	}
@@ -662,6 +668,7 @@ public class BusinessUnitUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			//Selección de comportamiento
+			//Aceptamos la creación de una nueva unidad de negocio
 			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
 				//Debug
 				System.out.println("Acción de grabar nueva unidad de negocio");
@@ -710,10 +717,13 @@ public class BusinessUnitUI extends JPanel {
 				for (int i = 0; i < textFieldList.size(); i++) {
 					textFieldList.get(i).setText(textFieldContentList.get(i));
 				}
-				//Debug
 				
-				
+			//Guardamos los cambios de la unidad de negocio editada	
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
+				
+				//Debug
+				System.out.println("Guardando los cambios de la unidad de negocio " + nameField.getText());
+				
 				//Objeto que recoge los datos actualizados
 				BusinessUnit updatedBunit = new BusinessUnit();
 				updatedBunit.setId(session.getbUnit().getId());
@@ -748,7 +758,7 @@ public class BusinessUnitUI extends JPanel {
 						if(!changeRegister) {
 							infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
 						} else {
-							infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 						}
 						editButton.setEnabled(true);
 						oKButton.setEnabled(false);
