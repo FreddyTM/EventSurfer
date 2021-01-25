@@ -482,10 +482,10 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que define el comportamiento del objeto comboBox 
-	 * Cada elemento se corresponde con las unidades de negocio de la compañía que se han cargado en la sesión.
-	 * Por el nombre seleccionado se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto
-	 * como unidad de negocio de la sessión, reemplazando al que hubiera hasta ese momento. 
+	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
+	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
+	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
+	 * de la sessión, reemplazando al que hubiera hasta ese momento. 
 	 */
 	private class ComboListener implements ItemListener {
 
@@ -709,7 +709,6 @@ public class BusinessUnitUI extends JPanel {
 						}
 						//Renovamos la lista de las unidades de negocio del comboBox
 						comboList = getComboBoxItemsFromSession();
-						//comboBox.removeAllItems();
 						comboBox.setModel(new DefaultComboBoxModel(comboList));
 						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 						//Cambio de estado de los botones y el combobox

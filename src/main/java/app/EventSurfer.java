@@ -75,9 +75,5 @@ public class EventSurfer {
 			//Añadimos el panel de login a la ventana
 			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
 		}
-		//Debug
-		System.out.println("So far so good");
-
 	}
-	
 }
