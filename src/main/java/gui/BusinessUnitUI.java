@@ -674,6 +674,18 @@ public class BusinessUnitUI extends JPanel {
 					BusinessUnit storedBunit = new BusinessUnit().addNewBusinessUnit(session.getConnection(), newBunit);
 					//Si el objeto retornado no es null, la grabación se ha realizado correctamente
 					if (storedBunit != null) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						tNow = PersistenceManager.getTimestampNow();
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+						} else {
+							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						}
+						
 						//Añadimos la unidad de negocio a la lista de unidades de negocio de la compañía
 						session.getCompany().getBusinessUnits().add(storedBunit);
 						//Asignamos la nueva unidad de negocio como unidad de negocio de la sesión
