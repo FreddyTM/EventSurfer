@@ -950,7 +950,7 @@ ver 0.1.4 COMPANYUI FULLY FUNCTIONAL
 		Delete attributes
 			session, frame
 
-ver 0.1.5 BUSINESSUNITUI
+ver 0.1.5 BUSINESSUNITUI FULLY FUNCTIONAL
 
 	* - Package main.java.app
 
@@ -1012,4 +1012,10 @@ ver 0.1.5 BUSINESSUNITUI
 	· DatabaseError class (new):
 		Add attribute TITLE
 		Update constructor
-	
+
+ver 0.1.6 USERUI
+
+	* - Package main.java.gui
+
+	· UserUI class (new): --empty--
+
