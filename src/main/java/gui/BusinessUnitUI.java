@@ -94,7 +94,7 @@ public class BusinessUnitUI extends JPanel {
 		bUnitTxt.setBackground(UIManager.getColor(this.getBackground()));
 		bUnitTxt.setEditable(false);
 		bUnitTxt.setFocusable(false);
-		bUnitTxt.setBounds(50, 50, 380, 30);
+		bUnitTxt.setBounds(50, 50, 410, 30);
 		add(bUnitTxt);
 		
 		JLabel selectLabel = new JLabel("Unidades de negocio");
