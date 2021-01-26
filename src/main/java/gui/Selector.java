@@ -29,6 +29,7 @@ public class Selector extends JPanel {
 	private final Action logOutAction = new LogOutAction();
 	private final Action CompanyAction = new CompanyAction();
 	private final Action bUnitAction = new BunitAction();
+	private final Action userAction = new UserAction();
 	private JButton eventButton;
 	private JButton eventTypeButton;
 	private JButton areaButton;
@@ -36,6 +37,7 @@ public class Selector extends JPanel {
 	private JButton bUnitButton;
 	private JButton companyButton;
 	private JButton logOutButton;
+
 
 	/**
 	 * @wbp.parser.constructor
@@ -72,6 +74,7 @@ public class Selector extends JPanel {
 		add(areaButton);
 		
 		userButton = new JButton();
+		userButton.setAction(userAction);
 		userButton.setMargin(new Insets(2,2,2,2));
 		userButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		userButton.setText("USUARIOS");
@@ -164,13 +167,7 @@ public class Selector extends JPanel {
 			//Reseteamos la pantalla de la aplicación para cargar de nuevo el panel de login
 			frame.initialize();
 			Login loginPanel = new Login(frame.getConn(), frame.getSession(), frame);
-//			frame.getBasePanel().add(loginPanel, BorderLayout.CENTER);
-			
-//			frame.setCenterPanel(loginPanel);
-//			frame.getBasePanel().add(frame.getCenterPanel(), BorderLayout.CENTER);
-//			frame.revalidate();
-//			frame.repaint();
-			
+			//Mostramos el panel
 			showPanel(frame, loginPanel);
 		}
 	}
@@ -184,23 +181,11 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show Company screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-//			BorderLayout layout = (BorderLayout) frame.getBasePanel().getLayout();
-//			frame.getBasePanel().remove(layout.getLayoutComponent(BorderLayout.CENTER));
-			
-			//Quitamos visibilidad del panel central y lo quitamos del panel base
-//			frame.getCenterPanel().setVisible(false);
-//			frame.getBasePanel().remove(frame.getCenterPanel());
+			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			
-			
+			//Creamos panel de empresa			
 			CompanyUI companyUI = new CompanyUI(session);
-//			frame.getBasePanel().add(companyUI, BorderLayout.CENTER);
-			
-//			frame.setCenterPanel(companyUI);
-//			frame.getBasePanel().add(frame.getCenterPanel(), BorderLayout.CENTER);
-//			frame.revalidate();
-//			frame.repaint();
-			
+			//Mostramos el panel
 			showPanel(frame, companyUI);			
 		}
 	}
@@ -210,9 +195,26 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show BusinessUnit screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de unidad de negocio	
 			BusinessUnitUI bUnitUI = new BusinessUnitUI(session);
+			//Mostramos el panel
 			showPanel(frame, bUnitUI);
+		}
+	}
+	private class UserAction extends AbstractAction {
+		public UserAction() {
+			putValue(NAME, "UserAction");
+			putValue(SHORT_DESCRIPTION, "Show user screen");
+		}
+		public void actionPerformed(ActionEvent e) {
+			//Vaciamos el panel base y le quitamos visibilidad
+			hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de usuario
+			UserUI userUI = new UserUI(session);
+			//Mostramos el panel
+			showPanel(frame, userUI);
 		}
 	}
 }

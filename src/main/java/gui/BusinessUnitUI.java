@@ -90,7 +90,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		JTextPane bUnitTxt = new JTextPane();
 		bUnitTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
-		bUnitTxt.setText("DATOS DE LA UNIDAD DE NEGOCIO");
+		bUnitTxt.setText("DATOS DE LAS UNIDADES DE NEGOCIO");
 		bUnitTxt.setBackground(UIManager.getColor(this.getBackground()));
 		bUnitTxt.setEditable(false);
 		bUnitTxt.setFocusable(false);

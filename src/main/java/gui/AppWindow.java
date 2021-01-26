@@ -90,7 +90,7 @@ public class AppWindow extends JFrame {
 		basePanel.removeAll();
 
 		centerPanel = new JPanel();
-		JLabel welcome = new JLabel("EVENT SURFER 0.1.5");
+		JLabel welcome = new JLabel("EVENT SURFER 0.1.6");
 		welcome.setFont(new Font("Tahoma", Font.BOLD, 50));
 		JLabel emptyLabel = new JLabel();
 		emptyLabel.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 800));

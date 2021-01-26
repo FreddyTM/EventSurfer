@@ -957,11 +957,17 @@ ver 0.1.5 BUSINESSUNITUI FULLY FUNCTIONAL
 	· EventSurfer class:
 		Update go() --clean code--
 
+	* - Package main.java.gui
+
 	· AppWindow class:
 		Update setUpWindow() --show app version--
 		Update intialize() --clean code--
 
-	* - Package main.java.gui
+	· Selector class:
+		Add attribute bUnitAction
+
+	· UserAction class (new inner Selector class):
+		Update actionPerformed()
 
 	· BusinessUnitUI class (new):
 		Add constructor
@@ -1017,5 +1023,14 @@ ver 0.1.6 USERUI
 
 	* - Package main.java.gui
 
-	· UserUI class (new): --empty--
+	· AppWindow class:
+		Update setUpWindow() --ver 0.1.6--
+
+	· Selector class:
+		Add attribute userAction
+
+	· UserUI class (new):
+		Add Attributes
+			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible
+		Update constructor
 
