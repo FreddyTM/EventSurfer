@@ -97,17 +97,17 @@ public class BusinessUnitUI extends JPanel {
 		bUnitTxt.setBounds(50, 50, 410, 30);
 		add(bUnitTxt);
 		
-		JLabel selectLabel = new JLabel("Unidades de negocio");
-		selectLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		selectLabel.setBounds(50, 125, 200, 25);
-		add(selectLabel);
-		
 		JLabel companyLabel = new JLabel("Empresa");
 		companyLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		companyLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		companyLabel.setBounds(50, 175, 200, 25);
+		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
+		
+		JLabel selectLabel = new JLabel("Unidades de negocio");
+		selectLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		selectLabel.setBounds(50, 175, 200, 25);
+		add(selectLabel);
 		
 		JLabel nameLabel = new JLabel("Nombre");
 		nameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -154,7 +154,7 @@ public class BusinessUnitUI extends JPanel {
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-		companyField.setBounds(260, 175, 400, 25);
+		companyField.setBounds(260, 125, 400, 25);
 		companyField.setText(session.getbUnit().getCompany().getNombre());
 		companyField.setEditable(false);
 		textFieldList.add(companyField);
@@ -165,7 +165,7 @@ public class BusinessUnitUI extends JPanel {
 		comboBox = new JComboBox(comboList);
 		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 		comboBox.addItemListener(new ComboListener());
-		comboBox.setBounds(260, 130, 400, 22);
+		comboBox.setBounds(260, 175, 400, 25);
 		comboBox.setEditable(false);
 		comboBox.setBackground(Color.WHITE);
 		add(comboBox);

@@ -1032,5 +1032,6 @@ ver 0.1.6 USERUI
 	· UserUI class (new):
 		Add Attributes
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible
+			bUnitComboList, userComboList, userTypeComboList
 		Update constructor
 
