@@ -842,7 +842,8 @@ public class BusinessUnitUI extends JPanel {
 						//unidad de negocio como nueva unidad de negocio de la sesión
 						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
 							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
-							if (bUnit.getId() == bUnitShowing.getId()) { //ERROR NULL POINTER EXCEPTION
+//							if (bUnit.getId() == bUnitShowing.getId()) { //ERROR NULL POINTER EXCEPTION
+							if (bUnit.getId() == session.getbUnit().getId()) { 
 								session.setbUnit(bUnit);
 								bUnitShowing = session.getbUnit();
 							}
