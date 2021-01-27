@@ -1021,6 +1021,16 @@ ver 0.1.5 BUSINESSUNITUI FULLY FUNCTIONAL
 
 ver 0.1.6 USERUI
 
+	* - Package main.java.company
+
+	· BusinessUnit class:
+		Add attribute activo
+		Update constructor
+		Update saveBUnitToDB()
+		Update updateBusinessUnitToDB()
+		Update getBusinessUnitsFromDB()
+		Update refresh()
+
 	* - Package main.java.gui
 
 	· AppWindow class:

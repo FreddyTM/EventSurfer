@@ -23,12 +23,13 @@ public class BusinessUnit {
 	private String cpostal;
 	private String telefono;
 	private String mail;
+	private Boolean activo;
 	private List<User> users = new ArrayList<User>();
 	private List<Area> areas = new ArrayList<Area>();
 	private List<Event> events = new ArrayList<Event>();
 	
 	public BusinessUnit(int id, Company company, String nombre, String direccion,
-			String provincia, String estado, String cpostal, String telefono, String mail) {			
+			String provincia, String estado, String cpostal, String telefono, String mail, boolean activo) {			
 		//this.connection = connection;
 		this.id = id;
 		this.company = company;
@@ -39,6 +40,7 @@ public class BusinessUnit {
 		this.cpostal = cpostal;
 		this.telefono = telefono;
 		this.mail = mail;
+		this.activo = activo;
 	}
 	
 	public BusinessUnit() {
@@ -54,8 +56,8 @@ public class BusinessUnit {
 	public boolean saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
 		PreparedStatement pstm = null;
 		String sql = "INSERT INTO business_unit (company_id, nombre, direccion, provincia, "
-				+ "estado, cpostal, telefono, mail) "
-				+ "VALUES (?, ?, ?, ? ,? ,? ,? ,?);";
+				+ "estado, cpostal, telefono, mail, activo) "
+				+ "VALUES (?, ?, ?, ? ,? ,? ,? ,?, ?);";
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, bUnit.getCompany().getId());
@@ -66,6 +68,7 @@ public class BusinessUnit {
 			pstm.setString(6, bUnit.getCpostal());
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
+			pstm.setBoolean(9, true);
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -111,7 +114,8 @@ public class BusinessUnit {
 				+ "estado = ?, "
 				+ "cpostal = ?, "
 				+ "telefono = ?, "
-				+ "mail = ? "
+				+ "mail = ?, "
+				+ "activo = ? "
 				+ "WHERE id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
@@ -123,7 +127,8 @@ public class BusinessUnit {
 			pstm.setString(6, bUnit.getCpostal());
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
-			pstm.setInt(9, bUnit.getId());
+			pstm.setBoolean(9, bUnit.getActivo());
+			pstm.setInt(10, bUnit.getId());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -165,7 +170,7 @@ public class BusinessUnit {
 		PreparedStatement pstm = null;
 		ResultSet results = null;
 		String sql = "SELECT id, nombre, direccion, provincia, estado, "
-				+ "cpostal, telefono, mail "
+				+ "cpostal, telefono, mail, activo "
 				+ "FROM business_unit "
 				+ "WHERE company_id = ?;";
 		try {
@@ -183,6 +188,7 @@ public class BusinessUnit {
 				bUnit.setCpostal(results.getString(6));
 				bUnit.setTelefono(results.getString(7));
 				bUnit.setMail(results.getString(8));
+				bUnit.setActivo(results.getBoolean(9));
 				bUnitsList.add(bUnit);
 			}
 		} catch (SQLException e) {
@@ -205,7 +211,7 @@ public class BusinessUnit {
 		PreparedStatement pstm = null;
 		ResultSet results = null;
 		String sql = "SELECT nombre, direccion, provincia, estado, "
-				+ "cpostal, telefono, mail "
+				+ "cpostal, telefono, mail, activo "
 				+ "FROM business_unit "
 				+ "WHERE id = ?;";
 		try {
@@ -220,6 +226,7 @@ public class BusinessUnit {
 				this.cpostal = results.getString(5);
 				this.telefono = results.getString(6);
 				this.mail = results.getString(7);
+				this.activo = results.getBoolean(8);
 			}
 			return true;
 		} catch (SQLException e) {
@@ -301,13 +308,6 @@ public class BusinessUnit {
 	}
 
 	
-	//METODO DE PRUEBA. SE PUEDE BORRAR
-	public void pruebaEnviaObjeto () {
-		User user = new User();
-		user.prueba(this);
-	}
-
-	
 	public int getId() {
 		return id;
 	}
@@ -385,6 +385,14 @@ public class BusinessUnit {
 		this.mail = mail;
 	}
 
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
 
 	public List<User> getUsers() {
 		return users;

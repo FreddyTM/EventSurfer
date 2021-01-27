@@ -33,6 +33,7 @@ import main.java.exceptions.DatabaseError;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
 public class BusinessUnitUI extends JPanel {
 	
@@ -56,6 +57,7 @@ public class BusinessUnitUI extends JPanel {
 	private JTextField postalCodeField;
 	private JTextField telephoneField;
 	private JTextField mailField;
+	private JCheckBox activeCheckBox;
 	private JComboBox comboBox;
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
@@ -291,6 +293,11 @@ public class BusinessUnitUI extends JPanel {
 		textFieldList.add(mailField);
 		textFieldContentList.add(session.getbUnit().getMail());
 		add(mailField);
+		
+		activeCheckBox = new JCheckBox(" Activa");
+		activeCheckBox.setBounds(260, 575, 100, 25);
+		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		add(activeCheckBox);
 				
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -343,24 +350,24 @@ public class BusinessUnitUI extends JPanel {
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 580, 770, 25);
+		infoLabel.setBounds(50, 625, 770, 25);
 		add(infoLabel);
 		
 		oKButton = new JButton();
 		oKButton.setAction(oKAction);
-		oKButton.setBounds(731, 630, 89, 23);
+		oKButton.setBounds(731, 675, 89, 23);
 		oKButton.setEnabled(false);
 		add(oKButton);
 		
 		cancelButton = new JButton();
 		cancelButton.setAction(cancelAction);
-		cancelButton.setBounds(632, 630, 89, 23);
+		cancelButton.setBounds(632, 675, 89, 23);
 		cancelButton.setEnabled(false);
 		add(cancelButton);
 		
 		editButton = new JButton();
 		editButton.setAction(editAction);
-		editButton.setBounds(531, 630, 89, 23);
+		editButton.setBounds(531, 675, 89, 23);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			editButton.setEnabled(false);
 		}
@@ -368,11 +375,12 @@ public class BusinessUnitUI extends JPanel {
 		
 		newButton = new JButton();
 		newButton.setAction(newAction);
-		newButton.setBounds(431, 630, 89, 23);
+		newButton.setBounds(431, 675, 89, 23);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
+
 				
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -871,5 +879,4 @@ public class BusinessUnitUI extends JPanel {
 		}
 		
 	}
-
 }
