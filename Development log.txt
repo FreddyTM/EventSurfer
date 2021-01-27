@@ -1033,6 +1033,10 @@ ver 0.1.6 USERUI
 
 	* - Package main.java.gui
 
+	· BusinessUnitUI
+		Add attribute activeCheckBox
+		Update constructor
+
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.6--
 
