@@ -3,9 +3,12 @@ package main.java.gui;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
@@ -28,12 +31,21 @@ public class UserUI extends JPanel {
 	private Timer timer;
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
+	private JTextField companyField;
 	
 	
 	//Lista de elementos que aparecen en los comboBox
 	private String[] bUnitComboList;
 	private String[] userComboList;
 	private String[] userTypeComboList;
+	
+	//Lista de etiquetas informativas de longitud máxima de datos
+	private List<JLabel> labelList = new ArrayList<JLabel>();
+	//Lista de campos de datos asociados a las etiquetas informativas
+	private List<JTextField> textFieldList = new ArrayList<JTextField>();
+	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
+	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	private List<String> textFieldContentList = new ArrayList<String>();
 
 	/**
 	 * @wbp.parser.constructor
@@ -113,6 +125,16 @@ public class UserUI extends JPanel {
 		add(confirmPassLabel);
 		
 
+		companyField = new JTextField();
+		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+		companyField.setBounds(260, 125, 400, 25);
+		companyField.setText(session.getbUnit().getCompany().getNombre());
+		companyField.setEditable(false);
+		textFieldList.add(companyField);
+		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
+		add(companyField);
+		
 	}
 
 	public UserUI(LayoutManager layout) {
