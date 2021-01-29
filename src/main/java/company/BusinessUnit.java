@@ -23,7 +23,7 @@ public class BusinessUnit {
 	private String cpostal;
 	private String telefono;
 	private String mail;
-	private Boolean activo;
+	private boolean activo;
 	private List<User> users = new ArrayList<User>();
 	private List<Area> areas = new ArrayList<Area>();
 	private List<Event> events = new ArrayList<Event>();
@@ -68,7 +68,7 @@ public class BusinessUnit {
 			pstm.setString(6, bUnit.getCpostal());
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
-			pstm.setBoolean(9, true);
+			pstm.setBoolean(9, bUnit.getActivo());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {

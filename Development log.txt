@@ -1049,3 +1049,9 @@ ver 0.1.6 USERUI
 			bUnitComboList, userComboList, userTypeComboList
 		Update constructor
 
+	* - Package main.java.test
+
+	· BusinessUnitTest class:
+		Update testSaveBUnitToDB() --not tested yet--
+		Update testAddNewBusinessUnit() --not tested yet--
+		Update testUpdateBusinessUnitToDB() --not tested yet--

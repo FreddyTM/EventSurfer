@@ -58,6 +58,7 @@ class BusinessUnitTest {
 		bUnit.setCpostal("08999");
 		bUnit.setTelefono("999887766");
 		bUnit.setMail("tienda1@empactual.com");
+		bUnit.setActivo(true);
 		assertTrue(new BusinessUnit().saveBUnitToDB(conn, bUnit));
 		bUnit.setId(PersistenceManager.getLastElementIdFromDB(conn, BusinessUnit.TABLE_NAME));
 		company.getBusinessUnits().add(bUnit);
@@ -75,6 +76,7 @@ class BusinessUnitTest {
 		bUnit.setCpostal("17999");
 		bUnit.setTelefono("888776655");
 		bUnit.setMail("tienda2@empactual.com");
+		bUnit.setActivo(true);
 		assertNotNull(new BusinessUnit().addNewBusinessUnit(conn, bUnit));
 		assertNotEquals(0, bUnit.getId());
 		assertEquals(3, bUnit.getId());
@@ -95,6 +97,7 @@ class BusinessUnitTest {
 		newBunit.setCpostal("43999");
 		newBunit.setTelefono("777665544");
 		newBunit.setMail("nuevatienda1@empactual.com");
+		newBunit.setActivo(true);
 		assertTrue(new BusinessUnit().updateBusinessUnitToDB(conn, newBunit));
 		oldBunit = newBunit;
 	}
