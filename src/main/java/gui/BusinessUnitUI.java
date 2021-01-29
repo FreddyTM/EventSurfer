@@ -179,6 +179,7 @@ public class BusinessUnitUI extends JPanel {
 		activeFilterCheckBox = new JCheckBox(" solo activas");
 		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeFilterCheckBox.setBounds(666, 175, 154, 25);
+		activeFilterCheckBox.setSelected(true);
 		add(activeFilterCheckBox);
 		
 		nameField = new JTextField();
