@@ -59,6 +59,7 @@ public class BusinessUnitUI extends JPanel {
 	private JTextField mailField;
 	private JCheckBox activeCheckBox;
 	private JComboBox comboBox;
+	private JCheckBox activeFilterCheckBox;
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
 	private BusinessUnit bUnitShowing;
@@ -174,6 +175,11 @@ public class BusinessUnitUI extends JPanel {
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			comboBox.setEnabled(false);
 		}
+
+		activeFilterCheckBox = new JCheckBox(" solo activas");
+		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activeFilterCheckBox.setBounds(666, 175, 154, 25);
+		add(activeFilterCheckBox);
 		
 		nameField = new JTextField();
 		nameField.setColumns(10);
@@ -380,7 +386,7 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
-
+		
 				
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
