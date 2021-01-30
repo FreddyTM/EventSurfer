@@ -154,6 +154,12 @@ public class BusinessUnitUI extends JPanel {
 		mailLabel.setBounds(50, 525, 200, 25);
 		add(mailLabel);
 		
+		JLabel activaLabel = new JLabel("Activa");
+		activaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		activaLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activaLabel.setBounds(50, 575, 200, 25);
+		add(activaLabel);
+		
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
@@ -301,9 +307,11 @@ public class BusinessUnitUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getMail());
 		add(mailField);
 		
-		activeCheckBox = new JCheckBox(" Activa");
+		activeCheckBox = new JCheckBox();
 		activeCheckBox.setBounds(260, 575, 100, 25);
 		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activeCheckBox.setSelected(session.getbUnit().isActivo());
+		activeCheckBox.setEnabled(false);
 		add(activeCheckBox);
 				
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
@@ -594,6 +602,9 @@ public class BusinessUnitUI extends JPanel {
 					tField.setBackground(Color.WHITE);
 				}
 			}
+			//Activamos checkbox "Activa" (activo por defecto)
+			activeCheckBox.setSelected(true);
+			activeCheckBox.setEnabled(true);
 		}
 	}
 	
@@ -627,6 +638,8 @@ public class BusinessUnitUI extends JPanel {
 					tField.setBackground(Color.WHITE);
 				}
 			}
+			//Activamos checkbox "Activa"
+			activeCheckBox.setEnabled(true);
 		}
 	}
 	

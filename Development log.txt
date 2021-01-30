@@ -1019,7 +1019,7 @@ ver 0.1.5 BUSINESSUNITUI FULLY FUNCTIONAL
 		Add attribute TITLE
 		Update constructor
 
-ver 0.1.6 USERUI
+ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 
 	* - Package main.java.company
 
@@ -1040,6 +1040,12 @@ ver 0.1.6 USERUI
 		Update getComboBoxItemsFromSession()
 		Update populateTextFields()
 		Update constructor
+
+	· NewAction class (new inner BusinessUnitUI class):
+		Update actionPerformed() 
+
+	· EditAction class (new inner BusinessUnitUI class):
+		Update actionPerformed()
 
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.6--
