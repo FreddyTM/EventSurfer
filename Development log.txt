@@ -1026,6 +1026,7 @@ ver 0.1.6 USERUI
 	· BusinessUnit class:
 		Add attribute activo
 		Update constructor
+		Rename getActivo() -> isActivo()
 		Update saveBUnitToDB()
 		Update updateBusinessUnitToDB()
 		Update getBusinessUnitsFromDB()
@@ -1037,6 +1038,7 @@ ver 0.1.6 USERUI
 		Add attribute activeCheckBox
 		Add attribute activeFilterCheckBox
 		Update getComboBoxItemsFromSession()
+		Update populateTextFields()
 		Update constructor
 
 	· AppWindow class:

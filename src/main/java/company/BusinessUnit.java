@@ -68,7 +68,7 @@ public class BusinessUnit {
 			pstm.setString(6, bUnit.getCpostal());
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
-			pstm.setBoolean(9, bUnit.getActivo());
+			pstm.setBoolean(9, bUnit.isActivo());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -127,7 +127,7 @@ public class BusinessUnit {
 			pstm.setString(6, bUnit.getCpostal());
 			pstm.setString(7, bUnit.getTelefono());
 			pstm.setString(8, bUnit.getMail());
-			pstm.setBoolean(9, bUnit.getActivo());
+			pstm.setBoolean(9, bUnit.isActivo());
 			pstm.setInt(10, bUnit.getId());
 			pstm.executeUpdate();
 			return true;
@@ -386,7 +386,7 @@ public class BusinessUnit {
 	}
 
 
-	public Boolean getActivo() {
+	public Boolean isActivo() {
 		return activo;
 	}
 

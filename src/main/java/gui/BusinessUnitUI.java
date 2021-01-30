@@ -418,6 +418,7 @@ public class BusinessUnitUI extends JPanel {
 		postalCodeField.setText(session.getbUnit().getCpostal());
 		telephoneField.setText(session.getbUnit().getTelefono());
 		mailField.setText(session.getbUnit().getMail());
+		activeCheckBox.setSelected(session.getbUnit().isActivo());
 	}
 	
 	/**
@@ -477,7 +478,7 @@ public class BusinessUnitUI extends JPanel {
 		List<String> tempList = new ArrayList<String>();
 		for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 			if (active) {
-				if (bUnit.getActivo()) {
+				if (bUnit.isActivo()) {
 					tempList.add(bUnit.getNombre());
 				}
 			} else {
