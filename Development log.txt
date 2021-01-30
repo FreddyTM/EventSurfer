@@ -1036,6 +1036,7 @@ ver 0.1.6 USERUI
 	· BusinessUnitUI
 		Add attribute activeCheckBox
 		Add attribute activeFilterCheckBox
+		Update getComboBoxItemsFromSession()
 		Update constructor
 
 	· AppWindow class:

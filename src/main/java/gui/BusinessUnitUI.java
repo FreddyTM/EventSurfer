@@ -164,7 +164,13 @@ public class BusinessUnitUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
-		comboList = getComboBoxItemsFromSession();
+		activeFilterCheckBox = new JCheckBox(" solo activas");
+		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activeFilterCheckBox.setBounds(666, 175, 154, 25);
+		activeFilterCheckBox.setSelected(true);
+		add(activeFilterCheckBox);
+		
+		comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 		comboBox = new JComboBox(comboList);
 		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 		comboBox.addItemListener(new ComboListener());
@@ -175,13 +181,7 @@ public class BusinessUnitUI extends JPanel {
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			comboBox.setEnabled(false);
 		}
-
-		activeFilterCheckBox = new JCheckBox(" solo activas");
-		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		activeFilterCheckBox.setBounds(666, 175, 154, 25);
-		activeFilterCheckBox.setSelected(true);
-		add(activeFilterCheckBox);
-		
+	
 		nameField = new JTextField();
 		nameField.setColumns(10);
 		nameField.setBounds(260, 225, 400, 25);
@@ -470,16 +470,39 @@ public class BusinessUnitUI extends JPanel {
 	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
 	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
 	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
+	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrar todas
 	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
 	 */
-	public String[] getComboBoxItemsFromSession() {
-		String[] comboList = new String[session.getCompany().getBusinessUnits().size()];
-		for (int i = 0; i < comboList.length; i++) {
-			comboList[i] = session.getCompany().getBusinessUnits().get(i).getNombre();
+	public String[] getComboBoxItemsFromSession(boolean active) {
+		List<String> tempList = new ArrayList<String>();
+		for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
+			if (active) {
+				if (bUnit.getActivo()) {
+					tempList.add(bUnit.getNombre());
+				}
+			} else {
+				tempList.add(bUnit.getNombre());
+			}
 		}
-		Arrays.sort(comboList);
-		return comboList;
+		String[] itemList = (String[]) tempList.toArray();
+		Arrays.sort(itemList);
+		return itemList;
 	}
+	
+//	String[] comboList = new String[session.getCompany().getBusinessUnits().size()];
+//	for (int i = 0; i < comboList.length; i++) {
+//		if (active) {
+//			List<String> tempList = new ArrayList<String>();
+//			if (session.getCompany().getBusinessUnits().get(i).getActivo()) {
+//				tempList.add(session.getCompany().getBusinessUnits().get(i).getNombre());
+//				comboList = (String[]) tempList.toArray();
+//			}
+//		} else {
+//			comboList[i] = session.getCompany().getBusinessUnits().get(i).getNombre();
+//		}
+//	}
+//	Arrays.sort(comboList);
+//	return comboList;
 	
 	/**
 	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
