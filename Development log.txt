@@ -1053,6 +1053,9 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· CancelAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
 
+	· OKAction class (new inner BusinessUnitUI class):
+		Update actionPerformed() --edit--
+
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged()
 
