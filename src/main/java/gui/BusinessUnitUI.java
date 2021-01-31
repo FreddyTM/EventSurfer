@@ -75,6 +75,9 @@ public class BusinessUnitUI extends JPanel {
 	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
+	//Último valor de activeCheckBox. Sirve de caché para recuperarlo
+	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	private boolean lastActive;
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
@@ -312,6 +315,7 @@ public class BusinessUnitUI extends JPanel {
 		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeCheckBox.setSelected(session.getbUnit().isActivo());
 		activeCheckBox.setEnabled(false);
+		lastActive = activeCheckBox.isSelected();
 		add(activeCheckBox);
 				
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
@@ -426,6 +430,7 @@ public class BusinessUnitUI extends JPanel {
 		postalCodeField.setText(session.getbUnit().getCpostal());
 		telephoneField.setText(session.getbUnit().getTelefono());
 		mailField.setText(session.getbUnit().getMail());
+		//Aunque no es un textfield, el valor de activeCheckBox también hay que mostrarlo actualizado
 		activeCheckBox.setSelected(session.getbUnit().isActivo());
 	}
 	
@@ -567,6 +572,9 @@ public class BusinessUnitUI extends JPanel {
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldContentList.add(textFieldList.get(i).getText());
 			}
+			//Guardamos el valor del ckeckbox "Activa". Al cancelar la edición o la creación de una nueva unidad de
+			//negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
+			lastActive = session.getbUnit().isActivo();
 		}
 		
 	}
@@ -602,7 +610,7 @@ public class BusinessUnitUI extends JPanel {
 					tField.setBackground(Color.WHITE);
 				}
 			}
-			//Activamos checkbox "Activa" (activo por defecto)
+			//Habilitamos checkbox "Activa" (activo por defecto)
 			activeCheckBox.setSelected(true);
 			activeCheckBox.setEnabled(true);
 		}
@@ -638,7 +646,7 @@ public class BusinessUnitUI extends JPanel {
 					tField.setBackground(Color.WHITE);
 				}
 			}
-			//Activamos checkbox "Activa"
+			//Habilitamos checkbox "Activa"
 			activeCheckBox.setEnabled(true);
 		}
 	}
@@ -676,7 +684,9 @@ public class BusinessUnitUI extends JPanel {
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
-			
+			//Deshabilitamos checkbox "Activa" y recuperamos su valor anterior
+			activeCheckBox.setEnabled(false);
+			activeCheckBox.setSelected(lastActive);
 		}
 	}
 	
@@ -901,16 +911,18 @@ public class BusinessUnitUI extends JPanel {
 							}
 						}				
 						//Renovamos la lista de las unidades de negocio del comboBox
-						comboList = getComboBoxItemsFromSession();
+						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 						comboBox.setModel(new DefaultComboBoxModel(comboList));
 						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 						//Asignamos el nuevo contenido a los textfields
 						BusinessUnitUI.this.populateTextFields();
-						//renovamos la lista de contenidos de los textfields
+						//renovamos la lista caché de contenidos de los textfields
 						textFieldContentList.clear();
 						for (int i = 0; i < textFieldList.size(); i++) {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
+						//Actualizamos el valor caché del ckeckbox "Activa".
+						lastActive = session.getbUnit().isActivo();
 						//Informamos por pantalla de la actualización
 						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber

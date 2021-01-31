@@ -1035,17 +1035,26 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	* - Package main.java.gui
 
 	· BusinessUnitUI
-		Add attribute activeCheckBox
-		Add attribute activeFilterCheckBox
+		Add attribute
+			activeCheckBox, activeFilterCheckBox, lastActive
 		Update getComboBoxItemsFromSession()
 		Update populateTextFields()
 		Update constructor
+
+	· TimerJob class (BusinessUnitUI inner class):
+		Update run()
 
 	· NewAction class (new inner BusinessUnitUI class):
 		Update actionPerformed() 
 
 	· EditAction class (new inner BusinessUnitUI class):
 		Update actionPerformed()
+
+	· CancelAction class (new inner BusinessUnitUI class):
+		Update actionPerformed()
+
+	· ComboListener class (new inner BusinessUnitUI class):
+		Update itemStateChanged()
 
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.6--
