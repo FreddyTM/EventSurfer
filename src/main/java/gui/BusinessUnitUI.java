@@ -534,6 +534,57 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
+	 * Habilita los campos del formulario para que pueda introducirse información
+	 */
+	public void editableDataOn() {
+		//Activar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(true);
+		}
+		//Datos editables
+		for (JTextField tField : textFieldList) {
+			if (tField != companyField) {
+				tField.setEditable(true);
+				tField.setBackground(Color.WHITE);
+			}
+		}
+		//Habilitamos checkbox "Activa"
+		activeCheckBox.setEnabled(true);
+	}
+	
+	/**
+	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
+	 */
+	public void editableDataOff() {
+		//Quitar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(false);
+		}
+		//Datos no editables
+		for (JTextField tField : textFieldList) {
+			tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+			tField.setEditable(false);
+		}
+		activeCheckBox.setEnabled(false);
+	}
+	
+	/**
+	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de una
+	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
+	 * estaba seleccionada.
+	 */
+	public void updateDataCache() {
+		//Vaciamos la lista de datos del caché de datos
+		textFieldContentList.clear();
+		//Añadimos los nuevos datos
+		for (int i = 0; i < textFieldList.size(); i++) {
+			textFieldContentList.add(textFieldList.get(i).getText());
+		}
+		//Guardamos el valor del ckeckbox "Activa"
+		lastActive = session.getbUnit().isActivo();
+	}
+	
+	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
@@ -564,17 +615,19 @@ public class BusinessUnitUI extends JPanel {
 			bUnitShowing = selectedBunit;
 			//Mostramos sus datos
 			populateTextFields();
-			//Vaciamos la lista de datos del caché de datos
-			textFieldContentList.clear();
-			//Añadimos los nuevos datos. Al cancelar la edición o la creación de una nueva unidad de negocio,
-			//podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
-			textFieldContentList.clear();
-			for (int i = 0; i < textFieldList.size(); i++) {
-				textFieldContentList.add(textFieldList.get(i).getText());
-			}
-			//Guardamos el valor del ckeckbox "Activa". Al cancelar la edición o la creación de una nueva unidad de
-			//negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
-			lastActive = session.getbUnit().isActivo();
+			//Hacemos backup del contenido de los datos del formulario
+			updateDataCache();
+			
+//			//Vaciamos la lista de datos del caché de datos
+//			textFieldContentList.clear();
+//			//Añadimos los nuevos datos. Al cancelar la edición o la creación de una nueva unidad de negocio,
+//			//podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
+//			for (int i = 0; i < textFieldList.size(); i++) {
+//				textFieldContentList.add(textFieldList.get(i).getText());
+//			}
+//			//Guardamos el valor del ckeckbox "Activa". Al cancelar la edición o la creación de una nueva unidad de
+//			//negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que estaba seleccionada
+//			lastActive = session.getbUnit().isActivo();
 		}
 		
 	}
@@ -598,21 +651,33 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
-			//Activar visibilidad de etiquetas de longitud máxima de datos
-			for (JLabel label : labelList) {
-				label.setVisible(true);
-			}
-			//Vaciamos los campos de texto y habilitamos su edición
+			//Formulario editable
+			editableDataOn();
+			//Vaciamos los campos de texto
 			for (JTextField tField : textFieldList) {
 				if (tField != companyField) {
-					tField.setEditable(true);
 					tField.setText("");
-					tField.setBackground(Color.WHITE);
 				}
 			}
-			//Habilitamos checkbox "Activa" (activo por defecto)
+			//checkbox "Activa" activo por defecto
 			activeCheckBox.setSelected(true);
-			activeCheckBox.setEnabled(true);
+			
+//			//Activar visibilidad de etiquetas de longitud máxima de datos
+//			for (JLabel label : labelList) {
+//				label.setVisible(true);
+//			}
+//			//Vaciamos los campos de texto y habilitamos su edición
+//			for (JTextField tField : textFieldList) {
+//				if (tField != companyField) {
+//					tField.setEditable(true);
+//					tField.setText("");
+//					tField.setBackground(Color.WHITE);
+//				}
+//			}
+//			//Habilitamos checkbox "Activa"
+//			activeCheckBox.setEnabled(true);
+			
+
 		}
 	}
 	
@@ -635,19 +700,22 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
 			infoLabel.setText("");
-			//Activar visibilidad de etiquetas de longitud máxima de datos
-			for (JLabel label : labelList) {
-				label.setVisible(true);
-			}
-			//Datos editables
-			for (JTextField tField : textFieldList) {
-				if (tField != companyField) {
-					tField.setEditable(true);
-					tField.setBackground(Color.WHITE);
-				}
-			}
-			//Habilitamos checkbox "Activa"
-			activeCheckBox.setEnabled(true);
+			//Formulario editable
+			editableDataOn();
+			
+//			//Activar visibilidad de etiquetas de longitud máxima de datos
+//			for (JLabel label : labelList) {
+//				label.setVisible(true);
+//			}
+//			//Datos editables
+//			for (JTextField tField : textFieldList) {
+//				if (tField != companyField) {
+//					tField.setEditable(true);
+//					tField.setBackground(Color.WHITE);
+//				}
+//			}
+//			//Habilitamos checkbox "Activa"
+//			activeCheckBox.setEnabled(true);
 		}
 	}
 	
@@ -671,21 +739,25 @@ public class BusinessUnitUI extends JPanel {
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
 			infoLabel.setText("");
-			//Quitar visibilidad de etiquetas de longitud máxima de datos
-			for (JLabel label : labelList) {
-				label.setVisible(false);
-			}
-			//Datos no editables
-			for (JTextField tField : textFieldList) {
-				tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-				tField.setEditable(false);
-			}
+			//Formulario no editable
+			editableDataOff();
+			
+//			//Quitar visibilidad de etiquetas de longitud máxima de datos
+//			for (JLabel label : labelList) {
+//				label.setVisible(false);
+//			}
+//			//Datos no editables
+//			for (JTextField tField : textFieldList) {
+//				tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+//				tField.setEditable(false);
+//			}
+//			activeCheckBox.setEnabled(false);
+			
 			//Recuperar valores previos a la edición de los datos
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
-			//Deshabilitamos checkbox "Activa" y recuperamos su valor anterior
-			activeCheckBox.setEnabled(false);
+			//Recuperamos el valor anterior del checkbox "Activa"
 			activeCheckBox.setSelected(lastActive);
 		}
 	}
@@ -755,24 +827,32 @@ public class BusinessUnitUI extends JPanel {
 						session.setbUnit(storedBunit);
 						//Registramos que la nueva unidad de negocio es la que se está mostrando
 						bUnitShowing = storedBunit;
-						//Quitar visibilidad de etiquetas de longitud máxima de datos
-						for (JLabel label : labelList) {
-							label.setVisible(false);
-						}
-						//Datos no editables
-						for (JTextField tField : textFieldList) {
-							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-							tField.setEditable(false);
-						}
-						activeCheckBox.setEnabled(false);						
-						//Vaciamos la lista de datos del caché de datos
-						textFieldContentList.clear();
-						//Añadimos los nuevos datos
-						for (int i = 0; i < textFieldList.size(); i++) {
-							textFieldContentList.add(textFieldList.get(i).getText());
-						}
-						//Guardamos el valor del ckeckbox "Activa"
-						lastActive = session.getbUnit().isActivo();
+						//Formulario no editable
+						editableDataOff();
+						
+//						//Quitar visibilidad de etiquetas de longitud máxima de datos
+//						for (JLabel label : labelList) {
+//							label.setVisible(false);
+//						}
+//						//Datos no editables
+//						for (JTextField tField : textFieldList) {
+//							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+//							tField.setEditable(false);
+//						}
+//						activeCheckBox.setEnabled(false);
+						
+						//Hacemos backup del contenido de los datos del formulario
+						updateDataCache();
+						
+//						//Vaciamos la lista de datos del caché de datos
+//						textFieldContentList.clear();
+//						//Añadimos los nuevos datos
+//						for (int i = 0; i < textFieldList.size(); i++) {
+//							textFieldContentList.add(textFieldList.get(i).getText());
+//						}
+//						//Guardamos el valor del ckeckbox "Activa"
+//						lastActive = session.getbUnit().isActivo();
+						
 						//Renovamos la lista de las unidades de negocio del comboBox
 						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 						comboBox.setModel(new DefaultComboBoxModel(comboList));
@@ -793,16 +873,20 @@ public class BusinessUnitUI extends JPanel {
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 				
 				//*** - IMPORTANTE - ***//
+				//LA UNIDAD DE NEGOCIO POR DEFECTO DE LA BASE DE DATOS NO PUEDE PASAR NUNCA A INACTIVA. SI SE INTENTA
+				// HAY QUE MOSTRAR UN MENSAJE DE ERROR//
+				
 				//SI LA UNIDAD DE NEGOCIO DE LA SESIÓN PASA A ESTAR INACTIVA, IMPLEMENTAR CAMBIO DE ESTADO DE 
 				//TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO A INACTIVOS, TANTO EN LA SESIÓN COMO EN LA BASE
 				//DE DATOS//
 				
-				//LO CONTRARIO NO ES APLICABLE. UNA UNIDAD DE NEGOCIO INACTIVA A LA QUE SE LE DEVUELVE A ESTAO 
+				//LO CONTRARIO NO ES APLICABLE. UNA UNIDAD DE NEGOCIO INACTIVA A LA QUE SE DEVUELVE A ESTADO 
 				//ACTIVO NO REACTIVA SUS USUARIOS DE FORMA AUTOMÁTICA, HAY QUE HACERLO MANUALMENTE UNO POR UNO,
 				//TANTOS COMO SE QUIERA REACTIVAR//
 				
 				//SI LA UNIDAD DE NEGOCIO PASADA A INACTIVA ES LA DEL USUARIO QUE ABRE SESIÓN, LA SESIÓN DEBE CERRARSE
-				//VOLVIENDO A LA PANTALLA DE LOGIN. EL USUARIO QUE ABRIÓ SESIÓN YA NO PODRÁ VOLVER A ABRIRLA//
+				//VOLVIENDO A LA PANTALLA DE LOGIN. EL USUARIO QUE ABRIÓ SESIÓN YA NO PODRÁ VOLVER A ABRIRLA PORQUE
+				//ESTARÁ DESACTIVADO//
 				
 				//PENSAR EN CÓMO GESTIONAR UN PASO DE UNIDAD DE NEGOCIO A INACTIVA CUANDO UN USUARIO DE DICHA UNIDAD
 				//DE NEGOCIO TIENE ABIERTA SESIÓN EN OTRO LUGAR. LANZAR VENTANA DE AVISO. ACEPTANDO EL AVISO SE CIERRA
@@ -822,60 +906,77 @@ public class BusinessUnitUI extends JPanel {
 				updatedBunit.setCpostal(postalCodeField.getText());
 				updatedBunit.setTelefono(telephoneField.getText());
 				updatedBunit.setMail(mailField.getText());
+				updatedBunit.setActivo(activeCheckBox.isSelected());
+				//Comprobamos que no se intenta marcar como inactiva la unidad de negocio por defecto de la base de datos
+				if (updatedBunit.getId() == 1 && updatedBunit.isActivo() == false) {
+					infoLabel.setText("LA UNIDAD DE NEGOCIO " + updatedBunit.getNombre() + " NO SE PUEDE MARCAR COMO INACTIVA");
+				} else {
+					//Si los datos están validados
+					if (testData(updatedBunit)) {
+						//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
+						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+							session.getbUnit().setCompany(updatedBunit.getCompany());
+							session.getbUnit().setNombre(updatedBunit.getNombre());
+							session.getbUnit().setDireccion(updatedBunit.getDireccion());
+							session.getbUnit().setProvincia(updatedBunit.getProvincia());
+							session.getbUnit().setEstado(updatedBunit.getEstado());
+							session.getbUnit().setCpostal(updatedBunit.getCpostal());
+							session.getbUnit().setTelefono(updatedBunit.getTelefono());
+							session.getbUnit().setMail(updatedBunit.getMail());
+							session.getbUnit().setActivo(activeCheckBox.isSelected());
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+							tNow = PersistenceManager.getTimestampNow();
+							//Actualizamos los datos de la tabla last_modification
+							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									BusinessUnit.TABLE_NAME, tNow);
+							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+							//no queda registrada
+							if (!changeRegister) {
+								infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+							} else {
+								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: "
+										+ session.formatTimestamp(tNow, null));
+							}
+							//Formulario no editable
+							editableDataOff();
+							
+//							//Quitar visibilidad de etiquetas de longitud máxima de datos
+//							for (JLabel label : labelList) {
+//								label.setVisible(false);
+//							}
+//							//Datos no editables
+//							for (JTextField tField : textFieldList) {
+//								tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+//								tField.setEditable(false);
+//							}
+//							activeCheckBox.setEnabled(false);
+							
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+							
+//							//Vaciamos la lista de datos del caché de datos
+//							textFieldContentList.clear();
+//							//Añadimos los nuevos datos
+//							for (int i = 0; i < textFieldList.size(); i++) {
+//								textFieldContentList.add(textFieldList.get(i).getText());
+//							}
+//							//Guardamos el valor del ckeckbox "Activa"
+//							lastActive = session.getbUnit().isActivo();
+							
+							//Cambio de estado de los botones y el combobox
+							editButton.setEnabled(true);
+							oKButton.setEnabled(false);
+							cancelButton.setEnabled(false);
+							newButton.setEnabled(true);
+							comboBox.setEnabled(true);
 
-				//Si los datos están validados
-				if (testData(updatedBunit)) {
-					//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
-					if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-						session.getbUnit().setCompany(updatedBunit.getCompany());
-						session.getbUnit().setNombre(updatedBunit.getNombre());
-						session.getbUnit().setDireccion(updatedBunit.getDireccion());
-						session.getbUnit().setProvincia(updatedBunit.getProvincia());
-						session.getbUnit().setEstado(updatedBunit.getEstado());
-						session.getbUnit().setCpostal(updatedBunit.getCpostal());
-						session.getbUnit().setTelefono(updatedBunit.getTelefono());
-						session.getbUnit().setMail(updatedBunit.getMail());
+							//El selector de acción retorna al estado sin definir
+							okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 
-						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = PersistenceManager.getTimestampNow();
-						//Actualizamos los datos de la tabla last_modification
-						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
-						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-						//no queda registrada
-						if(!changeRegister) {
-							infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+							//Error de actualización de los datos en la base de datos
 						} else {
-							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 						}
-						
-						//Quitar visibilidad de etiquetas de longitud máxima de datos
-						for (JLabel label : labelList) {
-							label.setVisible(false);
-						}
-						//Datos no editables
-						for (JTextField tField : textFieldList) {
-							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-							tField.setEditable(false);
-						}
-						//Vaciamos la lista de datos del caché de datos
-						textFieldContentList.clear();
-						//Añadimos los nuevos datos
-						for (int i = 0; i < textFieldList.size(); i++) {
-							textFieldContentList.add(textFieldList.get(i).getText());
-						}
-						//Cambio de estado de los botones y el combobox
-						editButton.setEnabled(true);
-						oKButton.setEnabled(false);
-						cancelButton.setEnabled(false);
-						newButton.setEnabled(true);
-						comboBox.setEnabled(true);
-						
-						//El selector de acción retorna al estado sin definir
-						okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;	
-						
-					//Error de actualización de los datos en la base de datos
-					} else {
-						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 					}
 				}
 			}
@@ -935,14 +1036,18 @@ public class BusinessUnitUI extends JPanel {
 						comboBox.setModel(new DefaultComboBoxModel(comboList));
 						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 						//Asignamos el nuevo contenido a los textfields
-						BusinessUnitUI.this.populateTextFields();
-						//renovamos la lista caché de contenidos de los textfields
-						textFieldContentList.clear();
-						for (int i = 0; i < textFieldList.size(); i++) {
-							textFieldContentList.add(textFieldList.get(i).getText());
-						}
-						//Actualizamos el valor caché del ckeckbox "Activa".
-						lastActive = session.getbUnit().isActivo();
+						BusinessUnitUI.this.populateTextFields();		
+						//Hacemos backup del contenido de los datos del formulario
+						updateDataCache();
+						
+//						//renovamos la lista caché de contenidos de los textfields
+//						textFieldContentList.clear();
+//						for (int i = 0; i < textFieldList.size(); i++) {
+//							textFieldContentList.add(textFieldList.get(i).getText());
+//						}
+//						//Actualizamos el valor caché del ckeckbox "Activa".
+//						lastActive = session.getbUnit().isActivo();
+						
 						//Informamos por pantalla de la actualización
 						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber

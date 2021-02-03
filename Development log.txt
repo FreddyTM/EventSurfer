@@ -1037,6 +1037,9 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· BusinessUnitUI
 		Add attribute
 			activeCheckBox, activeFilterCheckBox, lastActive
+		Add editableDataOn()
+		Add editableDataOff()
+		Add updateDataCache()
 		Update getComboBoxItemsFromSession()
 		Update populateTextFields()
 		Update constructor
