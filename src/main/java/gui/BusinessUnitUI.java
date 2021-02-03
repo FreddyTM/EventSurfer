@@ -565,6 +565,7 @@ public class BusinessUnitUI extends JPanel {
 			tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 			tField.setEditable(false);
 		}
+		//Deshabilitamos checkbox "Activa"
 		activeCheckBox.setEnabled(false);
 	}
 	
