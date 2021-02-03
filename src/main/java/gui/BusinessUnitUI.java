@@ -302,7 +302,7 @@ public class BusinessUnitUI extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					oKButton.requestFocusInWindow();
+					activeCheckBox.requestFocusInWindow();
 				}
 			}
 		});
@@ -315,6 +315,14 @@ public class BusinessUnitUI extends JPanel {
 		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeCheckBox.setSelected(session.getbUnit().isActivo());
 		activeCheckBox.setEnabled(false);
+		activeCheckBox.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					oKButton.requestFocusInWindow();
+				}
+			}
+		});
 		lastActive = activeCheckBox.isSelected();
 		add(activeCheckBox);
 				
@@ -660,6 +668,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(false);
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
+			activeFilterCheckBox.setEnabled(false);
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
@@ -709,6 +718,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(false);
 			newButton.setEnabled(false);
 			comboBox.setEnabled(false);
+			activeFilterCheckBox.setEnabled(false);
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
@@ -746,6 +756,7 @@ public class BusinessUnitUI extends JPanel {
 			editButton.setEnabled(true);
 			newButton.setEnabled(true);
 			comboBox.setEnabled(true);
+			activeFilterCheckBox.setEnabled(true);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
 			infoLabel.setText("");
@@ -874,6 +885,7 @@ public class BusinessUnitUI extends JPanel {
 						editButton.setEnabled(true);
 						newButton.setEnabled(true);
 						comboBox.setEnabled(true);
+						activeFilterCheckBox.setEnabled(true);
 						oKButton.setEnabled(false);
 						cancelButton.setEnabled(false);
 						
@@ -978,10 +990,11 @@ public class BusinessUnitUI extends JPanel {
 							
 							//Cambio de estado de los botones y el combobox
 							editButton.setEnabled(true);
-							oKButton.setEnabled(false);
-							cancelButton.setEnabled(false);
 							newButton.setEnabled(true);
 							comboBox.setEnabled(true);
+							activeFilterCheckBox.setEnabled(true);
+							oKButton.setEnabled(false);
+							cancelButton.setEnabled(false);
 
 							//El selector de acción retorna al estado sin definir
 							okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
