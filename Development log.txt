@@ -1054,7 +1054,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update actionPerformed()
 
 	· OKAction class (new inner BusinessUnitUI class):
-		Update actionPerformed() --edit--
+		Update actionPerformed() --new--
 
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged()

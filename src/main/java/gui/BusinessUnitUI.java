@@ -729,6 +729,7 @@ public class BusinessUnitUI extends JPanel {
 				newBunit.setCpostal(postalCodeField.getText());
 				newBunit.setTelefono(telephoneField.getText());
 				newBunit.setMail(mailField.getText());
+				newBunit.setActivo(activeCheckBox.isSelected());
 				//Validamos los datos del formulario
 				if(testData(newBunit)) {
 					//Intentamos grabar la nueva unidad de negocio en la base de datos, retornando un objeto con idénticos
@@ -763,14 +764,17 @@ public class BusinessUnitUI extends JPanel {
 							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 							tField.setEditable(false);
 						}
+						activeCheckBox.setEnabled(false);						
 						//Vaciamos la lista de datos del caché de datos
 						textFieldContentList.clear();
 						//Añadimos los nuevos datos
 						for (int i = 0; i < textFieldList.size(); i++) {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
+						//Guardamos el valor del ckeckbox "Activa"
+						lastActive = session.getbUnit().isActivo();
 						//Renovamos la lista de las unidades de negocio del comboBox
-						comboList = getComboBoxItemsFromSession();
+						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 						comboBox.setModel(new DefaultComboBoxModel(comboList));
 						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 						//Cambio de estado de los botones y el combobox
