@@ -1040,6 +1040,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Add editableDataOn()
 		Add editableDataOff()
 		Add updateDataCache()
+		Add refreshComboBox()
 		Update getComboBoxItemsFromSession()
 		Update populateTextFields()
 		Update constructor

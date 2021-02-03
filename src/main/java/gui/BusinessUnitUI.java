@@ -534,6 +534,15 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
+	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
+	 */
+	public void refreshComboBox() {
+		comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
+		comboBox.setModel(new DefaultComboBoxModel(comboList));
+		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+	}
+	
+	/**
 	 * Habilita los campos del formulario para que pueda introducirse información
 	 */
 	public void editableDataOn() {
@@ -855,9 +864,12 @@ public class BusinessUnitUI extends JPanel {
 //						lastActive = session.getbUnit().isActivo();
 						
 						//Renovamos la lista de las unidades de negocio del comboBox
-						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
-						comboBox.setModel(new DefaultComboBoxModel(comboList));
-						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+						refreshComboBox();
+						
+//						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
+//						comboBox.setModel(new DefaultComboBoxModel(comboList));
+//						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+						
 						//Cambio de estado de los botones y el combobox
 						editButton.setEnabled(true);
 						newButton.setEnabled(true);
@@ -870,12 +882,12 @@ public class BusinessUnitUI extends JPanel {
 					}
 				}
 				
-			//Guardamos los cambios de la unidad de negocio editada	
+			//Aceptamos los cambios de la unidad de negocio editada	
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 				
 				//*** - IMPORTANTE - ***//
 				//LA UNIDAD DE NEGOCIO POR DEFECTO DE LA BASE DE DATOS NO PUEDE PASAR NUNCA A INACTIVA. SI SE INTENTA
-				// HAY QUE MOSTRAR UN MENSAJE DE ERROR//
+				// HAY QUE MOSTRAR UN MENSAJE DE ERROR// --OK--
 				
 				//SI LA UNIDAD DE NEGOCIO DE LA SESIÓN PASA A ESTAR INACTIVA, IMPLEMENTAR CAMBIO DE ESTADO DE 
 				//TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO A INACTIVOS, TANTO EN LA SESIÓN COMO EN LA BASE
@@ -1031,11 +1043,16 @@ public class BusinessUnitUI extends JPanel {
 								session.setbUnit(bUnit);
 								bUnitShowing = session.getbUnit();
 							}
-						}				
+						}
 						//Renovamos la lista de las unidades de negocio del comboBox
-						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
-						comboBox.setModel(new DefaultComboBoxModel(comboList));
-						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+						refreshComboBox();			
+						
+//						//Renovamos la lista de las unidades de negocio del comboBox
+//						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
+//						comboBox.setModel(new DefaultComboBoxModel(comboList));
+//						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+						
+						
 						//Asignamos el nuevo contenido a los textfields
 						BusinessUnitUI.this.populateTextFields();		
 						//Hacemos backup del contenido de los datos del formulario
