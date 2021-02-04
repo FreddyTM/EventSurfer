@@ -1063,6 +1063,9 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged()
 
+	· CheckBoxListener class (new inner BusinessUnitUI class):
+		Update itemStateChanged()
+
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.6--
 
