@@ -507,7 +507,11 @@ public class BusinessUnitUI extends JPanel {
 				tempList.add(bUnit.getNombre());
 			}
 		}
-		String[] itemList = (String[]) tempList.toArray();
+		Object[] object = (Object[]) tempList.toArray();
+		String[] itemList = new String[object.length];
+		for (int i = 0; i < object.length; i++) {
+			itemList[i] = object[i].toString();
+		}
 		Arrays.sort(itemList);
 		return itemList;
 	}
@@ -664,9 +668,12 @@ public class BusinessUnitUI extends JPanel {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
+			
 			int state = e.getStateChange();
 			if (state == ItemEvent.SELECTED) {
-				if (!session.getbUnit().isActivo()) {
+				//Si la bUnit de la sesión no está activa
+				if (session.getbUnit().isActivo() == false) {		
+					//Buscamos la bUnit del usuario que abrió sesión
 					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
@@ -677,12 +684,15 @@ public class BusinessUnitUI extends JPanel {
 					//Hacemos backup del contenido de los datos del formulario
 					updateDataCache();
 					//Renovamos la lista de las unidades de negocio del comboBox
-					refreshComboBox();
-				} else if (state == ItemEvent.DESELECTED) {
+					refreshComboBox();			
+				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
+				} else {
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 				}
-			
+			} else if (state == ItemEvent.DESELECTED) {
+				//Renovamos la lista de las unidades de negocio del comboBox
+				refreshComboBox();
 			}
 		}
 	}
