@@ -449,13 +449,23 @@ public class BusinessUnitUI extends JPanel {
 	 * @return true si son correctos, false si no lo son
 	 */
 	public boolean testData(BusinessUnit bUnit) {
-		//Comprobamos que los datos no exceden el tamaño máximo
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean error = false;
-		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
+		String errorLengthText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
+		String errorNameText = "YA EXISTE UNA UNIDAD DE NEGOCIO CON ESE NOMBRE";
 		if (bUnit.getNombre().length() > 100 || bUnit.getNombre().length() == 0) {
 			nameField.setBackground(Color.YELLOW);
 			error = true;
 		}
+		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
+		for (BusinessUnit unit: bUnitList) {
+			if (bUnit.getNombre().equals(unit.getNombre())) {
+				infoLabel.setText(errorNameText);
+				nameField.setBackground(Color.YELLOW);
+				return false;
+			}
+		}
+		
 		if (bUnit.getDireccion().length() > 150) {
 			addressField.setBackground(Color.YELLOW);
 			error = true;
@@ -483,7 +493,7 @@ public class BusinessUnitUI extends JPanel {
 
 		//Si hay un error, mensaje de error y retornamos false
 		if (error) {
-			infoLabel.setText(errorText);
+			infoLabel.setText(errorLengthText);
 			return false;
 		}
 		return true;
@@ -727,23 +737,6 @@ public class BusinessUnitUI extends JPanel {
 			}
 			//checkbox "Activa" activo por defecto
 			activeCheckBox.setSelected(true);
-			
-//			//Activar visibilidad de etiquetas de longitud máxima de datos
-//			for (JLabel label : labelList) {
-//				label.setVisible(true);
-//			}
-//			//Vaciamos los campos de texto y habilitamos su edición
-//			for (JTextField tField : textFieldList) {
-//				if (tField != companyField) {
-//					tField.setEditable(true);
-//					tField.setText("");
-//					tField.setBackground(Color.WHITE);
-//				}
-//			}
-//			//Habilitamos checkbox "Activa"
-//			activeCheckBox.setEnabled(true);
-			
-
 		}
 	}
 	
@@ -769,20 +762,6 @@ public class BusinessUnitUI extends JPanel {
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
-			
-//			//Activar visibilidad de etiquetas de longitud máxima de datos
-//			for (JLabel label : labelList) {
-//				label.setVisible(true);
-//			}
-//			//Datos editables
-//			for (JTextField tField : textFieldList) {
-//				if (tField != companyField) {
-//					tField.setEditable(true);
-//					tField.setBackground(Color.WHITE);
-//				}
-//			}
-//			//Habilitamos checkbox "Activa"
-//			activeCheckBox.setEnabled(true);
 		}
 	}
 	
@@ -808,19 +787,7 @@ public class BusinessUnitUI extends JPanel {
 			cancelButton.setEnabled(false);
 			infoLabel.setText("");
 			//Formulario no editable
-			editableDataOff();
-			
-//			//Quitar visibilidad de etiquetas de longitud máxima de datos
-//			for (JLabel label : labelList) {
-//				label.setVisible(false);
-//			}
-//			//Datos no editables
-//			for (JTextField tField : textFieldList) {
-//				tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-//				tField.setEditable(false);
-//			}
-//			activeCheckBox.setEnabled(false);
-			
+			editableDataOff();		
 			//Recuperar valores previos a la edición de los datos
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
