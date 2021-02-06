@@ -19,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
@@ -46,6 +47,9 @@ public class CurrentSession {
 	private Connection connection;
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
+	//Panel que contiene el selector de pantallas del programa. Necesitamos la referencia para regresar
+	//la pantalla de login desde diferentes partes del código cuando las condiciones lo requieren
+	private JPanel selector;
 	
 	//ATRIBUTOS VOLATILE
 	//Se declaran volatile para que todos los temporizadores de actualización de datos
@@ -409,6 +413,14 @@ public class CurrentSession {
 
 	public Timer getTimer() {
 		return timer;
+	}
+
+	public JPanel getSelector() {
+		return selector;
+	}
+
+	public void setSelector(JPanel selector) {
+		this.selector = selector;
 	}
 
 	public Map <String, Timestamp> getEventStates() {

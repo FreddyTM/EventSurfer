@@ -1032,7 +1032,18 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update getBusinessUnitsFromDB()
 		Update refresh()
 
+	· User class:
+		Add setNoActiveUsersToDb()
+
+	* - Package main.java.persistence
+
+	· CurrentSession class:
+		Add attribute selector
+
 	* - Package main.java.gui
+
+	· AppWindow class:
+		Update setUpWindow()
 
 	· BusinessUnitUI
 		Add attribute
