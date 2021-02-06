@@ -236,6 +236,25 @@ public class User {
 	}
 	
 	/**
+	 * Marca como no activos todos los usuarios pertenecientes a la unidad de negocio pasada por parámetro,
+	 * y actualiza dichos usuarios en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param bUnit unidad de negocio cuyos usuarios se marcarán como inactivos
+	 * @return true si las actualizaciones de los usuarios en la base de datos se realizan correctamente,
+	 * false si no lo hacen
+	 */
+	public boolean setNoActiveUsersToDb (Connection conn, BusinessUnit bUnit) {
+		List<User> userList = new User().getUsersFromDB(conn, bUnit);
+		for (User user: userList) {
+			user.setActivo(false);
+			if (!new User().updateUserToDB(conn, user)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
 	 * Comprueba si el usuario administrador por defecto mantiene el password por defecto
 	 * o lo ha cambiado.
 	 * @param conn conexión con la base de datos
