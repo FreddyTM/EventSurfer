@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
+import main.java.company.User;
 import main.java.exceptions.DatabaseError;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
@@ -615,7 +616,7 @@ public class BusinessUnitUI extends JPanel {
 		}
 		//Guardamos el valor del ckeckbox "Activa"
 		lastActive = session.getbUnit().isActivo();
-	}
+	}	
 	
 	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
@@ -906,7 +907,7 @@ public class BusinessUnitUI extends JPanel {
 				
 				//SI LA UNIDAD DE NEGOCIO DE LA SESIÓN PASA A ESTAR INACTIVA, IMPLEMENTAR CAMBIO DE ESTADO DE 
 				//TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO A INACTIVOS, TANTO EN LA SESIÓN COMO EN LA BASE
-				//DE DATOS//
+				//DE DATOS// --OK DB, FALTA SESIÓN--
 				
 				//LO CONTRARIO NO ES APLICABLE. UNA UNIDAD DE NEGOCIO INACTIVA A LA QUE SE DEVUELVE A ESTADO 
 				//ACTIVO NO REACTIVA SUS USUARIOS DE FORMA AUTOMÁTICA, HAY QUE HACERLO MANUALMENTE UNO POR UNO,
@@ -941,9 +942,9 @@ public class BusinessUnitUI extends JPanel {
 				} else {
 					//Si los datos están validados
 					if (testData(updatedBunit)) {
-						//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
+						//Si los datos actualizados se graban en la base de datos
 						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-							//Si la unidad de negocio editada sigue activa (único caso previo)
+							//Si la unidad de negocio editada sigue activa, se actualizan los datos de la sesión (único caso previo)
 							if (updatedBunit.isActivo()) {
 								session.getbUnit().setCompany(updatedBunit.getCompany());
 								session.getbUnit().setNombre(updatedBunit.getNombre());
@@ -981,18 +982,11 @@ public class BusinessUnitUI extends JPanel {
 								//El selector de acción retorna al estado sin definir
 								okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 								
-							//CAMBIAR CRITERIO. SI LA UNIDAD EDITADA SE DESACTIVA 
-							//if (updatedBunit.isActivo()) {
-								//} else {
-									//desactivar usuarios
-									//filtrar por si usuario desactiva una unidad que no es la suya, o desactiva la suya
-								//}
-									
-								
-								
 								//Si el usuario que abre sesión pasa a inactiva una unidad de negocio que no es la suya
-							} else if (true) {
-								//Pasar a inactivos todos los usuarios de la unidad de negocio
+							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
+								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+								
+								//Recargar los usuarios en la unidad de negocio afectada
 								
 								//if (no_filtro_activa) {
 								
@@ -1001,10 +995,16 @@ public class BusinessUnitUI extends JPanel {
 								//}
 								
 							//Si el usuario que abre sesión pasa a inactiva su propia unidad de negocio
-							} else if (false) {
-								//Pasar a inactivos todos los usuarios de la unidad de negocio
+							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
+								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+								if (new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit)) {
+									//Cerrar sesión y volver a login
+									
+								} else {
+									infoLabel.setText("NO SE HAN PODIDO MARCAR COMO INACTIVOS TODOS LOS USUARIOS DE LA UNIDAD DE NEGOCIO EDITADA");
+								}
 								
-								//Cerrar sesión y volver a login
+								
 							}
 							
 						
