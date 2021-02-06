@@ -985,9 +985,9 @@ public class BusinessUnitUI extends JPanel {
 								//Si el usuario que abre sesión pasa a inactiva una unidad de negocio que no es la suya
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-								
+								List<User> updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
 								//Recargar los usuarios en la unidad de negocio afectada
-								
+								updatedBunit.setUsers(updatedUserList);
 								//if (no_filtro_activa) {
 								
 								//} else if (filtro_activa) {
@@ -997,14 +997,9 @@ public class BusinessUnitUI extends JPanel {
 							//Si el usuario que abre sesión pasa a inactiva su propia unidad de negocio
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-								if (new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit)) {
-									//Cerrar sesión y volver a login
-									
-								} else {
-									infoLabel.setText("NO SE HAN PODIDO MARCAR COMO INACTIVOS TODOS LOS USUARIOS DE LA UNIDAD DE NEGOCIO EDITADA");
-								}
-								
-								
+								new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
+								//Cerrar sesión y volver a login
+								new JButton(session.getLogOutAction()).doClick();
 							}
 							
 						
