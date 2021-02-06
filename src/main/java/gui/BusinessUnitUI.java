@@ -944,6 +944,8 @@ public class BusinessUnitUI extends JPanel {
 					if (testData(updatedBunit)) {
 						//Si los datos actualizados se graban en la base de datos
 						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+							tNow = PersistenceManager.getTimestampNow();
 							//Si la unidad de negocio editada sigue activa, se actualizan los datos de la sesión (único caso previo)
 							if (updatedBunit.isActivo()) {
 								session.getbUnit().setCompany(updatedBunit.getCompany());
@@ -954,9 +956,10 @@ public class BusinessUnitUI extends JPanel {
 								session.getbUnit().setCpostal(updatedBunit.getCpostal());
 								session.getbUnit().setTelefono(updatedBunit.getTelefono());
 								session.getbUnit().setMail(updatedBunit.getMail());
-								session.getbUnit().setActivo(activeCheckBox.isSelected());
-								//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-								tNow = PersistenceManager.getTimestampNow();
+								session.getbUnit().setActivo(updatedBunit.isActivo());
+								
+//								//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+//								tNow = PersistenceManager.getTimestampNow();
 								//Actualizamos los datos de la tabla last_modification
 								boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 										BusinessUnit.TABLE_NAME, tNow);
@@ -968,55 +971,88 @@ public class BusinessUnitUI extends JPanel {
 									infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: "
 											+ session.formatTimestamp(tNow, null));
 								}
-								//Formulario no editable
-								editableDataOff();						
-								//Hacemos backup del contenido de los datos del formulario
-								updateDataCache();					
-								//Cambio de estado de los botones y el combobox
-								editButton.setEnabled(true);
-								newButton.setEnabled(true);
-								comboBox.setEnabled(true);
-								activeFilterCheckBox.setEnabled(true);
-								oKButton.setEnabled(false);
-								cancelButton.setEnabled(false);
-								//El selector de acción retorna al estado sin definir
-								okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
+								
+//								//Formulario no editable
+//								editableDataOff();						
+//								//Hacemos backup del contenido de los datos del formulario
+//								updateDataCache();					
+//								//Cambio de estado de los botones y el combobox
+//								editButton.setEnabled(true);
+//								newButton.setEnabled(true);
+//								comboBox.setEnabled(true);
+//								activeFilterCheckBox.setEnabled(true);
+//								oKButton.setEnabled(false);
+//								cancelButton.setEnabled(false);
+//								//El selector de acción retorna al estado sin definir
+//								okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 								
 								//Si el usuario que abre sesión pasa a inactiva una unidad de negocio que no es la suya
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
 								List<User> updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
-								//Recargar los usuarios en la unidad de negocio afectada
-								updatedBunit.setUsers(updatedUserList);
-								//if (no_filtro_activa) {
-								
-								//} else if (filtro_activa) {
-								
-								//}
-								
+								//Si el filtro de unidades de negocio no está activo, se actualizan los datos de la sesión
+								if (!activeFilterCheckBox.isSelected()) {
+									session.getbUnit().setCompany(updatedBunit.getCompany());
+									session.getbUnit().setNombre(updatedBunit.getNombre());
+									session.getbUnit().setDireccion(updatedBunit.getDireccion());
+									session.getbUnit().setProvincia(updatedBunit.getProvincia());
+									session.getbUnit().setEstado(updatedBunit.getEstado());
+									session.getbUnit().setCpostal(updatedBunit.getCpostal());
+									session.getbUnit().setTelefono(updatedBunit.getTelefono());
+									session.getbUnit().setMail(updatedBunit.getMail());
+									session.getbUnit().setActivo(updatedBunit.isActivo());
+									if (updatedUserList != null) {
+										//Recargar los usuarios pasados a inactivos en la unidad de negocio afectada
+										session.getbUnit().setUsers(updatedUserList);
+									}
+									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+											BusinessUnit.TABLE_NAME, tNow);
+									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+									boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+											User.TABLE_NAME, tNow);
+									//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+									//o de la tabla user no queda registrada
+									if (!bUnitChangeRegister || !UserChangeRegister) {
+										infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+									} else {
+										infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: "
+												+ session.formatTimestamp(tNow, null));
+									}
+								//Si el filtro de unidades de negocio está activo, la unidad de negocio editada no puede seguir siendo
+								//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
+								} else {
+									
+								}
 							//Si el usuario que abre sesión pasa a inactiva su propia unidad de negocio
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
 								new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
 								//Cerrar sesión y volver a login
 								new JButton(session.getLogOutAction()).doClick();
+								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+								PersistenceManager.updateTimeStampToDB(session.getConnection(),
+										BusinessUnit.TABLE_NAME, tNow);
+								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+								PersistenceManager.updateTimeStampToDB(session.getConnection(),
+										User.TABLE_NAME, tNow);
 							}
-							
-						
 
-							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-							tNow = PersistenceManager.getTimestampNow();
-							//Actualizamos los datos de la tabla last_modification
-							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-									BusinessUnit.TABLE_NAME, tNow);
-							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-							//no queda registrada
-							if (!changeRegister) {
-								infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
-							} else {
-								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: "
-										+ session.formatTimestamp(tNow, null));
-							}
+//							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+//							tNow = PersistenceManager.getTimestampNow();
+//							
+//							//Actualizamos los datos de la tabla last_modification por el cambio en la table business_unit
+//							bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+//									BusinessUnit.TABLE_NAME, tNow);
+//							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+//							//o de la tabla user no queda registrada
+//							if (!bUnitChangeRegister || !userChangeRegister) {
+//								infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+//							} else {
+//								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: "
+//										+ session.formatTimestamp(tNow, null));
+//							}
+							
 							//Formulario no editable
 							editableDataOff();						
 							//Hacemos backup del contenido de los datos del formulario
@@ -1028,7 +1064,6 @@ public class BusinessUnitUI extends JPanel {
 							activeFilterCheckBox.setEnabled(true);
 							oKButton.setEnabled(false);
 							cancelButton.setEnabled(false);
-
 							//El selector de acción retorna al estado sin definir
 							okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 
