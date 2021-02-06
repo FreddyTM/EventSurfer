@@ -240,18 +240,18 @@ public class User {
 	 * y actualiza dichos usuarios en la base de datos
 	 * @param conn conexión con la base de datos
 	 * @param bUnit unidad de negocio cuyos usuarios se marcarán como inactivos
-	 * @return true si las actualizaciones de los usuarios en la base de datos se realizan correctamente,
-	 * false si no lo hacen
+	 * @return lista de usuarios actualizados en la base de datos
 	 */
-	public boolean setNoActiveUsersToDb (Connection conn, BusinessUnit bUnit) {
+	public List<User> setNoActiveUsersToDb (Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
+		List<User> updatedUserList = new ArrayList<User>();
 		for (User user: userList) {
 			user.setActivo(false);
-			if (!new User().updateUserToDB(conn, user)) {
-				return false;
+			if (new User().updateUserToDB(conn, user)) {
+				updatedUserList.add(user);
 			}
 		}
-		return true;
+		return updatedUserList;
 	}
 	
 	/**

@@ -1034,11 +1034,12 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 
 	· User class:
 		Add setNoActiveUsersToDb()
+		Update setNoActiveUsersToDb()
 
 	* - Package main.java.persistence
 
 	· CurrentSession class:
-		Add attribute selector
+		Add attribute logOutAction
 
 	* - Package main.java.gui
 
