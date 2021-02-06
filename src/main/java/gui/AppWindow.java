@@ -98,7 +98,6 @@ public class AppWindow extends JFrame {
 		centerPanel.add(welcome);
 
 		leftPanel = new Selector(this, session);
-		session.setSelector(leftPanel);
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		

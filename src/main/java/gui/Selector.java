@@ -45,6 +45,7 @@ public class Selector extends JPanel {
 	public Selector(AppWindow frame, CurrentSession session) {
 		this.frame = frame;
 		this.session = session;
+		session.setLogOutAction(logOutAction);
 		
 		setLayout(new GridLayout(8, 0, 10, 10));
 		setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -217,4 +218,5 @@ public class Selector extends JPanel {
 			showPanel(frame, userUI);
 		}
 	}
+
 }
