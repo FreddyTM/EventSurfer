@@ -462,7 +462,9 @@ public class BusinessUnitUI extends JPanel {
 		}
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
 		for (BusinessUnit unit: bUnitList) {
-			if (bUnit.getNombre().equals(unit.getNombre())) {
+			//Si el nombre de la unidad de negocio editada ya existe en alguna unidad de negocio (excluyéndose ella misma),
+			//no se permite la asignación de nombre
+			if (bUnit.getNombre().equals(unit.getNombre()) && !bUnit.getNombre().equals(session.getbUnit().getNombre())) {
 				infoLabel.setText(errorNameText);
 				nameField.setBackground(Color.YELLOW);
 				return false;
