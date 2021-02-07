@@ -1053,6 +1053,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Add editableDataOff()
 		Add updateDataCache()
 		Add refreshComboBox()
+		Add afterNewOrEditBunit()
 		Update getComboBoxItemsFromSession()
 		Update populateTextFields()
 		Update constructor
@@ -1071,7 +1072,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner BusinessUnitUI class):
-		Update actionPerformed() --new--
+		Update actionPerformed() --new & edit--
 
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--
