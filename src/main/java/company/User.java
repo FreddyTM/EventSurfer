@@ -244,17 +244,38 @@ public class User {
 	 */
 	public List<User> setNoActiveUsersToDb (Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
+		
+		//Debug
+		System.out.println("userList.size(): " + userList.size());
+		
 		List<User> updatedUserList = new ArrayList<User>();
-		if (userList != null) {
+		if (userList.size() > 0) {
 			for (User user : userList) {
+				
+				//Debug
+				System.out.println("User: " + user.getUserAlias());
+				
 				user.setActivo(false);
-				if (new User().updateUserToDB(conn, user)) {
-					updatedUserList.add(user);
-				}
+				updatedUserList.add(user);
+				
+				//Debug
+				System.out.println("Setting user inactive...");
+
 			} 
-		} else  {
-			return null;
+		} 
+//		else {
+//			return null;
+//		}
+		for (User user : updatedUserList) {
+			if (!new User().updateUserToDB(conn, user)) {
+				return null;
+			}
+			
+			//Debug
+			System.out.println("Updating user inactive to Db...");
+			
 		}
+		
 		return updatedUserList;
 	}
 	

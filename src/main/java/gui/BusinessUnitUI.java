@@ -79,8 +79,6 @@ public class BusinessUnitUI extends JPanel {
 	//Último valor de activeCheckBox. Sirve de caché para recuperarlo
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private boolean lastActive;
-	//
-	private boolean onEditActive;
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
@@ -411,7 +409,6 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
-		
 				
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -462,7 +459,7 @@ public class BusinessUnitUI extends JPanel {
 		}
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
 		for (BusinessUnit unit: bUnitList) {
-			//Si el nombre de la unidad de negocio editada ya existe en alguna unidad de negocio (excluyéndose ella misma),
+			//Si el nombre de la unidad de negocio creada o editada ya existe en alguna unidad de negocio (excluyéndose ella misma),
 			//no se permite la asignación de nombre
 			if (bUnit.getNombre().equals(unit.getNombre()) && !bUnit.getNombre().equals(session.getbUnit().getNombre())) {
 				infoLabel.setText(errorNameText);
@@ -655,17 +652,17 @@ public class BusinessUnitUI extends JPanel {
 			String item = (String) comboBox.getSelectedItem();
 			Company company = session.getCompany();
 			
-			//Debug
-			System.out.println(session.getCompany() == null);
-			System.out.println(session.getCompany().getNombre());
+//			//Debug
+//			System.out.println(session.getCompany() == null);
+//			System.out.println(session.getCompany().getNombre());
 			
 			//Recuperamos la unidad de negocio seleccionada
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
 			
-			//Debug
-			System.out.println(selectedBunit == null);
-			System.out.println(selectedBunit.getNombre());
-			System.out.println(selectedBunit.getCompany().getNombre());
+//			//Debug
+//			System.out.println(selectedBunit == null);
+//			System.out.println(selectedBunit.getNombre());
+//			System.out.println(selectedBunit.getCompany().getNombre());
 			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
@@ -996,15 +993,29 @@ public class BusinessUnitUI extends JPanel {
 								if(!changeRegister) {
 									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 								}
+							//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han cambiado
+							//de estado
+							if (!lastActive) {
+								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+							}
 								
 							//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
 							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
 							//manera diferente en cada caso
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
+								
+								//Debug
+								System.out.println("Opción EDIT 1");
+								System.out.println("lastActive: " + lastActive);
+								
 								boolean UserChangeRegister = true;
 								List<User> updatedUserList = null;
 								//Si la unidad de negocio estaba activa antes de editarla
 								if (lastActive) {
+									
+									//Debug
+									System.out.println("Marcando usuarios inactivos");
+									
 									//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
 									updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
 									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
@@ -1022,8 +1033,18 @@ public class BusinessUnitUI extends JPanel {
 									session.getbUnit().setTelefono(updatedBunit.getTelefono());
 									session.getbUnit().setMail(updatedBunit.getMail());
 									session.getbUnit().setActivo(updatedBunit.isActivo());
+									
+									if (updatedUserList != null) {
+										//Debug
+										//System.out.println("updatedUserList != null: " + updatedUserList != null);
+										System.out.println("updatedUserList.size(): " + updatedUserList.size());
+									}
 									//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
 									if (updatedUserList != null && updatedUserList.size() > 0) {
+										
+										//Debug
+										System.out.println("Anunciando usuarios inactivos");
+										
 										//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
 										session.getbUnit().setUsers(updatedUserList);
 										infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
