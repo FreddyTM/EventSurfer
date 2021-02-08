@@ -177,7 +177,8 @@ public class BusinessUnitUI extends JPanel {
 		activeFilterCheckBox = new JCheckBox(" solo activas");
 		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeFilterCheckBox.setBounds(666, 175, 154, 25);
-		activeFilterCheckBox.setSelected(true);
+//		activeFilterCheckBox.setSelected(true);
+		activeFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		activeFilterCheckBox.addItemListener(new CheckBoxListener());
 		add(activeFilterCheckBox);
 		
@@ -409,7 +410,7 @@ public class BusinessUnitUI extends JPanel {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
-				
+		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
 		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
@@ -975,6 +976,11 @@ public class BusinessUnitUI extends JPanel {
 							//Importante: Si la unidad de negocio editada pasa de inactiva a activa, sus usuarios (previamente desactivados también)
 							//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
 							if (updatedBunit.isActivo()) {
+								
+								//Debug
+								System.out.println("Opción EDIT 1");
+								System.out.println("lastActive: " + lastActive);
+								
 								session.getbUnit().setCompany(updatedBunit.getCompany());
 								session.getbUnit().setNombre(updatedBunit.getNombre());
 								session.getbUnit().setDireccion(updatedBunit.getDireccion());
@@ -1005,7 +1011,7 @@ public class BusinessUnitUI extends JPanel {
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
 								
 								//Debug
-								System.out.println("Opción EDIT 1");
+								System.out.println("Opción EDIT 2");
 								System.out.println("lastActive: " + lastActive);
 								
 								boolean UserChangeRegister = true;
@@ -1024,6 +1030,10 @@ public class BusinessUnitUI extends JPanel {
 								}
 								//Si el filtro de unidades de negocio no está activo, se actualizan los datos de la sesión
 								if (!activeFilterCheckBox.isSelected()) {
+									
+									//Debug
+									System.out.println("Opción EDIT 2 - filtro no activo");
+									
 									session.getbUnit().setCompany(updatedBunit.getCompany());
 									session.getbUnit().setNombre(updatedBunit.getNombre());
 									session.getbUnit().setDireccion(updatedBunit.getDireccion());
@@ -1060,9 +1070,16 @@ public class BusinessUnitUI extends JPanel {
 									if (!bUnitChangeRegister || !UserChangeRegister) {
 										infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
 									}
+									
+									
 								//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
 								//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
 								} else {
+									
+									//Debug
+									System.out.println("Opción EDIT 2 - filtro activo");
+									
+									
 									//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
 									//Se podrían aplicar los cambios a la unidad de negocio de la sesión porque aún no la hemos cambiado, pero de esta
 									//manera evitamos ambigüedades
@@ -1106,6 +1123,11 @@ public class BusinessUnitUI extends JPanel {
 							//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
 							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
+								
+								System.out.println("Opción EDIT 3");
+								System.out.println("lastActive: " + lastActive);
+								
+								
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
 								new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
 								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
@@ -1119,8 +1141,16 @@ public class BusinessUnitUI extends JPanel {
 								new JButton(session.getLogOutAction()).doClick();
 							}
 							
+							
 							//Si la sesión sigue abierta
 							if (stillOpenSession) {
+								
+								//Debug
+								System.out.println("Aquí entramos siempre tras editar");
+								
+//								//Renovamos la lista de las unidades de negocio del comboBox
+//								refreshComboBox();
+								
 								//Devolvemos el formulario a su estado previo
 								afterNewOrEditBunit();
 								
