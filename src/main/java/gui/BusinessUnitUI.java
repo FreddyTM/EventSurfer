@@ -73,10 +73,10 @@ public class BusinessUnitUI extends JPanel {
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de campos de datos asociados a las etiquetas informativas
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
-	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
+	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
-	//Último valor de activeCheckBox. Sirve de caché para recuperarlo
+	//Último valor de activeCheckBox. Sirve de backup para recuperarlo
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private boolean lastActive;
 	private final Action editAction = new EditAction();
@@ -419,8 +419,8 @@ public class BusinessUnitUI extends JPanel {
 		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
 		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
 		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva actualización, y el panel
-		* nunca podrá reflejar los cambios. Esto pasaría si la actualización del panel se hace al mismo ritmo
+		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
+		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
 		* o más lenta que la comprobación de los datos que hace el objeto session.
 		*/
 		timer = new Timer();
@@ -454,10 +454,7 @@ public class BusinessUnitUI extends JPanel {
 		Boolean error = false;
 		String errorLengthText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
 		String errorNameText = "YA EXISTE UNA UNIDAD DE NEGOCIO CON ESE NOMBRE";
-		if (bUnit.getNombre().length() > 100 || bUnit.getNombre().length() == 0) {
-			nameField.setBackground(Color.YELLOW);
-			error = true;
-		}
+		
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
 		for (BusinessUnit unit: bUnitList) {
 			//Si el nombre de la unidad de negocio creada o editada ya existe en alguna unidad de negocio (excluyéndose ella misma),
@@ -468,7 +465,10 @@ public class BusinessUnitUI extends JPanel {
 				return false;
 			}
 		}
-		
+		if (bUnit.getNombre().length() > 100 || bUnit.getNombre().length() == 0) {
+			nameField.setBackground(Color.YELLOW);
+			error = true;
+		}
 		if (bUnit.getDireccion().length() > 150) {
 			addressField.setBackground(Color.YELLOW);
 			error = true;
@@ -506,7 +506,7 @@ public class BusinessUnitUI extends JPanel {
 	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
 	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
 	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
-	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrar todas
+	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
 	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
 	 */
 	public String[] getComboBoxItemsFromSession(boolean active) {
@@ -528,21 +528,6 @@ public class BusinessUnitUI extends JPanel {
 		Arrays.sort(itemList);
 		return itemList;
 	}
-	
-//	String[] comboList = new String[session.getCompany().getBusinessUnits().size()];
-//	for (int i = 0; i < comboList.length; i++) {
-//		if (active) {
-//			List<String> tempList = new ArrayList<String>();
-//			if (session.getCompany().getBusinessUnits().get(i).getActivo()) {
-//				tempList.add(session.getCompany().getBusinessUnits().get(i).getNombre());
-//				comboList = (String[]) tempList.toArray();
-//			}
-//		} else {
-//			comboList[i] = session.getCompany().getBusinessUnits().get(i).getNombre();
-//		}
-//	}
-//	Arrays.sort(comboList);
-//	return comboList;
 	
 	/**
 	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
@@ -652,19 +637,8 @@ public class BusinessUnitUI extends JPanel {
 		public void itemStateChanged(ItemEvent e) {
 			String item = (String) comboBox.getSelectedItem();
 			Company company = session.getCompany();
-			
-//			//Debug
-//			System.out.println(session.getCompany() == null);
-//			System.out.println(session.getCompany().getNombre());
-			
 			//Recuperamos la unidad de negocio seleccionada
-			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
-			
-//			//Debug
-//			System.out.println(selectedBunit == null);
-//			System.out.println(selectedBunit.getNombre());
-//			System.out.println(selectedBunit.getCompany().getNombre());
-			
+			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
 			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
@@ -675,7 +649,6 @@ public class BusinessUnitUI extends JPanel {
 			updateDataCache();
 			//Vaciamos label de información
 			infoLabel.setText("");
-
 		}
 		
 	}
@@ -683,7 +656,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Listener que define el comportamiento del checkbox activeFilterCheckBox.
 	 * Si activamos el checkbox y la unidad de negocio en pantalla está activa no habrá ningún cambio. Si no está activa,
-	 * la unidad de negocio de la sesión pasará a ser la del usuario que abrió sesión, y se mostrará en pantalla. En cualquier
+	 * la unidad de negocio de la sesión pasará a ser la del usuario que abrió sesión, y se mostrará en pantalla. En ese
 	 * caso comboBox dejará de mostrar las unidades de negocio no activas.
 	 * Si desactivamos el checkbox no habrá ningún cambio. comboBox pasará a mostrar todas las unidades de negocio cargadas en
 	 * la sesión.
@@ -782,10 +755,10 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar.
-	 * Descarta los cambios en los datos introducidos en el formulario. No se graban en la base de datos ni en el
-	 * objeto businessUnit. Se recupera la información que figuraba anteriormente en el formulario. Se borra cualquier
-	 * mensaje de error mostrado anteriormente
+	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar y el
+	 * botón Nueva. Descarta los cambios en los datos introducidos en el formulario. No se graban en la base de datos 
+	 * ni en el objeto businessUnit. Se recupera la información que figuraba anteriormente en el formulario. Se borra 
+	 * cualquier mensaje de error mostrado anteriormente
 	 */
 	private class CancelAction extends AbstractAction {
 		public CancelAction() {
@@ -816,7 +789,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilitan los
 	 * botones Editar y Nueva. Se intentan guardar los datos de la unidad de negocio actualizados en la base
-	 * de datos, o bien los datos de una nueva compañía. Si se consigue, se actualiza el objeto businessUnit
+	 * de datos, o bien los datos de una nueva unidad de negocio. Si se consigue, se actualiza el objeto businessUnit
 	 * con dichos datos o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación
 	 * del objeto businessUnit y se muestra un mensaje de error. Se intenta guardar el registro
 	 * de la actualización de datos en la base de datos. Si no se consigue se muestra un mensaje de error.
@@ -1044,11 +1017,12 @@ public class BusinessUnitUI extends JPanel {
 									session.getbUnit().setMail(updatedBunit.getMail());
 									session.getbUnit().setActivo(updatedBunit.isActivo());
 									
+									//Debug
 									if (updatedUserList != null) {
-										//Debug
 										//System.out.println("updatedUserList != null: " + updatedUserList != null);
 										System.out.println("updatedUserList.size(): " + updatedUserList.size());
 									}
+									
 									//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
 									if (updatedUserList != null && updatedUserList.size() > 0) {
 										
@@ -1093,8 +1067,8 @@ public class BusinessUnitUI extends JPanel {
 									targetBunit.setTelefono(updatedBunit.getTelefono());
 									targetBunit.setMail(updatedBunit.getMail());
 									targetBunit.setActivo(updatedBunit.isActivo());
-									//Informamos de la actualización de la unidad de negocio editada citando su nombre porque ya no se visualizará por
-									//pantalla
+									//Sobreescribimos la notificación de la actualización de la unidad de negocio editada citando su nombre porque ya no
+									//se visualizará por pantalla
 									infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
 											session.formatTimestamp(tNow, null));
 									//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
@@ -1114,12 +1088,9 @@ public class BusinessUnitUI extends JPanel {
 									//Mostramos sus datos
 									populateTextFields();
 									//Renovamos la lista de las unidades de negocio del comboBox
-									refreshComboBox();
-									
-//									//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
-//									comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
-									
+									refreshComboBox();						
 								}
+								
 							//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
 							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
 							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
@@ -1137,7 +1108,10 @@ public class BusinessUnitUI extends JPanel {
 								PersistenceManager.updateTimeStampToDB(session.getConnection(),
 										User.TABLE_NAME, tNow);
 								stillOpenSession = false;
-								//Cerrar sesión y volver a login. El usuario que abrió sesión
+								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
+								
+								//Lanzar un JOptionPane informativo antes de volver al login
+								
 								new JButton(session.getLogOutAction()).doClick();
 							}
 							
