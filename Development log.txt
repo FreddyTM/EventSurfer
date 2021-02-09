@@ -1072,7 +1072,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner BusinessUnitUI class):
-		Update actionPerformed() --new & edit--
+		Update actionPerformed() --new & edit ok--
 
 	· ComboListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--
@@ -1095,6 +1095,6 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	* - Package main.java.test
 
 	· BusinessUnitTest class:
-		Update testSaveBUnitToDB() --not tested yet--
-		Update testAddNewBusinessUnit() --not tested yet--
-		Update testUpdateBusinessUnitToDB() --not tested yet--
+		Update testSaveBUnitToDB() --not tested, but method works in app--
+		Update testAddNewBusinessUnit() --not tested, but method works in app--
+		Update testUpdateBusinessUnitToDB() --not tested, but method works in app--

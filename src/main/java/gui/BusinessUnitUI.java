@@ -21,6 +21,7 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -671,7 +672,7 @@ public class BusinessUnitUI extends JPanel {
 				//Si la bUnit de la sesión no está activa
 				if (session.getbUnit().isActivo() == false) {		
 					//Buscamos la bUnit del usuario que abrió sesión
-					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
+					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
 					//Registramos que la unidad de negocio seleccionada es la que se está mostrando
@@ -1109,9 +1110,12 @@ public class BusinessUnitUI extends JPanel {
 										User.TABLE_NAME, tNow);
 								stillOpenSession = false;
 								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
-								
 								//Lanzar un JOptionPane informativo antes de volver al login
-								
+								String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
+										+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
+										+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
+								JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+								//Replicamos la acción de logout del selector
 								new JButton(session.getLogOutAction()).doClick();
 							}
 							
@@ -1121,10 +1125,7 @@ public class BusinessUnitUI extends JPanel {
 								
 								//Debug
 								System.out.println("Aquí entramos siempre tras editar");
-								
-//								//Renovamos la lista de las unidades de negocio del comboBox
-//								refreshComboBox();
-								
+															
 								//Devolvemos el formulario a su estado previo
 								afterNewOrEditBunit();
 								
@@ -1195,33 +1196,17 @@ public class BusinessUnitUI extends JPanel {
 						//unidad de negocio como nueva unidad de negocio de la sesión
 						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
 							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
-//							if (bUnit.getId() == bUnitShowing.getId()) { //ERROR NULL POINTER EXCEPTION
 							if (bUnit.getId() == session.getbUnit().getId()) { 
 								session.setbUnit(bUnit);
 								bUnitShowing = session.getbUnit();
 							}
 						}
 						//Renovamos la lista de las unidades de negocio del comboBox
-						refreshComboBox();			
-						
-//						//Renovamos la lista de las unidades de negocio del comboBox
-//						comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
-//						comboBox.setModel(new DefaultComboBoxModel(comboList));
-//						comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
-						
-						
+						refreshComboBox();						
 						//Asignamos el nuevo contenido a los textfields
 						BusinessUnitUI.this.populateTextFields();		
 						//Hacemos backup del contenido de los datos del formulario
 						updateDataCache();
-						
-//						//renovamos la lista caché de contenidos de los textfields
-//						textFieldContentList.clear();
-//						for (int i = 0; i < textFieldList.size(); i++) {
-//							textFieldContentList.add(textFieldList.get(i).getText());
-//						}
-//						//Actualizamos el valor caché del ckeckbox "Activa".
-//						lastActive = session.getbUnit().isActivo();
 						
 						//Informamos por pantalla de la actualización
 						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
