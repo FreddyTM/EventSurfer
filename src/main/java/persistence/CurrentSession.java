@@ -323,6 +323,12 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "user":
+								
+								//Debug
+								System.out.println("Usuario: " + user.getUserAlias());
+								System.out.println("Dentro del case user");
+								
+								
 								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
 								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
 								for (User user: userList) {

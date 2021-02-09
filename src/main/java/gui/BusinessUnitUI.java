@@ -942,6 +942,11 @@ public class BusinessUnitUI extends JPanel {
 						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
 							tNow = PersistenceManager.getTimestampNow();
+							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
+							boolean UserChangeRegister = true;
+							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+							boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									BusinessUnit.TABLE_NAME, tNow);
 							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 							//Variable de control para saber si la sesión sigue activa tras la edición de una unidad de negocio
 							boolean stillOpenSession = true;
@@ -965,12 +970,13 @@ public class BusinessUnitUI extends JPanel {
 								session.getbUnit().setMail(updatedBunit.getMail());
 								session.getbUnit().setActivo(updatedBunit.isActivo());
 
-								//Actualizamos los datos de la tabla last_modification
-								boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-										BusinessUnit.TABLE_NAME, tNow);
+//								//Actualizamos los datos de la tabla last_modification
+//								boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+//										BusinessUnit.TABLE_NAME, tNow);
+								
 								//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
 								//no queda registrada
-								if(!changeRegister) {
+								if(!bUnitChangeRegister) {
 									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 								}
 							//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han cambiado
@@ -988,7 +994,7 @@ public class BusinessUnitUI extends JPanel {
 								System.out.println("Opción EDIT 2");
 								System.out.println("lastActive: " + lastActive);
 								
-								boolean UserChangeRegister = true;
+//								boolean UserChangeRegister = true;
 								List<User> updatedUserList = null;
 								//Si la unidad de negocio estaba activa antes de editarla
 								if (lastActive) {
@@ -1007,6 +1013,10 @@ public class BusinessUnitUI extends JPanel {
 									
 									//Debug
 									System.out.println("Opción EDIT 2 - filtro no activo");
+									
+//									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+//									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+//											BusinessUnit.TABLE_NAME, tNow);	
 									
 									session.getbUnit().setCompany(updatedBunit.getCompany());
 									session.getbUnit().setNombre(updatedBunit.getNombre());
@@ -1037,9 +1047,11 @@ public class BusinessUnitUI extends JPanel {
 									} else {
 										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 									}
-									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-											BusinessUnit.TABLE_NAME, tNow);								
+									
+//									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+//									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+//											BusinessUnit.TABLE_NAME, tNow);								
+									
 									//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
 									//o de la tabla user no queda registrada
 									if (!bUnitChangeRegister || !UserChangeRegister) {
@@ -1098,13 +1110,9 @@ public class BusinessUnitUI extends JPanel {
 								
 								System.out.println("Opción EDIT 3");
 								System.out.println("lastActive: " + lastActive);
-								
-								
+												
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
 								new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
-								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-								PersistenceManager.updateTimeStampToDB(session.getConnection(),
-										BusinessUnit.TABLE_NAME, tNow);
 								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 								PersistenceManager.updateTimeStampToDB(session.getConnection(),
 										User.TABLE_NAME, tNow);
@@ -1112,12 +1120,6 @@ public class BusinessUnitUI extends JPanel {
 								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
 								//Lanzar un JOptionPane informativo antes de volver al login
 								session.backToLogin();
-//								String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
-//										+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
-//										+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-//								JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
-//								//Replicamos la acción de logout del selector
-//								new JButton(session.getLogOutAction()).doClick();
 							}
 							
 							
