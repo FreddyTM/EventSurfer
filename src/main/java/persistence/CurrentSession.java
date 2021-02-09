@@ -20,7 +20,9 @@ import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.java.company.Area;
@@ -208,6 +210,20 @@ public class CurrentSession {
 		String niceTimestamp = formatter.format(timestamp);
 		return niceTimestamp;
 	}
+	
+	/**
+	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro usuario desde otra
+	 * sesión. Se mostrará un mensaje informativo antes de cerrar la sesión local. El usuario que abrió sesión ya no podrá hacer
+	 * login de nuevo hasta que no sea reactivado por algún administrador.
+	 */
+	public void backToLogin() {
+		String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
+				+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
+				+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
+		JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+		//Replicamos la acción de logout del selector
+		new JButton(logOutAction).doClick();
+	}
 
 	/**
 	 * Clase que realiza la comprobación de las tablas que se han actualizado
@@ -308,6 +324,14 @@ public class CurrentSession {
 								break;
 							case "user":
 								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
+								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
+								for (User user: userList) {
+									if (user.getId() == session.getUser().getId() && user.isActivo() == false) {
+										//Back to login
+										backToLogin();
+										break;
+									}
+								}
 								//Asignamos la lista de usuarios actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setUsers(userList);
 								//Reasignamos el usuario de la sesión

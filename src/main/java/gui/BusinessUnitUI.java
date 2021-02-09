@@ -1111,12 +1111,13 @@ public class BusinessUnitUI extends JPanel {
 								stillOpenSession = false;
 								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
 								//Lanzar un JOptionPane informativo antes de volver al login
-								String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
-										+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
-										+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-								JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
-								//Replicamos la acción de logout del selector
-								new JButton(session.getLogOutAction()).doClick();
+								session.backToLogin();
+//								String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
+//										+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
+//										+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
+//								JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+//								//Replicamos la acción de logout del selector
+//								new JButton(session.getLogOutAction()).doClick();
 							}
 							
 							
@@ -1128,20 +1129,6 @@ public class BusinessUnitUI extends JPanel {
 															
 								//Devolvemos el formulario a su estado previo
 								afterNewOrEditBunit();
-								
-//								//Formulario no editable
-//								editableDataOff();
-//								//Hacemos backup del contenido de los datos del formulario
-//								updateDataCache();
-//								//Cambio de estado de los botones y el combobox
-//								editButton.setEnabled(true);
-//								newButton.setEnabled(true);
-//								comboBox.setEnabled(true);
-//								activeFilterCheckBox.setEnabled(true);
-//								oKButton.setEnabled(false);
-//								cancelButton.setEnabled(false);
-//								//El selector de acción retorna al estado sin definir
-//								okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 							}
 
 							//Error de actualización de los datos en la base de datos
