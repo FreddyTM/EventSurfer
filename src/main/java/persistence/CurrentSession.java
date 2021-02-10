@@ -90,43 +90,46 @@ public class CurrentSession {
 	 * de todas las unidades de negocio
 	 */
 	public void loadAllData (Connection conn, int bUnitId, int userId) {
+		//Carga de tipos de usuarios, tipos de eventos y estados de eventos
+		loadTypesStates(conn);
 		
-		//Lista de tipos de usuario
-		UserType userTypeList = new UserType();
-		userTypeList.loadData(conn);		
-		//Lista de tipos de eventos
-		EventType eventTypeList = new EventType();
-		eventTypeList.loadData(conn);		
-		//Lista de estados de eventos
-		EventState eventStateList = new EventState();
-		eventStateList.loadData(conn);	
-		//Mandamos las listas a un objeto contenedor
-		TypesStatesContainer.setuType(userTypeList);
-		TypesStatesContainer.setEvType(eventTypeList);
-		TypesStatesContainer.setEvState(eventStateList);	
+//		//Lista de tipos de usuario
+//		UserType userTypeList = new UserType();
+//		userTypeList.loadData(conn);		
+//		//Lista de tipos de eventos
+//		EventType eventTypeList = new EventType();
+//		eventTypeList.loadData(conn);		
+//		//Lista de estados de eventos
+//		EventState eventStateList = new EventState();
+//		eventStateList.loadData(conn);	
+//		//Mandamos las listas a un objeto contenedor
+//		TypesStatesContainer.setuType(userTypeList);
+//		TypesStatesContainer.setEvType(eventTypeList);
+//		TypesStatesContainer.setEvState(eventStateList);
+		
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos las unidades de negocio de la compañía
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		company.setBusinessUnits(bUnitList);
-		for (BusinessUnit bUnit: bUnitList) {
-			if (bUnit.getId() == bUnitId) {
+		for (BusinessUnit unit: bUnitList) {
+			if (unit.getId() == bUnitId) {
 				//Asignamos la unidad de negocio a bUnit
-				this.bUnit = bUnit;
+				bUnit = unit;
 			}
 		}
 		//Para localizar y asignar la BusinessUnit de la sesión, también debería funcionar
 		// this.bunit = new BusinessUnit().getBusinessUnitById (company, bUnitId);
 		
 		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
-		for (BusinessUnit bUnit: company.getBusinessUnits()) {
-			List<User> userList = new User().getUsersFromDB(conn, bUnit);
-			bUnit.setUsers(userList);
-			List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
-			bUnit.setAreas(areaList);
-			List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
-			bUnit.setEvents(eventList);
-			for (Event event: bUnit.getEvents()) {
+		for (BusinessUnit unit: company.getBusinessUnits()) {
+			List<User> userList = new User().getUsersFromDB(conn, unit);
+			unit.setUsers(userList);
+			List<Area> areaList = new Area().getAreasFromDB(conn, unit);
+			unit.setAreas(areaList);
+			List<Event> eventList = new Event().getEventsFromDB(conn, unit);
+			unit.setEvents(eventList);
+			for (Event event: unit.getEvents()) {
 				List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 				event.setUpdates(eUpdate);
 			}
@@ -150,29 +153,33 @@ public class CurrentSession {
 	 * @param userId id del usuario que abre la sesión
 	 */
 	public void loadCurrentSessionData(Connection conn, int bUnitId, int userId) {
-		//Lista de tipos de usuario
-		UserType userTypeList = new UserType();
-		userTypeList.loadData(conn);	
-		//Lista de tipos de eventos
-		EventType eventTypeList = new EventType();
-		eventTypeList.loadData(conn);	
-		//Lista de estados de eventos
-		EventState eventStateList = new EventState();
-		eventStateList.loadData(conn);		
-		//Mandamos las listas a un objeto contenedor
-		TypesStatesContainer.setuType(userTypeList);
-		TypesStatesContainer.setEvType(eventTypeList);
-		TypesStatesContainer.setEvState(eventStateList);
+		//Carga de tipos de usuarios, tipos de eventos y estados de eventos
+		loadTypesStates(conn);
+		
+//		//Lista de tipos de usuario
+//		UserType userTypeList = new UserType();
+//		userTypeList.loadData(conn);		
+//		//Lista de tipos de eventos
+//		EventType eventTypeList = new EventType();
+//		eventTypeList.loadData(conn);		
+//		//Lista de estados de eventos
+//		EventState eventStateList = new EventState();
+//		eventStateList.loadData(conn);	
+//		//Mandamos las listas a un objeto contenedor
+//		TypesStatesContainer.setuType(userTypeList);
+//		TypesStatesContainer.setEvType(eventTypeList);
+//		TypesStatesContainer.setEvState(eventStateList);
+		
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos la unidad de negocio que tiene el id bUnitId
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
-		for (BusinessUnit bUnit: bUnitList) {
-			if (bUnit.getId() == bUnitId) {
+		for (BusinessUnit unit: bUnitList) {
+			if (unit.getId() == bUnitId) {
 				//Añadimos a la compañía la unidad de negocio a la que pertenece el usuario
-				company.getBusinessUnits().add(bUnit);
+				company.getBusinessUnits().add(unit);
 				//Asignamos la unidad de negocio a bUnit
-				this.bUnit = bUnit;
+				bUnit = unit;
 			}
 		}
 		//Cargamos sus usuarios, areas y eventos de la unidad de negocio
@@ -194,6 +201,38 @@ public class CurrentSession {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 10000, 60000);
+	}
+	
+	/**
+	 * Método de carga de datos unificado
+	 * @param conn conexión con la base de datos
+	 * @param bUnitId id de la unidad de negocio
+	 * @param userId id del usuario que abre la sesión
+	 */
+	public void loadData (Connection conn, int bUnitId, int userId) {
+		//Crear método en user getUserTypeFromDb(Connection conn, int userId) para filtrar la carga de datos en
+		//función del tipo de usuario que abrió sesión
+	}
+	
+	/**
+	 * Carga los tipos de usuarios, tipos de eventos y estados de eventos almacenados en la base
+	 * de datos, y los agrupa en un objeto contenedor TypesStatesContainer
+	 * @param conn conexión con la base de datos
+	 */
+	public void loadTypesStates(Connection conn) {
+		//Lista de tipos de usuario
+		UserType userTypeList = new UserType();
+		userTypeList.loadData(conn);	
+		//Lista de tipos de eventos
+		EventType eventTypeList = new EventType();
+		eventTypeList.loadData(conn);	
+		//Lista de estados de eventos
+		EventState eventStateList = new EventState();
+		eventStateList.loadData(conn);		
+		//Mandamos las listas a un objeto contenedor
+		TypesStatesContainer.setuType(userTypeList);
+		TypesStatesContainer.setEvType(eventTypeList);
+		TypesStatesContainer.setEvState(eventStateList);
 	}
 	
 	/**
@@ -233,7 +272,10 @@ public class CurrentSession {
 		
 		@Override
 		public void run() {
+			//Debug
+			System.out.println("Usuario: " + user.getUserAlias());
 			System.out.println("Comprobando actualización de datos de la sesión");
+			
 			CurrentSession.this.updatedTables.clear();
 			Connection conn = session.getConnection();
 			if (conn == null) {
@@ -315,10 +357,66 @@ public class CurrentSession {
 								//Debug
 								System.out.println("Dentro del case business_unit");
 								
+								//Carga de tipos de usuarios, tipos de eventos y estados de eventos
+								loadTypesStates(conn);
+								
 								//Recargamos la lista de unidades de negocio de la base de datos
 								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
-								//Asignamos la lista actualizada al objeto company de la sesión
-								company.setBusinessUnits(bUnits);
+								//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
+								//Si es un usuario administrador, se recargan todas las unidades de negocio
+								if (user.getUserType().equals("ADMIN")) {
+									company.setBusinessUnits(bUnits);
+									for (BusinessUnit unit : company.getBusinessUnits()) {
+										if (unit.getId() == user.getbUnit().getId()) {
+											//Reasignamos la unidad de negocio de la sesión
+											bUnit = unit;
+											break;
+										}
+									}
+									//Debug
+									System.out.println("Recargando todas las unidades de negocio. Usuario administrador");
+									
+								//Si es un usuario manager o user, solo recargamos su unidad de negocio
+								} else {
+									for (BusinessUnit unit : bUnits) {
+										if (unit.getId() == user.getbUnit().getId()) {
+											company.getBusinessUnits().clear();
+											company.getBusinessUnits().add(unit);
+											//Reasignamos la unidad de negocio de la sesión
+											bUnit = unit;
+											
+											//Debug
+											System.out.println("Recargando las unidad de negocio del usuario manager o user");
+											
+											break;
+										}
+									}
+								}
+								
+								//Recargamos los datos de la lista de unidades de negocio actualizada								
+								for (BusinessUnit unit : company.getBusinessUnits()) {
+									List<User> userList = new User().getUsersFromDB(conn, unit);
+									unit.setUsers(userList);
+									List<Area> areaList = new Area().getAreasFromDB(conn, unit);
+									unit.setAreas(areaList);
+									List<Event> eventList = new Event().getEventsFromDB(conn, unit);
+									unit.setEvents(eventList);
+									for (Event event: unit.getEvents()) {
+										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+										event.setUpdates(eUpdate);
+									}
+								}
+								//Asignamos el usuario que abre sesión a user
+								for (User oneUser : bUnit.getUsers()) {
+									if (oneUser.getId() == user.getId()) {
+										user = oneUser;
+										break;
+									}
+								}
+								
+								
+//								//Asignamos la lista actualizada al objeto company de la sesión
+//								company.setBusinessUnits(bUnits);
 								//Añadimos la tabla a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
