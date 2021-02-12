@@ -1062,6 +1062,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update testData()
 
 	· TimerJob class (BusinessUnitUI inner class):
+		Add attribute usersUpdated
 		Update run()
 
 	· NewAction class (new inner BusinessUnitUI class):

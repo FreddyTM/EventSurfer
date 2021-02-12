@@ -1180,16 +1180,21 @@ public class BusinessUnitUI extends JPanel {
 					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
 						//Localizar la unidad de negocio de la sesión que teníamos seleccionada
 						
-						//Buscamos en la lista de unidades de negocio actualizadas la que tiene
-						//el mismo id que el de la actual unidad de negocio de la sesión. Designamos dicha
-						//unidad de negocio como nueva unidad de negocio de la sesión
-						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
-							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
-							if (bUnit.getId() == session.getbUnit().getId()) { 
-								session.setbUnit(bUnit);
-								bUnitShowing = session.getbUnit();
-							}
-						}
+						//*** - YA ESTAMOS HACIENDO ESTO EN CURRENTSESSION
+//						//Buscamos en la lista de unidades de negocio actualizadas la que tiene
+//						//el mismo id que el de la actual unidad de negocio de la sesión. Designamos dicha
+//						//unidad de negocio como nueva unidad de negocio de la sesión
+//						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
+//							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
+//							if (bUnit.getId() == session.getbUnit().getId()) { 
+//								session.setbUnit(bUnit);
+//								
+//							}
+//						}
+						///*** -------------------------------------------------
+						
+						bUnitShowing = session.getbUnit();
+						
 						//Renovamos la lista de las unidades de negocio del comboBox
 						refreshComboBox();						
 						//Asignamos el nuevo contenido a los textfields

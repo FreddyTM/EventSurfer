@@ -270,6 +270,8 @@ public class CurrentSession {
 	*/
 	private class TimerJob extends TimerTask {
 		
+		private boolean usersUpdated = false;
+		
 		@Override
 		public void run() {
 			//Debug
@@ -362,63 +364,80 @@ public class CurrentSession {
 								
 								//Recargamos la lista de unidades de negocio de la base de datos
 								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
-								//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
-								//Si es un usuario administrador, se recargan todas las unidades de negocio
-								if (user.getUserType().equals("ADMIN")) {
-									company.setBusinessUnits(bUnits);
-									for (BusinessUnit unit : company.getBusinessUnits()) {
-										if (unit.getId() == user.getbUnit().getId()) {
-											//Reasignamos la unidad de negocio de la sesión
-											bUnit = unit;
-											break;
-										}
+								
+								//Localizamos la unidad de negocio del usuario que abrió sesión
+								BusinessUnit updatedBunit = null;
+								for (BusinessUnit oneUnit : bUnits) {
+									if (oneUnit.getId() == user.getbUnit().getId()) {
+										updatedBunit = oneUnit;
 									}
-									//Debug
-									System.out.println("Recargando todas las unidades de negocio. Usuario administrador");
-									
-								//Si es un usuario manager o user, solo recargamos su unidad de negocio
+								}
+								
+								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
+								if(updatedBunit.isActivo() == false) {
+									//Back to login
+									backToLogin();
+								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
 								} else {
-									for (BusinessUnit unit : bUnits) {
-										if (unit.getId() == user.getbUnit().getId()) {
-											company.getBusinessUnits().clear();
-											company.getBusinessUnits().add(unit);
-											//Reasignamos la unidad de negocio de la sesión
-											bUnit = unit;
-											
-											//Debug
-											System.out.println("Recargando las unidad de negocio del usuario manager o user");
-											
+									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
+									//Si es un usuario administrador, se recargan todas las unidades de negocio
+									if (user.getUserType().equals("ADMIN")) {
+													
+										//Debug
+										System.out.println("Recargando todas las unidades de negocio. Usuario administrador");
+										
+										company.setBusinessUnits(bUnits);
+										for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+											if (oneUnit.getId() == bUnit.getId()) {
+												//Reasignamos la unidad de negocio de la sesión
+												bUnit = oneUnit;
+												break;
+											}
+										}									
+									//Si es un usuario manager o user, solo recargamos su unidad de negocio, que es la misma que la
+									//de la sesión
+									} else {
+										for (BusinessUnit oneUnit : bUnits) {
+											if (oneUnit.getId() == bUnit.getId()) {
+												company.getBusinessUnits().clear();
+												company.getBusinessUnits().add(oneUnit);
+												//Reasignamos la unidad de negocio de la sesión
+												bUnit = oneUnit;
+												
+												//Debug
+												System.out.println("Recargando la unidad de negocio del usuario manager o user");
+												
+												break;
+											}
+										}
+									}
+									//Recargamos los datos de la lista de unidades de negocio actualizadas							
+									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
+										oneUnit.setUsers(userList);
+										List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
+										oneUnit.setAreas(areaList);
+										List<Event> eventList = new Event().getEventsFromDB(conn, oneUnit);
+										oneUnit.setEvents(eventList);
+										for (Event event: oneUnit.getEvents()) {
+											List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+											event.setUpdates(eUpdate);
+										}
+									}
+									
+									
+									//*** - REVISAR ESTO
+									//Asignamos el usuario que abre sesión a user
+									for (User oneUser : bUnit.getUsers()) {
+										if (oneUser.getId() == user.getId()) {
+											user = oneUser;
 											break;
 										}
 									}
+									usersUpdated = true;
+									//Añadimos la tabla a la lista de tablas actualizadas
+									CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								}
-								
-								//Recargamos los datos de la lista de unidades de negocio actualizada								
-								for (BusinessUnit unit : company.getBusinessUnits()) {
-									List<User> userList = new User().getUsersFromDB(conn, unit);
-									unit.setUsers(userList);
-									List<Area> areaList = new Area().getAreasFromDB(conn, unit);
-									unit.setAreas(areaList);
-									List<Event> eventList = new Event().getEventsFromDB(conn, unit);
-									unit.setEvents(eventList);
-									for (Event event: unit.getEvents()) {
-										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-										event.setUpdates(eUpdate);
-									}
-								}
-								//Asignamos el usuario que abre sesión a user
-								for (User oneUser : bUnit.getUsers()) {
-									if (oneUser.getId() == user.getId()) {
-										user = oneUser;
-										break;
-									}
-								}
-								
-								
-//								//Asignamos la lista actualizada al objeto company de la sesión
-//								company.setBusinessUnits(bUnits);
-								//Añadimos la tabla a la lista de tablas actualizadas
-								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "user":
 								
@@ -426,11 +445,37 @@ public class CurrentSession {
 								System.out.println("Usuario: " + user.getUserAlias());
 								System.out.println("Dentro del case user");
 								
+								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
+								//correspondiente actualización de los usuarios. En ese caso no hemos de repetir la recarga
+								//de datos
+								if (!usersUpdated) {
+									
+									//Recargamos los datos de los usuarios de todas las unidades de negocio
+									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
+										oneUnit.setUsers(userList);
+									}
+									//Localizamos al usuario que abrió sesión
+									User updatedUser = null;
+									for (User oneUser : user.getbUnit().getUsers()) {
+										if (oneUser.getId() == user.getId()) {
+											updatedUser = oneUser;
+										}
+									}
+									//Comprobamos que el usuario que abrió sesión no ha sido deshabilitado
+									if(updatedUser.isActivo() == false) {
+										//Back to login
+										backToLogin();
+									//Si el usuario que abrió sesión sigue activa, recargamos datos
+									} else {
+										
+									}
+								}
 								
-								List<User> userList = new User().getUsersFromDB(conn, session.getbUnit());
+								
 								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
-								for (User user: userList) {
-									if (user.getId() == session.getUser().getId() && user.isActivo() == false) {
+								for (User oneUser: userList) {
+									if (oneUser.getId() == user.getId() && oneUser.isActivo() == false) {
 										//Back to login
 										backToLogin();
 										break;
@@ -493,7 +538,6 @@ public class CurrentSession {
 				//2º - Comprobar si el panel visible tiene datos de la tabla que ha cambiado
 				//3º - Recargar datos del panel visible
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
