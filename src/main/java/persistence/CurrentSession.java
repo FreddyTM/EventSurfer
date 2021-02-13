@@ -345,7 +345,7 @@ public class CurrentSession {
 								//Debug
 								System.out.println(session.getCompany().getNombre());
 								
-								//Añadimos la tabla a la lista de tablas actualizadas
+								//Añadimos la tabla company a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								
 								//Debug
@@ -398,15 +398,15 @@ public class CurrentSession {
 									//de la sesión
 									} else {
 										for (BusinessUnit oneUnit : bUnits) {
+											
+											//Debug
+											System.out.println("Recargando la unidad de negocio del usuario manager o user");
+											
 											if (oneUnit.getId() == bUnit.getId()) {
 												company.getBusinessUnits().clear();
 												company.getBusinessUnits().add(oneUnit);
 												//Reasignamos la unidad de negocio de la sesión
 												bUnit = oneUnit;
-												
-												//Debug
-												System.out.println("Recargando la unidad de negocio del usuario manager o user");
-												
 												break;
 											}
 										}
@@ -424,19 +424,21 @@ public class CurrentSession {
 											event.setUpdates(eUpdate);
 										}
 									}
-									
-									
-									//*** - REVISAR ESTO
-									//Asignamos el usuario que abre sesión a user
-									for (User oneUser : bUnit.getUsers()) {
+
+									//Asignamos el usuario que abre sesión a user	
+									for (User oneUser : updatedBunit.getUsers()) {
 										if (oneUser.getId() == user.getId()) {
 											user = oneUser;
 											break;
 										}
 									}
+									//Registramos que la recarga de los usuarios actualizados ya se ha hecho
 									usersUpdated = true;
-									//Añadimos la tabla a la lista de tablas actualizadas
+									//Añadimos la tabla business_unit a la lista de tablas actualizadas
 									CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+									//Añadimos la tabla user a la lista de tablas actualizadas para cubrir la posibilidad de que la
+									//edición de una unidad de negocio haya afectado al estado de sus usuarios
+									CurrentSession.this.updatedTables.put(User.TABLE_NAME, dateTimeDb);
 								}
 								break;
 							case "user":
@@ -446,8 +448,7 @@ public class CurrentSession {
 								System.out.println("Dentro del case user");
 								
 								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
-								//correspondiente actualización de los usuarios. En ese caso no hemos de repetir la recarga
-								//de datos
+								//correspondiente recarga de los usuarios actualizados, para no repetirla.
 								if (!usersUpdated) {
 									
 									//Recargamos los datos de los usuarios de todas las unidades de negocio
