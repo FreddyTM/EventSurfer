@@ -467,29 +467,30 @@ public class CurrentSession {
 									if(updatedUser.isActivo() == false) {
 										//Back to login
 										backToLogin();
-									//Si el usuario que abrió sesión sigue activa, recargamos datos
+									//Si el usuario que abrió sesión sigue activo, lo reasignamos 
 									} else {
-										
+										user = updatedUser;	
 									}
 								}
 								
+								usersUpdated = false;
 								
-								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
-								for (User oneUser: userList) {
-									if (oneUser.getId() == user.getId() && oneUser.isActivo() == false) {
-										//Back to login
-										backToLogin();
-										break;
-									}
-								}
-								//Asignamos la lista de usuarios actualizada a la unidad de negocio de la sesión
-								session.getbUnit().setUsers(userList);
-								//Reasignamos el usuario de la sesión
-								for (User user: session.getbUnit().getUsers()) {
-									if (session.getUser().getId() == user.getId()) {
-										session.setUser(user);
-									}
-								}
+//								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
+//								for (User oneUser: userList) {
+//									if (oneUser.getId() == user.getId() && oneUser.isActivo() == false) {
+//										//Back to login
+//										backToLogin();
+//										break;
+//									}
+//								}
+//								//Asignamos la lista de usuarios actualizada a la unidad de negocio de la sesión
+//								session.getbUnit().setUsers(userList);
+//								//Reasignamos el usuario de la sesión
+//								for (User user: session.getbUnit().getUsers()) {
+//									if (session.getUser().getId() == user.getId()) {
+//										session.setUser(user);
+//									}
+//								}
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":

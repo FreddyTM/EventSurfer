@@ -1043,6 +1043,9 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update run() case "business_unit"
 		Update run() case "user"
 
+	· TimerJob class (CurrentSession inner class):
+		Add attribute usersUpdated
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -1062,7 +1065,6 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update testData()
 
 	· TimerJob class (BusinessUnitUI inner class):
-		Add attribute usersUpdated
 		Update run()
 
 	· NewAction class (new inner BusinessUnitUI class):
