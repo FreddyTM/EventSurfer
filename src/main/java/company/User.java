@@ -263,9 +263,7 @@ public class User {
 
 			} 
 		} 
-//		else {
-//			return null;
-//		}
+
 		for (User user : updatedUserList) {
 			if (!new User().updateUserToDB(conn, user)) {
 				return null;

@@ -1040,11 +1040,13 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 
 	· CurrentSession class:
 		Add attribute logOutAction
+		Add attribute volatile usersUpdated
 		Update run() case "business_unit"
 		Update run() case "user"
 
 	· TimerJob class (CurrentSession inner class):
 		Add attribute usersUpdated
+		Delete attribute usersUpdated
 
 	* - Package main.java.gui
 

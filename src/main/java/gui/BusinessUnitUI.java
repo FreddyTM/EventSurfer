@@ -873,21 +873,7 @@ public class BusinessUnitUI extends JPanel {
 						
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditBunit();
-						
-//						//Hacemos backup del contenido de los datos del formulario
-//						updateDataCache();
-//						//Formulario no editable
-//						editableDataOff();
-//						//Cambio de estado de los botones y el combobox
-//						editButton.setEnabled(true);
-//						newButton.setEnabled(true);
-//						comboBox.setEnabled(true);
-//						activeFilterCheckBox.setEnabled(true);
-//						oKButton.setEnabled(false);
-//						cancelButton.setEnabled(false);					
-//						//El selector de acción retorna al estado sin definir
-//						okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
-						
+				
 					//Si la unidad de negocio no se almacena correctamente en la base de datos 
 					} else {
 						infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA UNIDAD DE NEGOCIO EN LA BASE DE DATOS");
@@ -898,20 +884,6 @@ public class BusinessUnitUI extends JPanel {
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 				
 				//*** - IMPORTANTE - ***//
-				//LA UNIDAD DE NEGOCIO POR DEFECTO DE LA BASE DE DATOS NO PUEDE PASAR NUNCA A INACTIVA. SI SE INTENTA
-				// HAY QUE MOSTRAR UN MENSAJE DE ERROR// --OK--
-				
-				//SI LA UNIDAD DE NEGOCIO DE LA SESIÓN PASA A ESTAR INACTIVA, IMPLEMENTAR CAMBIO DE ESTADO DE 
-				//TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO A INACTIVOS, TANTO EN LA SESIÓN COMO EN LA BASE
-				//DE DATOS// --OK DB, FALTA SESIÓN--
-				
-				//LO CONTRARIO NO ES APLICABLE. UNA UNIDAD DE NEGOCIO INACTIVA A LA QUE SE DEVUELVE A ESTADO 
-				//ACTIVO NO REACTIVA SUS USUARIOS DE FORMA AUTOMÁTICA, HAY QUE HACERLO MANUALMENTE UNO POR UNO,
-				//TANTOS COMO SE QUIERA REACTIVAR// --OK--
-				
-				//SI LA UNIDAD DE NEGOCIO PASADA A INACTIVA ES LA DEL USUARIO QUE ABRE SESIÓN, LA SESIÓN DEBE CERRARSE
-				//VOLVIENDO A LA PANTALLA DE LOGIN. EL USUARIO QUE ABRIÓ SESIÓN YA NO PODRÁ VOLVER A ABRIRLA PORQUE
-				//ESTARÁ DESACTIVADO// --OK--
 				
 				//PENSAR EN CÓMO GESTIONAR UN PASO DE UNIDAD DE NEGOCIO A INACTIVA CUANDO UN USUARIO DE DICHA UNIDAD
 				//DE NEGOCIO TIENE ABIERTA SESIÓN EN OTRO LUGAR. LANZAR VENTANA DE AVISO. ACEPTANDO EL AVISO SE CIERRA
@@ -1119,6 +1091,7 @@ public class BusinessUnitUI extends JPanel {
 								stillOpenSession = false;
 								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
 								//Lanzar un JOptionPane informativo antes de volver al login
+								session.setUsersUpdated(true);
 								session.backToLogin();
 							}
 							

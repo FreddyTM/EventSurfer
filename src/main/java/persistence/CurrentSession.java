@@ -65,6 +65,8 @@ public class CurrentSession {
 	private volatile Timestamp dateTimeReference;
 	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
 	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
+	//Variable de control de actualización de usuarios desde la pantalla de unidades de negocio
+	private volatile boolean usersUpdated = false;
 	
 	private CurrentSession() {
 		
@@ -270,7 +272,7 @@ public class CurrentSession {
 	*/
 	private class TimerJob extends TimerTask {
 		
-		private boolean usersUpdated = false;
+//		private volatile boolean usersUpdated = false;
 		
 		@Override
 		public void run() {
@@ -612,6 +614,14 @@ public class CurrentSession {
 
 	public void setUpdatedTables(Map<String, Timestamp> updatedTables) {
 		this.updatedTables = updatedTables;
+	}
+
+	public boolean isUsersUpdated() {
+		return usersUpdated;
+	}
+
+	public void setUsersUpdated(boolean usersUpdated) {
+		this.usersUpdated = usersUpdated;
 	}
 
 }
