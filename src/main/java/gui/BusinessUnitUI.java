@@ -1101,8 +1101,8 @@ public class BusinessUnitUI extends JPanel {
 							//Si la sesión sigue abierta
 							if (stillOpenSession) {
 								
-								//Debug
-								System.out.println("Aquí entramos siempre tras editar");
+//								//Debug
+//								System.out.println("Aquí entramos siempre tras editar");
 															
 								//Devolvemos el formulario a su estado previo
 								afterNewOrEditBunit();
@@ -1167,6 +1167,21 @@ public class BusinessUnitUI extends JPanel {
 //							}
 //						}
 						///*** -------------------------------------------------
+						
+						
+						//Pensar en las diferencias de refresco de la información si el filtro del combobox está activo o inactivo
+						if (!activeFilterCheckBox.isSelected()) {
+							
+						} else {
+							
+						}
+						
+						
+						//Recuperamos la bUnit del usuario que abre sesión
+						BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
+						//La asignamos como bUnit de la sesión
+						session.setbUnit(userBunit);
+						
 						
 						bUnitShowing = session.getbUnit();
 						

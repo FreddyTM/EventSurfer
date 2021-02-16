@@ -348,6 +348,8 @@ public class CurrentSession {
 								
 								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
 								if(updatedBunit.isActivo() == false && usersUpdated == false) {
+									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
+									usersUpdated = true;
 									//Back to login
 									backToLogin();
 								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
