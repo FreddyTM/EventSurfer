@@ -65,7 +65,8 @@ public class CurrentSession {
 	private volatile Timestamp dateTimeReference;
 	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
 	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
-	//Variable de control de actualización de usuarios desde la pantalla de unidades de negocio
+	//Variable de control de actualización de usuarios si ésta se produce por la actualización
+	//de unidades de negocio
 	private volatile boolean usersUpdated = false;
 	
 	private CurrentSession() {
@@ -94,21 +95,6 @@ public class CurrentSession {
 	public void loadAllData (Connection conn, int bUnitId, int userId) {
 		//Carga de tipos de usuarios, tipos de eventos y estados de eventos
 		loadTypesStates(conn);
-		
-//		//Lista de tipos de usuario
-//		UserType userTypeList = new UserType();
-//		userTypeList.loadData(conn);		
-//		//Lista de tipos de eventos
-//		EventType eventTypeList = new EventType();
-//		eventTypeList.loadData(conn);		
-//		//Lista de estados de eventos
-//		EventState eventStateList = new EventState();
-//		eventStateList.loadData(conn);	
-//		//Mandamos las listas a un objeto contenedor
-//		TypesStatesContainer.setuType(userTypeList);
-//		TypesStatesContainer.setEvType(eventTypeList);
-//		TypesStatesContainer.setEvState(eventStateList);
-		
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos las unidades de negocio de la compañía
@@ -157,21 +143,6 @@ public class CurrentSession {
 	public void loadCurrentSessionData(Connection conn, int bUnitId, int userId) {
 		//Carga de tipos de usuarios, tipos de eventos y estados de eventos
 		loadTypesStates(conn);
-		
-//		//Lista de tipos de usuario
-//		UserType userTypeList = new UserType();
-//		userTypeList.loadData(conn);		
-//		//Lista de tipos de eventos
-//		EventType eventTypeList = new EventType();
-//		eventTypeList.loadData(conn);		
-//		//Lista de estados de eventos
-//		EventState eventStateList = new EventState();
-//		eventStateList.loadData(conn);	
-//		//Mandamos las listas a un objeto contenedor
-//		TypesStatesContainer.setuType(userTypeList);
-//		TypesStatesContainer.setEvType(eventTypeList);
-//		TypesStatesContainer.setEvState(eventStateList);
-		
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos la unidad de negocio que tiene el id bUnitId
@@ -206,7 +177,7 @@ public class CurrentSession {
 	}
 	
 	/**
-	 * Método de carga de datos unificado
+	 * Método de carga de datos unificado. ** Declarado, pero sin desarrollar todavía **
 	 * @param conn conexión con la base de datos
 	 * @param bUnitId id de la unidad de negocio
 	 * @param userId id del usuario que abre la sesión
@@ -376,7 +347,7 @@ public class CurrentSession {
 								}
 								
 								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
-								if(updatedBunit.isActivo() == false) {
+								if(updatedBunit.isActivo() == false && usersUpdated == false) {
 									//Back to login
 									backToLogin();
 								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos

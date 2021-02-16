@@ -1041,6 +1041,9 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· CurrentSession class:
 		Add attribute logOutAction
 		Add attribute volatile usersUpdated
+		Add loadAllData() --empty, not used yet--
+		Update loadAllData()
+		Update loadCurrentSessionData()
 		Update run() case "business_unit"
 		Update run() case "user"
 

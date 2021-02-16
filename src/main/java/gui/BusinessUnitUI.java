@@ -1075,6 +1075,8 @@ public class BusinessUnitUI extends JPanel {
 									//Renovamos la lista de las unidades de negocio del comboBox
 									refreshComboBox();						
 								}
+								//Los usuarios ya han sido actualizados
+								session.setUsersUpdated(true);
 								
 							//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
 							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
