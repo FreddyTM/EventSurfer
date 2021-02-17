@@ -798,7 +798,7 @@ public class BusinessUnitUI extends JPanel {
 	private class OKAction extends AbstractAction {
 		public OKAction() {
 			putValue(NAME, "Aceptar");
-			putValue(SHORT_DESCRIPTION, "Execute data edit");
+			putValue(SHORT_DESCRIPTION, "Execute new data or data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
@@ -851,7 +851,7 @@ public class BusinessUnitUI extends JPanel {
 						//como unidad de negocio de la sesión y por tanto tampoco puede visualizarse al aceptar su creación
 						if (activeFilterCheckBox.isSelected() && storedBunit.isActivo() == false) {
 							//Recuperamos la bUnit del usuario que abre sesión
-							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
+							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 							//La asignamos como bUnit de la sesión
 							session.setbUnit(userBunit);
 							//Registramos que la unidad de negocio seleccionada es la que se está mostrando
@@ -860,6 +860,7 @@ public class BusinessUnitUI extends JPanel {
 							populateTextFields();
 							//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
 							comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+							
 						//Si el filtro de unidades de negocio no está activo, la nueva unidad de negocio pasa a ser la unidad de negocio de la sesión,
 						//tanto si se crea como activa como si no
 						} else {
@@ -882,13 +883,7 @@ public class BusinessUnitUI extends JPanel {
 				
 			//Aceptamos los cambios de la unidad de negocio editada	
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
-				
-				//*** - IMPORTANTE - ***//
-				
-				//PENSAR EN CÓMO GESTIONAR UN PASO DE UNIDAD DE NEGOCIO A INACTIVA CUANDO UN USUARIO DE DICHA UNIDAD
-				//DE NEGOCIO TIENE ABIERTA SESIÓN EN OTRO LUGAR. LANZAR VENTANA DE AVISO. ACEPTANDO EL AVISO SE CIERRA
-				//LA SESIÓN Y SE VUELVE A LA PANTALLA DE LOGIN//
-				
+
 				//Debug
 				System.out.println("Guardando los cambios de la unidad de negocio " + nameField.getText());
 				
@@ -942,10 +937,6 @@ public class BusinessUnitUI extends JPanel {
 								session.getbUnit().setMail(updatedBunit.getMail());
 								session.getbUnit().setActivo(updatedBunit.isActivo());
 
-//								//Actualizamos los datos de la tabla last_modification
-//								boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//										BusinessUnit.TABLE_NAME, tNow);
-								
 								//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
 								//no queda registrada
 								if(!bUnitChangeRegister) {
@@ -986,10 +977,6 @@ public class BusinessUnitUI extends JPanel {
 									//Debug
 									System.out.println("Opción EDIT 2 - filtro no activo");
 									
-//									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-//									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//											BusinessUnit.TABLE_NAME, tNow);	
-									
 									session.getbUnit().setCompany(updatedBunit.getCompany());
 									session.getbUnit().setNombre(updatedBunit.getNombre());
 									session.getbUnit().setDireccion(updatedBunit.getDireccion());
@@ -1018,26 +1005,20 @@ public class BusinessUnitUI extends JPanel {
 									//Si no se ha actualizado la lista de usuarios de la unidad de negocio editada
 									} else {
 										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-									}
-									
-//									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-//									boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//											BusinessUnit.TABLE_NAME, tNow);								
+									}							
 									
 									//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
 									//o de la tabla user no queda registrada
 									if (!bUnitChangeRegister || !UserChangeRegister) {
 										infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
-									}
-									
-									
+									}		
+	
 								//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
 								//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
 								} else {
 									
 									//Debug
 									System.out.println("Opción EDIT 2 - filtro activo");
-									
 									
 									//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
 									//Se podrían aplicar los cambios a la unidad de negocio de la sesión porque aún no la hemos cambiado, pero de esta
@@ -1065,7 +1046,7 @@ public class BusinessUnitUI extends JPanel {
 										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 									}
 									//Recuperamos la bUnit del usuario que abre sesión
-									BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
+									BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 									//La asignamos como bUnit de la sesión
 									session.setbUnit(userBunit);
 									//Registramos que la unidad de negocio seleccionada es la que se está mostrando
@@ -1096,14 +1077,9 @@ public class BusinessUnitUI extends JPanel {
 								session.setUsersUpdated(true);
 								session.backToLogin();
 							}
-							
-							
+									
 							//Si la sesión sigue abierta
 							if (stillOpenSession) {
-								
-//								//Debug
-//								System.out.println("Aquí entramos siempre tras editar");
-															
 								//Devolvemos el formulario a su estado previo
 								afterNewOrEditBunit();
 							}
@@ -1153,45 +1129,42 @@ public class BusinessUnitUI extends JPanel {
 					
 					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
 					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
-						//Localizar la unidad de negocio de la sesión que teníamos seleccionada
-						
-						//*** - YA ESTAMOS HACIENDO ESTO EN CURRENTSESSION
-//						//Buscamos en la lista de unidades de negocio actualizadas la que tiene
-//						//el mismo id que el de la actual unidad de negocio de la sesión. Designamos dicha
-//						//unidad de negocio como nueva unidad de negocio de la sesión
-//						for (int i = 0; i < session.getCompany().getBusinessUnits().size(); i++) {
-//							BusinessUnit bUnit = session.getCompany().getBusinessUnits().get(i);
-//							if (bUnit.getId() == session.getbUnit().getId()) { 
-//								session.setbUnit(bUnit);
-//								
-//							}
-//						}
-						///*** -------------------------------------------------
-						
-						
-						//Pensar en las diferencias de refresco de la información si el filtro del combobox está activo o inactivo
-						if (!activeFilterCheckBox.isSelected()) {
+						//Si la unidad de negocio de la sesión ha sido desactivada y el filtro del combobox está activo, la unidad
+						//de negocio de la sesión pasa a ser la del usuario que abrió sesión, y será la que se visualize
+						if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
 							
+							//Debug
+							System.out.println("Actualizando pantalla cambiando la bUnit de la sesión");
+							System.out.println("La bUnit de la sesión era " + session.getbUnit().getNombre());
+							
+							//Recuperamos la bUnit del usuario que abre sesión
+							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+							//La asignamos como bUnit de la sesión
+							session.setbUnit(userBunit);
+							
+							//Debug
+							System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
+							
+							bUnitShowing = session.getbUnit();
+							//Asignamos el nuevo contenido a los textfields
+							populateTextFields();
+							//Renovamos la lista de las unidades de negocio del comboBox
+							refreshComboBox();						
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
 						} else {
 							
+							//Debug
+							System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
+							
+							//Asignamos el nuevo contenido a los textfields
+							populateTextFields();
+							//Renovamos la lista de las unidades de negocio del comboBox
+							refreshComboBox();						
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
 						}
-						
-						
-						//Recuperamos la bUnit del usuario que abre sesión
-						BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getId());
-						//La asignamos como bUnit de la sesión
-						session.setbUnit(userBunit);
-						
-						
-						bUnitShowing = session.getbUnit();
-						
-						//Renovamos la lista de las unidades de negocio del comboBox
-						refreshComboBox();						
-						//Asignamos el nuevo contenido a los textfields
-						BusinessUnitUI.this.populateTextFields();		
-						//Hacemos backup del contenido de los datos del formulario
-						updateDataCache();
-						
+
 						//Informamos por pantalla de la actualización
 						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
