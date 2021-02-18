@@ -2,6 +2,8 @@ package main.java.gui;
 
 import java.awt.Font;
 import java.awt.LayoutManager;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +14,14 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
+import main.java.company.BusinessUnit;
+import main.java.company.Company;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
 public class UserUI extends JPanel {
 	
@@ -32,6 +38,8 @@ public class UserUI extends JPanel {
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	private JTextField companyField;
+	private JComboBox bUnitComboBox;
+	private JCheckBox bUnitActiveFilterCheckBox;
 	
 	
 	//Lista de elementos que aparecen en los comboBox
@@ -135,6 +143,19 @@ public class UserUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
+		bUnitComboList = null;
+		//bUnitComboBox = new JComboBox(bUnitComboList);
+		bUnitComboBox = new JComboBox();
+		bUnitComboBox.setBounds(260, 175, 400, 22);
+		bUnitComboBox.addItemListener(null);
+		add(bUnitComboBox);
+		
+		bUnitActiveFilterCheckBox = new JCheckBox(" solo activas");
+		bUnitActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		bUnitActiveFilterCheckBox.setBounds(666, 175, 154, 25);
+		bUnitActiveFilterCheckBox.addItemListener(new BunitCheckBoxListener());
+		add(bUnitActiveFilterCheckBox);
+		
 	}
 
 	public UserUI(LayoutManager layout) {
@@ -151,4 +172,81 @@ public class UserUI extends JPanel {
 		super(layout, isDoubleBuffered);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	
+	/**
+	 * Listener que define el comportamiento del comboBox bUnitComboBox. Cada elemento se corresponde con
+	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
+	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
+	 * de la sessión, reemplazando al que hubiera hasta ese momento. Si activeFilterCheckBox está seleccionado,
+	 * no se mostrarán las unidades de negocio que estén marcadas como no activas
+	 */
+	private class BunitComboListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			//*** - NO ACTIVAR TODAVÍA - ***// 
+//			String item = (String) bUnitComboBox.getSelectedItem();
+//			Company company = session.getCompany();
+//			//Recuperamos la unidad de negocio seleccionada
+//			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
+//			//La asignamos a la sesión
+//			session.setbUnit(selectedBunit);
+			//------------------------------//
+			
+//			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+//			bUnitShowing = selectedBunit;
+//			//Mostramos sus datos
+//			populateTextFields();
+//			//Hacemos backup del contenido de los datos del formulario
+//			updateDataCache();
+//			//Vaciamos label de información
+//			infoLabel.setText("");
+		}
+		
+	}
+	
+	/**
+	 * Listener que define el comportamiento del checkbox bUnitActiveFilterCheckBox.
+	 * Si activamos el checkbox solo visualizaremos los usuarios de las unidades de negocio activas. Si lo deseleccionamos
+	 * visualizaremos los usuarios de todas las unidades de negocio. La visualización de usuarios está afectada también
+	 * por el propio filtro de usuarios activos.
+	 */
+	private class BunitCheckBoxListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			int state = e.getStateChange();
+			if (state == ItemEvent.SELECTED) {
+//				//Si la bUnit de la sesión no está activa
+//				if (session.getbUnit().isActivo() == false) {		
+//					//Buscamos la bUnit del usuario que abrió sesión
+//					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+//					//La asignamos como bUnit de la sesión
+//					session.setbUnit(userBunit);
+//					//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+//					bUnitShowing = userBunit;
+//					//Mostramos sus datos
+//					populateTextFields();
+//					//Hacemos backup del contenido de los datos del formulario
+//					updateDataCache();
+//					//Renovamos la lista de las unidades de negocio del comboBox
+//					refreshComboBox();
+//					//Vaciamos label de información
+//					infoLabel.setText("");
+//				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
+//				} else {
+//					//Renovamos la lista de las unidades de negocio del comboBox
+//					refreshComboBox();
+//				}
+			} else if (state == ItemEvent.DESELECTED) {
+				//Renovamos la lista de las unidades de negocio del comboBox
+//				refreshComboBox();
+			}
+		}
+	}
+	
 }

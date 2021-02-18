@@ -1054,7 +1054,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	* - Package main.java.gui
 
 	· AppWindow class:
-		Update setUpWindow()
+		Update setUpWindow() --ver 0.1.6--
 
 	· BusinessUnitUI
 		Add attribute
@@ -1090,9 +1090,6 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· CheckBoxListener class (new inner BusinessUnitUI class):
 		Update itemStateChanged() --ok--
 
-	· AppWindow class:
-		Update setUpWindow() --ver 0.1.6--
-
 	· Selector class:
 		Add attribute userAction
 
@@ -1108,3 +1105,20 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update testSaveBUnitToDB() --not tested, but method works in app--
 		Update testAddNewBusinessUnit() --not tested, but method works in app--
 		Update testUpdateBusinessUnitToDB() --not tested, but method works in app--
+
+ver 0.1.7 - USERUI
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update setUpWindow() --ver 0.1.7--
+
+	· UserUI class:
+		Add attribute
+			bUnitComboBox, bUnitActiveFilterCheckBox
+
+	· BunitComboListener class (new UserUI inner class):
+		Update itemStateChanged()
+
+	· BunitCheckBoxListener class (new UserUI inner class):
+		Update itemStateChanged()
