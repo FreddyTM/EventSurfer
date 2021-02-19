@@ -212,6 +212,16 @@ public class Selector extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
+			
+//			//Marcamos la unidad de negocio del usuario que abre sesión como unidad de negocio de la sesión
+//			session.setbUnit(session.getUser().getbUnit());
+//			
+//			if (session.getUser().getbUnit().isActivo()) {	
+//				session.setbUnit(session.getUser().getbUnit());
+//			} else {
+//				session.backToLogin();;
+//			}
+			
 			//Creamos panel de usuario
 			UserUI userUI = new UserUI(session);
 			//Mostramos el panel

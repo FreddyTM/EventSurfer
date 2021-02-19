@@ -1,11 +1,15 @@
 package main.java.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
@@ -22,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
+import javax.swing.JPasswordField;
 
 public class UserUI extends JPanel {
 	
@@ -40,6 +45,16 @@ public class UserUI extends JPanel {
 	private JTextField companyField;
 	private JComboBox bUnitComboBox;
 	private JCheckBox bUnitActiveFilterCheckBox;
+	private JComboBox userComboBox;
+	private JCheckBox userActiveFilterCheckBox;
+	private JComboBox userTypeComboBox;
+	private JTextField userAliasField;
+	private JTextField nameField;
+	private JTextField lastNameField;
+	private JPasswordField currentPasswordField;
+	private JPasswordField newPasswordField;
+	private JPasswordField confirmPasswordField;
+	private JCheckBox activeCheckBox;
 	
 	
 	//Lista de elementos que aparecen en los comboBox
@@ -54,6 +69,11 @@ public class UserUI extends JPanel {
 	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
+	
+	
+	
+	
+
 
 	/**
 	 * @wbp.parser.constructor
@@ -78,13 +98,13 @@ public class UserUI extends JPanel {
 		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
 		
-		JLabel selectBunitLabel = new JLabel("Unidad de negocio");
+		JLabel selectBunitLabel = new JLabel("Unidades de negocio");
 		selectBunitLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		selectBunitLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		selectBunitLabel.setBounds(50, 175, 200, 25);
 		add(selectBunitLabel);
 		
-		JLabel userLabel = new JLabel("Usuario");
+		JLabel userLabel = new JLabel("Usuarios");
 		userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		userLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		userLabel.setBounds(50, 225, 200, 25);
@@ -132,7 +152,12 @@ public class UserUI extends JPanel {
 		confirmPassLabel.setBounds(50, 575, 200, 25);
 		add(confirmPassLabel);
 		
-
+		JLabel activaLabel = new JLabel("Activo");
+		activaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		activaLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activaLabel.setBounds(50, 625, 200, 25);
+		add(activaLabel);
+		
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
@@ -143,37 +168,224 @@ public class UserUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
-		bUnitComboList = null;
-		//bUnitComboBox = new JComboBox(bUnitComboList);
-		bUnitComboBox = new JComboBox();
-		bUnitComboBox.setBounds(260, 175, 400, 22);
-		bUnitComboBox.addItemListener(null);
-		add(bUnitComboBox);
-		
 		bUnitActiveFilterCheckBox = new JCheckBox(" solo activas");
 		bUnitActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bUnitActiveFilterCheckBox.setBounds(666, 175, 154, 25);
 		bUnitActiveFilterCheckBox.addItemListener(new BunitCheckBoxListener());
+		bUnitActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		add(bUnitActiveFilterCheckBox);
+		
+		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
+		bUnitComboBox = new JComboBox(bUnitComboList);
+		bUnitComboBox.setSelectedIndex(getSelectedIndexFromArray(bUnitComboList));
+		bUnitComboBox.setBounds(260, 175, 400, 25);
+		bUnitComboBox.addItemListener(new BunitComboListener());
+		bUnitComboBox.setEditable(false);
+		bUnitComboBox.setBackground(Color.WHITE);
+		add(bUnitComboBox);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			bUnitComboBox.setEnabled(false);
+		}
+		
+		userActiveFilterCheckBox = new JCheckBox(" solo activos");
+		userActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		userActiveFilterCheckBox.setBounds(666, 225, 154, 25);
+		userActiveFilterCheckBox.addItemListener(new UserCheckBoxListener());
+		add(userActiveFilterCheckBox);
+		
+		userComboList = null;
+		//userComboBox = new JComboBox(userComboList);
+		userComboBox = new JComboBox();
+		userComboBox.setBounds(260, 225, 400, 25);
+		userComboBox.addItemListener(new UserComboListener());
+		userComboBox.setEditable(false);
+		userComboBox.setBackground(Color.WHITE);
+		add(userComboBox);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			userComboBox.setEnabled(false);
+		}
+		
+		userTypeComboList = null;
+		//userTypeComboBox = new JComboBox(userTypeComboList);
+		userTypeComboBox = new JComboBox();
+		userTypeComboBox.setBounds(260, 275, 400, 25);
+		userTypeComboBox.addItemListener(new UserTypeComboListener());
+		userTypeComboBox.setEditable(false);
+		userTypeComboBox.setBackground(Color.WHITE);
+		add(userTypeComboBox);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			userTypeComboBox.setEnabled(false);
+		}
+		
+		userAliasField = new JTextField();
+		userAliasField.setText((String) null);
+		userAliasField.setEditable(false);
+		userAliasField.setColumns(10);
+		userAliasField.setBounds(260, 325, 400, 25);
+		userAliasField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					nameField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(userAliasField);
+		//textFieldContentList.add(session.getbUnit().getCompany().getNombre());
+		add(userAliasField);
+		
+		nameField = new JTextField();
+		nameField.setText((String) null);
+		nameField.setEditable(false);
+		nameField.setColumns(10);
+		nameField.setBounds(260, 375, 400, 25);
+		nameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					lastNameField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(nameField);
+		add(nameField);
+		
+		lastNameField = new JTextField();
+		lastNameField.setText((String) null);
+		lastNameField.setEditable(false);
+		lastNameField.setColumns(10);
+		lastNameField.setBounds(260, 425, 400, 25);
+		lastNameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					currentPasswordField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(lastNameField);
+		add(lastNameField);
+		
+		currentPasswordField = new JPasswordField();
+		currentPasswordField.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		currentPasswordField.setColumns(10);
+		currentPasswordField.setBounds(260, 475, 400, 25);
+		currentPasswordField.setEditable(false);
+		currentPasswordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					newPasswordField.requestFocusInWindow();
+				}
+			}
+		});
+		add(currentPasswordField);
+		
+		newPasswordField = new JPasswordField();
+		newPasswordField.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		newPasswordField.setColumns(10);
+		newPasswordField.setBounds(260, 525, 400, 25);
+		newPasswordField.setEditable(false);
+		newPasswordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					confirmPasswordField.requestFocusInWindow();
+				}
+			}
+		});
+		add(newPasswordField);
+		
+		confirmPasswordField = new JPasswordField();
+		confirmPasswordField.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		confirmPasswordField.setColumns(10);
+		confirmPasswordField.setBounds(260, 575, 400, 25);
+		confirmPasswordField.setEditable(false);
+		confirmPasswordField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					activeCheckBox.requestFocusInWindow();
+				}
+			}
+		});
+		add(confirmPasswordField);
+		
+		activeCheckBox = new JCheckBox();
+		activeCheckBox.setBounds(260, 625, 100, 25);
+		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activeCheckBox.setSelected(session.getbUnit().isActivo());
+		activeCheckBox.setEnabled(false);
+		activeCheckBox.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					//oKButton.requestFocusInWindow();
+				}
+			}
+		});
+		//lastActive = activeCheckBox.isSelected();
+		add(activeCheckBox);
 		
 	}
 
-	public UserUI(LayoutManager layout) {
-		super(layout);
-		// TODO Auto-generated constructor stub
-	}
-
-	public UserUI(boolean isDoubleBuffered) {
-		super(isDoubleBuffered);
-		// TODO Auto-generated constructor stub
-	}
-
-	public UserUI(LayoutManager layout, boolean isDoubleBuffered) {
-		super(layout, isDoubleBuffered);
-		// TODO Auto-generated constructor stub
+//	public UserUI(LayoutManager layout) {
+//		super(layout);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public UserUI(boolean isDoubleBuffered) {
+//		super(isDoubleBuffered);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public UserUI(LayoutManager layout, boolean isDoubleBuffered) {
+//		super(layout, isDoubleBuffered);
+//		// TODO Auto-generated constructor stub
+//	}
+	
+	/**
+	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
+	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
+	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
+	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
+	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
+	 */
+	public String[] getBunitComboBoxItemsFromSession(boolean active) {
+		List<String> tempList = new ArrayList<String>();
+		for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
+			if (active) {
+				if (bUnit.isActivo()) {
+					tempList.add(bUnit.getNombre());
+				}
+			} else {
+				tempList.add(bUnit.getNombre());
+			}
+		}
+		Object[] object = (Object[]) tempList.toArray();
+		String[] itemList = new String[object.length];
+		for (int i = 0; i < object.length; i++) {
+			itemList[i] = object[i].toString();
+		}
+		Arrays.sort(itemList);
+		return itemList;
 	}
 	
-	
+	/**
+	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
+	 * del array pasado por parámetro
+	 * --- CANDIDATO A REFACTOR >> MANDAR A CURRENTSESSION ---
+	 * @param array array con la lista de unidades de negocio
+	 * @return índice del elemento a seleccionar por defecto
+	 */
+	public int getSelectedIndexFromArray(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(session.getbUnit().getNombre())) {
+				return i;
+			}
+		}
+		return 0;
+	}
 	
 	/**
 	 * Listener que define el comportamiento del comboBox bUnitComboBox. Cada elemento se corresponde con
@@ -249,4 +461,105 @@ public class UserUI extends JPanel {
 		}
 	}
 	
+	/**
+	 * Listener que define el comportamiento del comboBox userComboBox. Cada elemento se corresponde con
+	 * los usuarios de la unidad de negocio seleccionada, que pasará a ser la unidad de negocio de la sesión.
+	 * Si userActiveFilterCheckBox está seleccionado, no se mostrarán los usuarios que estén marcadas como no activos
+	 */
+	private class UserComboListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			//*** - NO ACTIVAR TODAVÍA - ***// 
+//			String item = (String) bUnitComboBox.getSelectedItem();
+//			Company company = session.getCompany();
+//			//Recuperamos la unidad de negocio seleccionada
+//			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
+//			//La asignamos a la sesión
+//			session.setbUnit(selectedBunit);
+			//------------------------------//
+			
+//			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+//			bUnitShowing = selectedBunit;
+//			//Mostramos sus datos
+//			populateTextFields();
+//			//Hacemos backup del contenido de los datos del formulario
+//			updateDataCache();
+//			//Vaciamos label de información
+//			infoLabel.setText("");
+		}
+		
+	}
+	
+	/**
+	 * Listener que define el comportamiento del checkbox userActiveFilterCheckBox. Si activamos el checkbox solo
+	 * visualizaremos los usuarios activos de la unidad de negocio seleccionada. Si lo deseleccionamos visualizaremos
+	 * todos los usuarios de dicha unidad de negocio. 
+	 */
+	private class UserCheckBoxListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			int state = e.getStateChange();
+			if (state == ItemEvent.SELECTED) {
+//				//Si la bUnit de la sesión no está activa
+//				if (session.getbUnit().isActivo() == false) {		
+//					//Buscamos la bUnit del usuario que abrió sesión
+//					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+//					//La asignamos como bUnit de la sesión
+//					session.setbUnit(userBunit);
+//					//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+//					bUnitShowing = userBunit;
+//					//Mostramos sus datos
+//					populateTextFields();
+//					//Hacemos backup del contenido de los datos del formulario
+//					updateDataCache();
+//					//Renovamos la lista de las unidades de negocio del comboBox
+//					refreshComboBox();
+//					//Vaciamos label de información
+//					infoLabel.setText("");
+//				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
+//				} else {
+//					//Renovamos la lista de las unidades de negocio del comboBox
+//					refreshComboBox();
+//				}
+			} else if (state == ItemEvent.DESELECTED) {
+				//Renovamos la lista de las unidades de negocio del comboBox
+//				refreshComboBox();
+			}
+		}
+	}
+	
+	/**
+	 * Listener que define el comportamiento del comboBox userTypeComboBox. Cada elemento se corresponde con los tipos de usuarios
+	 * que existen en la aplicación: ADMIN, MANAGER y USER. Al crear o editar un usuario se podrá asignar dicho tipo.
+	 * 
+	 */
+	private class UserTypeComboListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			//*** - NO ACTIVAR TODAVÍA - ***// 
+//			String item = (String) bUnitComboBox.getSelectedItem();
+//			Company company = session.getCompany();
+//			//Recuperamos la unidad de negocio seleccionada
+//			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
+//			//La asignamos a la sesión
+//			session.setbUnit(selectedBunit);
+			//------------------------------//
+			
+//			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+//			bUnitShowing = selectedBunit;
+//			//Mostramos sus datos
+//			populateTextFields();
+//			//Hacemos backup del contenido de los datos del formulario
+//			updateDataCache();
+//			//Vaciamos label de información
+//			infoLabel.setText("");
+		}
+		
+	}
 }

@@ -1115,10 +1115,23 @@ ver 0.1.7 - USERUI
 
 	· UserUI class:
 		Add attribute
-			bUnitComboBox, bUnitActiveFilterCheckBox
+			bUnitComboBox, bUnitActiveFilterCheckBox, userComboBox, userActiveFilterCheckBox, userTypeComboBox,
+			userAliasField, nameField, lastNameField
+		Add getBunitComboBoxItemsFromSession()
+		Add getSelectedIndexFromArray()
+		Update constructor
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged()
 
 	· BunitCheckBoxListener class (new UserUI inner class):
+		Update itemStateChanged()
+
+	· UserComboListener class (new UserUI inner class):
+		Update itemStateChanged()
+
+	· UserCheckBoxListener class (new UserUI inner class):
+		Update itemStateChanged()
+
+	· UserTypeComboListener class (new UserUI inner class):
 		Update itemStateChanged()
