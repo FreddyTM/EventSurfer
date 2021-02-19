@@ -192,18 +192,23 @@ public class UserUI extends JPanel {
 		userActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		userActiveFilterCheckBox.setBounds(666, 225, 154, 25);
 		userActiveFilterCheckBox.addItemListener(new UserCheckBoxListener());
+		userActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		add(userActiveFilterCheckBox);
 		
-		//userComboList = (String []) new User().getUsersFromDB(session.getConnection(), session.getbUnit()).toArray();
-		userComboList = (String[]) session.getbUnit().getUsers().toArray();
+		userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
+		//Si la lista está vacía
+		if (userComboList.length == 0) {
+			userComboList = new String[1];
+			userComboList[0] = "<Ningún usuario seleccionable>";
+		}		
 		userComboBox = new JComboBox(userComboList);
-		//userComboBox = new JComboBox();
+		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
 		userComboBox.setBounds(260, 225, 400, 25);
 		userComboBox.addItemListener(new UserComboListener());
 		userComboBox.setEditable(false);
 		userComboBox.setBackground(Color.WHITE);
 		add(userComboBox);
-		if (!session.getUser().getUserType().equals("ADMIN")) {
+		if (session.getUser().getUserType().equals("USER")) {
 			userComboBox.setEnabled(false);
 		}
 		
@@ -405,23 +410,29 @@ public class UserUI extends JPanel {
 	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir
 	 * del array pasado por parámetro
 	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
-	 * @return -1 si la lista está vacía, el índice que corresponda al alias del usuario que abrió sesión si
-	 * dicho usuario está en la lista, 0 si el usuario que abrió sesión no está en la lista (equivale a 
-	 * seleccionar el primer usuario que aparezca)
+	 * @return el índice que corresponda al alias del usuario que abrió sesión si dicho usuario está en la lista,
+	 * 0 si el usuario que abrió sesión no está en la lista (equivale a seleccionar el primer usuario que aparezca)
 	 */
 	public int getSelectedUserIndexFromArray(String[] array) {
-		//La unidad de negocio no tiene usuarios, o userActiveFilterCheckBox está activados y la unidad de
-		//negocio no tiene usuarios activos.
-		if (array.length == 0) {
-			return -1;
-		} else {
-			for (int i = 0; i < array.length; i++) {
-				if (array[i].equals(session.getUser().getUserAlias())) {
-					return i;
-				}
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(session.getUser().getUserAlias())) {
+				return i;
 			}
 		}
 		return 0;
+		
+//		//La unidad de negocio no tiene usuarios, o userActiveFilterCheckBox está activados y la unidad de
+//		//negocio no tiene usuarios activos.
+//		if (array.length == 0) {
+//			return -1;
+//		} else {
+//			for (int i = 0; i < array.length; i++) {
+//				if (array[i].equals(session.getUser().getUserAlias())) {
+//					return i;
+//				}
+//			}
+//		}		
+
 	}
 	
 	/**
