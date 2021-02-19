@@ -1118,7 +1118,9 @@ ver 0.1.7 - USERUI
 			bUnitComboBox, bUnitActiveFilterCheckBox, userComboBox, userActiveFilterCheckBox, userTypeComboBox,
 			userAliasField, nameField, lastNameField
 		Add getBunitComboBoxItemsFromSession()
-		Add getSelectedIndexFromArray()
+		Add getSelectedBunitIndexFromArray()
+		Add getUserComboBoxItemsFromSession()
+		Add getSelectedUserIndexFromArray()
 		Update constructor
 
 	· BunitComboListener class (new UserUI inner class):

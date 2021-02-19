@@ -20,6 +20,7 @@ import javax.swing.UIManager;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
+import main.java.company.User;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import javax.swing.JLabel;
@@ -177,7 +178,7 @@ public class UserUI extends JPanel {
 		
 		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
 		bUnitComboBox = new JComboBox(bUnitComboList);
-		bUnitComboBox.setSelectedIndex(getSelectedIndexFromArray(bUnitComboList));
+		bUnitComboBox.setSelectedIndex(getSelectedBunitIndexFromArray(bUnitComboList));
 		bUnitComboBox.setBounds(260, 175, 400, 25);
 		bUnitComboBox.addItemListener(new BunitComboListener());
 		bUnitComboBox.setEditable(false);
@@ -193,9 +194,10 @@ public class UserUI extends JPanel {
 		userActiveFilterCheckBox.addItemListener(new UserCheckBoxListener());
 		add(userActiveFilterCheckBox);
 		
-		userComboList = null;
-		//userComboBox = new JComboBox(userComboList);
-		userComboBox = new JComboBox();
+		//userComboList = (String []) new User().getUsersFromDB(session.getConnection(), session.getbUnit()).toArray();
+		userComboList = (String[]) session.getbUnit().getUsers().toArray();
+		userComboBox = new JComboBox(userComboList);
+		//userComboBox = new JComboBox();
 		userComboBox.setBounds(260, 225, 400, 25);
 		userComboBox.addItemListener(new UserComboListener());
 		userComboBox.setEditable(false);
@@ -329,21 +331,6 @@ public class UserUI extends JPanel {
 		
 	}
 
-//	public UserUI(LayoutManager layout) {
-//		super(layout);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public UserUI(boolean isDoubleBuffered) {
-//		super(isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public UserUI(LayoutManager layout, boolean isDoubleBuffered) {
-//		super(layout, isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
-	
 	/**
 	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
 	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
@@ -372,16 +359,66 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
+	 * Obiene el índice del elemento de bUnitComboBox que será seleccionado por defecto a partir
 	 * del array pasado por parámetro
 	 * --- CANDIDATO A REFACTOR >> MANDAR A CURRENTSESSION ---
 	 * @param array array con la lista de unidades de negocio
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	public int getSelectedIndexFromArray(String[] array) {
+	public int getSelectedBunitIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getbUnit().getNombre())) {
 				return i;
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * Obtiene la lista de usuarios de la unidad de negocio de la sesión. Serán todos los usuarios si
+	 * userActiveFilterCheckBox está deseleccionado, y solo los usuarios activos si userActiveFilterCheckBox
+	 * está seleccionado.
+	 * @param active true si se muestran solo los usuarios activos, false para mostrarlos todos
+	 * @return array ordenado alfabéticamente con la lista de usuarios
+	 */
+	public String[] getUserComboBoxItemsFromSession(boolean active) {
+		List<String> tempList = new ArrayList<String>();
+		for (User user : session.getbUnit().getUsers()) {
+			if (active) {
+				if (user.isActivo()) {
+					tempList.add(user.getUserAlias());
+				}
+			} else {
+				tempList.add(user.getUserAlias());
+			}
+		}
+		Object[] object = (Object[]) tempList.toArray();
+		String[] itemList = new String[object.length];
+		for (int i = 0; i < object.length; i++) {
+			itemList[i] = object[i].toString();
+		}
+		Arrays.sort(itemList);
+		return itemList;
+	}
+	
+	/**
+	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir
+	 * del array pasado por parámetro
+	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
+	 * @return -1 si la lista está vacía, el índice que corresponda al alias del usuario que abrió sesión si
+	 * dicho usuario está en la lista, 0 si el usuario que abrió sesión no está en la lista (equivale a 
+	 * seleccionar el primer usuario que aparezca)
+	 */
+	public int getSelectedUserIndexFromArray(String[] array) {
+		//La unidad de negocio no tiene usuarios, o userActiveFilterCheckBox está activados y la unidad de
+		//negocio no tiene usuarios activos.
+		if (array.length == 0) {
+			return -1;
+		} else {
+			for (int i = 0; i < array.length; i++) {
+				if (array[i].equals(session.getUser().getUserAlias())) {
+					return i;
+				}
 			}
 		}
 		return 0;
