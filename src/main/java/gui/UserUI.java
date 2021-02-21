@@ -2,6 +2,7 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -23,9 +24,12 @@ import main.java.company.Company;
 import main.java.company.User;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.types_states.TypesStatesContainer;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
 
@@ -43,6 +47,8 @@ public class UserUI extends JPanel {
 	private Timer timer;
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
+	//Usuario seleccionado en pantalla
+	private User userSelected;
 	private JTextField companyField;
 	private JComboBox bUnitComboBox;
 	private JCheckBox bUnitActiveFilterCheckBox;
@@ -182,6 +188,7 @@ public class UserUI extends JPanel {
 		bUnitComboBox.setBounds(260, 175, 400, 25);
 		bUnitComboBox.addItemListener(new BunitComboListener());
 		bUnitComboBox.setEditable(false);
+		setBlackForeground(bUnitComboBox);
 		bUnitComboBox.setBackground(Color.WHITE);
 		add(bUnitComboBox);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
@@ -206,26 +213,26 @@ public class UserUI extends JPanel {
 		userComboBox.setBounds(260, 225, 400, 25);
 		userComboBox.addItemListener(new UserComboListener());
 		userComboBox.setEditable(false);
+		setBlackForeground(userComboBox);
 		userComboBox.setBackground(Color.WHITE);
 		add(userComboBox);
 		if (session.getUser().getUserType().equals("USER")) {
 			userComboBox.setEnabled(false);
 		}
 		
-		userTypeComboList = null;
-		//userTypeComboBox = new JComboBox(userTypeComboList);
-		userTypeComboBox = new JComboBox();
+		userTypeComboList = getUserTypeComboBoxItemsFromSession();
+		userTypeComboBox = new JComboBox(userTypeComboList);
+		userTypeComboBox.setSelectedIndex(getSelectedUserTypeIndexFromArray(userTypeComboList));
 		userTypeComboBox.setBounds(260, 275, 400, 25);
 		userTypeComboBox.addItemListener(new UserTypeComboListener());
 		userTypeComboBox.setEditable(false);
+		userTypeComboBox.setEnabled(false);
+		setBlackForeground(userTypeComboBox);
 		userTypeComboBox.setBackground(Color.WHITE);
 		add(userTypeComboBox);
-		if (!session.getUser().getUserType().equals("ADMIN")) {
-			userTypeComboBox.setEnabled(false);
-		}
 		
 		userAliasField = new JTextField();
-		userAliasField.setText((String) null);
+		userAliasField.setText(userSelected.getUserAlias());
 		userAliasField.setEditable(false);
 		userAliasField.setColumns(10);
 		userAliasField.setBounds(260, 325, 400, 25);
@@ -242,7 +249,7 @@ public class UserUI extends JPanel {
 		add(userAliasField);
 		
 		nameField = new JTextField();
-		nameField.setText((String) null);
+		nameField.setText(userSelected.getNombre());
 		nameField.setEditable(false);
 		nameField.setColumns(10);
 		nameField.setBounds(260, 375, 400, 25);
@@ -258,7 +265,7 @@ public class UserUI extends JPanel {
 		add(nameField);
 		
 		lastNameField = new JTextField();
-		lastNameField.setText((String) null);
+		lastNameField.setText(userSelected.getApellido());
 		lastNameField.setEditable(false);
 		lastNameField.setColumns(10);
 		lastNameField.setBounds(260, 425, 400, 25);
@@ -321,7 +328,7 @@ public class UserUI extends JPanel {
 		activeCheckBox = new JCheckBox();
 		activeCheckBox.setBounds(260, 625, 100, 25);
 		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		activeCheckBox.setSelected(session.getbUnit().isActivo());
+		activeCheckBox.setSelected(userSelected.isActivo());
 		activeCheckBox.setEnabled(false);
 		activeCheckBox.addKeyListener(new KeyAdapter() {
 			@Override
@@ -416,23 +423,70 @@ public class UserUI extends JPanel {
 	public int getSelectedUserIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getUser().getUserAlias())) {
+				userSelected = new User().getUserByAlias(session.getbUnit(), array[i]);
+				return i;
+			}
+		}
+		userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
+		return 0;
+	}
+	
+	/**
+	 * Devuelve el usuario entrado por parámetro si dicho usuario no es null. Si es null, crea un usuario dummy con
+	 * un id (-1) que no existe en la base de datos para poderlo distinguir de cualquier otro usuario real
+	 * @param user objeto User, o null
+	 * @return usuario entrado por parámetro sin modificar, o un usuario vacío
+	 */
+	public User buildUserSelected (User user) {
+		if (user == null) {
+			user = new User(-1, session.getbUnit(), "", "", "", "", "", false);
+		}
+		return user;
+	}
+	
+	/**
+	 * Obtiene la lista de los tipos de usuarios definidos en el programa. Si userSelected es un usuario dummy con id -1
+	 * la lista tendrá un único elemento vacío
+	 * @return lista de tipos de usuarios, o lista con un único elemento vacío
+	 */
+	public String [] getUserTypeComboBoxItemsFromSession() {
+		if (userSelected.getId() == -1) {
+			String[] emptyList = {""};
+			return emptyList;
+		} else {
+			return TypesStatesContainer.getuType().getUserTypesArray();
+		}
+	}
+	
+	/**
+	 * Obiene el índice del elemento de userTypeComboBox que será seleccionado por defecto a partir
+	 * del array pasado por parámetro
+	 * @param array array con la lista de tipos de usuarios, o array con un único elemento vacío si
+	 * userSelected es un usuario dummy con id -1
+	 * @return índice del elemento a seleccionar por defecto
+	 */
+	public int getSelectedUserTypeIndexFromArray(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			if (userSelected.getUserType().equals(array[i])) {
 				return i;
 			}
 		}
 		return 0;
-		
-//		//La unidad de negocio no tiene usuarios, o userActiveFilterCheckBox está activados y la unidad de
-//		//negocio no tiene usuarios activos.
-//		if (array.length == 0) {
-//			return -1;
-//		} else {
-//			for (int i = 0; i < array.length; i++) {
-//				if (array[i].equals(session.getUser().getUserAlias())) {
-//					return i;
-//				}
-//			}
-//		}		
-
+	}
+	
+	/**
+	 * Establece por defecto el color negro como color de la letra del JComboBox pasado por parámetro, incluso
+	 * en el caso de que el combobox esté deshabilitado
+	 * @param combobox JComboBox al que le queremos aplicar el formato
+	 */
+	public void setBlackForeground(JComboBox combobox) {
+		combobox.setRenderer(new DefaultListCellRenderer() {
+		   @Override
+		   public void paint(Graphics g) {
+		       setForeground(Color.BLACK);
+		       super.paint(g);
+		   };
+	   });
 	}
 	
 	/**

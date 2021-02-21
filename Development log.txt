@@ -1121,6 +1121,10 @@ ver 0.1.7 - USERUI
 		Add getSelectedBunitIndexFromArray()
 		Add getUserComboBoxItemsFromSession()
 		Add getSelectedUserIndexFromArray()
+		Add buildUserSelected()
+		Add getUserTypeComboBoxItemsFromSession()
+		Add setBlackForeground()
+		Update getSelectedUserIndexFromArray()
 		Update constructor
 
 	· BunitComboListener class (new UserUI inner class):
