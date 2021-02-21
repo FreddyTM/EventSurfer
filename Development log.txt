@@ -1096,7 +1096,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 	· UserUI class (new):
 		Add Attributes
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible
-			bUnitComboList, userComboList, userTypeComboList
+			bUnitComboList, userComboList, userTypeComboList, companyField
 		Update constructor
 
 	* - Package main.java.test
@@ -1116,7 +1116,10 @@ ver 0.1.7 - USERUI
 	· UserUI class:
 		Add attribute
 			bUnitComboBox, bUnitActiveFilterCheckBox, userComboBox, userActiveFilterCheckBox, userTypeComboBox,
-			userAliasField, nameField, lastNameField
+			userAliasField, nameField, lastNameField, activeCheckBox, lastActive, lastUserType, lastUserTypeIndex
+		Add attribute
+			currentPasswordField, newPasswordField, confirmPasswordField, infoLabel, editButton, cancelButton,
+			oKButton, newButton, editAction, cancelAction, oKAction, newAction
 		Add getBunitComboBoxItemsFromSession()
 		Add getSelectedBunitIndexFromArray()
 		Add getUserComboBoxItemsFromSession()
@@ -1141,3 +1144,15 @@ ver 0.1.7 - USERUI
 
 	· UserTypeComboListener class (new UserUI inner class):
 		Update itemStateChanged()
+
+	· NewAction class (new inner UserUI class):
+		Update actionPerformed() --empty--
+
+	· EditAction class (new inner UserUI class):
+		Update actionPerformed() --empty--
+
+	· CancelAction class (new inner UserUI class):
+		Update actionPerformed() --empty--
+
+	· OKAction class (new inner UserUI class):
+		Update actionPerformed() --empty--

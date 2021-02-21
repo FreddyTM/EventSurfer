@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
@@ -22,6 +23,7 @@ import javax.swing.UIManager;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
+
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.TypesStatesContainer;
@@ -29,7 +31,10 @@ import main.java.types_states.TypesStatesContainer;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
 
@@ -62,8 +67,19 @@ public class UserUI extends JPanel {
 	private JPasswordField newPasswordField;
 	private JPasswordField confirmPasswordField;
 	private JCheckBox activeCheckBox;
-	
-	
+	private JLabel infoLabel;
+	private JButton editButton;
+	private JButton cancelButton;
+	private JButton oKButton;
+	private JButton newButton;
+	//Último valor de activeCheckBox. Sirve de backup para recuperarlo tras cancelar una edición de datos
+	//o la creación de un nuevo usuario
+	private boolean lastActive;
+	//Último valor seleccionado de userTypeComboBox. Sirve de backup para recuperarlo tras cancelar una edición
+	//de datos o la creación de un nuevo usuario
+	private String lastUserType;
+	//Índice de lastUserType
+	private int lastUserTypeIndex;
 	//Lista de elementos que aparecen en los comboBox
 	private String[] bUnitComboList;
 	private String[] userComboList;
@@ -77,11 +93,13 @@ public class UserUI extends JPanel {
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
 	
+	private final Action editAction = new EditAction();
+	private final Action cancelAction = new CancelAction();
+	private final Action oKAction = new OKAction();
+	private final Action newAction = new NewAction();
+	//Registra la acción a realizar por el botón aceptar
+	private int okActionSelector = UserUI.OK_ACTION_UNDEFINED;
 	
-	
-	
-
-
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -177,7 +195,7 @@ public class UserUI extends JPanel {
 		
 		bUnitActiveFilterCheckBox = new JCheckBox(" solo activas");
 		bUnitActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		bUnitActiveFilterCheckBox.setBounds(666, 175, 154, 25);
+		bUnitActiveFilterCheckBox.setBounds(666, 175, 150, 25);
 		bUnitActiveFilterCheckBox.addItemListener(new BunitCheckBoxListener());
 		bUnitActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		add(bUnitActiveFilterCheckBox);
@@ -197,7 +215,7 @@ public class UserUI extends JPanel {
 		
 		userActiveFilterCheckBox = new JCheckBox(" solo activos");
 		userActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		userActiveFilterCheckBox.setBounds(666, 225, 154, 25);
+		userActiveFilterCheckBox.setBounds(666, 225, 150, 25);
 		userActiveFilterCheckBox.addItemListener(new UserCheckBoxListener());
 		userActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		add(userActiveFilterCheckBox);
@@ -230,6 +248,8 @@ public class UserUI extends JPanel {
 		setBlackForeground(userTypeComboBox);
 		userTypeComboBox.setBackground(Color.WHITE);
 		add(userTypeComboBox);
+		lastUserType = userTypeComboBox.getSelectedItem().toString();
+		lastUserTypeIndex = getSelectedItemIndex(userTypeComboList, lastUserType);
 		
 		userAliasField = new JTextField();
 		userAliasField.setText(userSelected.getUserAlias());
@@ -245,7 +265,7 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(userAliasField);
-		//textFieldContentList.add(session.getbUnit().getCompany().getNombre());
+		textFieldContentList.add(userSelected.getUserAlias());
 		add(userAliasField);
 		
 		nameField = new JTextField();
@@ -262,6 +282,7 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(nameField);
+		textFieldContentList.add(userSelected.getNombre());
 		add(nameField);
 		
 		lastNameField = new JTextField();
@@ -278,6 +299,7 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(lastNameField);
+		textFieldContentList.add(userSelected.getApellido());
 		add(lastNameField);
 		
 		currentPasswordField = new JPasswordField();
@@ -338,9 +360,69 @@ public class UserUI extends JPanel {
 				}
 			}
 		});
-		//lastActive = activeCheckBox.isSelected();
+		lastActive = activeCheckBox.isSelected();
 		add(activeCheckBox);
 		
+		JLabel maxCharsLabel = new JLabel("Max: 20 caracteres");
+		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel.setBounds(670, 325, 146, 25);
+		maxCharsLabel.setVisible(false);
+		labelList.add(maxCharsLabel);
+		add(maxCharsLabel);
+		
+		JLabel maxCharsLabel2 = new JLabel("Max: 50 caracteres");
+		maxCharsLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel2.setBounds(670, 375, 146, 25);
+		maxCharsLabel2.setVisible(false);
+		labelList.add(maxCharsLabel2);
+		add(maxCharsLabel2);
+		
+		JLabel maxCharsLabel3 = new JLabel("Max: 50 caracteres");
+		maxCharsLabel3.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel3.setBounds(670, 425, 146, 25);
+		maxCharsLabel3.setVisible(false);
+		labelList.add(maxCharsLabel3);
+		add(maxCharsLabel3);
+		
+		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
+		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel4.setBounds(670, 525, 146, 25);
+		maxCharsLabel4.setVisible(false);
+		labelList.add(maxCharsLabel4);
+		add(maxCharsLabel4);
+		
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel.setBounds(50, 675, 1000, 25);
+		add(infoLabel);
+		
+		oKButton = new JButton();
+		oKButton.setAction(oKAction);
+		oKButton.setBounds(727, 725, 89, 23);
+		oKButton.setEnabled(false);
+		add(oKButton);
+		
+		cancelButton = new JButton();
+		cancelButton.setAction(cancelAction);
+		cancelButton.setBounds(628, 725, 89, 23);
+		cancelButton.setEnabled(false);
+		add(cancelButton);
+		
+		editButton = new JButton();
+		editButton.setAction(editAction);
+		editButton.setBounds(527, 725, 89, 23);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			editButton.setEnabled(false);
+		}
+		add(editButton);
+		
+		newButton = new JButton();
+		newButton.setAction(newAction);
+		newButton.setBounds(427, 725, 89, 23);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			newButton.setEnabled(false);
+		}
+		add(newButton);
 	}
 
 	/**
@@ -468,6 +550,21 @@ public class UserUI extends JPanel {
 	public int getSelectedUserTypeIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (userSelected.getUserType().equals(array[i])) {
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * Obtiene el índice del elemento seleccionado en userTypeComboBox
+	 * @param itemList lista de valores que aparecen en userTypeComboBox
+	 * @param itemValue valor del que buscamos el índice
+	 * @return índice del valor buscado, o 0 si el valor no está en la lista
+	 */
+	public int getSelectedItemIndex (String[] itemList, String itemValue) {
+		for (int i = 0; i < itemList.length; i++) {
+			if (itemList[i].equals(itemValue)) {
 				return i;
 			}
 		}
@@ -663,5 +760,113 @@ public class UserUI extends JPanel {
 //			infoLabel.setText("");
 		}
 		
+	}
+	
+	/**
+	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
+	 * campos de texto y habilitamos su edición para añadir la información de un nuevo usuario.
+	 * Habilitamos el botón de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
+	 */
+	private class NewAction extends AbstractAction {
+		public NewAction() {
+			putValue(NAME, "Nuevo");
+			putValue(SHORT_DESCRIPTION, "Add new user");
+		}
+		public void actionPerformed(ActionEvent e) {
+//			okActionSelector = BusinessUnitUI.OK_ACTION_NEW;
+//			//Cambio de estado de los botones y el combobox
+//			oKButton.setEnabled(true);
+//			cancelButton.setEnabled(true);
+//			editButton.setEnabled(false);
+//			newButton.setEnabled(false);
+//			comboBox.setEnabled(false);
+//			activeFilterCheckBox.setEnabled(false);
+//			infoLabel.setText("");
+//			//Formulario editable
+//			editableDataOn();
+//			//Vaciamos los campos de texto
+//			for (JTextField tField : textFieldList) {
+//				if (tField != companyField) {
+//					tField.setText("");
+//				}
+//			}
+//			//checkbox "Activa" activo por defecto
+//			activeCheckBox.setSelected(true);
+		}
+	}
+	
+	/**
+	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
+	 * del formulario, el botón de Cancelar para que los cambios no se registren y el de Aceptar para
+	 * que sí lo hagan.
+	 */
+	private class EditAction extends AbstractAction {
+		public EditAction() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Enable data edit");
+		}
+		public void actionPerformed(ActionEvent e) {
+//			okActionSelector = BusinessUnitUI.OK_ACTION_EDIT;
+//			//Cambio de estado de los botones y el combobox
+//			oKButton.setEnabled(true);
+//			cancelButton.setEnabled(true);
+//			editButton.setEnabled(false);
+//			newButton.setEnabled(false);
+//			comboBox.setEnabled(false);
+//			activeFilterCheckBox.setEnabled(false);
+//			infoLabel.setText("");
+//			//Formulario editable
+//			editableDataOn();
+		}
+	}
+	
+	/**
+	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar y el
+	 * botón Nueva. Descarta los cambios en los datos introducidos en el formulario. No se graban en la base de datos 
+	 * ni en el objeto User. Se recupera la información que figuraba anteriormente en el formulario. Se borra 
+	 * cualquier mensaje de error mostrado anteriormente
+	 */
+	private class CancelAction extends AbstractAction {
+		public CancelAction() {
+			putValue(NAME, "Cancelar");
+			putValue(SHORT_DESCRIPTION, "Cancel data edit");
+		}
+		public void actionPerformed(ActionEvent e) {
+//			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
+//			//Cambio de estado de los botones y el combobox
+//			editButton.setEnabled(true);
+//			newButton.setEnabled(true);
+//			comboBox.setEnabled(true);
+//			activeFilterCheckBox.setEnabled(true);
+//			oKButton.setEnabled(false);
+//			cancelButton.setEnabled(false);
+//			infoLabel.setText("");
+//			//Formulario no editable
+//			editableDataOff();		
+//			//Recuperar valores previos a la edición de los datos
+//			for (int i = 0; i < textFieldList.size(); i++) {
+//				textFieldList.get(i).setText(textFieldContentList.get(i));
+//			}
+//			//Recuperamos el valor anterior del checkbox "Activa"
+//			activeCheckBox.setSelected(lastActive);
+		}
+	}
+	
+	/**
+	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilitan los
+	 * botones Editar y Nueva. Se intentan guardar los datos del usuario actualizados en la base
+	 * de datos, o bien los datos de un nuevo usuario. Si se consigue, se actualiza el objeto User
+	 * con dichos datos o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación
+	 * del objeto User y se muestra un mensaje de error. Se intenta guardar el registro
+	 * de la actualización de datos en la base de datos. Si no se consigue se muestra un mensaje de error.
+	 */
+	private class OKAction extends AbstractAction {
+		public OKAction() {
+			putValue(NAME, "Aceptar");
+			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
+		}
+		public void actionPerformed(ActionEvent e) {
+			
+		}
 	}
 }
