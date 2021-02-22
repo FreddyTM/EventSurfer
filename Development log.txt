@@ -1146,7 +1146,7 @@ ver 0.1.7 - USERUI
 		Update itemStateChanged() --ok--
 
 	· UserCheckBoxListener class (new UserUI inner class):
-		Update itemStateChanged()
+		Update itemStateChanged() --ok--
 
 	· UserTypeComboListener class (new UserUI inner class):
 		Update itemStateChanged()

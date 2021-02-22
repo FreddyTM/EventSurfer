@@ -54,7 +54,7 @@ public class UserUI extends JPanel {
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	//Usuario seleccionado en pantalla
-	private User userSelected = session.getUser();
+	private User userSelected;
 	private JTextField companyField;
 	private JComboBox bUnitComboBox = new JComboBox();
 	private JCheckBox bUnitActiveFilterCheckBox;
@@ -749,6 +749,11 @@ public class UserUI extends JPanel {
 			
 			int state = e.getStateChange();
 			if (state == ItemEvent.SELECTED) {
+				
+				if (userSelected == null) {
+					userSelected = session.getUser();
+				}
+				
 				//Si el usuario seleccionado no está activo
 				if (userSelected.isActivo() == false) {
 					//Actualizamos los usuarios de la unidad de negocio de la sesión
