@@ -56,9 +56,9 @@ public class UserUI extends JPanel {
 	//Usuario seleccionado en pantalla
 	private User userSelected;
 	private JTextField companyField;
-	private JComboBox bUnitComboBox;
+	private JComboBox bUnitComboBox = new JComboBox();
 	private JCheckBox bUnitActiveFilterCheckBox;
-	private JComboBox userComboBox;
+	private JComboBox userComboBox = new JComboBox();
 	private JCheckBox userActiveFilterCheckBox;
 	private JComboBox userTypeComboBox;
 	private JTextField userAliasField;
@@ -621,6 +621,15 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
+	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
+	 */
+	public void refreshBunitComboBox() {
+		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
+		bUnitComboBox.setModel(new DefaultComboBoxModel(bUnitComboList));
+		bUnitComboBox.setSelectedIndex(getSelectedBunitIndexFromArray(bUnitComboList));
+	}
+	
+	/**
 	 * Actualiza el contenido del comboBox que selecciona los usuarios
 	 */
 	public void refreshUserComboBox() {
@@ -677,30 +686,30 @@ public class UserUI extends JPanel {
 			
 			int state = e.getStateChange();
 			if (state == ItemEvent.SELECTED) {
-//				//Si la bUnit de la sesión no está activa
-//				if (session.getbUnit().isActivo() == false) {		
-//					//Buscamos la bUnit del usuario que abrió sesión
-//					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-//					//La asignamos como bUnit de la sesión
-//					session.setbUnit(userBunit);
-//					//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-//					bUnitShowing = userBunit;
-//					//Mostramos sus datos
-//					populateTextFields();
-//					//Hacemos backup del contenido de los datos del formulario
-//					updateDataCache();
-//					//Renovamos la lista de las unidades de negocio del comboBox
-//					refreshComboBox();
-//					//Vaciamos label de información
-//					infoLabel.setText("");
-//				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
-//				} else {
-//					//Renovamos la lista de las unidades de negocio del comboBox
-//					refreshComboBox();
-//				}
+				//Si la bUnit de la sesión no está activa
+				if (session.getbUnit().isActivo() == false) {		
+					//Buscamos la bUnit del usuario que abrió sesión
+					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+					//La asignamos como bUnit de la sesión
+					session.setbUnit(userBunit);
+					//Renovamos la lista de las unidades de negocio del comboBox
+					refreshBunitComboBox();
+					//Actualizamos los usuarios de la unidad de negocio de la sesión
+					refreshUserComboBox();
+					//Mostramos sus datos
+					populateUserFields();
+					//Hacemos backup del contenido de los datos del formulario
+					updateDataCache();
+					//Vaciamos label de información
+					infoLabel.setText("");
+				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
+				} else {
+					//Renovamos la lista de las unidades de negocio del comboBox
+					refreshBunitComboBox();
+				}
 			} else if (state == ItemEvent.DESELECTED) {
 				//Renovamos la lista de las unidades de negocio del comboBox
-//				refreshComboBox();
+				refreshBunitComboBox();
 			}
 		}
 	}

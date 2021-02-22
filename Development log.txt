@@ -1131,6 +1131,7 @@ ver 0.1.7 - USERUI
 		Add setBlackForeground()
 		Add populateUserFields()
 		Add updateDataCache()
+		Add refreshBunitComboBox()
 		Add refreshUserComboBox()
 		Update getSelectedUserIndexFromArray()
 		Update constructor
@@ -1139,7 +1140,7 @@ ver 0.1.7 - USERUI
 		Update itemStateChanged() --ok--
 
 	· BunitCheckBoxListener class (new UserUI inner class):
-		Update itemStateChanged()
+		Update itemStateChanged() --ok--
 
 	· UserComboListener class (new UserUI inner class):
 		Update itemStateChanged()
