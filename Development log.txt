@@ -1137,16 +1137,16 @@ ver 0.1.7 - USERUI
 		Update constructor
 
 	· BunitComboListener class (new UserUI inner class):
-		Update itemStateChanged() --ok--
+		Update itemStateChanged() --ok, add edit filters--
 
 	· BunitCheckBoxListener class (new UserUI inner class):
-		Update itemStateChanged() --ok--
+		Update itemStateChanged() --ok, add edit filters--
 
 	· UserComboListener class (new UserUI inner class):
-		Update itemStateChanged() --ok--
+		Update itemStateChanged() --ok, add edit filters--
 
 	· UserCheckBoxListener class (new UserUI inner class):
-		Update itemStateChanged() --ok--
+		Update itemStateChanged() --ok, add edit filters--
 
 	· UserTypeComboListener class (new UserUI inner class):
 		Update itemStateChanged()

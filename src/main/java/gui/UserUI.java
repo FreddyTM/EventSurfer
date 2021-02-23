@@ -60,7 +60,7 @@ public class UserUI extends JPanel {
 	private JCheckBox bUnitActiveFilterCheckBox;
 	private JComboBox userComboBox = new JComboBox();
 	private JCheckBox userActiveFilterCheckBox;
-	private JComboBox userTypeComboBox;
+	private JComboBox userTypeComboBox = new JComboBox();;
 	private JTextField userAliasField;
 	private JTextField nameField;
 	private JTextField lastNameField;
@@ -108,6 +108,37 @@ public class UserUI extends JPanel {
 		this.session = session;
 		setLayout(null);
 		panelVisible = true;
+		userSelected = session.getUser();
+		
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel.setBounds(50, 675, 1000, 25);
+		add(infoLabel);
+		
+		oKButton = new JButton();
+		oKButton.setAction(oKAction);
+		oKButton.setBounds(727, 725, 89, 23);
+		oKButton.setEnabled(false);
+		add(oKButton);
+		
+		cancelButton = new JButton();
+		cancelButton.setAction(cancelAction);
+		cancelButton.setBounds(628, 725, 89, 23);
+		cancelButton.setEnabled(false);
+		add(cancelButton);
+		
+		editButton = new JButton();
+		editButton.setAction(editAction);
+		editButton.setBounds(527, 725, 89, 23);
+		add(editButton);
+		
+		newButton = new JButton();
+		newButton.setAction(newAction);
+		newButton.setBounds(427, 725, 89, 23);
+		if (session.getUser().getUserType().equals("USER")) {
+			newButton.setEnabled(false);
+		}
+		add(newButton);
 		
 		JTextPane bUnitTxt = new JTextPane();
 		bUnitTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -194,6 +225,73 @@ public class UserUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
+		userAliasField = new JTextField();
+		userAliasField.setText(userSelected.getUserAlias());
+		userAliasField.setEditable(false);
+		userAliasField.setColumns(10);
+		userAliasField.setBounds(260, 325, 400, 25);
+		userAliasField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					nameField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(userAliasField);
+		textFieldContentList.add(userSelected.getUserAlias());
+		add(userAliasField);
+		
+		nameField = new JTextField();
+		nameField.setText(userSelected.getNombre());
+		nameField.setEditable(false);
+		nameField.setColumns(10);
+		nameField.setBounds(260, 375, 400, 25);
+		nameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					lastNameField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(nameField);
+		textFieldContentList.add(userSelected.getNombre());
+		add(nameField);
+		
+		lastNameField = new JTextField();
+		lastNameField.setText(userSelected.getApellido());
+		lastNameField.setEditable(false);
+		lastNameField.setColumns(10);
+		lastNameField.setBounds(260, 425, 400, 25);
+		lastNameField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					currentPasswordField.requestFocusInWindow();
+				}
+			}
+		});
+		textFieldList.add(lastNameField);
+		textFieldContentList.add(userSelected.getApellido());
+		add(lastNameField);
+		
+		activeCheckBox = new JCheckBox();
+		activeCheckBox.setBounds(260, 625, 100, 25);
+		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		activeCheckBox.setSelected(userSelected.isActivo());
+		activeCheckBox.setEnabled(false);
+		activeCheckBox.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					oKButton.requestFocusInWindow();
+				}
+			}
+		});
+		lastActive = activeCheckBox.isSelected();
+		add(activeCheckBox);
+		
 		bUnitActiveFilterCheckBox = new JCheckBox(" solo activas");
 		bUnitActiveFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bUnitActiveFilterCheckBox.setBounds(666, 175, 150, 25);
@@ -252,57 +350,6 @@ public class UserUI extends JPanel {
 		lastUserType = userTypeComboBox.getSelectedItem().toString();
 		lastUserTypeIndex = getSelectedItemIndex(userTypeComboList, lastUserType);
 		
-		userAliasField = new JTextField();
-		userAliasField.setText(userSelected.getUserAlias());
-		userAliasField.setEditable(false);
-		userAliasField.setColumns(10);
-		userAliasField.setBounds(260, 325, 400, 25);
-		userAliasField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					nameField.requestFocusInWindow();
-				}
-			}
-		});
-		textFieldList.add(userAliasField);
-		textFieldContentList.add(userSelected.getUserAlias());
-		add(userAliasField);
-		
-		nameField = new JTextField();
-		nameField.setText(userSelected.getNombre());
-		nameField.setEditable(false);
-		nameField.setColumns(10);
-		nameField.setBounds(260, 375, 400, 25);
-		nameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					lastNameField.requestFocusInWindow();
-				}
-			}
-		});
-		textFieldList.add(nameField);
-		textFieldContentList.add(userSelected.getNombre());
-		add(nameField);
-		
-		lastNameField = new JTextField();
-		lastNameField.setText(userSelected.getApellido());
-		lastNameField.setEditable(false);
-		lastNameField.setColumns(10);
-		lastNameField.setBounds(260, 425, 400, 25);
-		lastNameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					currentPasswordField.requestFocusInWindow();
-				}
-			}
-		});
-		textFieldList.add(lastNameField);
-		textFieldContentList.add(userSelected.getApellido());
-		add(lastNameField);
-		
 		currentPasswordField = new JPasswordField();
 		currentPasswordField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		currentPasswordField.setColumns(10);
@@ -348,22 +395,6 @@ public class UserUI extends JPanel {
 		});
 		add(confirmPasswordField);
 		
-		activeCheckBox = new JCheckBox();
-		activeCheckBox.setBounds(260, 625, 100, 25);
-		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		activeCheckBox.setSelected(userSelected.isActivo());
-		activeCheckBox.setEnabled(false);
-		activeCheckBox.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					oKButton.requestFocusInWindow();
-				}
-			}
-		});
-		lastActive = activeCheckBox.isSelected();
-		add(activeCheckBox);
-		
 		JLabel maxCharsLabel = new JLabel("Max: 20 caracteres");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		maxCharsLabel.setBounds(670, 325, 146, 25);
@@ -392,38 +423,6 @@ public class UserUI extends JPanel {
 		labelList.add(maxCharsLabel4);
 		add(maxCharsLabel4);
 		
-		infoLabel = new JLabel();
-		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 675, 1000, 25);
-		add(infoLabel);
-		
-		oKButton = new JButton();
-		oKButton.setAction(oKAction);
-		oKButton.setBounds(727, 725, 89, 23);
-		oKButton.setEnabled(false);
-		add(oKButton);
-		
-		cancelButton = new JButton();
-		cancelButton.setAction(cancelAction);
-		cancelButton.setBounds(628, 725, 89, 23);
-		cancelButton.setEnabled(false);
-		add(cancelButton);
-		
-		editButton = new JButton();
-		editButton.setAction(editAction);
-		editButton.setBounds(527, 725, 89, 23);
-//		if (session.getUser().getUserType().equals("USER")) {
-//			editButton.setEnabled(false);
-//		}
-		add(editButton);
-		
-		newButton = new JButton();
-		newButton.setAction(newAction);
-		newButton.setBounds(427, 725, 89, 23);
-		if (session.getUser().getUserType().equals("USER")) {
-			newButton.setEnabled(false);
-		}
-		add(newButton);
 	}
 
 	/**
@@ -644,6 +643,60 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
+	 * Si el usuario de la sesión es de tipo manager y el usuario seleccionado no es de tipo administrador, habilita
+	 * la edición de datos del usuario seleccionado 
+	 */
+	public void verifyManagerEditConditions() {
+
+		//Un usuario manager no puede editar los datos de un usuario administrador
+		if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN")) {
+			editButton.setEnabled(false);
+		} else if (session.getUser().getUserType().equals("MANAGER") && !userSelected.getUserType().equals("ADMIN")) {
+			editButton.setEnabled(true);
+		}
+	}
+	
+	/**
+	 * Si el usuario de la sesión es de tipo administrador, habilita la edición de sus propios datos y los de cualquier
+	 * otro usuario que no sea de tipo administrador. Si el usuario de la sesión es el administrador por defecto también
+	 * habilita la edición de los datos de cualquier usuario administrador.
+	 */
+	public void verifyAdminEditConditions() {
+
+		//Si el usuario de la sesión es un usuario administrador y el usuario seleccionado no lo es, habilitamos
+		//siempre la edición del usuario seleccionado
+		if (session.getUser().getUserType().equals("ADMIN") && !userSelected.getUserType().equals("ADMIN")) {
+			editButton.setEnabled(true);
+		}
+		
+		//Los datos del usuario administrador por defecto no pueden ser modificados por ningún otro usuario administrador
+		if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() != 1 && 
+				userSelected.getId() == 1) {
+			editButton.setEnabled(false);
+		} else if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() == 1) {
+			editButton.setEnabled(true);
+		}
+		
+		//Los datos de un usuario administrador solo pueden ser modificados por si mismo y por el usuario administrador
+		//por defecto
+		if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() == userSelected.getId()) {
+			editButton.setEnabled(true);
+		} else if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() != 1 &&
+				userSelected.getUserType().equals("ADMIN")) {
+			editButton.setEnabled(false);
+		}
+	}
+	
+	/**
+	 * Si userSelected es un usuario dummy con id -1, la edición de datos se deshabilita
+	 */
+	public void verifyUserSelectedExists() {
+		if (userSelected.getId() == -1) {
+			editButton.setEnabled(false);
+		}
+	}
+	
+	/**
 	 * Listener que define el comportamiento del comboBox bUnitComboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
@@ -654,7 +707,7 @@ public class UserUI extends JPanel {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			
+					
 			String item = (String) bUnitComboBox.getSelectedItem();
 			Company company = session.getCompany();
 			//Recuperamos la unidad de negocio seleccionada
@@ -669,8 +722,12 @@ public class UserUI extends JPanel {
 			updateDataCache();
 			//Vaciamos label de información
 			infoLabel.setText("");
-		}
-		
+			
+			//Si cambiamos la unidad de negocio de la sesión, comprobamos las condiciones de edición de datos de los usuarios
+			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
+			verifyAdminEditConditions();
+			verifyUserSelectedExists();
+		}		
 	}
 	
 	/**
@@ -711,6 +768,11 @@ public class UserUI extends JPanel {
 				//Renovamos la lista de las unidades de negocio del comboBox
 				refreshBunitComboBox();
 			}
+			
+			//Si cambiamos la unidad de negocio de la sesión, comprobamos condiciones de edición de datos de los usuarios
+			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
+			verifyAdminEditConditions();
+			verifyUserSelectedExists();
 		}
 	}
 	
@@ -733,6 +795,12 @@ public class UserUI extends JPanel {
 			updateDataCache();
 			//Vaciamos label de información
 			infoLabel.setText("");
+			
+			//Si cambiamos el usuario seleccionado, comprobamos las condiciones de edición de datos de los usuarios manager
+			//y administrador y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
+			verifyManagerEditConditions();
+			verifyAdminEditConditions();
+			verifyUserSelectedExists();
 		}
 		
 	}
@@ -746,33 +814,21 @@ public class UserUI extends JPanel {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
+			//Renovamos la lista de usuarios del comboBox
+			refreshUserComboBox();
+			//Mostramos sus datos
+			populateUserFields();
+			//Hacemos backup del contenido de los datos del formulario
+			updateDataCache();
+			//Vaciamos label de información
+			infoLabel.setText("");
 			
-			int state = e.getStateChange();
-			if (state == ItemEvent.SELECTED) {
-				
-				if (userSelected == null) {
-					userSelected = session.getUser();
-				}
-				
-				//Si el usuario seleccionado no está activo
-				if (userSelected.isActivo() == false) {
-					//Actualizamos los usuarios de la unidad de negocio de la sesión
-					refreshUserComboBox();
-					//Mostramos sus datos
-					populateUserFields();
-					//Hacemos backup del contenido de los datos del formulario
-					updateDataCache();
-					//Vaciamos label de información
-					infoLabel.setText("");
-				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
-				} else {
-					//Renovamos la lista de usuarios del comboBox
-					refreshUserComboBox();
-				}
-			} else if (state == ItemEvent.DESELECTED) {
-				//Renovamos la lista de usuarios del comboBox
-				refreshUserComboBox();
-			}
+			//Si el cambio de estado de userActiveFilterCheckBox cambia el usuario seleccionado, comprobamos las condiciones
+			//de edición de datos de los usuarios manager y administrador y deshabilitamos la edición de datos si el usuario
+			//seleccionado es un usuario dummy
+			verifyManagerEditConditions();
+			verifyAdminEditConditions();
+			verifyUserSelectedExists();
 		}
 	}
 	
@@ -786,14 +842,17 @@ public class UserUI extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			
-			//*** - NO ACTIVAR TODAVÍA - ***// 
-//			String item = (String) bUnitComboBox.getSelectedItem();
-//			Company company = session.getCompany();
+			String item = (String) userTypeComboBox.getSelectedItem();
+			if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN") 
+					&& !item.equals("ADMIN")) {
+				infoLabel.setText("UN USUARIO MANAGER NO PUEDE CAMBIAR EL TIPO DE USUARIO DE UN USUARIO ADMINISTRADOR");
+			}
+
 //			//Recuperamos la unidad de negocio seleccionada
 //			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
 //			//La asignamos a la sesión
 //			session.setbUnit(selectedBunit);
-			//------------------------------//
+
 			
 //			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
 //			bUnitShowing = selectedBunit;
