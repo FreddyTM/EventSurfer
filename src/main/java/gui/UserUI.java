@@ -620,6 +620,23 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
+	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
+	 */
+	public void editableDataOff() {
+		//Quitar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(false);
+		}
+		//Datos no editables
+		for (JTextField tField : textFieldList) {
+			tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+			tField.setEditable(false);
+		}
+		//Deshabilitamos checkbox "Activa"
+		activeCheckBox.setEnabled(false);
+	}
+	
+	/**
 	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
 	 */
 	public void refreshBunitComboBox() {
@@ -842,11 +859,11 @@ public class UserUI extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			
-			String item = (String) userTypeComboBox.getSelectedItem();
-			if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN") 
-					&& !item.equals("ADMIN")) {
-				infoLabel.setText("UN USUARIO MANAGER NO PUEDE CAMBIAR EL TIPO DE USUARIO DE UN USUARIO ADMINISTRADOR");
-			}
+//			String item = (String) userTypeComboBox.getSelectedItem();
+//			if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN") 
+//					&& !item.equals("ADMIN")) {
+//				infoLabel.setText("UN USUARIO MANAGER NO PUEDE CAMBIAR EL TIPO DE USUARIO DE UN USUARIO ADMINISTRADOR");
+//			}
 
 //			//Recuperamos la unidad de negocio seleccionada
 //			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
@@ -936,23 +953,26 @@ public class UserUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Cancel data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
-//			okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
-//			//Cambio de estado de los botones y el combobox
-//			editButton.setEnabled(true);
-//			newButton.setEnabled(true);
-//			comboBox.setEnabled(true);
-//			activeFilterCheckBox.setEnabled(true);
-//			oKButton.setEnabled(false);
-//			cancelButton.setEnabled(false);
-//			infoLabel.setText("");
-//			//Formulario no editable
-//			editableDataOff();		
-//			//Recuperar valores previos a la edición de los datos
-//			for (int i = 0; i < textFieldList.size(); i++) {
-//				textFieldList.get(i).setText(textFieldContentList.get(i));
-//			}
-//			//Recuperamos el valor anterior del checkbox "Activa"
-//			activeCheckBox.setSelected(lastActive);
+			okActionSelector = UserUI.OK_ACTION_UNDEFINED;
+			//Cambio de estado de los botones y los combobox
+			editButton.setEnabled(true);
+			newButton.setEnabled(true);
+			bUnitComboBox.setEnabled(true);
+			bUnitActiveFilterCheckBox.setEnabled(true);
+			userComboBox.setEnabled(true);
+			userActiveFilterCheckBox.setEnabled(true);
+			userTypeComboBox.setEnabled(false);
+			oKButton.setEnabled(false);
+			cancelButton.setEnabled(false);
+			infoLabel.setText("");
+			//Formulario no editable
+			editableDataOff();		
+			//Recuperar valores previos a la edición de los datos
+			for (int i = 0; i < textFieldList.size(); i++) {
+				textFieldList.get(i).setText(textFieldContentList.get(i));
+			}
+			//Recuperamos el valor anterior del checkbox "Activa"
+			activeCheckBox.setSelected(lastActive);
 		}
 	}
 	

@@ -1158,7 +1158,7 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --empty--
 
 	· CancelAction class (new inner UserUI class):
-		Update actionPerformed() --empty--
+		Update actionPerformed() --ok, not tested yet--
 
 	· OKAction class (new inner UserUI class):
 		Update actionPerformed() --empty--
