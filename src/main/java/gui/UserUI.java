@@ -297,6 +297,9 @@ public class UserUI extends JPanel {
 		bUnitActiveFilterCheckBox.setBounds(666, 175, 150, 25);
 		bUnitActiveFilterCheckBox.addItemListener(new BunitCheckBoxListener());
 		bUnitActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			bUnitActiveFilterCheckBox.setEnabled(false);
+		}
 		add(bUnitActiveFilterCheckBox);
 		
 		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
@@ -528,15 +531,20 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Obtiene la lista de los tipos de usuarios definidos en el programa. Si userSelected es un usuario dummy con id -1
-	 * la lista tendrá un único elemento vacío
+	 * la lista tendrá un único elemento vacío. Si el usuario de la sesión es de tipo manager, el tipo de usuario admin
+	 * no estará en la lista
 	 * @return lista de tipos de usuarios, o lista con un único elemento vacío
 	 */
 	public String [] getUserTypeComboBoxItemsFromSession() {
+		String[] fullList = TypesStatesContainer.getuType().getUserTypesArray();
 		if (userSelected.getId() == -1) {
 			String[] emptyList = {""};
 			return emptyList;
+		} else if (session.getUser().getUserType().equals("MANAGER")) {
+			String [] managerList = {fullList[1], fullList[2]};
+			return managerList;
 		} else {
-			return TypesStatesContainer.getuType().getUserTypesArray();
+			return fullList;
 		}
 	}
 	
@@ -620,6 +628,41 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
+	 * Habilita los campos del formulario para que pueda introducirse información. El usuario administrador por defecto
+	 * no puede cambiar su condición de administrador. Un usuario de tipo user no puede cambiar su tipo de usuario. Los
+	 * usuarios de tipo user y el administrador por defecto tampoco pueden cambiar su condición de activos.
+	 */
+	public void editableDataOn() {
+		//Activar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(true);
+		}
+		//Datos editables
+		for (JTextField tField : textFieldList) {
+			if (tField != companyField) {
+				tField.setEditable(true);
+				tField.setBackground(Color.WHITE);
+			}
+		}
+		//El usuario administrador por defecto no puede cambiar su condición de administrador
+		//Un usuario de tipo user no puede cambiar su tipo de usuario
+		if (session.getUser().getId() == 1 && userSelected.getId() == 1 || session.getUser().getUserType().equals("USER")) {
+			userTypeComboBox.setEnabled(false);
+		} else {
+			userTypeComboBox.setEnabled(true);
+		}
+		currentPasswordField.setEditable(true);
+		newPasswordField.setEditable(true);
+		confirmPasswordField.setEditable(true);
+		//Habilitamos checkbox "Activa" si el usuario de la sesión no es de tipo user y si no es el administrador por defecto
+		if (session.getUser().getUserType().equals("USER") || (session.getUser().getId() == 1 && userSelected.getId() == 1)) {
+			activeCheckBox.setEnabled(false);
+		} else {
+			activeCheckBox.setEnabled(true);
+		}
+	}
+	
+	/**
 	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
 	 */
 	public void editableDataOff() {
@@ -632,6 +675,10 @@ public class UserUI extends JPanel {
 			tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 			tField.setEditable(false);
 		}
+		userTypeComboBox.setEnabled(false);
+		currentPasswordField.setEditable(false);
+		newPasswordField.setEditable(false);
+		confirmPasswordField.setEditable(false);
 		//Deshabilitamos checkbox "Activa"
 		activeCheckBox.setEnabled(false);
 	}
@@ -894,7 +941,7 @@ public class UserUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Add new user");
 		}
 		public void actionPerformed(ActionEvent e) {
-//			okActionSelector = BusinessUnitUI.OK_ACTION_NEW;
+			okActionSelector = UserUI.OK_ACTION_NEW;
 //			//Cambio de estado de los botones y el combobox
 //			oKButton.setEnabled(true);
 //			cancelButton.setEnabled(true);
@@ -927,17 +974,20 @@ public class UserUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Enable data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
-//			okActionSelector = BusinessUnitUI.OK_ACTION_EDIT;
-//			//Cambio de estado de los botones y el combobox
-//			oKButton.setEnabled(true);
-//			cancelButton.setEnabled(true);
-//			editButton.setEnabled(false);
-//			newButton.setEnabled(false);
-//			comboBox.setEnabled(false);
-//			activeFilterCheckBox.setEnabled(false);
-//			infoLabel.setText("");
-//			//Formulario editable
-//			editableDataOn();
+			okActionSelector = UserUI.OK_ACTION_EDIT;
+			//Cambio de estado de los botones y el combobox
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			userTypeComboBox.setEnabled(true);
+			editButton.setEnabled(false);
+			newButton.setEnabled(false);
+			bUnitComboBox.setEnabled(false);
+			bUnitActiveFilterCheckBox.setEnabled(false);
+			userComboBox.setEnabled(false);
+			userActiveFilterCheckBox.setEnabled(false);
+			infoLabel.setText("");
+			//Formulario editable
+			editableDataOn();
 		}
 	}
 	
@@ -957,10 +1007,14 @@ public class UserUI extends JPanel {
 			//Cambio de estado de los botones y los combobox
 			editButton.setEnabled(true);
 			newButton.setEnabled(true);
-			bUnitComboBox.setEnabled(true);
-			bUnitActiveFilterCheckBox.setEnabled(true);
-			userComboBox.setEnabled(true);
-			userActiveFilterCheckBox.setEnabled(true);
+			if (session.getUser().getUserType().equals("ADMIN")) {
+				bUnitComboBox.setEnabled(true);
+				bUnitActiveFilterCheckBox.setEnabled(true);
+			}
+			if (!session.getUser().getUserType().equals("USER")) {
+				userComboBox.setEnabled(true);
+				userActiveFilterCheckBox.setEnabled(true);
+			}
 			userTypeComboBox.setEnabled(false);
 			oKButton.setEnabled(false);
 			cancelButton.setEnabled(false);
@@ -971,6 +1025,12 @@ public class UserUI extends JPanel {
 			for (int i = 0; i < textFieldList.size(); i++) {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
+			//Recuperamos el valor de userTypeComboBox
+			userTypeComboBox.setSelectedIndex(lastUserTypeIndex);
+			//Vaciamos los passwordFields
+			currentPasswordField.setText("");
+			newPasswordField.setText("");
+			confirmPasswordField.setText("");
 			//Recuperamos el valor anterior del checkbox "Activa"
 			activeCheckBox.setSelected(lastActive);
 		}
