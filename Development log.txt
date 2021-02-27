@@ -1135,6 +1135,7 @@ ver 0.1.7 - USERUI
 		Add editableDataOff()
 		Add refreshBunitComboBox()
 		Add refreshUserComboBox()
+		Add refreshUserTypeComboBox()
 		Add verifyManagerEditConditions()
 		Add verifyAdminEditConditions()
 		Add verifyUserSelectedExists()
@@ -1143,6 +1144,7 @@ ver 0.1.7 - USERUI
 		Update getSelectedUserIndexFromArray()
 		Update editableDataOn()
 		Update editableDataOff()
+		Update refreshUserTypeComboBox()
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--

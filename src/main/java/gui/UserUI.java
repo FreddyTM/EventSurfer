@@ -531,8 +531,7 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Obtiene la lista de los tipos de usuarios definidos en el programa. Si userSelected es un usuario dummy con id -1
-	 * la lista tendrá un único elemento vacío. Si el usuario de la sesión es de tipo manager, el tipo de usuario admin
-	 * no estará en la lista
+	 * la lista tendrá un único elemento vacío.
 	 * @return lista de tipos de usuarios, o lista con un único elemento vacío
 	 */
 	public String [] getUserTypeComboBoxItemsFromSession() {
@@ -540,9 +539,6 @@ public class UserUI extends JPanel {
 		if (userSelected.getId() == -1) {
 			String[] emptyList = {""};
 			return emptyList;
-		} else if (session.getUser().getUserType().equals("MANAGER")) {
-			String [] managerList = {fullList[1], fullList[2]};
-			return managerList;
 		} else {
 			return fullList;
 		}
@@ -651,6 +647,7 @@ public class UserUI extends JPanel {
 		} else {
 			userTypeComboBox.setEnabled(true);
 		}
+		
 		currentPasswordField.setEditable(true);
 		newPasswordField.setEditable(true);
 		confirmPasswordField.setEditable(true);
@@ -676,6 +673,7 @@ public class UserUI extends JPanel {
 			tField.setEditable(false);
 		}
 		userTypeComboBox.setEnabled(false);
+		//Password fields no editables
 		currentPasswordField.setEditable(false);
 		newPasswordField.setEditable(false);
 		confirmPasswordField.setEditable(false);
@@ -704,6 +702,25 @@ public class UserUI extends JPanel {
 		}
 		userComboBox.setModel(new DefaultComboBoxModel(userComboList));
 		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
+	}
+	
+	/**
+	 * Actualiza el contenido del combobox que selecciona los tipos de usuario. Si el usuario de la sesión
+	 * es de tipo manager, y dicho usuario edita un usuario existente o crea uno nuevo, se elimina de la lista
+	 * de tipos de usuario el usuario admin porque solo puede crear usuarios de tipo manager o user. 
+	 */
+	public void refreshUserTypeComboBox() {
+		//Almacenamos la anterior lista de tipos de usuario
+		lastUserType = userTypeComboBox.getSelectedItem().toString();
+		lastUserTypeIndex = getSelectedItemIndex(userTypeComboList, lastUserType);
+		//Recargamos la lista completa
+		userTypeComboList = getUserTypeComboBoxItemsFromSession();
+		//Recortamos la lista si es necesario
+		if (session.getUser().getUserType().equals("MANAGER")) {
+			String [] managerList = {userTypeComboList[1], userTypeComboList[2]};
+			userTypeComboList = managerList;
+		}
+		userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 	}
 	
 	/**
@@ -942,24 +959,41 @@ public class UserUI extends JPanel {
 		}
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = UserUI.OK_ACTION_NEW;
-//			//Cambio de estado de los botones y el combobox
-//			oKButton.setEnabled(true);
-//			cancelButton.setEnabled(true);
-//			editButton.setEnabled(false);
-//			newButton.setEnabled(false);
-//			comboBox.setEnabled(false);
-//			activeFilterCheckBox.setEnabled(false);
-//			infoLabel.setText("");
-//			//Formulario editable
-//			editableDataOn();
-//			//Vaciamos los campos de texto
-//			for (JTextField tField : textFieldList) {
-//				if (tField != companyField) {
-//					tField.setText("");
-//				}
-//			}
-//			//checkbox "Activa" activo por defecto
-//			activeCheckBox.setSelected(true);
+			//Cambio de estado de los botones y userTypeComboBox
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			userTypeComboBox.setEnabled(true);
+			//Actualizamos lista de tipos de usuario
+			refreshUserTypeComboBox();
+			//Tipo de usuario user habilitado por defecto
+			userTypeComboBox.setSelectedIndex(userTypeComboList.length - 1);		
+			//Password fields editables
+			currentPasswordField.setEditable(true);
+			newPasswordField.setEditable(true);
+			confirmPasswordField.setEditable(true);
+			//Habilitamos checkbox "Activa"
+			activeCheckBox.setEnabled(true);
+			activeCheckBox.setSelected(true);
+			//Activar visibilidad de etiquetas de longitud máxima de datos
+			for (JLabel label : labelList) {
+				label.setVisible(true);
+			}
+			//Datos editables y campos vacíos
+			for (JTextField tField : textFieldList) {
+				if (tField != companyField) {
+					tField.setEditable(true);
+					tField.setBackground(Color.WHITE);
+					tField.setText("");
+				}
+			}
+			infoLabel.setText("");
+			//Cambio de estado del resto de botones y combobox
+			editButton.setEnabled(false);
+			newButton.setEnabled(false);
+			bUnitComboBox.setEnabled(false);
+			bUnitActiveFilterCheckBox.setEnabled(false);
+			userComboBox.setEnabled(false);
+			userActiveFilterCheckBox.setEnabled(false);
 		}
 	}
 	
@@ -979,6 +1013,14 @@ public class UserUI extends JPanel {
 			oKButton.setEnabled(true);
 			cancelButton.setEnabled(true);
 			userTypeComboBox.setEnabled(true);
+			//Actualizamos lista de tipos de usuario
+			refreshUserTypeComboBox();
+			//Si la lista de tipos de usuario tiene solo 2 elementos, desplazamos el índice a seleccionar
+			if (userTypeComboList.length == 2) {
+				userTypeComboBox.setSelectedIndex(lastUserTypeIndex - 1);
+			} else {
+				userTypeComboBox.setSelectedIndex(lastUserTypeIndex);
+			}
 			editButton.setEnabled(false);
 			newButton.setEnabled(false);
 			bUnitComboBox.setEnabled(false);
@@ -1005,7 +1047,12 @@ public class UserUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = UserUI.OK_ACTION_UNDEFINED;
 			//Cambio de estado de los botones y los combobox
-			editButton.setEnabled(true);
+			//Impedimos que un usuario manager pueda editar usuarios admin tras cancelar
+			if (session.getUser().getUserType().equals("MANAGER" )) {
+				verifyManagerEditConditions();
+			} else {
+				editButton.setEnabled(true);
+			}
 			newButton.setEnabled(true);
 			if (session.getUser().getUserType().equals("ADMIN")) {
 				bUnitComboBox.setEnabled(true);
@@ -1026,6 +1073,8 @@ public class UserUI extends JPanel {
 				textFieldList.get(i).setText(textFieldContentList.get(i));
 			}
 			//Recuperamos el valor de userTypeComboBox
+			userTypeComboList = getUserTypeComboBoxItemsFromSession();
+			userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 			userTypeComboBox.setSelectedIndex(lastUserTypeIndex);
 			//Vaciamos los passwordFields
 			currentPasswordField.setText("");
