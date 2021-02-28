@@ -62,8 +62,8 @@ public class UserUI extends JPanel {
 	private JCheckBox userActiveFilterCheckBox;
 	private JComboBox userTypeComboBox = new JComboBox();;
 	private JTextField userAliasField;
-	private JTextField nameField;
-	private JTextField lastNameField;
+	private JTextField userNameField;
+	private JTextField userLastNameField;
 	private JPasswordField currentPasswordField;
 	private JPasswordField newPasswordField;
 	private JPasswordField confirmPasswordField;
@@ -234,7 +234,7 @@ public class UserUI extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					nameField.requestFocusInWindow();
+					userNameField.requestFocusInWindow();
 				}
 			}
 		});
@@ -242,29 +242,29 @@ public class UserUI extends JPanel {
 		textFieldContentList.add(userSelected.getUserAlias());
 		add(userAliasField);
 		
-		nameField = new JTextField();
-		nameField.setText(userSelected.getNombre());
-		nameField.setEditable(false);
-		nameField.setColumns(10);
-		nameField.setBounds(260, 375, 400, 25);
-		nameField.addKeyListener(new KeyAdapter() {
+		userNameField = new JTextField();
+		userNameField.setText(userSelected.getNombre());
+		userNameField.setEditable(false);
+		userNameField.setColumns(10);
+		userNameField.setBounds(260, 375, 400, 25);
+		userNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					lastNameField.requestFocusInWindow();
+					userLastNameField.requestFocusInWindow();
 				}
 			}
 		});
-		textFieldList.add(nameField);
+		textFieldList.add(userNameField);
 		textFieldContentList.add(userSelected.getNombre());
-		add(nameField);
+		add(userNameField);
 		
-		lastNameField = new JTextField();
-		lastNameField.setText(userSelected.getApellido());
-		lastNameField.setEditable(false);
-		lastNameField.setColumns(10);
-		lastNameField.setBounds(260, 425, 400, 25);
-		lastNameField.addKeyListener(new KeyAdapter() {
+		userLastNameField = new JTextField();
+		userLastNameField.setText(userSelected.getApellido());
+		userLastNameField.setEditable(false);
+		userLastNameField.setColumns(10);
+		userLastNameField.setBounds(260, 425, 400, 25);
+		userLastNameField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -272,9 +272,9 @@ public class UserUI extends JPanel {
 				}
 			}
 		});
-		textFieldList.add(lastNameField);
+		textFieldList.add(userLastNameField);
 		textFieldContentList.add(userSelected.getApellido());
-		add(lastNameField);
+		add(userLastNameField);
 		
 		activeCheckBox = new JCheckBox();
 		activeCheckBox.setBounds(260, 625, 100, 25);
@@ -419,12 +419,22 @@ public class UserUI extends JPanel {
 		labelList.add(maxCharsLabel3);
 		add(maxCharsLabel3);
 		
-		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
+		JLabel maxCharsLabel4 = new JLabel("Min: 8 caracteres");
 		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsLabel4.setBounds(670, 525, 146, 25);
-		maxCharsLabel4.setVisible(false);
-		labelList.add(maxCharsLabel4);
+		maxCharsLabel4.setBounds(670, 515, 146, 25);
 		add(maxCharsLabel4);
+		
+		JLabel maxCharsLabel5 = new JLabel("Max: 25 caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]");
+		maxCharsLabel5.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel5.setBounds(670, 535, 380, 25);
+		add(maxCharsLabel5);
+		
+//		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
+//		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
+//		maxCharsLabel4.setBounds(670, 525, 146, 25);
+//		maxCharsLabel4.setVisible(false);
+//		labelList.add(maxCharsLabel4);
+//		add(maxCharsLabel4);
 		
 	}
 
@@ -599,8 +609,8 @@ public class UserUI extends JPanel {
 		userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 		userTypeComboBox.setSelectedIndex(getSelectedUserTypeIndexFromArray(userTypeComboList));
 		userAliasField.setText(userSelected.getUserAlias());
-		nameField.setText(userSelected.getNombre());
-		lastNameField.setText(userSelected.getApellido());
+		userNameField.setText(userSelected.getNombre());
+		userLastNameField.setText(userSelected.getApellido());
 		//Aunque no es un textfield, el valor de activeCheckBox también hay que mostrarlo actualizado
 		activeCheckBox.setSelected(userSelected.isActivo());
 	}
@@ -679,6 +689,116 @@ public class UserUI extends JPanel {
 		confirmPasswordField.setEditable(false);
 		//Deshabilitamos checkbox "Activa"
 		activeCheckBox.setEnabled(false);
+	}
+	
+	/**
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
+	 * dato incorrecto se resalta con el fondo del campo en amarillo
+	 * @return true si son correctos, false si no lo son
+	 */
+	public boolean newUserTestData(BusinessUnit bUnit, User userToCheck) {
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
+		Boolean errorLength = false;
+		Boolean errorPass = false;
+		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorAliasText = "YA EXISTE UN USUARIO CON ESE ALIAS";
+		String errorPassLengthText = "CONTRASEÑA DE LONGITUD INCORRECTA.";
+		String errorPassTypeText = "LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
+				+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL";
+		
+		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
+		for (BusinessUnit unit: bUnitList) {
+			List<User> userList = new User().getUsersFromDB(session.getConnection(), unit);
+			for (User user: userList) {
+				//Si el alias del usuario creado ya existe en alguna unidad de negocio, no se permite la asignación del alias
+				//Los alias son únicos en la base de datos, no pueden tener duplicados
+				if (user.getUserAlias().equals(userToCheck.getUserAlias())) {
+					infoLabel.setText(errorAliasText);
+					userAliasField.setBackground(Color.YELLOW);
+					return false;
+				}
+			}
+		}
+		
+//		List<User> userList = new User().getUsersFromDB(session.getConnection(), bUnit);
+//		for (User user: userList) {
+//			//Si el alias del usuario creado ya existe en la unidad de negocio de la sesión, no se permite la asignación del alias
+//			//Los alias son únicos en la base de datos, no pueden tener duplicados
+//			if (user.getUserAlias().equals(userToCheck.getUserAlias())) {
+//				infoLabel.setText(errorAliasText);
+//				userAliasField.setBackground(Color.YELLOW);
+//				return false;
+//			}
+//		}
+		
+		if (userToCheck.getUserAlias().length() > 20 || userToCheck.getUserAlias().length() == 0) {
+			userAliasField.setBackground(Color.YELLOW);
+			errorLength = true;
+		}
+		
+		if (userToCheck.getNombre().length() > 50 || userToCheck.getNombre().length() == 0) {
+			userNameField.setBackground(Color.YELLOW);
+			errorLength = true;
+		}
+		if (userToCheck.getApellido().length() > 50 || userToCheck.getApellido().length() == 0) {
+			userLastNameField.setBackground(Color.YELLOW);
+			errorLength = true;
+		}
+		//Si hay un error de longitud de datos, mensaje de error y retornamos false
+		if (errorLength) {
+			infoLabel.setText(errorLengthText);
+			return false;
+		}
+		//Comprobamos que la nueva contraseña tiene el tamaño correcto
+		if (userToCheck.getPassword().length() > 25 || userToCheck.getPassword().length() < 8) {
+			newPasswordField.setBackground(Color.YELLOW);
+			infoLabel.setText(errorPassLengthText);
+			return false;
+		}
+		//Comprobamos que la contraseña solo incluye caracteres permitidos
+		if(!userToCheck.isAValidPassword(userToCheck.getPassword())) {
+			infoLabel.setText("LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
+					+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL");
+			return false;
+		}
+//		//Comprobamos que la nueva contraseña y la confirmación son iguales
+//		String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
+//		if (!newPassword.equals(confirmPassword)) {
+//			errorInfoLabel.setText("LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN");
+//			return false;
+//		}
+//		
+//		if (bUnit.getProvincia().length() > 50) {
+//			provinceField.setBackground(Color.YELLOW);
+//			error = true;
+//		}
+//		if (bUnit.getEstado().length() > 50) {
+//			stateField.setBackground(Color.YELLOW);
+//			error = true;
+//		}
+//		if (bUnit.getCpostal().length() > 8) {
+//			postalCodeField.setBackground(Color.YELLOW);
+//			error = true;
+//		}
+//		if (bUnit.getTelefono().length() > 15) {
+//			telephoneField.setBackground(Color.YELLOW);
+//			error = true;
+//		}
+//		if (bUnit.getMail().length() > 100) {
+//			mailField.setBackground(Color.YELLOW);
+//			error = true;
+//		}
+
+//		//Si hay un error de longitud de datos, mensaje de error y retornamos false
+//		if (errorLength) {
+//			infoLabel.setText(errorLengthText);
+//			return false;
+//		}
+//		//Si hay un error de contraseña, mensaje de error y retornamos false
+//		if (errorPass) {
+//			
+//		}
+		return true;
 	}
 	
 	/**
@@ -968,7 +1088,7 @@ public class UserUI extends JPanel {
 			//Tipo de usuario user habilitado por defecto
 			userTypeComboBox.setSelectedIndex(userTypeComboList.length - 1);		
 			//Password fields editables
-			currentPasswordField.setEditable(true);
+//			currentPasswordField.setEditable(true);
 			newPasswordField.setEditable(true);
 			confirmPasswordField.setEditable(true);
 			//Habilitamos checkbox "Activa"
@@ -1099,7 +1219,38 @@ public class UserUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
 		}
 		public void actionPerformed(ActionEvent e) {
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			for (JTextField tField : textFieldList) {
+				if (tField != companyField) {
+					tField.setBackground(Color.WHITE);
+				}
+			}
+			newPasswordField.setBackground(Color.WHITE);
+			confirmPasswordField.setBackground(Color.WHITE);
+			//Selección de comportamiento
 			
+			//Aceptamos la creación de una nueva unidad de negocio
+			if (okActionSelector == UserUI.OK_ACTION_NEW) {
+				//Debug
+				System.out.println("Acción de grabar nueva unidad de negocio");
+				
+				//Creamos nuevo BusinessUnit a partir de los datos del formulario
+				User newUser = new User();
+				newUser.setbUnit(session.getbUnit());
+				newUser.setUserType(userTypeComboBox.getSelectedItem().toString());
+				newUser.setUserAlias(userAliasField.getText());
+				newUser.setNombre(userNameField.getText());
+				newUser.setApellido(userLastNameField.getText());
+				//Password en texto plano
+				newUser.setPassword(String.valueOf(newPasswordField.getPassword()));
+//				newUser.setPassword(newUser.passwordHash(String.valueOf(newPasswordField.getPassword())));
+				newUser.setActivo(activeCheckBox.isSelected());
+				//Validamos los datos del formulario
+			
+			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
+				currentPasswordField.setBackground(Color.WHITE);
+			}
 		}
 	}
 }

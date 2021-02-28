@@ -1140,12 +1140,14 @@ ver 0.1.7 - USERUI
 		Add verifyManagerEditConditions()
 		Add verifyAdminEditConditions()
 		Add verifyUserSelectedExists()
+		Add newUserTestData()
 		Update constructor
 		Update getUserTypeComboBoxItemsFromSession()
 		Update getSelectedUserIndexFromArray()
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
+		Update newUserTestData() --in progress...--
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--
@@ -1163,7 +1165,7 @@ ver 0.1.7 - USERUI
 		Update itemStateChanged()
 
 	· NewAction class (new inner UserUI class):
-		Update actionPerformed() --empty--
+		Update actionPerformed() --ok--
 
 	· EditAction class (new inner UserUI class):
 		Update actionPerformed() --ok--
@@ -1172,4 +1174,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --empty--
+		Update actionPerformed() --in progress...--
