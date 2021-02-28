@@ -1112,7 +1112,7 @@ ver 0.1.7 - USERUI
 
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.7--
-		Update initialize() --not working yet--
+		Update initialize() --multimonitor screen ok--
 
 	· UserUI class:
 		Add attribute

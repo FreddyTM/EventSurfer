@@ -10,6 +10,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -65,103 +66,31 @@ public class AppWindow extends JFrame {
 	}
 	
 	public void initialize() {
-		//GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		
-//		GraphicsDevice gDevice = this.getGraphicsConfiguration().getDevice();
-//		GraphicsConfiguration[] gConfig = gDevice.getConfigurations();
-		
+
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		GraphicsDevice currentDisplay = this.getGraphicsConfiguration().getDevice();
-//		int currentWidth = currentDisplay.getDisplayMode().getWidth();
-//		int currentHeight = currentDisplay.getDisplayMode().getHeight();
-		int currentWidth = 0;
-		int currentHeight = 0;
-		int appWidth = 1000;
-	    int appHeight = 700;
-	    setPreferredSize(new Dimension(appWidth, appHeight));
 		
-		//Debug
-		System.out.println(currentDisplay.getIDstring());
-		System.out.println("Ancho pantalla: " + currentWidth + "\nAlto pantalla: " + currentHeight);
-		
-//		int widthToTrim = 0;
-//		int heigthToTrim = 0;
-		
-		if (currentDisplay.getIDstring().equals(displays[0].getIDstring())) {
-			currentWidth = currentDisplay.getDisplayMode().getWidth();
-			currentHeight = currentDisplay.getDisplayMode().getHeight();
-			setBounds((currentWidth - appWidth) / 2, (currentHeight - appHeight) / 2, appWidth, appHeight);
-		} else {
-			int widthToTrim = displays[0].getDisplayMode().getWidth();
-			int heigthToTrim = displays[0].getDisplayMode().getHeight();
-			
-			for (int i = 0; i < displays.length; i++) {
-				
-				currentWidth = currentWidth + ((displays[i].getDisplayMode().getWidth() - appWidth) / 2 + widthToTrim);
-				currentHeight = currentHeight + ((displays[i].getDisplayMode().getHeight() - appHeight) / 2 + heigthToTrim);
-				if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-					setBounds(currentWidth, currentHeight, appWidth, appHeight);
-					break;
-				}
-				
-				for (int j = 0; j < i; j++) {
-					currentWidth = currentWidth + displays[j].getDisplayMode().getWidth();
-					currentHeight = currentHeight + displays[j].getDisplayMode().getHeight();
-				}
-				
-				
-				
-				
-				
-				currentWidth = currentWidth + displays[i].getDisplayMode().getWidth();
-				currentHeight = currentHeight + displays[i].getDisplayMode().getHeight();
-				widthToTrim = widthToTrim + displays[i - 1].getDisplayMode().getWidth();
-				heigthToTrim = heigthToTrim + displays[i - 1].getDisplayMode().getHeight();
-				if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-					currentWidth = (currentWidth - widthToTrim) / 2 + widthToTrim;
-					currentHeight = (currentHeight - heigthToTrim) / 2 + heigthToTrim;
-					break;
-				}
-//				currentWidth = currentWidth + displays[i].getDisplayMode().getWidth();
-//				currentHeight = currentHeight + displays[i].getDisplayMode().getHeight();
-//				widthToTrim = widthToTrim + displays[i].getDisplayMode().getWidth();
-//				heigthToTrim = heigthToTrim + displays[i].getDisplayMode().getHeight();
-			}
-			setBounds((currentWidth - appWidth), (currentHeight - appHeight), appWidth, appHeight);
-		}
-		
-		
-//		for (int i = 0; i < displays.length; i++) {
-//
-//			if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-//				currentWidth = (currentWidth - widthToTrim) / 2 + widthToTrim;
-//				currentHeight = (currentHeight - heigthToTrim) / 2 + heigthToTrim;
-//				break;
-//			}
-//			currentWidth = currentWidth + displays[i].getDisplayMode().getWidth();
-//			currentHeight = currentHeight + displays[i].getDisplayMode().getHeight();
-//			widthToTrim = widthToTrim + displays[i].getDisplayMode().getWidth();
-//			heigthToTrim = heigthToTrim + displays[i].getDisplayMode().getHeight();
+//		//Debug
+//		for (GraphicsDevice screen : displays) {
+//			System.out.println(screen.getDefaultConfiguration().getBounds());
 //		}
 		
+	    int appWidth = 1000;
+	    int appHeight = 700;
+	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
+	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
+	    int currentWidth = 0;
+	    int currentHeight = 0;
+		//Centrado de pantalla multimonitor
+		for (int i = 0; i < displays.length; i++) {
+		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
+				currentWidth = currentDisplay.getDisplayMode().getWidth();
+				currentHeight = currentDisplay.getDisplayMode().getHeight();
+				setBounds((currentWidth - appWidth) / 2 + coordinateX, (currentHeight - appHeight) / 2 + coordinateY, appWidth, appHeight);
+		    }
+		}
 
-//		Rectangle currentDisplayBounds = this.getGraphicsConfiguration().getBounds();
-//		int displayWidth = currentDisplayBounds.width;
-//		int displayHeight = currentDisplayBounds.height;
-		
-		//Debug
-		System.out.println(currentDisplay.getIDstring());
-		System.out.println("Ancho pantalla: " + currentWidth + "\nAlto pantalla: " + currentHeight);
-		
-	    //OLD CODE
-//		int appWidth = 1000;
-//	    int appHeight = 700;
-//	    setPreferredSize(new Dimension(appWidth, appHeight));
-//	    setBounds((currentWidth - appWidth) / 2, (currentHeight - appHeight) / 2, appWidth, appHeight);
-//	    setBounds(new Rectangle(appWidth, appHeight));
-//	    setLocation((currentWidth - appWidth) / 2, (currentHeight - appHeight) / 2);
-		
-
+		//OLD CODE
 //		Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
 //	    int appWidth = 1000;
 //	    int appHeight = 700;
