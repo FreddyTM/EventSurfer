@@ -757,8 +757,7 @@ public class UserUI extends JPanel {
 		}
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
 		if(!userToCheck.isAValidPassword(userToCheck.getPassword())) {
-			infoLabel.setText("LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
-					+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL");
+			infoLabel.setText(errorPassTypeText);
 			return false;
 		}
 //		//Comprobamos que la nueva contraseña y la confirmación son iguales
