@@ -1141,13 +1141,15 @@ ver 0.1.7 - USERUI
 		Add verifyAdminEditConditions()
 		Add verifyUserSelectedExists()
 		Add newUserTestData()
+		Rename newUserTestData() -> testData()
+		Rename verifyUserSelectedExists() -> disableEditIfDummyUserSelected()
 		Update constructor
 		Update getUserTypeComboBoxItemsFromSession()
 		Update getSelectedUserIndexFromArray()
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
-		Update newUserTestData() --in progress...--
+		Update testData() --ok--
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--

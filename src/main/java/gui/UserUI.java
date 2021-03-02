@@ -119,6 +119,14 @@ public class UserUI extends JPanel {
 		oKButton.setAction(oKAction);
 		oKButton.setBounds(727, 725, 89, 23);
 		oKButton.setEnabled(false);
+		oKButton.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					oKButton.doClick();
+				}
+			}
+		});
 		add(oKButton);
 		
 		cancelButton = new JButton();
@@ -282,6 +290,12 @@ public class UserUI extends JPanel {
 		activeCheckBox.setSelected(userSelected.isActivo());
 		activeCheckBox.setEnabled(false);
 		activeCheckBox.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					activeCheckBox.setSelected(activeCheckBox.isSelected() ? false : true);
+				}
+			}
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -541,12 +555,12 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Obtiene la lista de los tipos de usuarios definidos en el programa. Si userSelected es un usuario dummy con id -1
-	 * la lista tendrá un único elemento vacío.
+	 * y no estamos creando un usuario nuevo, la lista tendrá un único elemento vacío.
 	 * @return lista de tipos de usuarios, o lista con un único elemento vacío
 	 */
 	public String [] getUserTypeComboBoxItemsFromSession() {
 		String[] fullList = TypesStatesContainer.getuType().getUserTypesArray();
-		if (userSelected.getId() == -1) {
+		if (userSelected.getId() == -1 && okActionSelector != UserUI.OK_ACTION_NEW) {
 			String[] emptyList = {""};
 			return emptyList;
 		} else {
@@ -692,19 +706,20 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
-	 * dato incorrecto se resalta con el fondo del campo en amarillo
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
+	 * con el fondo del campo en amarillo
+	 * @param userToCheck usuario del que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean newUserTestData(BusinessUnit bUnit, User userToCheck) {
+	public boolean testData(User userToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean errorLength = false;
-		Boolean errorPass = false;
-		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
 		String errorAliasText = "YA EXISTE UN USUARIO CON ESE ALIAS";
+		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
 		String errorPassLengthText = "CONTRASEÑA DE LONGITUD INCORRECTA.";
 		String errorPassTypeText = "LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
 				+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL";
+		String errorPassMatchText = "LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN";
 		
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
 		for (BusinessUnit unit: bUnitList) {
@@ -719,23 +734,11 @@ public class UserUI extends JPanel {
 				}
 			}
 		}
-		
-//		List<User> userList = new User().getUsersFromDB(session.getConnection(), bUnit);
-//		for (User user: userList) {
-//			//Si el alias del usuario creado ya existe en la unidad de negocio de la sesión, no se permite la asignación del alias
-//			//Los alias son únicos en la base de datos, no pueden tener duplicados
-//			if (user.getUserAlias().equals(userToCheck.getUserAlias())) {
-//				infoLabel.setText(errorAliasText);
-//				userAliasField.setBackground(Color.YELLOW);
-//				return false;
-//			}
-//		}
-		
+		//Comprobamos la longitud de los datos
 		if (userToCheck.getUserAlias().length() > 20 || userToCheck.getUserAlias().length() == 0) {
 			userAliasField.setBackground(Color.YELLOW);
 			errorLength = true;
-		}
-		
+		}	
 		if (userToCheck.getNombre().length() > 50 || userToCheck.getNombre().length() == 0) {
 			userNameField.setBackground(Color.YELLOW);
 			errorLength = true;
@@ -757,46 +760,19 @@ public class UserUI extends JPanel {
 		}
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
 		if(!userToCheck.isAValidPassword(userToCheck.getPassword())) {
+			newPasswordField.setBackground(Color.YELLOW);
 			infoLabel.setText(errorPassTypeText);
 			return false;
 		}
-//		//Comprobamos que la nueva contraseña y la confirmación son iguales
+		//Comprobamos que la nueva contraseña y la confirmación son iguales
 //		String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
-//		if (!newPassword.equals(confirmPassword)) {
-//			errorInfoLabel.setText("LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN");
-//			return false;
-//		}
-//		
-//		if (bUnit.getProvincia().length() > 50) {
-//			provinceField.setBackground(Color.YELLOW);
-//			error = true;
-//		}
-//		if (bUnit.getEstado().length() > 50) {
-//			stateField.setBackground(Color.YELLOW);
-//			error = true;
-//		}
-//		if (bUnit.getCpostal().length() > 8) {
-//			postalCodeField.setBackground(Color.YELLOW);
-//			error = true;
-//		}
-//		if (bUnit.getTelefono().length() > 15) {
-//			telephoneField.setBackground(Color.YELLOW);
-//			error = true;
-//		}
-//		if (bUnit.getMail().length() > 100) {
-//			mailField.setBackground(Color.YELLOW);
-//			error = true;
-//		}
+		if (!String.valueOf(newPasswordField.getPassword()).equals(String.valueOf(confirmPasswordField.getPassword()))) {
+			newPasswordField.setBackground(Color.YELLOW);
+			confirmPasswordField.setBackground(Color.YELLOW);
+			infoLabel.setText(errorPassMatchText);
+			return false;
+		}
 
-//		//Si hay un error de longitud de datos, mensaje de error y retornamos false
-//		if (errorLength) {
-//			infoLabel.setText(errorLengthText);
-//			return false;
-//		}
-//		//Si hay un error de contraseña, mensaje de error y retornamos false
-//		if (errorPass) {
-//			
-//		}
 		return true;
 	}
 	
@@ -890,7 +866,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Si userSelected es un usuario dummy con id -1, la edición de datos se deshabilita
 	 */
-	public void verifyUserSelectedExists() {
+	public void disableEditIfDummyUserSelected() {
 		if (userSelected.getId() == -1) {
 			editButton.setEnabled(false);
 		}
@@ -926,7 +902,7 @@ public class UserUI extends JPanel {
 			//Si cambiamos la unidad de negocio de la sesión, comprobamos las condiciones de edición de datos de los usuarios
 			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
 			verifyAdminEditConditions();
-			verifyUserSelectedExists();
+			disableEditIfDummyUserSelected();
 		}		
 	}
 	
@@ -972,7 +948,7 @@ public class UserUI extends JPanel {
 			//Si cambiamos la unidad de negocio de la sesión, comprobamos condiciones de edición de datos de los usuarios
 			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
 			verifyAdminEditConditions();
-			verifyUserSelectedExists();
+			disableEditIfDummyUserSelected();
 		}
 	}
 	
@@ -1000,7 +976,7 @@ public class UserUI extends JPanel {
 			//y administrador y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
 			verifyManagerEditConditions();
 			verifyAdminEditConditions();
-			verifyUserSelectedExists();
+			disableEditIfDummyUserSelected();
 		}
 		
 	}
@@ -1028,7 +1004,7 @@ public class UserUI extends JPanel {
 			//seleccionado es un usuario dummy
 			verifyManagerEditConditions();
 			verifyAdminEditConditions();
-			verifyUserSelectedExists();
+			disableEditIfDummyUserSelected();
 		}
 	}
 	
@@ -1246,7 +1222,12 @@ public class UserUI extends JPanel {
 //				newUser.setPassword(newUser.passwordHash(String.valueOf(newPasswordField.getPassword())));
 				newUser.setActivo(activeCheckBox.isSelected());
 				//Validamos los datos del formulario
-			
+				if (testData(newUser)) {
+					
+					//Debug
+					System.out.println("Nuevo usuario validado correctamente");
+					
+				}
 			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
 				currentPasswordField.setBackground(Color.WHITE);
 			}
