@@ -523,17 +523,22 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir
-	 * del array pasado por parámetro
+	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir del array pasado por parámetro
 	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
-	 * @return el índice que corresponda al alias del usuario que abrió sesión si dicho usuario está en la lista,
-	 * 0 si el usuario que abrió sesión no está en la lista (equivale a seleccionar el primer usuario que aparezca)
+	 * @return el índice que corresponda al alias del usuario que abrió sesión si dicho usuario está en la lista, o bien
+	 * el índice del nuevo usuario si hemos creado uno, o bien 0 si el usuario que abrió sesión no está en la lista y no hemos
+	 * creado un nuevo usuario (equivale a seleccionar el primer usuario de la lista)
 	 */
 	public int getSelectedUserIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getUser().getUserAlias())) {
 				userSelected = new User().getUserByAlias(session.getbUnit(), array[i]);
 				return i;
+			//Si hemos creado un nuevo usuario, retornamos el índice del nuevo usuario
+			} else {
+				if (okActionSelector == UserUI.OK_ACTION_NEW) {
+					
+				}
 			}
 		}
 		userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
@@ -1223,10 +1228,55 @@ public class UserUI extends JPanel {
 				newUser.setActivo(activeCheckBox.isSelected());
 				//Validamos los datos del formulario
 				if (testData(newUser)) {
-					
+					//Aplicamos hash a la contraseña del nuevo usuario
+					newUser.setPassword(newUser.passwordHash(String.valueOf(newUser.getPassword())));
 					//Debug
 					System.out.println("Nuevo usuario validado correctamente");
 					
+					//Intentamos grabar el nuevo usuario en la base de datos, retornando un objeto con idénticos
+					//datos que incluye también el id que le ha asignado dicha base de datos
+					User storedUser = new User().addNewUser(session.getConnection(), newUser);
+					//Si el usuario se almacena correctamente en la base de datos
+					if (storedUser != null) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						tNow = PersistenceManager.getTimestampNow();
+						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit() + ": "  + session.formatTimestamp(tNow, null));
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+						}
+						//Añadimos al nuevo usuario a la lista de usuarios de unidad de negocio de la sesión
+						session.getbUnit().getUsers().add(storedUser);
+						
+						//Si el filtro de usuarios está activo y el nuevo usuario se crea como no activo, no puede asignarse como usuario
+						//seleccionado y por tanto tampoco puede visualizarse al aceptar su creación
+						if (userActiveFilterCheckBox.isSelected() && storedUser.isActivo() == false) {
+							
+							//Renovamos la lista de usuarios del comboBox
+							refreshUserComboBox();
+							//Mostramos sus datos
+							populateUserFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+						
+						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado, tanto si se crea
+						//como activo como si no
+						} else {
+							
+						}
+						
+						
+						
+						
+						
+						
+					//Si el usuario no se almacena correctamente en la base de datos 
+					} else {
+						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO USUARIO EN LA BASE DE DATOS");
+					}
 				}
 			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
 				currentPasswordField.setBackground(Color.WHITE);

@@ -1145,7 +1145,7 @@ ver 0.1.7 - USERUI
 		Rename verifyUserSelectedExists() -> disableEditIfDummyUserSelected()
 		Update constructor
 		Update getUserTypeComboBoxItemsFromSession()
-		Update getSelectedUserIndexFromArray()
+		Update getSelectedUserIndexFromArray() --in progress--
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
