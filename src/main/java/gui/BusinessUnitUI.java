@@ -321,6 +321,12 @@ public class BusinessUnitUI extends JPanel {
 		activeCheckBox.setEnabled(false);
 		activeCheckBox.addKeyListener(new KeyAdapter() {
 			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					activeCheckBox.setSelected(activeCheckBox.isSelected() ? false : true);
+				}
+			}
+			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					oKButton.requestFocusInWindow();
@@ -388,6 +394,14 @@ public class BusinessUnitUI extends JPanel {
 		oKButton.setAction(oKAction);
 		oKButton.setBounds(731, 675, 89, 23);
 		oKButton.setEnabled(false);
+		oKButton.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					oKButton.doClick();
+				}
+			}
+		});
 		add(oKButton);
 		
 		cancelButton = new JButton();
@@ -446,8 +460,9 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
-	 * dato incorrecto se resalta con el fondo del campo en amarillo
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
+	 * con el fondo del campo en amarillo
+	 * @param bUnit unidad de negocio de la que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
 	public boolean testData(BusinessUnit bUnit) {
