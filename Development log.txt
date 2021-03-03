@@ -1134,6 +1134,7 @@ ver 0.1.7 - USERUI
 		Add updateDataCache()
 		Add editableDataOn()
 		Add editableDataOff()
+		Add afterNewOrEditUser()
 		Add refreshBunitComboBox()
 		Add refreshUserComboBox()
 		Add refreshUserTypeComboBox()
@@ -1145,7 +1146,7 @@ ver 0.1.7 - USERUI
 		Rename verifyUserSelectedExists() -> disableEditIfDummyUserSelected()
 		Update constructor
 		Update getUserTypeComboBoxItemsFromSession()
-		Update getSelectedUserIndexFromArray() --in progress--
+		Update getSelectedUserIndexFromArray()
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
@@ -1164,7 +1165,7 @@ ver 0.1.7 - USERUI
 		Update itemStateChanged() --ok, add edit filters--
 
 	· UserTypeComboListener class (new UserUI inner class):
-		Update itemStateChanged()
+		Update itemStateChanged() --do we need it?--
 
 	· NewAction class (new inner UserUI class):
 		Update actionPerformed() --ok--
@@ -1176,4 +1177,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --in progress...--
+		Update actionPerformed() --new finished, but not tested yet--

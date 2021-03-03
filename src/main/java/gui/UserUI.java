@@ -523,22 +523,18 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir del array pasado por parámetro
+	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir del array de alias de usuarios
+	 * pasado por parámetro. El alias seleccionado será asignado como usuario seleccionado.
 	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
 	 * @return el índice que corresponda al alias del usuario que abrió sesión si dicho usuario está en la lista, o bien
-	 * el índice del nuevo usuario si hemos creado uno, o bien 0 si el usuario que abrió sesión no está en la lista y no hemos
-	 * creado un nuevo usuario (equivale a seleccionar el primer usuario de la lista)
+	 * el índice del nuevo usuario si hemos creado uno, o bien 0 si el usuario que abrió sesión no está en la lista
+	 * (equivale a seleccionar el primer usuario de la lista)
 	 */
 	public int getSelectedUserIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getUser().getUserAlias())) {
-				userSelected = new User().getUserByAlias(session.getbUnit(), array[i]);
+				userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
 				return i;
-			//Si hemos creado un nuevo usuario, retornamos el índice del nuevo usuario
-			} else {
-				if (okActionSelector == UserUI.OK_ACTION_NEW) {
-					
-				}
 			}
 		}
 		userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
@@ -704,10 +700,59 @@ public class UserUI extends JPanel {
 		userTypeComboBox.setEnabled(false);
 		//Password fields no editables
 		currentPasswordField.setEditable(false);
+		currentPasswordField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		newPasswordField.setEditable(false);
+		newPasswordField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		confirmPasswordField.setEditable(false);
+		confirmPasswordField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+		//Vaciamos los passwordFields
+		currentPasswordField.setText("");
+		newPasswordField.setText("");
+		confirmPasswordField.setText("");
 		//Deshabilitamos checkbox "Activa"
 		activeCheckBox.setEnabled(false);
+	}
+	
+	/**
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de una unidad de negocio
+	 */
+	public void afterNewOrEditUser() {
+		//Hacemos backup del contenido de los datos del formulario
+		updateDataCache();
+		//Formulario no editable
+		editableDataOff();
+		
+		//Cambio de estado de los botones y los combobox
+		//Impedimos que un usuario manager pueda editar usuarios admin tras cancelar
+		if (session.getUser().getUserType().equals("MANAGER" )) {
+			verifyManagerEditConditions();
+		} else {
+			editButton.setEnabled(true);
+		}
+		newButton.setEnabled(true);
+		if (session.getUser().getUserType().equals("ADMIN")) {
+			bUnitComboBox.setEnabled(true);
+			bUnitActiveFilterCheckBox.setEnabled(true);
+		}
+		//Impedimos que un usuario user pueda seleccionar usuarios tras cancelar
+		if (!session.getUser().getUserType().equals("USER")) {
+			userComboBox.setEnabled(true);
+			userActiveFilterCheckBox.setEnabled(true);
+		}
+		userTypeComboBox.setEnabled(false);
+		oKButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+//		infoLabel.setText("");
+		
+//		//Cambio de estado de los botones y el combobox
+//		editButton.setEnabled(true);
+//		newButton.setEnabled(true);
+//		comboBox.setEnabled(true);
+//		activeFilterCheckBox.setEnabled(true);
+//		oKButton.setEnabled(false);
+//		cancelButton.setEnabled(false);					
+//		//El selector de acción retorna al estado sin definir
+//		okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 	}
 	
 	/**
@@ -1153,14 +1198,17 @@ public class UserUI extends JPanel {
 			} else {
 				editButton.setEnabled(true);
 			}
-			newButton.setEnabled(true);
+//			newButton.setEnabled(true);
 			if (session.getUser().getUserType().equals("ADMIN")) {
 				bUnitComboBox.setEnabled(true);
 				bUnitActiveFilterCheckBox.setEnabled(true);
 			}
+			//Impedimos que un usuario user pueda seleccionar usuarios tras cancelar
+			//Botón "nuevo" deshabilitado para un usuario user tras cancelar
 			if (!session.getUser().getUserType().equals("USER")) {
 				userComboBox.setEnabled(true);
 				userActiveFilterCheckBox.setEnabled(true);
+				newButton.setEnabled(true);
 			}
 			userTypeComboBox.setEnabled(false);
 			oKButton.setEnabled(false);
@@ -1176,10 +1224,10 @@ public class UserUI extends JPanel {
 			userTypeComboList = getUserTypeComboBoxItemsFromSession();
 			userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 			userTypeComboBox.setSelectedIndex(lastUserTypeIndex);
-			//Vaciamos los passwordFields
-			currentPasswordField.setText("");
-			newPasswordField.setText("");
-			confirmPasswordField.setText("");
+//			//Vaciamos los passwordFields
+//			currentPasswordField.setText("");
+//			newPasswordField.setText("");
+//			confirmPasswordField.setText("");
 			//Recuperamos el valor anterior del checkbox "Activa"
 			activeCheckBox.setSelected(lastActive);
 		}
@@ -1255,20 +1303,51 @@ public class UserUI extends JPanel {
 						//seleccionado y por tanto tampoco puede visualizarse al aceptar su creación
 						if (userActiveFilterCheckBox.isSelected() && storedUser.isActivo() == false) {
 							
-							//Renovamos la lista de usuarios del comboBox
-							refreshUserComboBox();
-							//Mostramos sus datos
+//							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
+//							//Si la lista está vacía
+//							if (userComboList.length == 0) {
+//								userComboList = new String[1];
+//								userComboList[0] = "<Ningún usuario seleccionable>";
+//							}
+//							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
+//							userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
+							
+//							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
+//							//Si la lista está vacía
+//							if (userComboList.length == 0) {
+//								userComboList = new String[1];
+//								userComboList[0] = "<Ningún usuario seleccionable>";
+//							}
+//							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
+							
+//							//Renovamos la lista de usuarios del comboBox ** NO HACE FALTA **
+//							refreshUserComboBox();
+							
+							//Mostramos los datos del anterior usuario seleccionado
 							populateUserFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
+							
+//							//Hacemos backup del contenido de los datos del formulario ** NO HACE FALTA **
+//							updateDataCache();
+							
+//							//Vaciamos label de información
+//							infoLabel.setText("");
 						
 						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado, tanto si se crea
 						//como activo como si no
 						} else {
-							
+							userSelected = storedUser;
+							//Renovamos la lista de usuarios del comboBox
+							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
+							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
+							userComboBox.setSelectedIndex(userComboList.length - 1);
+//							for (int i = 0; i < userComboList.length; i++) {
+//								if (userComboList[i].equals(userSelected.getUserAlias())) {
+//									userComboBox.setSelectedIndex(i);
+//								}
+//							}
 						}
 						
-						
+						afterNewOrEditUser();
 						
 						
 						
