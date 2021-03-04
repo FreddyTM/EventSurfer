@@ -1182,6 +1182,7 @@ ver 0.1.7 - USERUI
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
 		Update testData() --ok--
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--

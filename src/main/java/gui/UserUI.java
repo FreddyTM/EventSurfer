@@ -26,6 +26,7 @@ import main.java.company.User;
 
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
 
 import javax.swing.JLabel;
@@ -48,7 +49,7 @@ public class UserUI extends JPanel {
 	private static final int OK_ACTION_NEW = 2;
 	
 	private CurrentSession session;
-	private Timestamp tNow = PersistenceManager.getTimestampNow();
+	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	//Registra si el panel está visible o no
@@ -1287,7 +1288,7 @@ public class UserUI extends JPanel {
 					//Si el usuario se almacena correctamente en la base de datos
 					if (storedUser != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = PersistenceManager.getTimestampNow();
+						tNow = ToolBox.getTimestampNow();
 						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + session.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
