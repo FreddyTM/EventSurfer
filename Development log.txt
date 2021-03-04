@@ -1142,6 +1142,7 @@ ver 0.1.7 - USERUI
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 
 	· BusinessUnitUI class:
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 		Add setBlackForeground() //no//
 		Update constructor
 
@@ -1183,6 +1184,7 @@ ver 0.1.7 - USERUI
 		Update refreshUserTypeComboBox()
 		Update testData() --ok--
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+		Move setBlackForeground() to ToolBox class
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--

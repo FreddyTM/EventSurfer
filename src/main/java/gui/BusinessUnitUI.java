@@ -34,6 +34,8 @@ import main.java.company.User;
 import main.java.exceptions.DatabaseError;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
+
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 
@@ -46,7 +48,7 @@ public class BusinessUnitUI extends JPanel {
 	private static final int OK_ACTION_NEW = 2;
 	
 	private CurrentSession session;
-	private Timestamp tNow = PersistenceManager.getTimestampNow();
+	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	//Registra si el panel está visible o no
@@ -850,7 +852,7 @@ public class BusinessUnitUI extends JPanel {
 					//Si la unidad de negocio se almacena correctamente en la base de datos
 					if (storedBunit != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = PersistenceManager.getTimestampNow();
+						tNow = ToolBox.getTimestampNow();
 						infoLabel.setText("NUEVA UNIDAD DE NEGOCIO REGISTRADA: " + session.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
@@ -923,7 +925,7 @@ public class BusinessUnitUI extends JPanel {
 						//Si los datos actualizados se graban en la base de datos
 						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-							tNow = PersistenceManager.getTimestampNow();
+							tNow = ToolBox.getTimestampNow();
 							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
 							boolean UserChangeRegister = true;
 							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
