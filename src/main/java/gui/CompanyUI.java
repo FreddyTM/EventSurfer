@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import main.java.company.Company;
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
@@ -31,7 +32,7 @@ import javax.swing.Action;
 public class CompanyUI extends JPanel {
 
 	private CurrentSession session;
-	Timestamp tNow = PersistenceManager.getTimestampNow();
+	Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	//Registra si el panel está visible o no
@@ -526,7 +527,7 @@ public class CompanyUI extends JPanel {
 					session.getCompany().setMail(updatedCompany.getMail());
 					session.getCompany().setWeb(updatedCompany.getWeb());
 					//Registramos fecha y hora de la actualización de los datos de la tabla company
-					tNow = PersistenceManager.getTimestampNow();
+					tNow = ToolBox.getTimestampNow();
 					//Actualizamos los datos de la tabla last_modification
 					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow);
 					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla company

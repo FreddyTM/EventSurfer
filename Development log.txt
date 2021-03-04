@@ -1108,11 +1108,42 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 
 ver 0.1.7 - USERUI
 
+	* - Package main.java.persistence:
+
+	· PersistenceManager class:
+		Move getTimestampNow() to ToolBox class
+
+	* - Package main.java.toolbox (new)
+
+	· ToolBox class (new):
+		getTimestampNow()
+		Add setBlackForeground()
+
+	* - Package test.java
+
+	· EventUpdateTest class:
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+
+	· PersistenceManager class:
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+
+	* - Package main.java.event
+
+	· EventUpdate class:
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+
 	* - Package main.java.gui
 
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.7--
 		Update initialize() --multimonitor screen ok--
+
+	· CompanyUI class:
+		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+
+	· BusinessUnitUI class:
+		Add setBlackForeground() //no//
+		Update constructor
 
 	· UserUI class:
 		Add attribute
