@@ -1143,7 +1143,6 @@ ver 0.1.7 - USERUI
 
 	· BusinessUnitUI class:
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
-		Add setBlackForeground() //no//
 		Update constructor
 
 	· UserUI class:

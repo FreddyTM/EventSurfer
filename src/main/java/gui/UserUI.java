@@ -323,7 +323,7 @@ public class UserUI extends JPanel {
 		bUnitComboBox.setBounds(260, 175, 400, 25);
 		bUnitComboBox.addItemListener(new BunitComboListener());
 		bUnitComboBox.setEditable(false);
-		setBlackForeground(bUnitComboBox);
+		ToolBox.setBlackForeground(bUnitComboBox);
 		bUnitComboBox.setBackground(Color.WHITE);
 		add(bUnitComboBox);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
@@ -348,7 +348,7 @@ public class UserUI extends JPanel {
 		userComboBox.setBounds(260, 225, 400, 25);
 		userComboBox.addItemListener(new UserComboListener());
 		userComboBox.setEditable(false);
-		setBlackForeground(userComboBox);
+		ToolBox.setBlackForeground(userComboBox);
 		userComboBox.setBackground(Color.WHITE);
 		add(userComboBox);
 		if (session.getUser().getUserType().equals("USER")) {
@@ -362,7 +362,7 @@ public class UserUI extends JPanel {
 		userTypeComboBox.addItemListener(new UserTypeComboListener());
 		userTypeComboBox.setEditable(false);
 		userTypeComboBox.setEnabled(false);
-		setBlackForeground(userTypeComboBox);
+		ToolBox.setBlackForeground(userTypeComboBox);
 		userTypeComboBox.setBackground(Color.WHITE);
 		add(userTypeComboBox);
 		lastUserType = userTypeComboBox.getSelectedItem().toString();
@@ -601,21 +601,21 @@ public class UserUI extends JPanel {
 		return 0;
 	}
 	
-	/**
-	 * Establece por defecto el color negro como color de la letra del JComboBox pasado por parámetro, incluso
-	 * en el caso de que el combobox esté deshabilitado
-	 * @param combobox JComboBox al que le queremos aplicar el formato
-	 */
-	public void setBlackForeground(JComboBox combobox) {
-		combobox.setRenderer(new DefaultListCellRenderer() {
-		   @Override
-		   public void paint(Graphics g) {
-		       setForeground(Color.BLACK);
-		       super.paint(g);
-		   };
-	   });
-	}
-	
+//	/**
+//	 * Establece por defecto el color negro como color de la letra del JComboBox pasado por parámetro, incluso
+//	 * en el caso de que el combobox esté deshabilitado
+//	 * @param combobox JComboBox al que le queremos aplicar el formato
+//	 */
+//	public void setBlackForeground(JComboBox combobox) {
+//		combobox.setRenderer(new DefaultListCellRenderer() {
+//		   @Override
+//		   public void paint(Graphics g) {
+//		       setForeground(Color.BLACK);
+//		       super.paint(g);
+//		   };
+//	   });
+//	}
+//	
 	/**
 	 * Refresca los datos del usuario seleccionado para que se visualicen en pantalla
 	 */
