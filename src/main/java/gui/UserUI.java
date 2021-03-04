@@ -743,6 +743,9 @@ public class UserUI extends JPanel {
 		userTypeComboBox.setEnabled(false);
 		oKButton.setEnabled(false);
 		cancelButton.setEnabled(false);
+		
+		//El selector de acción retorna al estado sin definir
+		okActionSelector = UserUI.OK_ACTION_UNDEFINED;
 //		infoLabel.setText("");
 		
 //		//Cambio de estado de los botones y el combobox
@@ -765,25 +768,30 @@ public class UserUI extends JPanel {
 	public boolean testData(User userToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean errorLength = false;
+		Boolean oldPasswordOk = false;
 		String errorAliasText = "YA EXISTE UN USUARIO CON ESE ALIAS";
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorOldPassText = "LA CONTRASEÑA ACTUAL DEL USUARIO ES INCORRECTA";
 		String errorPassLengthText = "CONTRASEÑA DE LONGITUD INCORRECTA.";
 		String errorPassTypeText = "LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
 				+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL";
 		String errorPassMatchText = "LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN";
 		
-		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(), session.getCompany());
-		for (BusinessUnit unit: bUnitList) {
-			List<User> userList = new User().getUsersFromDB(session.getConnection(), unit);
-			for (User user: userList) {
-				//Si el alias del usuario creado ya existe en alguna unidad de negocio, no se permite la asignación del alias
-				//Los alias son únicos en la base de datos, no pueden tener duplicados
-				if (user.getUserAlias().equals(userToCheck.getUserAlias())) {
-					infoLabel.setText(errorAliasText);
-					userAliasField.setBackground(Color.YELLOW);
-					return false;
+		//Si estamos creando un nuevo usuario y el alias del usuario creado ya existe en alguna unidad de negocio,
+		//no se permite la asignación del alias. Los alias son únicos en la base de datos, no pueden tener duplicados
+		if (okActionSelector == UserUI.OK_ACTION_NEW) {
+			List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(),
+					session.getCompany());
+			for (BusinessUnit unit : bUnitList) {
+				List<User> userList = new User().getUsersFromDB(session.getConnection(), unit);
+				for (User user : userList) {
+					if (user.getUserAlias().equals(userToCheck.getUserAlias())) {
+						infoLabel.setText(errorAliasText);
+						userAliasField.setBackground(Color.YELLOW);
+						return false;
+					}
 				}
-			}
+			} 
 		}
 		//Comprobamos la longitud de los datos
 		if (userToCheck.getUserAlias().length() > 20 || userToCheck.getUserAlias().length() == 0) {
@@ -803,27 +811,48 @@ public class UserUI extends JPanel {
 			infoLabel.setText(errorLengthText);
 			return false;
 		}
-		//Comprobamos que la nueva contraseña tiene el tamaño correcto
-		if (userToCheck.getPassword().length() > 25 || userToCheck.getPassword().length() < 8) {
-			newPasswordField.setBackground(Color.YELLOW);
-			infoLabel.setText(errorPassLengthText);
-			return false;
+		//Comprobamos que la antigua contraseña es correcta si estamos editando usuarios y se quiere cambiar su contraseña
+		//Solo se comprueba la antigua contraseña en caso de que haya algo introducido en los campos "Nuevo password" y/o "Confirmar password"
+		if (okActionSelector == UserUI.OK_ACTION_EDIT) {
+			if (!String.valueOf(currentPasswordField.getPassword()).equals("") || !String.valueOf(confirmPasswordField.getPassword()).equals("")) {
+				if (String.valueOf(newPasswordField.getPassword()).equals("")) {
+					infoLabel.setText(errorOldPassText);
+					return false;
+				}
+				String hashedPass = new User().passwordHash(String.valueOf(currentPasswordField.getPassword()));
+				if (!hashedPass.equals(String.valueOf(userToCheck.getPassword()))) {
+					infoLabel.setText(errorOldPassText);
+					oldPasswordOk = true;
+					return false;
+				} 
+			}
 		}
-		//Comprobamos que la contraseña solo incluye caracteres permitidos
-		if(!userToCheck.isAValidPassword(userToCheck.getPassword())) {
-			newPasswordField.setBackground(Color.YELLOW);
-			infoLabel.setText(errorPassTypeText);
-			return false;
+		
+		//Comprobamos la nueva contraseña y la confirmación si estamos creando un nuevo usuario, o estamos editando un usuario existente y
+		//hay algo introducido en los campos "Nuevo password" y/o "Confirmar password"
+		if (okActionSelector == UserUI.OK_ACTION_NEW || (okActionSelector == UserUI.OK_ACTION_EDIT && oldPasswordOk == true) ) {
+			//Comprobamos que la nueva contraseña tiene el tamaño correcto
+			if (userToCheck.getPassword().length() > 25 || userToCheck.getPassword().length() < 8) {
+				newPasswordField.setBackground(Color.YELLOW);
+				infoLabel.setText(errorPassLengthText);
+				return false;
+			}
+			//Comprobamos que la contraseña solo incluye caracteres permitidos
+			if (!userToCheck.isAValidPassword(userToCheck.getPassword())) {
+				newPasswordField.setBackground(Color.YELLOW);
+				infoLabel.setText(errorPassTypeText);
+				return false;
+			}
+			//Comprobamos que la nueva contraseña y la confirmación son iguales
+			//		String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
+			if (!String.valueOf(newPasswordField.getPassword())
+					.equals(String.valueOf(confirmPasswordField.getPassword()))) {
+				newPasswordField.setBackground(Color.YELLOW);
+				confirmPasswordField.setBackground(Color.YELLOW);
+				infoLabel.setText(errorPassMatchText);
+				return false;
+			} 
 		}
-		//Comprobamos que la nueva contraseña y la confirmación son iguales
-//		String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
-		if (!String.valueOf(newPasswordField.getPassword()).equals(String.valueOf(confirmPasswordField.getPassword()))) {
-			newPasswordField.setBackground(Color.YELLOW);
-			confirmPasswordField.setBackground(Color.YELLOW);
-			infoLabel.setText(errorPassMatchText);
-			return false;
-		}
-
 		return true;
 	}
 	
@@ -1262,7 +1291,7 @@ public class UserUI extends JPanel {
 			//Aceptamos la creación de una nueva unidad de negocio
 			if (okActionSelector == UserUI.OK_ACTION_NEW) {
 				//Debug
-				System.out.println("Acción de grabar nueva unidad de negocio");
+				System.out.println("Acción de grabar un nuevo usuario");
 				
 				//Creamos nuevo BusinessUnit a partir de los datos del formulario
 				User newUser = new User();
@@ -1330,19 +1359,37 @@ public class UserUI extends JPanel {
 						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO USUARIO EN LA BASE DE DATOS");
 					}
 				}
+			
+			//Aceptamos los cambios de la unidad de negocio editada
 			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
+				
+				//Debug
+				System.out.println("Acción de editar un nuevo usuario");
+				
 				currentPasswordField.setBackground(Color.WHITE);
 				
 				//Objeto que recoge los datos actualizados
 				User updatedUser = new User();
 				updatedUser.setId(userSelected.getId());
 				updatedUser.setbUnit(userSelected.getbUnit());
+				updatedUser.setUserType(userTypeComboBox.getSelectedItem().toString());
+				updatedUser.setUserAlias(userAliasField.getText());
+				updatedUser.setNombre(userNameField.getText());
+				updatedUser.setApellido(userLastNameField.getText());
+				//Password en texto plano
+				updatedUser.setPassword(String.valueOf(newPasswordField.getPassword()));
+				updatedUser.setActivo(activeCheckBox.isSelected());
 				
-				
-				
-				
-				
-				
+				//Validamos los datos del formulario
+				if (testData(updatedUser)) {
+					
+					//Debug
+					System.out.println("Usuario editado correctamente");
+
+					
+				}
+				//Debug
+				okActionSelector = UserUI.OK_ACTION_UNDEFINED; //Only debug
 			}
 			
 		}

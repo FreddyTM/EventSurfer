@@ -1181,8 +1181,9 @@ ver 0.1.7 - USERUI
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
-		Update testData() --ok--
+		Update testData() --new ok, edit in progress...--
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
+		Update afterNewOrEditUser()
 		Move setBlackForeground() to ToolBox class
 
 	· BunitComboListener class (new UserUI inner class):
@@ -1210,4 +1211,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --new ok--
+		Update actionPerformed() --new ok, edit in progress...--
