@@ -204,16 +204,16 @@ public class PersistenceManager {
 		return id;
 	}
 	
-	/**
-	 * Devuelve la fecha y la hora actuales
-	 * @return Timestamp con la fecha y la hora actuales
-	 */
-	public static Timestamp getTimestampNow() {
-		Calendar calendar = Calendar.getInstance();
-		Date dNow = calendar.getTime();
-		Timestamp tNow = new Timestamp(dNow.getTime());
-		return tNow;
-	}
+//	/**
+//	 * Devuelve la fecha y la hora actuales
+//	 * @return Timestamp con la fecha y la hora actuales
+//	 */
+//	public static Timestamp getTimestampNow() {
+//		Calendar calendar = Calendar.getInstance();
+//		Date dNow = calendar.getTime();
+//		Timestamp tNow = new Timestamp(dNow.getTime());
+//		return tNow;
+//	}
 	
 	/**
 	 * Devuelve la fecha y la hora de la última actualización de datos en alguna

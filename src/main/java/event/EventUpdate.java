@@ -14,6 +14,7 @@ import java.util.List;
 import main.java.company.BusinessUnit;
 import main.java.company.User;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 
 public class EventUpdate {
 
@@ -53,7 +54,7 @@ public class EventUpdate {
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, 	eUpdate.getEvent().getId());
-			pstm.setTimestamp(2, PersistenceManager.getTimestampNow());
+			pstm.setTimestamp(2, ToolBox.getTimestampNow());
 			pstm.setString(3, eUpdate.getDescripcion());
 			pstm.setString(4, eUpdate.getAutor());
 			pstm.setInt(5, eUpdate.getUser().getId());
