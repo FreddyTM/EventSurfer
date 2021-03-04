@@ -20,6 +20,7 @@ import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
@@ -74,7 +75,7 @@ class EventUpdateTest {
 		EventUpdate eUpdate = new EventUpdate();
 		Event event = bUnit.getEvents().get(0);
 		eUpdate.setEvent(event);
-		eUpdate.setFechaHora(PersistenceManager.getTimestampNow());
+		eUpdate.setFechaHora(ToolBox.getTimestampNow());
 		eUpdate.setDescripcion("Aparecen tras el día de lluvia de ayer. "
 				+ "Se colocan cubos para recoger el agua");
 		eUpdate.setAutor("Juan Palomo");
@@ -90,7 +91,7 @@ class EventUpdateTest {
 		EventUpdate eUpdate = new EventUpdate();
 		Event event = bUnit.getEvents().get(1);
 		eUpdate.setEvent(event);
-		eUpdate.setFechaHora(PersistenceManager.getTimestampNow());
+		eUpdate.setFechaHora(ToolBox.getTimestampNow());
 		eUpdate.setDescripcion("Retiramos la mesa al almacén");
 		eUpdate.setAutor("Pepe Gotera");
 		eUpdate.setUser(bUnit.getUsers().get(2));
@@ -108,7 +109,7 @@ class EventUpdateTest {
 		EventUpdate newEupdate = new EventUpdate();
 		newEupdate.setId(oldEupdate.getId());
 		newEupdate.setEvent(event);
-		newEupdate.setFechaHora(PersistenceManager.getTimestampNow());
+		newEupdate.setFechaHora(ToolBox.getTimestampNow());
 		newEupdate.setDescripcion("Retiramos la mesa al almacén y desmontamos la pata rota");
 		newEupdate.setAutor("Pepe Gotera");
 		newEupdate.setUser(oldEupdate.getUser());

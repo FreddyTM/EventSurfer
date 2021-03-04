@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import main.java.company.Company;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 
 class PersistenceManagerTest {
 
@@ -155,7 +156,7 @@ class PersistenceManagerTest {
 	
 	@Test
 	void testUpdateTimeStampToDB() {
-		Timestamp tNow = PersistenceManager.getTimestampNow();
+		Timestamp tNow = ToolBox.getTimestampNow();
 		Timestamp readTimestamp = null;
 		assertTrue(PersistenceManager.updateTimeStampToDB(connection, Company.TABLE_NAME, tNow));
 		Statement stm = null;
@@ -178,7 +179,7 @@ class PersistenceManagerTest {
 	@Test
 	void testGetLatestTimestampFromDb() {
 		assertNotNull(PersistenceManager.getLatestTimestampFromDb(connection));
-		Timestamp tNow = PersistenceManager.getTimestampNow();
+		Timestamp tNow = ToolBox.getTimestampNow();
 		assertTrue(tNow.after(PersistenceManager.getLatestTimestampFromDb(connection)));
 	}
 	
