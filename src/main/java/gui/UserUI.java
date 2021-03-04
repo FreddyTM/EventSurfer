@@ -1272,12 +1272,12 @@ public class UserUI extends JPanel {
 				newUser.setApellido(userLastNameField.getText());
 				//Password en texto plano
 				newUser.setPassword(String.valueOf(newPasswordField.getPassword()));
-//				newUser.setPassword(newUser.passwordHash(String.valueOf(newPasswordField.getPassword())));
 				newUser.setActivo(activeCheckBox.isSelected());
 				//Validamos los datos del formulario
 				if (testData(newUser)) {
 					//Aplicamos hash a la contraseña del nuevo usuario
 					newUser.setPassword(newUser.passwordHash(String.valueOf(newUser.getPassword())));
+					
 					//Debug
 					System.out.println("Nuevo usuario validado correctamente");
 					
@@ -1288,7 +1288,7 @@ public class UserUI extends JPanel {
 					if (storedUser != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
 						tNow = PersistenceManager.getTimestampNow();
-						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit() + ": "  + session.formatTimestamp(tNow, null));
+						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + session.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
 						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
@@ -1303,55 +1303,27 @@ public class UserUI extends JPanel {
 						//seleccionado y por tanto tampoco puede visualizarse al aceptar su creación
 						if (userActiveFilterCheckBox.isSelected() && storedUser.isActivo() == false) {
 							
-//							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
-//							//Si la lista está vacía
-//							if (userComboList.length == 0) {
-//								userComboList = new String[1];
-//								userComboList[0] = "<Ningún usuario seleccionable>";
-//							}
-//							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
-//							userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
-							
-//							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
-//							//Si la lista está vacía
-//							if (userComboList.length == 0) {
-//								userComboList = new String[1];
-//								userComboList[0] = "<Ningún usuario seleccionable>";
-//							}
-//							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
-							
-//							//Renovamos la lista de usuarios del comboBox ** NO HACE FALTA **
-//							refreshUserComboBox();
-							
-							//Mostramos los datos del anterior usuario seleccionado
+							//Mostramos los datos del anterior usuario seleccionado. No renovamos el contenido de userComboBox porque
+							//no es necesario. Tampoco hacemos backup del contenido de los datos del formulario, se mantienen los anteriores
 							populateUserFields();
-							
-//							//Hacemos backup del contenido de los datos del formulario ** NO HACE FALTA **
-//							updateDataCache();
-							
-//							//Vaciamos label de información
-//							infoLabel.setText("");
 						
-						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado, tanto si se crea
-						//como activo como si no
+						//Si el filtro de usuarios está activo y el usuario se crea como activo, pasa a ser el usuario seleccionado.
+						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado tanto si se
+						//crea como activo como si no
 						} else {
 							userSelected = storedUser;
 							//Renovamos la lista de usuarios del comboBox
 							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
 							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
-							userComboBox.setSelectedIndex(userComboList.length - 1);
-//							for (int i = 0; i < userComboList.length; i++) {
-//								if (userComboList[i].equals(userSelected.getUserAlias())) {
-//									userComboBox.setSelectedIndex(i);
-//								}
-//							}
+							for (int i = 0; i < userComboList.length; i++) {
+								if (userComboList[i].equals(userSelected.getUserAlias())) {
+									userComboBox.setSelectedIndex(i);
+								}
+							}
 						}
-						
+						//Retornamos el formulario a su estado previo a la creación de un nuevo usuario
 						afterNewOrEditUser();
-						
-						
-						
-						
+
 					//Si el usuario no se almacena correctamente en la base de datos 
 					} else {
 						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO USUARIO EN LA BASE DE DATOS");
@@ -1359,7 +1331,19 @@ public class UserUI extends JPanel {
 				}
 			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
 				currentPasswordField.setBackground(Color.WHITE);
+				
+				//Objeto que recoge los datos actualizados
+				User updatedUser = new User();
+				updatedUser.setId(userSelected.getId());
+				updatedUser.setbUnit(userSelected.getbUnit());
+				
+				
+				
+				
+				
+				
 			}
+			
 		}
 	}
 }

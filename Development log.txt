@@ -1177,4 +1177,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --new finished, but not tested yet--
+		Update actionPerformed() --new ok--
