@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
@@ -55,7 +56,7 @@ public class UserUI extends JPanel {
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	//Usuario seleccionado en pantalla
-	private User userSelected;
+	private User selectedUser;
 	private JTextField companyField;
 	private JComboBox bUnitComboBox = new JComboBox();
 	private JCheckBox bUnitActiveFilterCheckBox;
@@ -109,7 +110,7 @@ public class UserUI extends JPanel {
 		this.session = session;
 		setLayout(null);
 		panelVisible = true;
-		userSelected = session.getUser();
+		selectedUser = session.getUser();
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -235,7 +236,7 @@ public class UserUI extends JPanel {
 		add(companyField);
 		
 		userAliasField = new JTextField();
-		userAliasField.setText(userSelected.getUserAlias());
+		userAliasField.setText(selectedUser.getUserAlias());
 		userAliasField.setEditable(false);
 		userAliasField.setColumns(10);
 		userAliasField.setBounds(260, 325, 400, 25);
@@ -248,11 +249,11 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(userAliasField);
-		textFieldContentList.add(userSelected.getUserAlias());
+		textFieldContentList.add(selectedUser.getUserAlias());
 		add(userAliasField);
 		
 		userNameField = new JTextField();
-		userNameField.setText(userSelected.getNombre());
+		userNameField.setText(selectedUser.getNombre());
 		userNameField.setEditable(false);
 		userNameField.setColumns(10);
 		userNameField.setBounds(260, 375, 400, 25);
@@ -265,11 +266,11 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(userNameField);
-		textFieldContentList.add(userSelected.getNombre());
+		textFieldContentList.add(selectedUser.getNombre());
 		add(userNameField);
 		
 		userLastNameField = new JTextField();
-		userLastNameField.setText(userSelected.getApellido());
+		userLastNameField.setText(selectedUser.getApellido());
 		userLastNameField.setEditable(false);
 		userLastNameField.setColumns(10);
 		userLastNameField.setBounds(260, 425, 400, 25);
@@ -282,13 +283,13 @@ public class UserUI extends JPanel {
 			}
 		});
 		textFieldList.add(userLastNameField);
-		textFieldContentList.add(userSelected.getApellido());
+		textFieldContentList.add(selectedUser.getApellido());
 		add(userLastNameField);
 		
 		activeCheckBox = new JCheckBox();
 		activeCheckBox.setBounds(260, 625, 100, 25);
 		activeCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		activeCheckBox.setSelected(userSelected.isActivo());
+		activeCheckBox.setSelected(selectedUser.isActivo());
 		activeCheckBox.setEnabled(false);
 		activeCheckBox.addKeyListener(new KeyAdapter() {
 			@Override
@@ -534,11 +535,11 @@ public class UserUI extends JPanel {
 	public int getSelectedUserIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getUser().getUserAlias())) {
-				userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
+				selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
 				return i;
 			}
 		}
-		userSelected = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
+		selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
 		return 0;
 	}
 	
@@ -562,7 +563,7 @@ public class UserUI extends JPanel {
 	 */
 	public String [] getUserTypeComboBoxItemsFromSession() {
 		String[] fullList = TypesStatesContainer.getuType().getUserTypesArray();
-		if (userSelected.getId() == -1 && okActionSelector != UserUI.OK_ACTION_NEW) {
+		if (selectedUser.getId() == -1 && okActionSelector != UserUI.OK_ACTION_NEW) {
 			String[] emptyList = {""};
 			return emptyList;
 		} else {
@@ -579,7 +580,7 @@ public class UserUI extends JPanel {
 	 */
 	public int getSelectedUserTypeIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
-			if (userSelected.getUserType().equals(array[i])) {
+			if (selectedUser.getUserType().equals(array[i])) {
 				return i;
 			}
 		}
@@ -624,11 +625,11 @@ public class UserUI extends JPanel {
 		userTypeComboList = getUserTypeComboBoxItemsFromSession();
 		userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 		userTypeComboBox.setSelectedIndex(getSelectedUserTypeIndexFromArray(userTypeComboList));
-		userAliasField.setText(userSelected.getUserAlias());
-		userNameField.setText(userSelected.getNombre());
-		userLastNameField.setText(userSelected.getApellido());
+		userAliasField.setText(selectedUser.getUserAlias());
+		userNameField.setText(selectedUser.getNombre());
+		userLastNameField.setText(selectedUser.getApellido());
 		//Aunque no es un textfield, el valor de activeCheckBox también hay que mostrarlo actualizado
-		activeCheckBox.setSelected(userSelected.isActivo());
+		activeCheckBox.setSelected(selectedUser.isActivo());
 	}
 	
 	/**
@@ -668,7 +669,7 @@ public class UserUI extends JPanel {
 		}
 		//El usuario administrador por defecto no puede cambiar su condición de administrador
 		//Un usuario de tipo user no puede cambiar su tipo de usuario
-		if (session.getUser().getId() == 1 && userSelected.getId() == 1 || session.getUser().getUserType().equals("USER")) {
+		if (session.getUser().getId() == 1 && selectedUser.getId() == 1 || session.getUser().getUserType().equals("USER")) {
 			userTypeComboBox.setEnabled(false);
 		} else {
 			userTypeComboBox.setEnabled(true);
@@ -678,7 +679,7 @@ public class UserUI extends JPanel {
 		newPasswordField.setEditable(true);
 		confirmPasswordField.setEditable(true);
 		//Habilitamos checkbox "Activa" si el usuario de la sesión no es de tipo user y si no es el administrador por defecto
-		if (session.getUser().getUserType().equals("USER") || (session.getUser().getId() == 1 && userSelected.getId() == 1)) {
+		if (session.getUser().getUserType().equals("USER") || (session.getUser().getId() == 1 && selectedUser.getId() == 1)) {
 			activeCheckBox.setEnabled(false);
 		} else {
 			activeCheckBox.setEnabled(true);
@@ -771,7 +772,9 @@ public class UserUI extends JPanel {
 		Boolean oldPasswordOk = false;
 		String errorAliasText = "YA EXISTE UN USUARIO CON ESE ALIAS";
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
-		String errorOldPassText = "LA CONTRASEÑA ACTUAL DEL USUARIO ES INCORRECTA";
+		String errorCurrentPassText = "SI DESEA GUARDAR UNA NUEVA CONTRASEÑA, INTRODUZCA LA CONTRASEÑA ACTUAL";
+		String error2CurrentPassText = "CONTRASEÑA ACTUAL INCORRECTA";
+		String errorSamePasswordText = "LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA CONTRASEÑA ACTUAL";
 		String errorPassLengthText = "CONTRASEÑA DE LONGITUD INCORRECTA.";
 		String errorPassTypeText = "LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
 				+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL";
@@ -811,26 +814,8 @@ public class UserUI extends JPanel {
 			infoLabel.setText(errorLengthText);
 			return false;
 		}
-		//Comprobamos que la antigua contraseña es correcta si estamos editando usuarios y se quiere cambiar su contraseña
-		//Solo se comprueba la antigua contraseña en caso de que haya algo introducido en los campos "Nuevo password" y/o "Confirmar password"
-		if (okActionSelector == UserUI.OK_ACTION_EDIT) {
-			if (!String.valueOf(currentPasswordField.getPassword()).equals("") || !String.valueOf(confirmPasswordField.getPassword()).equals("")) {
-				if (String.valueOf(newPasswordField.getPassword()).equals("")) {
-					infoLabel.setText(errorOldPassText);
-					return false;
-				}
-				String hashedPass = new User().passwordHash(String.valueOf(currentPasswordField.getPassword()));
-				if (!hashedPass.equals(String.valueOf(userToCheck.getPassword()))) {
-					infoLabel.setText(errorOldPassText);
-					oldPasswordOk = true;
-					return false;
-				} 
-			}
-		}
-		
-		//Comprobamos la nueva contraseña y la confirmación si estamos creando un nuevo usuario, o estamos editando un usuario existente y
-		//hay algo introducido en los campos "Nuevo password" y/o "Confirmar password"
-		if (okActionSelector == UserUI.OK_ACTION_NEW || (okActionSelector == UserUI.OK_ACTION_EDIT && oldPasswordOk == true) ) {
+		//Si estamos creando un nuevo usuario
+		if (okActionSelector == UserUI.OK_ACTION_NEW) {
 			//Comprobamos que la nueva contraseña tiene el tamaño correcto
 			if (userToCheck.getPassword().length() > 25 || userToCheck.getPassword().length() < 8) {
 				newPasswordField.setBackground(Color.YELLOW);
@@ -844,7 +829,6 @@ public class UserUI extends JPanel {
 				return false;
 			}
 			//Comprobamos que la nueva contraseña y la confirmación son iguales
-			//		String confirmPassword = String.valueOf(confirmPasswordField.getPassword());
 			if (!String.valueOf(newPasswordField.getPassword())
 					.equals(String.valueOf(confirmPasswordField.getPassword()))) {
 				newPasswordField.setBackground(Color.YELLOW);
@@ -853,7 +837,58 @@ public class UserUI extends JPanel {
 				return false;
 			} 
 		}
-		return true;
+		//Si estamos editando un usuario existente
+		if (okActionSelector == UserUI.OK_ACTION_EDIT) {
+			//Si hay datos en currentPasswordField, newPasswordField o confirmPasswordField
+			if (!String.valueOf(currentPasswordField.getPassword()).equals("")
+					|| !String.valueOf(newPasswordField.getPassword()).equals("")
+					|| !String.valueOf(confirmPasswordField.getPassword()).equals("")) {
+				//Comprobamos la contraseña actual del usuario seleccionado
+				//Si currentPasswordField está vacío, error
+				if (String.valueOf(currentPasswordField.getPassword()).equals("")) {
+					currentPasswordField.setBackground(Color.YELLOW);
+					infoLabel.setText(errorCurrentPassText);
+					return false;
+				//Si currentPasswordField no está vacío, comparamos con la contraseña del usuario seleccionado
+				} else {
+					String hashedPass = new User().passwordHash(String.valueOf(currentPasswordField.getPassword()));
+					//Si no coinciden, error
+					if (!hashedPass.equals(String.valueOf(selectedUser.getPassword()))) {
+						currentPasswordField.setBackground(Color.YELLOW);
+						infoLabel.setText(error2CurrentPassText);
+						return false;
+					} 
+				}
+				//Comprobamos que la nueva contraseña tiene el tamaño correcto
+				if (userToCheck.getPassword().length() > 25 || userToCheck.getPassword().length() < 8) {
+					newPasswordField.setBackground(Color.YELLOW);
+					infoLabel.setText(errorPassLengthText);
+					return false;
+				}
+				//Comprobamos que la nueva contraseña y la contraseña actual no son iguales
+				String hashedPass = new User().passwordHash(String.valueOf(newPasswordField.getPassword()));
+				if (hashedPass.equals(String.valueOf(selectedUser.getPassword()))) {
+					newPasswordField.setBackground(Color.YELLOW);
+					infoLabel.setText(errorSamePasswordText);
+					return false;
+				}
+				//Comprobamos que la contraseña solo incluye caracteres permitidos
+				if (!userToCheck.isAValidPassword(userToCheck.getPassword())) {
+					newPasswordField.setBackground(Color.YELLOW);
+					infoLabel.setText(errorPassTypeText);
+					return false;
+				}
+				//Comprobamos que la nueva contraseña y la confirmación son iguales
+				if (!String.valueOf(newPasswordField.getPassword())
+						.equals(String.valueOf(confirmPasswordField.getPassword()))) {
+					newPasswordField.setBackground(Color.YELLOW);
+					confirmPasswordField.setBackground(Color.YELLOW);
+					infoLabel.setText(errorPassMatchText);
+					return false;
+				} 
+			} 
+		}
+		return true;		
 	}
 	
 	/**
@@ -905,9 +940,9 @@ public class UserUI extends JPanel {
 	public void verifyManagerEditConditions() {
 
 		//Un usuario manager no puede editar los datos de un usuario administrador
-		if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN")) {
+		if (session.getUser().getUserType().equals("MANAGER") && selectedUser.getUserType().equals("ADMIN")) {
 			editButton.setEnabled(false);
-		} else if (session.getUser().getUserType().equals("MANAGER") && !userSelected.getUserType().equals("ADMIN")) {
+		} else if (session.getUser().getUserType().equals("MANAGER") && !selectedUser.getUserType().equals("ADMIN")) {
 			editButton.setEnabled(true);
 		}
 	}
@@ -921,13 +956,13 @@ public class UserUI extends JPanel {
 
 		//Si el usuario de la sesión es un usuario administrador y el usuario seleccionado no lo es, habilitamos
 		//siempre la edición del usuario seleccionado
-		if (session.getUser().getUserType().equals("ADMIN") && !userSelected.getUserType().equals("ADMIN")) {
+		if (session.getUser().getUserType().equals("ADMIN") && !selectedUser.getUserType().equals("ADMIN")) {
 			editButton.setEnabled(true);
 		}
 		
 		//Los datos del usuario administrador por defecto no pueden ser modificados por ningún otro usuario administrador
 		if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() != 1 && 
-				userSelected.getId() == 1) {
+				selectedUser.getId() == 1) {
 			editButton.setEnabled(false);
 		} else if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() == 1) {
 			editButton.setEnabled(true);
@@ -935,10 +970,10 @@ public class UserUI extends JPanel {
 		
 		//Los datos de un usuario administrador solo pueden ser modificados por si mismo y por el usuario administrador
 		//por defecto
-		if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() == userSelected.getId()) {
+		if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() == selectedUser.getId()) {
 			editButton.setEnabled(true);
 		} else if (session.getUser().getUserType().equals("ADMIN") && session.getUser().getId() != 1 &&
-				userSelected.getUserType().equals("ADMIN")) {
+				selectedUser.getUserType().equals("ADMIN")) {
 			editButton.setEnabled(false);
 		}
 	}
@@ -947,7 +982,7 @@ public class UserUI extends JPanel {
 	 * Si userSelected es un usuario dummy con id -1, la edición de datos se deshabilita
 	 */
 	public void disableEditIfDummyUserSelected() {
-		if (userSelected.getId() == -1) {
+		if (selectedUser.getId() == -1) {
 			editButton.setEnabled(false);
 		}
 	}
@@ -1044,7 +1079,7 @@ public class UserUI extends JPanel {
 			
 			String item = (String) userComboBox.getSelectedItem();
 			//Recuperamos el usuario seleccionado
-			userSelected = new User().getUserByAlias(session.getbUnit(), item);
+			selectedUser = new User().getUserByAlias(session.getbUnit(), item);
 			//Mostramos sus datos
 			populateUserFields();
 			//Hacemos backup del contenido de los datos del formulario
@@ -1341,12 +1376,12 @@ public class UserUI extends JPanel {
 						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado tanto si se
 						//crea como activo como si no
 						} else {
-							userSelected = storedUser;
+							selectedUser = storedUser;
 							//Renovamos la lista de usuarios del comboBox
 							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
 							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
 							for (int i = 0; i < userComboList.length; i++) {
-								if (userComboList[i].equals(userSelected.getUserAlias())) {
+								if (userComboList[i].equals(selectedUser.getUserAlias())) {
 									userComboBox.setSelectedIndex(i);
 								}
 							}
@@ -1370,8 +1405,8 @@ public class UserUI extends JPanel {
 				
 				//Objeto que recoge los datos actualizados
 				User updatedUser = new User();
-				updatedUser.setId(userSelected.getId());
-				updatedUser.setbUnit(userSelected.getbUnit());
+				updatedUser.setId(selectedUser.getId());
+				updatedUser.setbUnit(selectedUser.getbUnit());
 				updatedUser.setUserType(userTypeComboBox.getSelectedItem().toString());
 				updatedUser.setUserAlias(userAliasField.getText());
 				updatedUser.setNombre(userNameField.getText());
@@ -1382,14 +1417,67 @@ public class UserUI extends JPanel {
 				
 				//Validamos los datos del formulario
 				if (testData(updatedUser)) {
+					//Si no hay contraseña nueva dejamos la del usuario seleccionado
+					if (updatedUser.getPassword().equals("")) {
+						updatedUser.setPassword(selectedUser.getPassword());
+						
+						//Debug
+						System.out.println("Contraseña sin modificar");
+						
+					//Si hay contraseña nueva le aplicamos el hash
+					} else {
+						updatedUser.setPassword(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
+						
+						//Debug
+						System.out.println("Contraseña modificada");
+						System.out.println(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
+						
+					}
+					
+					//Si los datos actualizados se graban en la base de datos
+					if (new User().updateUserToDB(session.getConnection(), updatedUser)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla user
+						tNow = ToolBox.getTimestampNow();
+						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
+						boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+								User.TABLE_NAME, tNow);
+						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
+						boolean stillOpenSession = true;
+						
+						//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
+						//Esta opción puede darse con el filtro de usuarios activo o inactivo y se gestiona igual en ambos casos
+						if (updatedUser.isActivo()) {
+							//Localizar al usuario editado en la unidad de negocio de la sesión y actualizarlo
+					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
+					        while (iter.hasNext()) {
+					            User user = iter.next();
+					            if (user.getId() == updatedUser.getId()) {
+					                iter.remove();
+					            }
+					        }
+					        selectedUser = updatedUser;
+					        session.getbUnit().getUsers().add(selectedUser);
+					        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
+							//no queda registrada
+							if(!UserChangeRegister) {
+								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
+							}
+						}
+						
+						
+						
+						
+						
+					}
+					
 					
 					//Debug
 					System.out.println("Usuario editado correctamente");
 
 					
 				}
-				//Debug
-				okActionSelector = UserUI.OK_ACTION_UNDEFINED; //Only debug
+
 			}
 			
 		}

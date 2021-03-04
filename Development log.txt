@@ -1148,10 +1148,12 @@ ver 0.1.7 - USERUI
 	· UserUI class:
 		Add attribute
 			bUnitComboBox, bUnitActiveFilterCheckBox, userComboBox, userActiveFilterCheckBox, userTypeComboBox,
-			userAliasField, nameField, lastNameField, activeCheckBox, lastActive, lastUserType, lastUserTypeIndex
+			userAliasField, userNameField, userLastNameField, activeCheckBox, lastActive, lastUserType, lastUserTypeIndex
 		Add attribute
 			currentPasswordField, newPasswordField, confirmPasswordField, infoLabel, editButton, cancelButton,
-			oKButton, newButton, editAction, cancelAction, oKAction, newAction
+			oKButton, newButton, editAction, cancelAction, oKAction, newAction, selectedUser
+		Add attribute
+			labelList, textFieldList, textFieldContentList, okActionSelector
 		Add getBunitComboBoxItemsFromSession()
 		Add getSelectedBunitIndexFromArray()
 		Add getUserComboBoxItemsFromSession()
@@ -1181,7 +1183,7 @@ ver 0.1.7 - USERUI
 		Update editableDataOn()
 		Update editableDataOff()
 		Update refreshUserTypeComboBox()
-		Update testData() --new ok, edit in progress...--
+		Update testData() --new ok, edit ok--
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 		Update afterNewOrEditUser()
 		Move setBlackForeground() to ToolBox class
@@ -1211,4 +1213,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --new ok, edit in progress...--
+		Update actionPerformed() --new ok, edit in progress... (user active ok, not tested yet)--
