@@ -180,7 +180,6 @@ public class BusinessUnitUI extends JPanel {
 		activeFilterCheckBox = new JCheckBox(" solo activas");
 		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeFilterCheckBox.setBounds(666, 175, 154, 25);
-//		activeFilterCheckBox.setSelected(true);
 		activeFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		activeFilterCheckBox.addItemListener(new CheckBoxListener());
 		add(activeFilterCheckBox);
@@ -191,6 +190,7 @@ public class BusinessUnitUI extends JPanel {
 		comboBox.addItemListener(new ComboListener());
 		comboBox.setBounds(260, 175, 400, 25);
 		comboBox.setEditable(false);
+		ToolBox.setBlackForeground(comboBox);
 		comboBox.setBackground(Color.WHITE);
 		add(comboBox);
 		if (!session.getUser().getUserType().equals("ADMIN")) {
@@ -974,7 +974,6 @@ public class BusinessUnitUI extends JPanel {
 								System.out.println("Opción EDIT 2");
 								System.out.println("lastActive: " + lastActive);
 								
-//								boolean UserChangeRegister = true;
 								List<User> updatedUserList = null;
 								//Si la unidad de negocio estaba activa antes de editarla
 								if (lastActive) {
