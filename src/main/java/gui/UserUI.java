@@ -1441,13 +1441,15 @@ public class UserUI extends JPanel {
 						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
 						boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 								User.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
 						boolean stillOpenSession = true;
 						
 						//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
-						//Esta opción puede darse con el filtro de usuarios activo o inactivo y se gestiona igual en ambos casos
-						if (updatedUser.isActivo()) {
+						//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está inactivo,
+						//también se actualizan los datos de la sesión
+						if (updatedUser.isActivo() || (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
+								&& !userActiveFilterCheckBox.isSelected())) {
 							
 							//Debug
 							System.out.println("Opción EDIT 1");
@@ -1467,6 +1469,31 @@ public class UserUI extends JPanel {
 							if(!UserChangeRegister) {
 								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 							}
+						
+						//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está activo,
+						//el usuario editado no puede seguir siendo el usuario seleccionado y por tanto tampoco puede visualizarse
+						} else if (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
+								&& userActiveFilterCheckBox.isSelected()) {
+							
+							//Debug
+							System.out.println("Opción EDIT 2");
+							
+							
+							
+							
+							
+							
+							
+						//Si el usuario que abre sesión deja inactivo su propio usuario	
+						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
+							
+							//Debug
+							System.out.println("Opción EDIT 3");
+							
+							
+							
+							stillOpenSession = false;
+							
 						}
 						
 						

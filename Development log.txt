@@ -1213,4 +1213,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --ok--
 
 	· OKAction class (new inner UserUI class):
-		Update actionPerformed() --new ok, edit in progress... (user active ok, not tested yet)--
+		Update actionPerformed() --new ok, edit in progress... (user active ok, inactive in progress)--
