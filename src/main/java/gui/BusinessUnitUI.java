@@ -959,11 +959,11 @@ public class BusinessUnitUI extends JPanel {
 								if(!bUnitChangeRegister) {
 									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 								}
-							//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han cambiado
-							//de estado
-							if (!lastActive) {
-								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-							}
+								//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han 
+								//cambiado de estado
+								if (!lastActive) {
+									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+								}
 								
 							//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
 							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
@@ -1100,7 +1100,7 @@ public class BusinessUnitUI extends JPanel {
 								afterNewOrEditBunit();
 							}
 
-							//Error de actualización de los datos en la base de datos
+						//Si los datos actualizados no se graban en la base de datos
 						} else {
 							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 						}
