@@ -1463,15 +1463,6 @@ public class UserUI extends JPanel {
 							//Debug
 							System.out.println("Opción EDIT 1");
 							
-//							//Localizar al usuario editado en la unidad de negocio de la sesión y actualizarlo
-//					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
-//					        while (iter.hasNext()) {
-//					            User user = iter.next();
-//					            if (user.getId() == updatedUser.getId()) {
-//					                iter.remove();
-//					            }
-//					        }
-							
 					        //El usuario editado pasa a ser el usuario seleccionado, y lo añadimos a la lista de usuarios de la unidad de negocio
 							//de la sesión
 							selectedUser = updatedUser;
@@ -1502,9 +1493,6 @@ public class UserUI extends JPanel {
 							
 							//Debug
 							System.out.println("Opción EDIT 3");
-							
-//							//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
-//							session.getbUnit().getUsers().add(updatedUser);
 							
 							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
 							//Lanzar un JOptionPane informativo antes de volver al login
