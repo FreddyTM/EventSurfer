@@ -1007,7 +1007,7 @@ public class UserUI extends JPanel {
 			session.setbUnit(selectedBunit);
 			//Actualizamos los usuarios de la unidad de negocio de la sesión
 			refreshUserComboBox();
-			//Mostramos sus datos
+			//Mostramos los datos del usuario seleccionado
 			populateUserFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
@@ -1044,7 +1044,7 @@ public class UserUI extends JPanel {
 					refreshBunitComboBox();
 					//Actualizamos los usuarios de la unidad de negocio de la sesión
 					refreshUserComboBox();
-					//Mostramos sus datos
+					//Mostramos los datos del usuario seleccionado
 					populateUserFields();
 					//Hacemos backup del contenido de los datos del formulario
 					updateDataCache();
@@ -1080,7 +1080,7 @@ public class UserUI extends JPanel {
 			String item = (String) userComboBox.getSelectedItem();
 			//Recuperamos el usuario seleccionado
 			selectedUser = new User().getUserByAlias(session.getbUnit(), item);
-			//Mostramos sus datos
+			//Mostramos los datos del usuario seleccionado
 			populateUserFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
@@ -1444,6 +1444,15 @@ public class UserUI extends JPanel {
 						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
 						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
 						boolean stillOpenSession = true;
+						//Localizar en la lista de usuarios de la unidad de negocio de la sesión al usuario con el mismo id que el usuario editado 
+						// y suprimirlo
+				        Iterator<User> iter = session.getbUnit().getUsers().iterator();
+				        while (iter.hasNext()) {
+				            User user = iter.next();
+				            if (user.getId() == updatedUser.getId()) {
+				                iter.remove();
+				            }
+				        }
 						
 						//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
 						//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está inactivo,
@@ -1454,15 +1463,18 @@ public class UserUI extends JPanel {
 							//Debug
 							System.out.println("Opción EDIT 1");
 							
-							//Localizar al usuario editado en la unidad de negocio de la sesión y actualizarlo
-					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
-					        while (iter.hasNext()) {
-					            User user = iter.next();
-					            if (user.getId() == updatedUser.getId()) {
-					                iter.remove();
-					            }
-					        }
-					        selectedUser = updatedUser;
+//							//Localizar al usuario editado en la unidad de negocio de la sesión y actualizarlo
+//					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
+//					        while (iter.hasNext()) {
+//					            User user = iter.next();
+//					            if (user.getId() == updatedUser.getId()) {
+//					                iter.remove();
+//					            }
+//					        }
+							
+					        //El usuario editado pasa a ser el usuario seleccionado, y lo añadimos a la lista de usuarios de la unidad de negocio
+							//de la sesión
+							selectedUser = updatedUser;
 					        session.getbUnit().getUsers().add(selectedUser);
 					        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
 							//no queda registrada
@@ -1478,25 +1490,29 @@ public class UserUI extends JPanel {
 							//Debug
 							System.out.println("Opción EDIT 2");
 							
-							
-							
-							
-							
-							
-							
+							//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
+							session.getbUnit().getUsers().add(updatedUser);
+							//Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
+							refreshUserComboBox();
+							//Mostramos los datos del usuario seleccionado
+							populateUserFields();
+	
 						//Si el usuario que abre sesión deja inactivo su propio usuario	
 						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
 							
 							//Debug
 							System.out.println("Opción EDIT 3");
 							
+//							//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
+//							session.getbUnit().getUsers().add(updatedUser);
 							
-							
+							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
+							//Lanzar un JOptionPane informativo antes de volver al login
 							stillOpenSession = false;
+							session.backToLogin();
 							
 						}
-						
-						
+			
 						//Si la sesión sigue abierta
 						if (stillOpenSession) {
 							//Devolvemos el formulario a su estado previo
