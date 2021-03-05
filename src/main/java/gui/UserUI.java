@@ -1448,6 +1448,10 @@ public class UserUI extends JPanel {
 						//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
 						//Esta opción puede darse con el filtro de usuarios activo o inactivo y se gestiona igual en ambos casos
 						if (updatedUser.isActivo()) {
+							
+							//Debug
+							System.out.println("Opción EDIT 1");
+							
 							//Localizar al usuario editado en la unidad de negocio de la sesión y actualizarlo
 					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
 					        while (iter.hasNext()) {
@@ -1466,9 +1470,15 @@ public class UserUI extends JPanel {
 						}
 						
 						
+						//Si la sesión sigue abierta
+						if (stillOpenSession) {
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditUser();
+						}	
 						
-						
-						
+					//Si los datos actualizados no se graban en la base de datos
+					} else {
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 					}
 					
 					
