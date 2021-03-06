@@ -227,12 +227,23 @@ public class CurrentSession {
 	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro usuario desde otra
 	 * sesión. Se mostrará un mensaje informativo antes de cerrar la sesión local. El usuario que abrió sesión ya no podrá hacer
 	 * login de nuevo hasta que no sea reactivado por algún administrador.
+	 * @param tableName origen de la desactivación del usuario, bien sea por la desactivación de la unidad de negocio a la que pertenece
+	 * o por la desactivación directa del usuario
 	 */
-	public void backToLogin() {
-		String infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
-				+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
-				+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-		JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+	public void backToLogin(String tableName) {
+		String infoMessage = "";
+		if (tableName.equals(BusinessUnit.TABLE_NAME)) {
+			infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
+					+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
+					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
+			JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+		} else if (tableName.equals(User.TABLE_NAME)) {
+			infoMessage = "SE HA DESACTIVADO AL USUARIO QUE HA ABIERTO SESIÓN.\n"
+					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
+			JOptionPane.showMessageDialog(null, infoMessage, "Usuario desactivado", JOptionPane.WARNING_MESSAGE);
+		}
+//		JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+		
 		//Replicamos la acción de logout del selector
 		new JButton(logOutAction).doClick();
 	}
@@ -351,7 +362,7 @@ public class CurrentSession {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
 									usersUpdated = true;
 									//Back to login
-									backToLogin();
+									backToLogin(BusinessUnit.TABLE_NAME);
 								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
 								} else {
 									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
@@ -441,7 +452,7 @@ public class CurrentSession {
 									//Comprobamos que el usuario que abrió sesión no ha sido deshabilitado
 									if(updatedUser.isActivo() == false) {
 										//Back to login
-										backToLogin();
+										backToLogin(User.TABLE_NAME);
 									//Si el usuario que abrió sesión sigue activo, lo reasignamos 
 									} else {
 										user = updatedUser;	
