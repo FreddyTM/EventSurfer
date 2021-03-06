@@ -1147,6 +1147,7 @@ ver 0.1.7 - USERUI
 	· BusinessUnitUI class:
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 		Update constructor
+		Delete backToLogin() when business unit inactive from other session
 
 	· UserUI class:
 		Add attribute
@@ -1190,6 +1191,7 @@ ver 0.1.7 - USERUI
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 		Update afterNewOrEditUser()
 		Move setBlackForeground() to ToolBox class
+		Delete backToLogin() when user inactive from other session
 
 	· BunitComboListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--

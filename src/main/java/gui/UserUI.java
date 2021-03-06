@@ -722,6 +722,7 @@ public class UserUI extends JPanel {
 			verifyManagerEditConditions();
 		} else {
 			editButton.setEnabled(true);
+			disableEditIfDummyUserSelected();
 		}
 		newButton.setEnabled(true);
 		if (session.getUser().getUserType().equals("ADMIN")) {
@@ -1464,6 +1465,12 @@ public class UserUI extends JPanel {
 							refreshUserComboBox();
 							//Mostramos los datos del usuario seleccionado
 							populateUserFields();
+//							//Si la edición del usuario cambia el usuario seleccionado, comprobamos las condiciones de edición de datos
+//							//de los usuarios manager y administrador y deshabilitamos la edición de datos si el usuario seleccionado es
+//							//un usuario dummy
+//							verifyManagerEditConditions();
+//							verifyAdminEditConditions();
+//							disableEditIfDummyUserSelected();
 	
 						//Si el usuario que abre sesión deja inactivo su propio usuario	
 						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
@@ -1471,10 +1478,11 @@ public class UserUI extends JPanel {
 							//Debug
 							System.out.println("Opción EDIT 3");
 							
+							//Se cerrará la sesión
+							stillOpenSession = false;
 							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
 							//Lanzar un JOptionPane informativo antes de volver al login
-							stillOpenSession = false;
-							session.backToLogin(User.TABLE_NAME);
+//							session.backToLogin(User.TABLE_NAME);
 							
 						}
 			

@@ -1087,11 +1087,14 @@ public class BusinessUnitUI extends JPanel {
 								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 								PersistenceManager.updateTimeStampToDB(session.getConnection(),
 										User.TABLE_NAME, tNow);
+								//Se cerrará la sesión
 								stillOpenSession = false;
+								//Usuarios de la sesión actualizados
+								session.setUsersUpdated(true);
+								
 								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
 								//Lanzar un JOptionPane informativo antes de volver al login
-								session.setUsersUpdated(true);
-								session.backToLogin(BusinessUnit.TABLE_NAME);
+//								session.backToLogin(BusinessUnit.TABLE_NAME);
 							}
 									
 							//Si la sesión sigue abierta
