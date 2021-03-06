@@ -1442,6 +1442,8 @@ public class UserUI extends JPanel {
 							//de la sesión
 							selectedUser = updatedUser;
 					        session.getbUnit().getUsers().add(selectedUser);
+					        //Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
+							refreshUserComboBox();
 					        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
 							//no queda registrada
 							if(!UserChangeRegister) {
@@ -1535,35 +1537,58 @@ public class UserUI extends JPanel {
 					//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
 					if (updatedTable.getKey().equals(User.TABLE_NAME)) {
 						//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
-						//seleccionado pasa a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
+						//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
 						//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
 						//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
-						if (userActiveFilterCheckBox.isSelected() && selectedUser.isActivo() == false) {
-							
-							//Debug
-							System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
-							System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
-							
-							//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
-							refreshUserComboBox();
-							//Mostramos los datos del usuario seleccionado
-							populateUserFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
-							
-							//Debug
-							String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
-							System.out.println("El nuevo usuario seleccionado es " + string );
-							
-							
-						} else {
-							
-							//Mostramos los datos del usuario seleccionado
-							populateUserFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
-							
-						}
+						//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
+						//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
+						
+						//Debug
+						System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
+						System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
+						
+						//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
+						refreshUserComboBox();
+						//Mostramos los datos del usuario seleccionado
+						populateUserFields();
+						//Hacemos backup del contenido de los datos del formulario
+						updateDataCache();
+						
+						//Debug
+						String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
+						System.out.println("El nuevo usuario seleccionado es " + string );
+						
+						
+						
+//						if (userActiveFilterCheckBox.isSelected() && selectedUser.isActivo() == false) {
+//							
+//							//Debug
+//							System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
+//							System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
+//							
+//							//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
+//							refreshUserComboBox();
+//							//Mostramos los datos del usuario seleccionado
+//							populateUserFields();
+//							//Hacemos backup del contenido de los datos del formulario
+//							updateDataCache();
+//							
+//							//Debug
+//							String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
+//							System.out.println("El nuevo usuario seleccionado es " + string );
+//							
+//							
+//						} else {
+//							
+//							//Actualizamos la información del formulario
+//							refreshUserComboBox();
+//							//Mostramos los datos del usuario seleccionado
+//							populateUserFields();
+//							//Hacemos backup del contenido de los datos del formulario
+//							updateDataCache();
+//							
+//						}
+//						
 						
 						//Informamos por pantalla de la actualización
 						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
