@@ -1216,4 +1216,4 @@ ver 0.1.7 - USERUI
 		Update actionPerformed() --new ok, edit ok (user active ok, inactive ok)--
 
 	· TimerJob class (new inner UserUI class):
-		Update run()
+		Update run() --ok, not tested yet--

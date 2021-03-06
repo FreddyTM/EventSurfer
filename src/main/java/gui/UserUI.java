@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1507,7 +1508,71 @@ public class UserUI extends JPanel {
 
 		@Override
 		public void run() {
-			
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
+			if (!UserUI.this.isShowing()) {
+				UserUI.this.panelVisible = false;
+				this.cancel();
+				UserUI.this.timer.cancel();
+				 System.out.println("Se ha cerrado la ventana Usuarios");
+			}
+			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
+			if (cancelButton.isEnabled() && oKButton.isEnabled() && UserUI.this.isShowing()) {
+				//Do nothing
+			//Se comprueba la actualización de los datos si no los estamos modificando
+			} else if (UserUI.this.panelVisible == true){
+				
+				//Debug
+				System.out.println("Comprobando actualización de datos de los usuarios");
+				System.out.println(session.getUpdatedTables().size());
+				
+				//Loop por el Map de CurrentSession, si aparece la tabla user, recargar datos
+				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					
+					//Debug
+					System.out.println(updatedTable.getKey());
+					System.out.println(updatedTable.getValue());
+					
+					//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
+					if (updatedTable.getKey().equals(User.TABLE_NAME)) {
+						//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
+						//seleccionado pasa a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
+						//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
+						//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
+						if (userActiveFilterCheckBox.isSelected() && selectedUser.isActivo() == false) {
+							
+							//Debug
+							System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
+							System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
+							
+							//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
+							refreshUserComboBox();
+							//Mostramos los datos del usuario seleccionado
+							populateUserFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+							
+							//Debug
+							String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
+							System.out.println("El nuevo usuario seleccionado es " + string );
+							
+							
+						} else {
+							
+							//Mostramos los datos del usuario seleccionado
+							populateUserFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+							
+						}
+						
+						//Informamos por pantalla de la actualización
+						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
+						//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
+						UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
+						session.formatTimestamp(updatedTable.getValue(), null));
+					}
+				}
+			}	
 		}
 	}
 }
