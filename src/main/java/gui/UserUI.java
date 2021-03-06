@@ -1474,7 +1474,7 @@ public class UserUI extends JPanel {
 							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
 							//Lanzar un JOptionPane informativo antes de volver al login
 							stillOpenSession = false;
-							session.backToLogin();
+							session.backToLogin(User.TABLE_NAME);
 							
 						}
 			

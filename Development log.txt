@@ -1113,6 +1113,9 @@ ver 0.1.7 - USERUI
 	· PersistenceManager class:
 		Move getTimestampNow() to ToolBox class
 
+	· CurrentSession class:
+		Update backToLogin() --add table name parameter--
+
 	* - Package main.java.toolbox (new)
 
 	· ToolBox class (new):
