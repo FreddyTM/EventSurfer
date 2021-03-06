@@ -1201,7 +1201,7 @@ ver 0.1.7 - USERUI
 		Update itemStateChanged() --ok, add edit filters--
 
 	· UserTypeComboListener class (new UserUI inner class):
-		Update itemStateChanged() --do we need it?--
+		Update itemStateChanged() --do we need it?-- 
 
 	· NewAction class (new inner UserUI class):
 		Update actionPerformed() --ok--
@@ -1214,3 +1214,6 @@ ver 0.1.7 - USERUI
 
 	· OKAction class (new inner UserUI class):
 		Update actionPerformed() --new ok, edit ok (user active ok, inactive ok)--
+
+	· TimerJob class (new inner UserUI class):
+		Update run()

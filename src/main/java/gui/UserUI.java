@@ -2,8 +2,6 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -15,6 +13,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,7 +23,6 @@ import javax.swing.UIManager;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
-
 import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
 import main.java.toolbox.ToolBox;
@@ -36,7 +34,6 @@ import javax.swing.JComboBox;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
@@ -445,12 +442,21 @@ public class UserUI extends JPanel {
 		maxCharsLabel5.setBounds(670, 535, 380, 25);
 		add(maxCharsLabel5);
 		
-//		JLabel maxCharsLabel4 = new JLabel("Max: 50 caracteres");
-//		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
-//		maxCharsLabel4.setBounds(670, 525, 146, 25);
-//		maxCharsLabel4.setVisible(false);
-//		labelList.add(maxCharsLabel4);
-//		add(maxCharsLabel4);
+		/*Iniciamos la comprobación periódica de actualizaciones
+		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
+		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
+		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
+		* por error que no había cambios.
+		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
+		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
+		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
+		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
+		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
+		* o más lenta que la comprobación de los datos que hace el objeto session.
+		*/
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 1000, 30000);
 		
 	}
 
@@ -602,21 +608,6 @@ public class UserUI extends JPanel {
 		return 0;
 	}
 	
-//	/**
-//	 * Establece por defecto el color negro como color de la letra del JComboBox pasado por parámetro, incluso
-//	 * en el caso de que el combobox esté deshabilitado
-//	 * @param combobox JComboBox al que le queremos aplicar el formato
-//	 */
-//	public void setBlackForeground(JComboBox combobox) {
-//		combobox.setRenderer(new DefaultListCellRenderer() {
-//		   @Override
-//		   public void paint(Graphics g) {
-//		       setForeground(Color.BLACK);
-//		       super.paint(g);
-//		   };
-//	   });
-//	}
-//	
 	/**
 	 * Refresca los datos del usuario seleccionado para que se visualicen en pantalla
 	 */
@@ -747,17 +738,7 @@ public class UserUI extends JPanel {
 		
 		//El selector de acción retorna al estado sin definir
 		okActionSelector = UserUI.OK_ACTION_UNDEFINED;
-//		infoLabel.setText("");
-		
-//		//Cambio de estado de los botones y el combobox
-//		editButton.setEnabled(true);
-//		newButton.setEnabled(true);
-//		comboBox.setEnabled(true);
-//		activeFilterCheckBox.setEnabled(true);
-//		oKButton.setEnabled(false);
-//		cancelButton.setEnabled(false);					
-//		//El selector de acción retorna al estado sin definir
-//		okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
+
 	}
 	
 	/**
@@ -1092,8 +1073,7 @@ public class UserUI extends JPanel {
 			verifyManagerEditConditions();
 			verifyAdminEditConditions();
 			disableEditIfDummyUserSelected();
-		}
-		
+		}	
 	}
 	
 	/**
@@ -1178,7 +1158,6 @@ public class UserUI extends JPanel {
 			//Tipo de usuario user habilitado por defecto
 			userTypeComboBox.setSelectedIndex(userTypeComboList.length - 1);		
 			//Password fields editables
-//			currentPasswordField.setEditable(true);
 			newPasswordField.setEditable(true);
 			confirmPasswordField.setEditable(true);
 			//Habilitamos checkbox "Activa"
@@ -1263,7 +1242,6 @@ public class UserUI extends JPanel {
 			} else {
 				editButton.setEnabled(true);
 			}
-//			newButton.setEnabled(true);
 			if (session.getUser().getUserType().equals("ADMIN")) {
 				bUnitComboBox.setEnabled(true);
 				bUnitActiveFilterCheckBox.setEnabled(true);
@@ -1289,10 +1267,6 @@ public class UserUI extends JPanel {
 			userTypeComboList = getUserTypeComboBoxItemsFromSession();
 			userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
 			userTypeComboBox.setSelectedIndex(lastUserTypeIndex);
-//			//Vaciamos los passwordFields
-//			currentPasswordField.setText("");
-//			newPasswordField.setText("");
-//			confirmPasswordField.setText("");
 			//Recuperamos el valor anterior del checkbox "Activa"
 			activeCheckBox.setSelected(lastActive);
 		}
@@ -1520,6 +1494,19 @@ public class UserUI extends JPanel {
 				}
 
 			}
+			
+		}
+	}
+	
+	/**
+	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
+	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel se encuentra en modo
+	 * de edición de los datos, o no está visible, no se produce la comprobación porque no es necesaria.
+	 */
+	private class TimerJob extends TimerTask {
+
+		@Override
+		public void run() {
 			
 		}
 	}
