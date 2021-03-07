@@ -1246,3 +1246,6 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 
 	· DefaultAdmin class:
 		Update startSession() --add app version & user alias to app window bar--
+
+	· UserUI class:
+		Add messageTest() --show JOptionPane in app window current screen center, not tested yet--

@@ -1,7 +1,12 @@
 package main.java.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -30,8 +35,11 @@ import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
@@ -968,6 +976,39 @@ public class UserUI extends JPanel {
 		if (selectedUser.getId() == -1) {
 			editButton.setEnabled(false);
 		}
+	}
+	
+	public void messageTest() {
+		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
+//		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
+		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) this);
+		
+		
+//		Rectangle rectangle = testPane.getBounds();
+//	    int paneWidth = rectangle.width;
+//	    int paneHeight = rectangle.height;
+		
+		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
+		
+		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
+		Rectangle frameRectangle = messageFrame.getBounds();
+	    int paneWidth = frameRectangle.width;
+	    int paneHeight = frameRectangle.height;
+		
+	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
+	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
+	    int currentWidth = 0;
+	    int currentHeight = 0;
+		//Centrado de pantalla multimonitor
+		for (int i = 0; i < displays.length; i++) {
+		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
+				currentWidth = currentDisplay.getDisplayMode().getWidth();
+				currentHeight = currentDisplay.getDisplayMode().getHeight();
+				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
+		    }
+		}
+		JOptionPane.showMessageDialog(messageFrame, testMessage, "Prueba", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	/**
