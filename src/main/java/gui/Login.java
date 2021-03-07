@@ -44,6 +44,9 @@ public class Login extends JPanel {
 		this.setFrame(frame);
 		setLayout(null);
 		
+		this.session.setbUnit(null);
+		this.session.setUser(null);
+		
 		JTextPane userLoginTxt = new JTextPane();
 		userLoginTxt.setText("INTRODUZCA USUARIO Y CONTRASEÑA");
 		userLoginTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
