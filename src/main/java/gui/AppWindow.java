@@ -35,7 +35,7 @@ public class AppWindow extends JFrame {
 	private JPanel rightPanel;
 	private JPanel basePanel;
 	private JLabel infoLabel;
-	private String versionNumber = "EVENT SURFER 0.1.8";
+	private String versionNumber = "0.1.8";
 	//private TabbedDesk desk;
 	private CurrentSession session;
 	private Connection conn;
@@ -119,7 +119,7 @@ public class AppWindow extends JFrame {
 		basePanel.removeAll();
 
 		centerPanel = new JPanel();
-		JLabel welcome = new JLabel(versionNumber);
+		JLabel welcome = new JLabel("EVENTSURFER APP " + versionNumber);
 		welcome.setFont(new Font("Tahoma", Font.BOLD, 50));
 		JLabel emptyLabel = new JLabel();
 		emptyLabel.setPreferredSize(new Dimension(MAXIMIZED_HORIZ, 800));
