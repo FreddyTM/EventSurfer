@@ -1249,3 +1249,7 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 
 	· UserUI class:
 		Add messageTest() --show JOptionPane in app window current screen center, not tested yet--
+		Update getSelectedUserIndexFromArray() --fix wrong selections--
+
+	· OKAction class (UserUI class):
+		Update actionPerformed() --fix wrong data display in option edit 1--

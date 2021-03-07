@@ -351,7 +351,7 @@ public class UserUI extends JPanel {
 			userComboList[0] = "<Ningún usuario seleccionable>";
 		}		
 		userComboBox = new JComboBox(userComboList);
-		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
+		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		userComboBox.setBounds(260, 225, 400, 25);
 		userComboBox.addItemListener(new UserComboListener());
 		userComboBox.setEditable(false);
@@ -543,15 +543,26 @@ public class UserUI extends JPanel {
 	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir del array de alias de usuarios
 	 * pasado por parámetro. El alias seleccionado será asignado como usuario seleccionado.
 	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
-	 * @return el índice que corresponda al alias del usuario que abrió sesión si dicho usuario está en la lista, o bien
-	 * el índice del nuevo usuario si hemos creado uno, o bien 0 si el usuario que abrió sesión no está en la lista
-	 * (equivale a seleccionar el primer usuario de la lista)
+	 * @param firstSearch determina si se accede al método por primera vez
+	 * @return el índice que corresponda al alias del usuario que abrió sesión, o bien el índice del nuevo usuario seleccionado,
+	 * creado o editado (si no queda inactivo y el filtro de usuarios está activo), o bien 0 si el usuario no está en la lista
+	 * (se escoge el primer usuario de la lista)
 	 */
-	public int getSelectedUserIndexFromArray(String[] array) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i].equals(session.getUser().getUserAlias())) {
-				selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
-				return i;
+	public int getSelectedUserIndexFromArray(String[] array, boolean firstSearch) {
+		if (firstSearch) {
+			for (int i = 0; i < array.length; i++) {
+				if (array[i].equals(session.getUser().getUserAlias())) {
+					selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
+					firstSearch = false;
+					return i;
+				}
+			} 
+		} else {
+			for (int i = 0; i < array.length; i++) {
+				if (array[i].equals(userAliasField.getText())) {
+					selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[i]));
+					return i;
+				}
 			}
 		}
 		selectedUser = buildUserSelected(new User().getUserByAlias(session.getbUnit(), array[0]));
@@ -902,7 +913,7 @@ public class UserUI extends JPanel {
 			userComboList[0] = "<Ningún usuario seleccionable>";
 		}
 		userComboBox.setModel(new DefaultComboBoxModel(userComboList));
-		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList));
+		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, false));
 	}
 	
 	/**
@@ -1417,6 +1428,7 @@ public class UserUI extends JPanel {
 				
 				//Debug
 				System.out.println("Acción de editar un nuevo usuario");
+				System.out.println("selectedUser alias: " + selectedUser.getUserAlias());
 				
 				currentPasswordField.setBackground(Color.WHITE);
 				
@@ -1450,6 +1462,9 @@ public class UserUI extends JPanel {
 						System.out.println(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
 						
 					}
+					
+					//Debug
+					System.out.println("updatedUser alias: " + updatedUser.getUserAlias());
 					
 					//Si los datos actualizados se graban en la base de datos
 					if (new User().updateUserToDB(session.getConnection(), updatedUser)) {
@@ -1486,6 +1501,8 @@ public class UserUI extends JPanel {
 					        session.getbUnit().getUsers().add(selectedUser);
 					        //Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
 							refreshUserComboBox();
+							//Mostramos los datos del usuario seleccionado
+							populateUserFields();
 					        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
 							//no queda registrada
 							if(!UserChangeRegister) {
