@@ -46,6 +46,7 @@ public class Login extends JPanel {
 		
 		this.session.setbUnit(null);
 		this.session.setUser(null);
+		this.frame.setTitle("EVENTSURFER");
 		
 		JTextPane userLoginTxt = new JTextPane();
 		userLoginTxt.setText("INTRODUZCA USUARIO Y CONTRASEÑA");
@@ -199,7 +200,8 @@ public class Login extends JPanel {
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
 		}
-				
+		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + alias;
+		frame.setTitle(title);	
 		return true;
 	}
 

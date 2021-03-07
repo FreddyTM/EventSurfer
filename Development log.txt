@@ -1226,7 +1226,7 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 	· TimerJob class (new inner UserUI class):
 		Update run() --ok--
 
-ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED
+ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE BAR
 
 	* - Package main.java.gui
 
@@ -1235,3 +1235,14 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED
 
 	· OKAction class (BusinessUnitUI class):
 		Update actionPerformed() --delete check for active default bUnit--
+
+	· AppWindow class:
+		Add attribute versionNumber
+		Update setUpWindow() --ver 0.1.8--
+
+	· Login class:
+		Update constructor --frame title set to "EVENTSURFER" constructor--
+		Update userLogin() --add app version & user alias to app window bar--
+
+	· DefaultAdmin class:
+		Update startSession() --add app version & user alias to app window bar--
