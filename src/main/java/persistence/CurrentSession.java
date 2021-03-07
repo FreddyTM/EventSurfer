@@ -1,5 +1,8 @@
 package main.java.persistence;
 
+import java.awt.Component;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
@@ -231,6 +235,15 @@ public class CurrentSession {
 	 * o por la desactivación directa del usuario
 	 */
 	public void backToLogin(String tableName) {
+		
+//		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
+//		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
+////		JFrame frame = (JFrame) SwingUtilities.getRoot((Component) this.getClass());
+//		
+//		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+//		GraphicsDevice currentDisplay = this.getGraphicsConfiguration().getDevice();
+		
+		
 		String infoMessage = "";
 		if (tableName.equals(BusinessUnit.TABLE_NAME)) {
 			infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
