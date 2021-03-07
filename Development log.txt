@@ -1106,7 +1106,7 @@ ver 0.1.6 BUSINESSUNITUI ADD ACTIVE PROPERTY, USERUI BASIC LAYOUT
 		Update testAddNewBusinessUnit() --not tested, but method works in app--
 		Update testUpdateBusinessUnitToDB() --not tested, but method works in app--
 
-ver 0.1.7 - USERUI
+ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 
 	* - Package main.java.persistence:
 
@@ -1140,6 +1140,9 @@ ver 0.1.7 - USERUI
 	· AppWindow class:
 		Update setUpWindow() --ver 0.1.7--
 		Update initialize() --multimonitor screen ok--
+
+	· Login class:
+		Update constructor --bUnit & user set to null in constructor--
 
 	· CompanyUI class:
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()

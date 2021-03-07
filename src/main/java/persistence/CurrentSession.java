@@ -258,8 +258,12 @@ public class CurrentSession {
 		
 		@Override
 		public void run() {
-			//Debug
-			System.out.println("Usuario: " + user.getUserAlias());
+			if (user != null) {
+				//Debug
+				System.out.println("Usuario: " + user.getUserAlias());
+			} else {
+				System.out.println("Usuario: sin definir");
+			}
 			System.out.println("Comprobando actualización de datos de la sesión");
 			
 			CurrentSession.this.updatedTables.clear();
