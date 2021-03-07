@@ -586,8 +586,12 @@ public class BusinessUnitUI extends JPanel {
 				tField.setBackground(Color.WHITE);
 			}
 		}
-		//Habilitamos checkbox "Activa"
-		activeCheckBox.setEnabled(true);
+		//Habilitamos checkbox "Activa" si la unidad de negocio no es la unidad de negocio por defecto
+		if (session.getbUnit().getId() != 1 ) {
+			activeCheckBox.setEnabled(true);
+		} else {
+			activeCheckBox.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -916,33 +920,84 @@ public class BusinessUnitUI extends JPanel {
 				updatedBunit.setTelefono(telephoneField.getText());
 				updatedBunit.setMail(mailField.getText());
 				updatedBunit.setActivo(activeCheckBox.isSelected());
-				//Comprobamos que no se intenta marcar como inactiva la unidad de negocio por defecto de la base de datos
-				if (updatedBunit.getId() == 1 && updatedBunit.isActivo() == false) {
-					infoLabel.setText("LA UNIDAD DE NEGOCIO " + updatedBunit.getNombre() + " NO SE PUEDE MARCAR COMO INACTIVA");
-				} else {
-					//Si los datos están validados
-					if (testData(updatedBunit)) {
-						//Si los datos actualizados se graban en la base de datos
-						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-							tNow = ToolBox.getTimestampNow();
-							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
-							boolean UserChangeRegister = true;
-							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-							boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-									BusinessUnit.TABLE_NAME, tNow);
-							infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
-							//Variable de control para saber si la sesión sigue activa tras la edición de una unidad de negocio
-							boolean stillOpenSession = true;
-							//Si el usuario que abre sesión deja activa la unidad de negocio editada, se actualizan los datos de la sesión
-							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos
-							//Importante: Si la unidad de negocio editada pasa de inactiva a activa, sus usuarios (previamente desactivados también)
-							//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
-							if (updatedBunit.isActivo()) {
+				
+//				//Comprobamos que no se intenta marcar como inactiva la unidad de negocio por defecto de la base de datos
+//				if (updatedBunit.getId() == 1 && updatedBunit.isActivo() == false) {
+//					infoLabel.setText("LA UNIDAD DE NEGOCIO " + updatedBunit.getNombre() + " NO SE PUEDE MARCAR COMO INACTIVA");
+//				} else { }
+				
+				//Si los datos están validados
+				if (testData(updatedBunit)) {
+					//Si los datos actualizados se graban en la base de datos
+					if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						tNow = ToolBox.getTimestampNow();
+						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
+						boolean UserChangeRegister = true;
+						//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+						boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+								BusinessUnit.TABLE_NAME, tNow);
+						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						//Variable de control para saber si la sesión sigue activa tras la edición de una unidad de negocio
+						boolean stillOpenSession = true;
+						//Si el usuario que abre sesión deja activa la unidad de negocio editada, se actualizan los datos de la sesión
+						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos
+						//Importante: Si la unidad de negocio editada pasa de inactiva a activa, sus usuarios (previamente desactivados también)
+						//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
+						if (updatedBunit.isActivo()) {
+							
+							//Debug
+							System.out.println("Opción EDIT 1");
+							System.out.println("lastActive: " + lastActive);
+							
+							session.getbUnit().setCompany(updatedBunit.getCompany());
+							session.getbUnit().setNombre(updatedBunit.getNombre());
+							session.getbUnit().setDireccion(updatedBunit.getDireccion());
+							session.getbUnit().setProvincia(updatedBunit.getProvincia());
+							session.getbUnit().setEstado(updatedBunit.getEstado());
+							session.getbUnit().setCpostal(updatedBunit.getCpostal());
+							session.getbUnit().setTelefono(updatedBunit.getTelefono());
+							session.getbUnit().setMail(updatedBunit.getMail());
+							session.getbUnit().setActivo(updatedBunit.isActivo());
+
+							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+							//no queda registrada
+							if(!bUnitChangeRegister) {
+								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
+							}
+							//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han 
+							//cambiado de estado
+							if (!lastActive) {
+								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+							}
+							
+						//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
+						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
+						//manera diferente en cada caso
+						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
+							
+							//Debug
+							System.out.println("Opción EDIT 2");
+							System.out.println("lastActive: " + lastActive);
+							
+							List<User> updatedUserList = null;
+							//Si la unidad de negocio estaba activa antes de editarla
+							if (lastActive) {
 								
 								//Debug
-								System.out.println("Opción EDIT 1");
-								System.out.println("lastActive: " + lastActive);
+								System.out.println("Marcando usuarios inactivos");
+								
+								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+								updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
+								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+								UserChangeRegister = PersistenceManager.updateTimeStampToDB(
+										session.getConnection(), User.TABLE_NAME, tNow);
+							}
+							//Si el filtro de unidades de negocio no está activo, se actualizan los datos de la sesión
+							if (!activeFilterCheckBox.isSelected()) {
+								
+								//Debug
+								System.out.println("Opción EDIT 2 - filtro no activo");
 								
 								session.getbUnit().setCompany(updatedBunit.getCompany());
 								session.getbUnit().setNombre(updatedBunit.getNombre());
@@ -953,160 +1008,110 @@ public class BusinessUnitUI extends JPanel {
 								session.getbUnit().setTelefono(updatedBunit.getTelefono());
 								session.getbUnit().setMail(updatedBunit.getMail());
 								session.getbUnit().setActivo(updatedBunit.isActivo());
-
-								//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-								//no queda registrada
-								if(!bUnitChangeRegister) {
-									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
-								}
-								//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han 
-								//cambiado de estado
-								if (!lastActive) {
-									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-								}
-								
-							//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
-							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
-							//manera diferente en cada caso
-							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
 								
 								//Debug
-								System.out.println("Opción EDIT 2");
-								System.out.println("lastActive: " + lastActive);
-								
-								List<User> updatedUserList = null;
-								//Si la unidad de negocio estaba activa antes de editarla
-								if (lastActive) {
-									
-									//Debug
-									System.out.println("Marcando usuarios inactivos");
-									
-									//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-									updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
-									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
-									UserChangeRegister = PersistenceManager.updateTimeStampToDB(
-											session.getConnection(), User.TABLE_NAME, tNow);
+								if (updatedUserList != null) {
+									//System.out.println("updatedUserList != null: " + updatedUserList != null);
+									System.out.println("updatedUserList.size(): " + updatedUserList.size());
 								}
-								//Si el filtro de unidades de negocio no está activo, se actualizan los datos de la sesión
-								if (!activeFilterCheckBox.isSelected()) {
+								
+								//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
+								if (updatedUserList != null && updatedUserList.size() > 0) {
 									
 									//Debug
-									System.out.println("Opción EDIT 2 - filtro no activo");
+									System.out.println("Anunciando usuarios inactivos");
 									
-									session.getbUnit().setCompany(updatedBunit.getCompany());
-									session.getbUnit().setNombre(updatedBunit.getNombre());
-									session.getbUnit().setDireccion(updatedBunit.getDireccion());
-									session.getbUnit().setProvincia(updatedBunit.getProvincia());
-									session.getbUnit().setEstado(updatedBunit.getEstado());
-									session.getbUnit().setCpostal(updatedBunit.getCpostal());
-									session.getbUnit().setTelefono(updatedBunit.getTelefono());
-									session.getbUnit().setMail(updatedBunit.getMail());
-									session.getbUnit().setActivo(updatedBunit.isActivo());
-									
-									//Debug
-									if (updatedUserList != null) {
-										//System.out.println("updatedUserList != null: " + updatedUserList != null);
-										System.out.println("updatedUserList.size(): " + updatedUserList.size());
-									}
-									
-									//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
-									if (updatedUserList != null && updatedUserList.size() > 0) {
-										
-										//Debug
-										System.out.println("Anunciando usuarios inactivos");
-										
-										//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
-										session.getbUnit().setUsers(updatedUserList);
-										infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
-									//Si no se ha actualizado la lista de usuarios de la unidad de negocio editada
-									} else {
-										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-									}							
-									
-									//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-									//o de la tabla user no queda registrada
-									if (!bUnitChangeRegister || !UserChangeRegister) {
-										infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
-									}		
-	
-								//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
-								//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
+									//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
+									session.getbUnit().setUsers(updatedUserList);
+									infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
+								//Si no se ha actualizado la lista de usuarios de la unidad de negocio editada
 								} else {
-									
-									//Debug
-									System.out.println("Opción EDIT 2 - filtro activo");
-									
-									//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
-									//Se podrían aplicar los cambios a la unidad de negocio de la sesión porque aún no la hemos cambiado, pero de esta
-									//manera evitamos ambigüedades
-									BusinessUnit targetBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getbUnit().getId());
-									targetBunit.setCompany(updatedBunit.getCompany());
-									targetBunit.setNombre(updatedBunit.getNombre());
-									targetBunit.setDireccion(updatedBunit.getDireccion());
-									targetBunit.setProvincia(updatedBunit.getProvincia());
-									targetBunit.setEstado(updatedBunit.getEstado());
-									targetBunit.setCpostal(updatedBunit.getCpostal());
-									targetBunit.setTelefono(updatedBunit.getTelefono());
-									targetBunit.setMail(updatedBunit.getMail());
-									targetBunit.setActivo(updatedBunit.isActivo());
-									//Sobreescribimos la notificación de la actualización de la unidad de negocio editada citando su nombre porque ya no
-									//se visualizará por pantalla
-									infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
-											session.formatTimestamp(tNow, null));
-									//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
-									if (updatedUserList != null && updatedUserList.size() > 0) {
-										//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
-										targetBunit.setUsers(updatedUserList);
-										infoLabel.setText(infoLabel.getText() +	" . USUARIOS INACTIVOS");
-									} else {
-										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-									}
-									//Recuperamos la bUnit del usuario que abre sesión
-									BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-									//La asignamos como bUnit de la sesión
-									session.setbUnit(userBunit);
-									//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-									bUnitShowing = userBunit;
-									//Mostramos sus datos
-									populateTextFields();
-									//Renovamos la lista de las unidades de negocio del comboBox
-									refreshComboBox();						
-								}
-								//Los usuarios ya han sido actualizados
-								session.setUsersUpdated(true);
+									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+								}							
 								
-							//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
-							//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
-							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
-								
-								System.out.println("Opción EDIT 3");
-								System.out.println("lastActive: " + lastActive);
-												
-								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-								new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
-								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
-								PersistenceManager.updateTimeStampToDB(session.getConnection(),
-										User.TABLE_NAME, tNow);
-								//Se cerrará la sesión
-								stillOpenSession = false;
-								//Usuarios de la sesión actualizados
-								session.setUsersUpdated(true);
-								
-								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
-								//Lanzar un JOptionPane informativo antes de volver al login
-//								session.backToLogin(BusinessUnit.TABLE_NAME);
-							}
-									
-							//Si la sesión sigue abierta
-							if (stillOpenSession) {
-								//Devolvemos el formulario a su estado previo
-								afterNewOrEditBunit();
-							}
+								//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+								//o de la tabla user no queda registrada
+								if (!bUnitChangeRegister || !UserChangeRegister) {
+									infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
+								}		
 
-						//Si los datos actualizados no se graban en la base de datos
-						} else {
-							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+							//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
+							//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
+							} else {
+								
+								//Debug
+								System.out.println("Opción EDIT 2 - filtro activo");
+								
+								//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
+								//Se podrían aplicar los cambios a la unidad de negocio de la sesión porque aún no la hemos cambiado, pero de esta
+								//manera evitamos ambigüedades
+								BusinessUnit targetBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getbUnit().getId());
+								targetBunit.setCompany(updatedBunit.getCompany());
+								targetBunit.setNombre(updatedBunit.getNombre());
+								targetBunit.setDireccion(updatedBunit.getDireccion());
+								targetBunit.setProvincia(updatedBunit.getProvincia());
+								targetBunit.setEstado(updatedBunit.getEstado());
+								targetBunit.setCpostal(updatedBunit.getCpostal());
+								targetBunit.setTelefono(updatedBunit.getTelefono());
+								targetBunit.setMail(updatedBunit.getMail());
+								targetBunit.setActivo(updatedBunit.isActivo());
+								//Sobreescribimos la notificación de la actualización de la unidad de negocio editada citando su nombre porque ya no
+								//se visualizará por pantalla
+								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
+										session.formatTimestamp(tNow, null));
+								//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
+								if (updatedUserList != null && updatedUserList.size() > 0) {
+									//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
+									targetBunit.setUsers(updatedUserList);
+									infoLabel.setText(infoLabel.getText() +	" . USUARIOS INACTIVOS");
+								} else {
+									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+								}
+								//Recuperamos la bUnit del usuario que abre sesión
+								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+								//La asignamos como bUnit de la sesión
+								session.setbUnit(userBunit);
+								//Registramos que la unidad de negocio seleccionada es la que se está mostrando
+								bUnitShowing = userBunit;
+								//Mostramos sus datos
+								populateTextFields();
+								//Renovamos la lista de las unidades de negocio del comboBox
+								refreshComboBox();						
+							}
+							//Los usuarios ya han sido actualizados
+							session.setUsersUpdated(true);
+							
+						//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
+						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
+						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
+							
+							System.out.println("Opción EDIT 3");
+							System.out.println("lastActive: " + lastActive);
+											
+							//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+							new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
+							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+							PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									User.TABLE_NAME, tNow);
+							//Se cerrará la sesión
+							stillOpenSession = false;
+							//Usuarios de la sesión actualizados
+							session.setUsersUpdated(true);
+							
+//							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
+//							//Lanzar un JOptionPane informativo antes de volver al login
+//								session.backToLogin(BusinessUnit.TABLE_NAME);
 						}
+								
+						//Si la sesión sigue abierta
+						if (stillOpenSession) {
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditBunit();
+						}
+
+					//Si los datos actualizados no se graban en la base de datos
+					} else {
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 					}
 				}
 			}

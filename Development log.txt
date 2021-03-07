@@ -1225,3 +1225,13 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 
 	· TimerJob class (new inner UserUI class):
 		Update run() --ok--
+
+ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED
+
+	* - Package main.java.gui
+
+	· BusinessUnitUI class:
+		Update editableDataOn() --no active checkbox enabled on edit if default bUnit--
+
+	· OKAction class (BusinessUnitUI class):
+		Update actionPerformed() --delete check for active default bUnit--
