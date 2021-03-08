@@ -1098,9 +1098,9 @@ public class BusinessUnitUI extends JPanel {
 							//Usuarios de la sesión actualizados
 							session.setUsersUpdated(true);
 							
-//							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
-//							//Lanzar un JOptionPane informativo antes de volver al login
-//								session.backToLogin(BusinessUnit.TABLE_NAME);
+							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
+								session.setUsersUpdated(true);
+								session.backToLogin(BusinessUnit.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
 						}
 								
 						//Si la sesión sigue abierta

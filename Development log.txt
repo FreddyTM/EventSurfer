@@ -1228,6 +1228,16 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 
 ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE BAR
 
+	* - package main.java.persistence
+
+	· CurrentSession class:
+		Add attributes
+			displays, currentDisplay, alertShown
+		Update backToLogin() --add multimonitor message display--
+
+	· TimerJob class (inner CurrentSession class):
+		update run() --new backToLogin params--
+
 	* - Package main.java.gui
 
 	· BusinessUnitUI class:
@@ -1235,10 +1245,17 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 
 	· OKAction class (BusinessUnitUI class):
 		Update actionPerformed() --delete check for active default bUnit--
+		Update actionPerformed() --enable backToLogin() & new params in option edit 3--
 
 	· AppWindow class:
 		Add attribute versionNumber
 		Update setUpWindow() --ver 0.1.8--
+		Update initialize() --add CenteredWindow listener--
+
+	· CenteredWindow class (new inner AppWindow class):
+		Add attributes
+			parentFrame, displays
+		Add windowStateChanged()
 
 	· Login class:
 		Update constructor --frame title set to "EVENTSURFER" constructor--
@@ -1253,3 +1270,4 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 
 	· OKAction class (UserUI class):
 		Update actionPerformed() --fix wrong data display in option edit 1--
+		Update actionPerformed() --enable backToLogin() & new params in option edit 3--
