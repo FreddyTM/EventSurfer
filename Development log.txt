@@ -1276,3 +1276,6 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 	· OKAction class (UserUI class):
 		Update actionPerformed() --fix wrong data display in option edit 1--
 		Update actionPerformed() --enable backToLogin() & new params in option edit 3--
+
+	· TimerJob class (UserUI class):
+		update run() --fix wrong bUnit display if bUnit inactive & bUnit filter active--
