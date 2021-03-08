@@ -469,8 +469,12 @@ public class CurrentSession {
 							case "user":
 								
 								//Debug
+							if (user.getUserAlias() == "" || user.getUserAlias() == null) {
+								System.out.println("Usuario: ninguno");
+							} else {
 								System.out.println("Usuario: " + user.getUserAlias());
-								System.out.println("Dentro del case user");
+							}
+							System.out.println("Dentro del case user");
 								
 								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
 								//correspondiente recarga de los usuarios actualizados, para no repetirla.

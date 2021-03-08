@@ -1226,7 +1226,7 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 	· TimerJob class (new inner UserUI class):
 		Update run() --ok--
 
-ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE BAR
+ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TITLE BAR, COMBOBOX ERRORS FIXING in progress...
 
 	* - package main.java.persistence
 
@@ -1250,7 +1250,8 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 	· AppWindow class:
 		Add attribute versionNumber
 		Update setUpWindow() --ver 0.1.8--
-		Update initialize() --add CenteredWindow listener--
+		Update initialize() --add WindowStateListener(CenteredWindow)--
+		Update initialize() --add addComponentListener(CenteredWindow)--
 
 	· CenteredWindow class (new inner AppWindow class):
 		Add attributes
@@ -1265,7 +1266,7 @@ ver 0.1.8 - AREA UI, MULTIPLE SCREEN MANAGEMENT UPDATED, VERSION & USER TO TITLE
 		Update startSession() --add app version & user alias to app window bar--
 
 	· UserUI class:
-		Add messageTest() --show JOptionPane in app window current screen center, not tested yet--
+		Add messageTest() --show JOptionPane in app window current screen center--
 		Update getSelectedUserIndexFromArray() --fix wrong selections--
 
 	· OKAction class (UserUI class):
