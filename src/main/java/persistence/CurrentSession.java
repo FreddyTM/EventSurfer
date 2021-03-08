@@ -388,18 +388,15 @@ public class CurrentSession {
 								//Localizamos la unidad de negocio del usuario que abrió sesión
 								BusinessUnit updatedBunit = null;
 								for (BusinessUnit oneUnit : bUnits) {
-									if (oneUnit.getId() == user.getbUnit().getId()) {
-										updatedBunit = oneUnit;
-									} 
-//									if (alertShown) {
-//										if (oneUnit.getId() == user.getbUnit().getId()) {
-//											updatedBunit = oneUnit;
-//										} 
-//									}
+									if (user != null) {
+										if (oneUnit.getId() == user.getbUnit().getId()) {
+											updatedBunit = oneUnit;
+										}
+									}
 								}
 								
 								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
-								if(updatedBunit.isActivo() == false && usersUpdated == false) {
+								if(updatedBunit != null && updatedBunit.isActivo() == false && usersUpdated == false) {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
 									usersUpdated = true;
 									//Si no hemos vuelto a la pantalla de login directamente por la acción del usuario
@@ -409,7 +406,7 @@ public class CurrentSession {
 									}
 									alertShown = false;
 								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
-								} else {
+								} else if (updatedBunit != null){
 									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
 									//Si es un usuario administrador, se recargan todas las unidades de negocio
 									if (user.getUserType().equals("ADMIN")) {
@@ -475,12 +472,14 @@ public class CurrentSession {
 							case "user":
 								
 								//Debug
-							if (user.getUserAlias() == "" || user.getUserAlias() == null) {
-								System.out.println("Usuario: ninguno");
-							} else {
-								System.out.println("Usuario: " + user.getUserAlias());
-							}
-							System.out.println("Dentro del case user");
+								if (user != null) {
+									if (user.getUserAlias() == "" || user.getUserAlias() == null) {
+										System.out.println("Usuario: ninguno");
+									} else {
+										System.out.println("Usuario: " + user.getUserAlias());
+									} 
+								}
+								System.out.println("Dentro del case user");
 								
 								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
 								//correspondiente recarga de los usuarios actualizados, para no repetirla.
