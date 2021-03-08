@@ -1170,10 +1170,11 @@ public class BusinessUnitUI extends JPanel {
 							System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
 							
 							bUnitShowing = session.getbUnit();
+
+							//Renovamos la lista de las unidades de negocio del comboBox
+							refreshComboBox();
 							//Asignamos el nuevo contenido a los textfields
 							populateTextFields();
-							//Renovamos la lista de las unidades de negocio del comboBox
-							refreshComboBox();						
 							//Hacemos backup del contenido de los datos del formulario
 							updateDataCache();
 						} else {
@@ -1181,10 +1182,10 @@ public class BusinessUnitUI extends JPanel {
 							//Debug
 							System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
 							
+							//Renovamos la lista de las unidades de negocio del comboBox
+							refreshComboBox();
 							//Asignamos el nuevo contenido a los textfields
 							populateTextFields();
-							//Renovamos la lista de las unidades de negocio del comboBox
-							refreshComboBox();						
 							//Hacemos backup del contenido de los datos del formulario
 							updateDataCache();
 						}
