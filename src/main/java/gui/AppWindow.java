@@ -11,6 +11,8 @@ import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -73,6 +75,9 @@ public class AppWindow extends JFrame {
 		session.setDisplays(displays);
 		session.setCurrentDisplay(currentDisplay);
 		
+		//Debug
+		System.out.println("Monitor actual: " + currentDisplay.getIDstring());
+		
 	    int appWidth = 1000;
 	    int appHeight = 700;
 	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
@@ -111,7 +116,8 @@ public class AppWindow extends JFrame {
 			  }
 		});
 		
-		addWindowListener(new CenteredWindow(this, displays));
+		addWindowStateListener(new CenteredWindow(this, displays));
+		addComponentListener(new CenteredWindow(this, displays));
 	}
 	
 	public void setUpWindow(){
@@ -136,7 +142,7 @@ public class AppWindow extends JFrame {
 		this.repaint();
 	}
 	
-	private class CenteredWindow extends WindowAdapter {
+	private class CenteredWindow extends WindowAdapter implements ComponentListener{
 		JFrame parentFrame;
 		GraphicsDevice [] displays;
 		
@@ -149,7 +155,40 @@ public class AppWindow extends JFrame {
 			GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
 			session.setDisplays(displays);
 			session.setCurrentDisplay(currentDisplay);
+			
+			//Debug
+			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
+			
 		  }
+
+		@Override
+		public void componentResized(ComponentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentMoved(ComponentEvent e) {
+			GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
+			session.setDisplays(displays);
+			session.setCurrentDisplay(currentDisplay);
+			
+			//Debug
+			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
+			
+		}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void componentHidden(ComponentEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	public JPanel getUpPanel() {
