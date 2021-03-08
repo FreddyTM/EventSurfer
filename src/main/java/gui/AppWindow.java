@@ -70,6 +70,8 @@ public class AppWindow extends JFrame {
 
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		GraphicsDevice currentDisplay = this.getGraphicsConfiguration().getDevice();
+		session.setDisplays(displays);
+		session.setCurrentDisplay(currentDisplay);
 		
 	    int appWidth = 1000;
 	    int appHeight = 700;
