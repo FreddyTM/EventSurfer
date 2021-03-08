@@ -390,13 +390,19 @@ public class CurrentSession {
 								for (BusinessUnit oneUnit : bUnits) {
 									if (oneUnit.getId() == user.getbUnit().getId()) {
 										updatedBunit = oneUnit;
-									}
+									} 
+//									if (alertShown) {
+//										if (oneUnit.getId() == user.getbUnit().getId()) {
+//											updatedBunit = oneUnit;
+//										} 
+//									}
 								}
 								
 								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
 								if(updatedBunit.isActivo() == false && usersUpdated == false) {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
 									usersUpdated = true;
+									//Si no hemos vuelto a la pantalla de login directamente por la acción del usuario
 									if (!alertShown) {
 										//Back to login
 										backToLogin(BusinessUnit.TABLE_NAME, displays, currentDisplay);

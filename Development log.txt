@@ -1237,6 +1237,7 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 
 	· TimerJob class (inner CurrentSession class):
 		update run() --new backToLogin params--
+		update run() --fix case businessunit error--
 
 	* - Package main.java.gui
 
@@ -1246,6 +1247,9 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 	· OKAction class (BusinessUnitUI class):
 		Update actionPerformed() --delete check for active default bUnit--
 		Update actionPerformed() --enable backToLogin() & new params in option edit 3--
+
+	· TimerJob class (BusinessUnitUI class):
+		update run() --1st refreshCombobox(), 2nd populateTextFields()--
 
 	· AppWindow class:
 		Add attribute versionNumber
