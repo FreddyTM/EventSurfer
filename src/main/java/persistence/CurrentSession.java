@@ -1,8 +1,10 @@
 package main.java.persistence;
 
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,6 +74,12 @@ public class CurrentSession {
 	//Variable de control de actualización de usuarios si ésta se produce por la actualización
 	//de unidades de negocio
 	private volatile boolean usersUpdated = false;
+	
+	//Registran la lista de monitores del sistema, y el monitor en el que se ejecuta la aplicación
+	GraphicsDevice [] displays;
+	GraphicsDevice currentDisplay;
+	//Registra si una ventana de aviso ya ha sido lanzada
+	public boolean alertShown = false;
 	
 	private CurrentSession() {
 		
@@ -234,28 +242,39 @@ public class CurrentSession {
 	 * @param tableName origen de la desactivación del usuario, bien sea por la desactivación de la unidad de negocio a la que pertenece
 	 * o por la desactivación directa del usuario
 	 */
-	public void backToLogin(String tableName) {
-		
-//		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
-//		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
-////		JFrame frame = (JFrame) SwingUtilities.getRoot((Component) this.getClass());
-//		
-//		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-//		GraphicsDevice currentDisplay = this.getGraphicsConfiguration().getDevice();
-		
+	public void backToLogin(String tableName, GraphicsDevice [] displays, GraphicsDevice currentDisplay) {
 		
 		String infoMessage = "";
+		String title = "";
 		if (tableName.equals(BusinessUnit.TABLE_NAME)) {
 			infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
 					+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
 					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-			JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+			title = "Unidad de negocio y usuarios desactivados";
 		} else if (tableName.equals(User.TABLE_NAME)) {
 			infoMessage = "SE HA DESACTIVADO AL USUARIO QUE HA ABIERTO SESIÓN.\n"
 					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-			JOptionPane.showMessageDialog(null, infoMessage, "Usuario desactivado", JOptionPane.WARNING_MESSAGE);
+			title = "Usuario desactivado";
 		}
-//		JOptionPane.showMessageDialog(null, infoMessage, "Unidad de negocio y usuarios desactivados", JOptionPane.WARNING_MESSAGE);
+
+		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
+		Rectangle frameRectangle = messageFrame.getBounds();
+	    int paneWidth = frameRectangle.width;
+	    int paneHeight = frameRectangle.height;
+		
+	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
+	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
+	    int currentWidth = 0;
+	    int currentHeight = 0;
+		//Centrado de pantalla multimonitor
+		for (int i = 0; i < displays.length; i++) {
+		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
+				currentWidth = currentDisplay.getDisplayMode().getWidth();
+				currentHeight = currentDisplay.getDisplayMode().getHeight();
+				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
+		    }
+		}
+		JOptionPane.showMessageDialog(messageFrame, infoMessage, title, JOptionPane.WARNING_MESSAGE);
 		
 		//Replicamos la acción de logout del selector
 		new JButton(logOutAction).doClick();
@@ -378,8 +397,11 @@ public class CurrentSession {
 								if(updatedBunit.isActivo() == false && usersUpdated == false) {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
 									usersUpdated = true;
-									//Back to login
-									backToLogin(BusinessUnit.TABLE_NAME);
+									if (!alertShown) {
+										//Back to login
+										backToLogin(BusinessUnit.TABLE_NAME, displays, currentDisplay);
+									}
+									alertShown = false;
 								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
 								} else {
 									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
@@ -468,32 +490,20 @@ public class CurrentSession {
 									}
 									//Comprobamos que el usuario que abrió sesión no ha sido deshabilitado
 									if(updatedUser.isActivo() == false) {
-										//Back to login
-										backToLogin(User.TABLE_NAME);
+										if (!alertShown) {
+											//Back to login
+										backToLogin(User.TABLE_NAME, displays, currentDisplay);
+										}
+										alertShown = false;
 									//Si el usuario que abrió sesión sigue activo, lo reasignamos 
 									} else {
 										user = updatedUser;	
 									}
 								}
-								
+								//Reset usersUpdated
 								usersUpdated = false;
 								
-//								//Comprobamos que el usuario de la sesión no ha sido desactivado por un administrador
-//								for (User oneUser: userList) {
-//									if (oneUser.getId() == user.getId() && oneUser.isActivo() == false) {
-//										//Back to login
-//										backToLogin();
-//										break;
-//									}
-//								}
-//								//Asignamos la lista de usuarios actualizada a la unidad de negocio de la sesión
-//								session.getbUnit().setUsers(userList);
-//								//Reasignamos el usuario de la sesión
-//								for (User user: session.getbUnit().getUsers()) {
-//									if (session.getUser().getId() == user.getId()) {
-//										session.setUser(user);
-//									}
-//								}
+//								//Añadimos la tabla user a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":
@@ -623,6 +633,30 @@ public class CurrentSession {
 
 	public void setUsersUpdated(boolean usersUpdated) {
 		this.usersUpdated = usersUpdated;
+	}
+
+	public GraphicsDevice[] getDisplays() {
+		return displays;
+	}
+
+	public void setDisplays(GraphicsDevice[] displays) {
+		this.displays = displays;
+	}
+
+	public GraphicsDevice getCurrentDisplay() {
+		return currentDisplay;
+	}
+
+	public void setCurrentDisplay(GraphicsDevice currentDisplay) {
+		this.currentDisplay = currentDisplay;
+	}
+
+	public boolean isAlertShown() {
+		return alertShown;
+	}
+
+	public void setAlertShown(boolean alertShown) {
+		this.alertShown = alertShown;
 	}
 
 }
