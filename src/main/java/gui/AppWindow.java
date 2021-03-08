@@ -71,11 +71,6 @@ public class AppWindow extends JFrame {
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		GraphicsDevice currentDisplay = this.getGraphicsConfiguration().getDevice();
 		
-//		//Debug
-//		for (GraphicsDevice screen : displays) {
-//			System.out.println(screen.getDefaultConfiguration().getBounds());
-//		}
-		
 	    int appWidth = 1000;
 	    int appHeight = 700;
 	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
@@ -113,6 +108,8 @@ public class AppWindow extends JFrame {
 				  System.exit(0);
 			  }
 		});
+		
+		addWindowListener(new CenteredWindow(this, displays));
 	}
 	
 	public void setUpWindow(){
@@ -137,6 +134,21 @@ public class AppWindow extends JFrame {
 		this.repaint();
 	}
 	
+	private class CenteredWindow extends WindowAdapter {
+		JFrame parentFrame;
+		GraphicsDevice [] displays;
+		
+		public CenteredWindow (JFrame parentFrame, GraphicsDevice [] displays) {
+			this.parentFrame = parentFrame;
+			this.displays =  displays;
+		}
+		
+		public void windowStateChanged (WindowEvent e) {
+			GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
+			session.setDisplays(displays);
+			session.setCurrentDisplay(currentDisplay);
+		  }
+	}
 
 	public JPanel getUpPanel() {
 		return upPanel;
