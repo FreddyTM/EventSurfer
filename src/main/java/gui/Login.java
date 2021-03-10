@@ -2,24 +2,18 @@ package main.java.gui;
 
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-
 import main.java.company.User;
-import main.java.persistence.CurrentSession;
-
+import main.java.session.CurrentSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;

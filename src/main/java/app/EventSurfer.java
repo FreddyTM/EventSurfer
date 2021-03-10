@@ -8,8 +8,8 @@ import main.java.company.User;
 import main.java.gui.AppWindow;
 import main.java.gui.DefaultAdmin;
 import main.java.gui.Login;
-import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.session.CurrentSession;
 
 //VERSION 0.1.5
 

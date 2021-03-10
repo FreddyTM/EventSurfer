@@ -1,43 +1,29 @@
-package main.java.persistence;
+package main.java.session;
 
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
-import main.java.gui.AppWindow;
+import main.java.persistence.PersistenceManager;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;

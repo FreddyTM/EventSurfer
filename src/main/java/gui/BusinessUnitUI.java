@@ -7,7 +7,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,27 +14,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
-import main.java.exceptions.DatabaseError;
-import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
-
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 

@@ -29,8 +29,8 @@ import javax.swing.UIManager;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
-import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
 
@@ -68,7 +68,7 @@ public class UserUI extends JPanel {
 	private JCheckBox bUnitActiveFilterCheckBox;
 	private JComboBox userComboBox = new JComboBox();
 	private JCheckBox userActiveFilterCheckBox;
-	private JComboBox userTypeComboBox = new JComboBox();;
+	private JComboBox userTypeComboBox = new JComboBox();
 	private JTextField userAliasField;
 	private JTextField userNameField;
 	private JTextField userLastNameField;

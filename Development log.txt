@@ -1239,6 +1239,10 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 		update run() --new backToLogin params--
 		update run() --fix case businessunit error--
 
+	* - package main.java.session (new)
+
+	· Move CurrentSession class to package main.java.session
+
 	* - Package main.java.gui
 
 	· BusinessUnitUI class:

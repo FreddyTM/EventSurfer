@@ -10,7 +10,7 @@ import javax.swing.JTextPane;
 import javax.swing.UIManager;
 
 import main.java.company.User;
-import main.java.persistence.CurrentSession;
+import main.java.session.CurrentSession;
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;

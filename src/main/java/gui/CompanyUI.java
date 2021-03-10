@@ -6,24 +6,20 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
 import main.java.company.Company;
-import main.java.persistence.CurrentSession;
 import main.java.persistence.PersistenceManager;
+import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
-
 import javax.swing.JButton;
 import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;

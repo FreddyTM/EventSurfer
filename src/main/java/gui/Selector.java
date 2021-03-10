@@ -1,16 +1,10 @@
 package main.java.gui;
 
-import java.awt.LayoutManager;
+
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
-import main.java.persistence.CurrentSession;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import main.java.session.CurrentSession;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
