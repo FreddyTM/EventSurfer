@@ -1283,3 +1283,7 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 
 	· TimerJob class (UserUI class):
 		update run() --fix wrong bUnit display if bUnit inactive & bUnit filter active--
+
+	* - UML diagrams
+	
+	· Create DatabaseObjects diagram
