@@ -1287,3 +1287,4 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 	* - UML diagrams
 	
 	· Create DatabaseObjects diagram
+	· Update DatabaseObjects diagram
