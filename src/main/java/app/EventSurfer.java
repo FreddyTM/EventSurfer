@@ -15,7 +15,7 @@ import main.java.session.CurrentSession;
 
 public class EventSurfer {
 
-	Connection connection;
+	private Connection connection;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
