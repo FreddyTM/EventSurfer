@@ -492,12 +492,6 @@ public class User {
 		return hashedInput;
 	}
 	
-
-	
-	//METODO DE PRUEBA. SE PUEDE BORRAR
-	public void prueba(BusinessUnit bUnit) {
-		
-	}
 	
 	public int getId() {
 		return id;

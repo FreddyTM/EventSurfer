@@ -62,8 +62,8 @@ public class CurrentSession {
 	private volatile boolean usersUpdated = false;
 	
 	//Registran la lista de monitores del sistema, y el monitor en el que se ejecuta la aplicación
-	GraphicsDevice [] displays;
-	GraphicsDevice currentDisplay;
+	private GraphicsDevice [] displays;
+	private GraphicsDevice currentDisplay;
 	//Registra si una ventana de aviso ya ha sido lanzada
 	public boolean alertShown = false;
 	
@@ -174,16 +174,16 @@ public class CurrentSession {
 		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 	
-	/**
-	 * Método de carga de datos unificado. ** Declarado, pero sin desarrollar todavía **
-	 * @param conn conexión con la base de datos
-	 * @param bUnitId id de la unidad de negocio
-	 * @param userId id del usuario que abre la sesión
-	 */
-	public void loadData (Connection conn, int bUnitId, int userId) {
-		//Crear método en user getUserTypeFromDb(Connection conn, int userId) para filtrar la carga de datos en
-		//función del tipo de usuario que abrió sesión
-	}
+//	/**
+//	 * Método de carga de datos unificado. ** Declarado, pero sin desarrollar todavía **
+//	 * @param conn conexión con la base de datos
+//	 * @param bUnitId id de la unidad de negocio
+//	 * @param userId id del usuario que abre la sesión
+//	 */
+//	public void loadData (Connection conn, int bUnitId, int userId) {
+//		//Crear método en user getUserTypeFromDb(Connection conn, int userId) para filtrar la carga de datos en
+//		//función del tipo de usuario que abrió sesión
+//	}
 	
 	/**
 	 * Carga los tipos de usuarios, tipos de eventos y estados de eventos almacenados en la base

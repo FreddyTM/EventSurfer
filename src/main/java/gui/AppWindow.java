@@ -47,21 +47,28 @@ public class AppWindow extends JFrame {
 		// TODO Auto-generated constructor stub
 	}
 
-	public AppWindow(GraphicsConfiguration gc) {
-		super(gc);
-		// TODO Auto-generated constructor stub
-	}
-
-	public AppWindow(String title) throws HeadlessException {
-		super(title);
-		// TODO Auto-generated constructor stub
-	}
-
-	public AppWindow(String title, GraphicsConfiguration gc) {
-		super(title, gc);
-		// TODO Auto-generated constructor stub
-	}
+//	public AppWindow(GraphicsConfiguration gc) {
+//		super(gc);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public AppWindow(String title) throws HeadlessException {
+//		super(title);
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public AppWindow(String title, GraphicsConfiguration gc) {
+//		super(title, gc);
+//		// TODO Auto-generated constructor stub
+//	}
 	
+	/**
+	 * Crea la ventana de la aplicación y la centra en la pantalla. Envía a la sesión la información de las pantallas del sistema
+	 * y de la pantalla en la que se está ejecutando la aplicación. Actualiza dicha información de manera continuada para que,
+	 * en un entorno multipantalla, la ventana de login y los mensajes emergentes puedan aparecer siempre centrados en la pantalla 
+	 * en la que se ejecuta la aplicación
+	 * 
+	 */
 	public void initialize() {
 
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -114,6 +121,9 @@ public class AppWindow extends JFrame {
 		addComponentListener(new CenteredWindow(this, displays));
 	}
 	
+	/**
+	 * Muestra el panel de bienvenida al pasar la pantalla de login
+	 */
 	public void setUpWindow(){
 		basePanel.removeAll();
 
@@ -137,8 +147,8 @@ public class AppWindow extends JFrame {
 	}
 	
 	private class CenteredWindow extends WindowAdapter implements ComponentListener{
-		JFrame parentFrame;
-		GraphicsDevice [] displays;
+		private JFrame parentFrame;
+		private GraphicsDevice [] displays;
 		
 		public CenteredWindow (JFrame parentFrame, GraphicsDevice [] displays) {
 			this.parentFrame = parentFrame;
