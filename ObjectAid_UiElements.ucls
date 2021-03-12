@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
+  router="FAN">  
+  <class id="1" language="java" name="main.java.gui.CompanyUI.OKAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/CompanyUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="-276" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="main.java.gui.DefaultAdmin" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/DefaultAdmin.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="711" width="318" x="1320" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="main.java.gui.CompanyUI" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/CompanyUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="513" width="313" x="48" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="main.java.gui.CompanyUI.CancelAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/CompanyUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="-42" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="main.java.gui.Selector.CompanyAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Selector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="553" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="main.java.gui.UserUI.UserComboListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="3309" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="main.java.gui.UserUI.TimerJob" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="87" x="3539" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="main.java.gui.UserUI.UserTypeComboListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="3666" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="main.java.gui.UserUI.UserCheckBoxListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="3896" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="main.java.gui.UserUI.NewAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="4126" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="main.java.gui.Selector.BunitAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Selector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="787" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="main.java.gui.UserUI.EditAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="4360" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="main.java.gui.BusinessUnitUI.NewAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="1786" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="main.java.gui.UserUI.BunitCheckBoxListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="4594" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="main.java.gui.Selector.UserAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Selector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="1021" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="main.java.gui.BusinessUnitUI.TimerJob" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="87" x="2020" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="main.java.gui.AppWindow.CenteredWindow" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/AppWindow.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="239" x="1489" y="1631"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="main.java.gui.BusinessUnitUI.CancelAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="2147" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="main.java.gui.BusinessUnitUI.OKAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="2381" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="main.java.gui.BusinessUnitUI.ComboListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="2615" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="main.java.gui.Selector" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Selector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="333" width="259" x="1021" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="main.java.gui.UserUI.CancelAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="4824" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="main.java.gui.UserUI.OKAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="5058" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="main.java.gui.BusinessUnitUI" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="855" width="332" x="2381" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="main.java.gui.Login" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Login.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="405" width="273" x="1678" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="main.java.gui.UserUI" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1179" width="313" x="4267" y="-303"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="main.java.gui.CompanyUI.TimerJob" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/CompanyUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="87" x="192" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="main.java.gui.AppWindow" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/AppWindow.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="675" width="257" x="1489" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="main.java.gui.Selector.LogOutAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/Selector.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="1255" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="main.java.gui.BusinessUnitUI.CheckBoxListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="2845" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="main.java.gui.BusinessUnitUI.EditAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/BusinessUnitUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="3075" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="main.java.gui.UserUI.BunitComboListener" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/UserUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="190" x="5292" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="main.java.gui.CompanyUI.EditAction" project="EventSurfer" 
+    file="/EventSurfer/src/main/java/gui/CompanyUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="194" x="319" y="916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <nesting id="34">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="27"/>  
+  </nesting>  
+  <nesting id="35">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="20"/>  
+  </nesting>  
+  <nesting id="36">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <nesting id="37">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="13"/>  
+  </nesting>  
+  <nesting id="38">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <nesting id="39">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <nesting id="40">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="23"/>  
+  </nesting>  
+  <association id="41">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="42" name="frame"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="44">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="31"/>  
+  </nesting>  
+  <nesting id="45">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="30"/>  
+  </nesting>  
+  <association id="46">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="47" name="frame"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="49">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <nesting id="50">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="7"/>  
+  </nesting>  
+  <nesting id="51">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <nesting id="52">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <nesting id="53">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="33"/>  
+  </nesting>  
+  <nesting id="54">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="17"/>  
+  </nesting>  
+  <nesting id="55">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
+  <nesting id="56">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="18"/>  
+  </nesting>  
+  <nesting id="57">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="32"/>  
+  </nesting>  
+  <nesting id="58">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="19"/>  
+  </nesting>  
+  <nesting id="59">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="22"/>  
+  </nesting>  
+  <nesting id="60">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <nesting id="61">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="9"/>  
+  </nesting>  
+  <nesting id="62">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="6"/>  
+  </nesting>  
+  <nesting id="63">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <nesting id="64">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="29"/>  
+  </nesting>  
+  <nesting id="65">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="12"/>  
+  </nesting>  
+  <association id="66">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="67" name="frame"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="28" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

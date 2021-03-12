@@ -65,7 +65,7 @@ public class CurrentSession {
 	private GraphicsDevice [] displays;
 	private GraphicsDevice currentDisplay;
 	//Registra si una ventana de aviso ya ha sido lanzada
-	public boolean alertShown = false;
+	private boolean alertShown = false;
 	
 	private CurrentSession() {
 		
