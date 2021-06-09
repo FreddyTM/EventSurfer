@@ -256,7 +256,7 @@ public class BusinessUnit {
 	 * @param area area a añadir
 	 */
 	public void addArea (Connection conn, Area area) {
-		Area completeArea = area.addNewArea(conn, this, area);
+		Area completeArea = area.addNewAreaToBunitArea(conn, this, area);
 		if (completeArea != null) {
 			areas.add(completeArea);
 		}
