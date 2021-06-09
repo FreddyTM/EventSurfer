@@ -1288,3 +1288,28 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 	
 	· Create DatabaseObjects diagram
 	· Update DatabaseObjects diagram
+
+ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.9--
+	
+	* - package main.java.company
+
+	· Area class:
+		Update addNewArea() --only adds an area to the area table, but not to the b_unit_area table
+		Add addNewAreaToBunitArea() --adds an area to the area table and to the b_unit_area_table
+
+	· BusinessUnit class:
+
+		Update addArea() --use addNewAreaToBunitArea() method
+
+	* - package test.java
+
+	· AreaTest class:
+
+		Update testAddNewArea()
+		Add testAddNewAreaToBunitArea()
+		

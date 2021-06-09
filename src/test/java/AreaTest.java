@@ -16,7 +16,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
-import main.java.company.User;
 import main.java.persistence.PersistenceManager;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -69,18 +68,30 @@ class AreaTest {
 
 	@Test
 	@Order(5)
+	void testAddNewAreaToBunitArea() {
+		Area area = new Area();
+		area.setArea("VESTÍBULO PRINCIPAL");
+		area.setDescripcion("Vestíbulo principal del centro de trabajo");
+		assertNotNull(new Area().addNewAreaToBunitArea(conn, bUnit, area));
+		assertNotEquals(0, area.getId());
+//		assertEquals(2, area.getId());
+		bUnit.getAreas().add(area);
+	}
+	
+	@Test
+	@Order(6)
 	void testAddNewArea() {
 		Area area = new Area();
 		area.setArea("VESTÍBULO PRINCIPAL");
 		area.setDescripcion("Vestíbulo principal del centro de trabajo");
-		assertNotNull(new Area().addNewArea(conn, bUnit, area));
+		assertNotNull(new Area().addNewArea(conn, area));
 		assertNotEquals(0, area.getId());
-		assertEquals(2, area.getId());
+//		assertEquals(2, area.getId());
 		bUnit.getAreas().add(area);
 	}
 
 	@Test
-	@Order(6)
+	@Order(7)
 	void testUpdateAreaToDB() {
 		Area oldArea = new Area().getAreaByName(bUnit, "VESTÍBULO PRINCIPAL");
 		Area newArea = new Area();
@@ -92,7 +103,7 @@ class AreaTest {
 	}
 
 	@Test
-	@Order(7)
+	@Order(8)
 	void testGetAreasFromDB() {
 		assertNotNull(new Area().getAreasFromDB(conn, bUnit));
 	}

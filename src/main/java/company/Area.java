@@ -82,6 +82,25 @@ public class Area {
 	/**
 	 * Si la inserción de un area nueva en la base de datos tiene éxito,
 	 * recupera el id asignado en el registro de la base de datos y lo almacena
+	 * en el id del objeto Area.
+	 * @param conn conexión a la base de datos
+	 * @param area area nueva
+	 * @return el area nueva insertada
+	 */
+	public Area addNewArea (Connection conn, Area area) {
+		if (saveAreaToDB(conn, area)) {
+			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
+			area.setId(id);
+			return area;
+//			if (saveBUnitAreaToDB (conn, bUnit, area)) {
+//			}
+		}	
+		return null;
+	}
+	
+	/**
+	 * Si la inserción de un area nueva en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena
 	 * en el id del objeto Area. Tras ello, inserta un nuevo registro en la
 	 * tabla b_unit_area con los id del area y de la unidad de negocio a la que pertenece
 	 * @param conn conexión a la base de datos
@@ -89,7 +108,7 @@ public class Area {
 	 * @param area area nueva
 	 * @return el area nueva insertada
 	 */
-	public Area addNewArea (Connection conn, BusinessUnit bUnit, Area area) {
+	public Area addNewAreaToBunitArea (Connection conn, BusinessUnit bUnit, Area area) {
 		if (saveAreaToDB(conn, area)) {
 			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
 			area.setId(id);
