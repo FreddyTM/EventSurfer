@@ -53,11 +53,11 @@ class AreaTest {
 	@Order(1)
 	void testSaveAreaToDB() {
 		Area area = new Area();
-		area.setArea("RECEPCIÓN");
-		area.setDescripcion("Recepción del centro de trabajo");
+		area.setArea("VESTÍBULO POSTERIOR");
+		area.setDescripcion("Vestíbulo de la entrada posterior del centro de trabajo");
 		assertTrue(new Area().saveAreaToDB(conn, area));
-		area.setId(PersistenceManager.getLastElementIdFromDB(conn, Area.TABLE_NAME));
-		bUnit.getAreas().add(area);
+//		area.setId(PersistenceManager.getLastElementIdFromDB(conn, Area.TABLE_NAME));
+//		bUnit.getAreas().add(area);
 	}
 
 	@Test
@@ -87,7 +87,7 @@ class AreaTest {
 		assertNotNull(new Area().addNewArea(conn, area));
 		assertNotEquals(0, area.getId());
 //		assertEquals(2, area.getId());
-		bUnit.getAreas().add(area);
+//		bUnit.getAreas().add(area);
 	}
 
 	@Test

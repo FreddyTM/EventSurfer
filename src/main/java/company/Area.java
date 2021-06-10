@@ -54,6 +54,29 @@ public class Area {
 	}
 	
 	/**
+	 * Borra un area de la base de datos 
+	 * @param conn conexión a la base de datos
+	 * @param area area a borrar de la base de datos
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteAreaFromDB(Connection conn, Area area) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM area "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
 	 * Inserta un nuevo registro en la tabla b_unit_area con los id del area nueva
 	 * y de la unidad de negocio a la que pertenece
 	 * @param conn conexión a la base de datos
