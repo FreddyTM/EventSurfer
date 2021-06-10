@@ -52,7 +52,7 @@ class EventUpdateTest {
 		uType.loadData(conn);
 		TypesStatesContainer.setuType(uType);
 		bUnit.setAreas(new Area().getAreasFromDB(conn, bUnit));
-		bUnit.setEvents(new Event().getEventsFromDB(conn, bUnit));
+		bUnit.setEvents(new Event().getBunitEventsFromDB(conn, bUnit));
 		bUnit.setUsers(new User().getUsersFromDB(conn, bUnit));
 	}
 

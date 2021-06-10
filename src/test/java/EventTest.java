@@ -109,8 +109,8 @@ class EventTest {
 
 	@Test
 	@Order(3)
-	void testGetEventsFromDB() {
-		assertNotNull(new Event().getEventsFromDB(conn, bUnit));
+	void testGetBunitEventsFromDB() {
+		assertNotNull(new Event().getBunitEventsFromDB(conn, bUnit));
 	}
 
 	@Test
@@ -118,6 +118,13 @@ class EventTest {
 	void testGetEventById() {
 		assertNotNull(new Event().getEventById(bUnit, 2));
 		assertEquals("Silla rota", new Event().getEventById(bUnit, 2).getTitulo());
+	}
+	
+	@Test
+	@Order(5)
+	void testGetAreaEventsFromDB() {
+		assertNotNull(new Event().getAreaEventsFromDB(conn, bUnit.getAreas().get(0), company));
+		assertNotEquals(0, new Event().getAreaEventsFromDB(conn, bUnit.getAreas().get(0), company).size());
 	}
 
 }

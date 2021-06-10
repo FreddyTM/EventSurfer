@@ -70,8 +70,8 @@ class AreaTest {
 	@Order(5)
 	void testAddNewAreaToBunitArea() {
 		Area area = new Area();
-		area.setArea("VESTÍBULO PRINCIPAL");
-		area.setDescripcion("Vestíbulo principal del centro de trabajo");
+		area.setArea("VESTÍBULO POSTERIOR");
+		area.setDescripcion("Vestíbulo de la entrada posterior del centro de trabajo");
 		assertNotNull(new Area().addNewAreaToBunitArea(conn, bUnit, area));
 		assertNotEquals(0, area.getId());
 //		assertEquals(2, area.getId());
