@@ -113,7 +113,7 @@ public class CurrentSession {
 			unit.setUsers(userList);
 			List<Area> areaList = new Area().getAreasFromDB(conn, unit);
 			unit.setAreas(areaList);
-			List<Event> eventList = new Event().getEventsFromDB(conn, unit);
+			List<Event> eventList = new Event().getBunitEventsFromDB(conn, unit);
 			unit.setEvents(eventList);
 			for (Event event: unit.getEvents()) {
 				List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
@@ -160,7 +160,7 @@ public class CurrentSession {
 		user = new User().getUserById(bUnit, userId);
 		List<Area> areaList = new Area().getAreasFromDB(conn, bUnit);
 		bUnit.setAreas(areaList);
-		List<Event> eventList = new Event().getEventsFromDB(conn, bUnit);
+		List<Event> eventList = new Event().getBunitEventsFromDB(conn, bUnit);
 		bUnit.setEvents(eventList);
 		for (Event event: bUnit.getEvents()) {
 			List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
@@ -431,7 +431,7 @@ public class CurrentSession {
 										oneUnit.setUsers(userList);
 										List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
 										oneUnit.setAreas(areaList);
-										List<Event> eventList = new Event().getEventsFromDB(conn, oneUnit);
+										List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
 										oneUnit.setEvents(eventList);
 										for (Event event: oneUnit.getEvents()) {
 											List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
@@ -508,7 +508,7 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event":
-								List<Event> eventList = new Event().getEventsFromDB(conn, session.getbUnit());
+								List<Event> eventList = new Event().getBunitEventsFromDB(conn, session.getbUnit());
 								//Asignamos la lista de eventos actualizada a la unidad de negocio de la sesión
 								session.getbUnit().setEvents(eventList);
 								//Asignamos a cada evento de la unidad de negocio sus actualizaciones

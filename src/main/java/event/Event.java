@@ -11,6 +11,7 @@ import java.util.List;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
+import main.java.company.Company;
 import main.java.company.User;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.TypesStatesContainer;
@@ -130,10 +131,10 @@ public class Event {
 	/**
 	 * Obtiene la lista de eventos del objeto BusinessUnit pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param bUnit objeto del que queremos recuperar sus eventos
-	 * @return lista de eventos del objeto almacenados en la base de datos
+	 * @param bUnit unidad de negocio de la que queremos recuperar sus eventos
+	 * @return lista de eventos de la unidad de negocio almacenados en la base de datos
 	 */
-	public List<Event> getEventsFromDB(Connection conn, BusinessUnit bUnit) {
+	public List<Event> getBunitEventsFromDB(Connection conn, BusinessUnit bUnit) {
 		List<Event> eventList = new ArrayList<Event>();
 		Event event = null;
 		PreparedStatement pstm = null;
@@ -157,6 +158,48 @@ public class Event {
 				event.setEventState(TypesStatesContainer.getEvState().getEventState(results.getInt(6)));
 				eventList.add(event);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return eventList;
+	}
+	
+	/**
+	 * Obtiene la lista de eventos sucedidos en el area pasada por parámetro
+	 * @param conn conexión con la base de datos
+	 * @param area area del que queremos recuperar sus eventos
+	 * @param company empresa a la que pertenecen las unidades de negocio en la que suceden los eventos
+	 * @return lista de eventos sucedidos en el area almacenados en la base de datos
+	 */
+	public List<Event> getAreaEventsFromDB(Connection conn, Area area, Company company) {
+		List<Event> eventList = new ArrayList<Event>();
+		Event event = null;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT id, b_unit_id, event_type_id, titulo, descripcion, event_state_id "
+				+ "FROM \"event\" "
+				+ "WHERE area_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				event = new Event();
+				event.setId(results.getInt(1));
+				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitById(company, results.getInt(2));
+				event.setbUnit(bUnit);
+				event.setArea(area);
+				event.setEventType(TypesStatesContainer.getEvType().getEventType(results.getInt(3)));
+				event.setTitulo(results.getString(4));
+				event.setDescripcion(results.getString(5));
+				event.setEventState(TypesStatesContainer.getEvState().getEventState(results.getInt(6)));
+				eventList.add(event);
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

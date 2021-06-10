@@ -1306,10 +1306,22 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 		Update addArea() --use addNewAreaToBunitArea() method
 
+	* - package main.java.event
+
+	· Event class:
+
+		Rename getEventsFromDB() >> getBunitEventsFromDB()
+		Add getAreaEventsFromDB()
+
 	* - package test.java
 
 	· AreaTest class:
 
 		Update testAddNewArea()
 		Add testAddNewAreaToBunitArea()
+
+	· EventTest class:
+
+		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB()
+		Add testGetAreaEventsFromDB()
 		
