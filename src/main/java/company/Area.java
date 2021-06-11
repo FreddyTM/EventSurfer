@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import main.java.persistence.PersistenceManager;
 
@@ -248,6 +250,15 @@ public class Area {
 			PersistenceManager.closePrepStatement(pstm);
 		}
 		return areaList;
+	}
+	
+	public boolean checkAllocatedAreasFromDB(Area area) {
+//		Set<Integer> areaSet = new HashSet<Integer>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "";
+		//select distinct area ids from db, iterate through resultset, if area id found, return true, otherwise return false
+		return false;
 	}
 	
 	/**

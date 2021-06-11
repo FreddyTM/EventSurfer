@@ -1304,6 +1304,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add deleteAreaFromDB()
 		Add removeArea()
 		Add deleteBUnitAreaFromDB()
+		Add checkAllocatedAreasFromDB() --incomplete--
 
 	· BusinessUnit class:
 
@@ -1320,12 +1321,12 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· AreaTest class:
 
-		Update testAddNewArea()
-		Add testAddNewAreaToBunitArea()
-		Add testDeleteBUnitAreaFromDB()
+		Update testAddNewArea() --ok--
+		Add testAddNewAreaToBunitArea() --ok--
+		Add testDeleteBUnitAreaFromDB() --ok--
 
 	· EventTest class:
 
-		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB()
-		Add testGetAreaEventsFromDB()
+		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB() --ok--
+		Add testGetAreaEventsFromDB() --ok--
 		
