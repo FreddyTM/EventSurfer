@@ -120,5 +120,11 @@ class AreaTest {
 		int id = bUnit.getAreas().get(0).getId();
 		assertNotNull(new Area().getAreaById(bUnit, id));
 	}
+	
+	@Test
+	@Order(9)
+	void testDeleteBUnitAreaFromDB() {
+		
+	}
 
 }
