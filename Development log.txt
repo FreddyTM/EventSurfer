@@ -1322,7 +1322,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 		Update testAddNewArea()
 		Add testAddNewAreaToBunitArea()
-		Add testDeleteBUnitAreaFromDB() --empty--
+		Add testDeleteBUnitAreaFromDB()
 
 	· EventTest class:
 
