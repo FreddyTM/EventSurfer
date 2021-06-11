@@ -257,6 +257,7 @@ public class Area {
 		PreparedStatement pstm = null;
 		ResultSet results = null;
 		String sql = "";
+		//postgres=# select distinct(col1) from test order by col1;
 		//select distinct area ids from db, iterate through resultset, if area id found, return true, otherwise return false
 		return false;
 	}
