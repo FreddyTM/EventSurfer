@@ -256,7 +256,9 @@ public class Area {
 //		Set<Integer> areaSet = new HashSet<Integer>();
 		PreparedStatement pstm = null;
 		ResultSet results = null;
-		String sql = "";
+		String sql = "SELECT DISTINCT area_id "
+				+ "FROM b_unit_area "
+				+ "ORDER BY area_id;";
 		//postgres=# select distinct(col1) from test order by col1;
 		//select distinct area ids from db, iterate through resultset, if area id found, return true, otherwise return false
 		return false;
