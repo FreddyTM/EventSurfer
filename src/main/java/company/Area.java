@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -252,13 +253,33 @@ public class Area {
 		return areaList;
 	}
 	
-	public boolean checkAllocatedAreasFromDB(Area area) {
-//		Set<Integer> areaSet = new HashSet<Integer>();
-		PreparedStatement pstm = null;
+	/**
+	 * Comprueba si el area pasada por parámetro está asignada a alguna unidad de negocio
+	 * @param conn conexión con la base de datos
+	 * @param area area a comprobar
+	 * @return true si el area está asignada, false si no lo está
+	 */
+	public boolean checkAllocatedAreasFromDB(Connection conn, Area area) {
+		Statement stm = null;
 		ResultSet results = null;
 		String sql = "SELECT DISTINCT area_id "
 				+ "FROM b_unit_area "
 				+ "ORDER BY area_id;";
+		try {
+			stm = conn.createStatement();
+			results = stm.executeQuery(sql);
+			while (results.next()) {
+				if (results.getInt(1) == area.getId()) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
+		}
 		//postgres=# select distinct(col1) from test order by col1;
 		//select distinct area ids from db, iterate through resultset, if area id found, return true, otherwise return false
 		return false;
