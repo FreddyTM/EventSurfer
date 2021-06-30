@@ -130,5 +130,15 @@ class AreaTest {
 		area.setId(2);
 		assertTrue(new Area().deleteBUnitAreaFromDB(conn, bUnit, area));
 	}
+	
+	@Test
+	@Order(10)
+	void testCheckAllocatedAreasFromDB() {
+		Area area = new Area();
+		area.setId(1);
+		assertTrue(area.checkAllocatedAreasFromDB(conn, area));
+		area.setId(3);
+		assertFalse(area.checkAllocatedAreasFromDB(conn, area));
+	}
 
 }

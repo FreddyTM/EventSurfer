@@ -1295,6 +1295,13 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.9--
+
+	· AreaUI class (new):
+		Add attributes
+			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
+			infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
+			areaComboBox, bUnitComboBox, areaNameField, areaComboList, bUnitComboList,
+		Add constructor, update constructor (area management)
 	
 	* - package main.java.company
 
@@ -1324,7 +1331,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update testAddNewArea() --ok--
 		Add testAddNewAreaToBunitArea() --ok--
 		Add testDeleteBUnitAreaFromDB() --ok--
-		***Add testCheckAllocatedAreasFromDB()***
+		Add testCheckAllocatedAreasFromDB() --ok--
 
 	· EventTest class:
 
