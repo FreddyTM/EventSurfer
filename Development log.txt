@@ -1299,7 +1299,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· AreaUI class (new):
 		Add attributes
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
-			lastArea, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
+			lastArea, labelList, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
 			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector
 		Add constructor, update constructor (area management)

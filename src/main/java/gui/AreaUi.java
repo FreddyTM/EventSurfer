@@ -1,6 +1,8 @@
 package main.java.gui;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 import javax.swing.AbstractAction;
@@ -15,10 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.java.company.Area;
-import main.java.gui.UserUI.CancelAction;
-import main.java.gui.UserUI.EditAction;
-import main.java.gui.UserUI.NewAction;
-import main.java.gui.UserUI.OKAction;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
@@ -53,6 +51,8 @@ public class AreaUi extends JPanel {
 	
 	//Registra el area seleccionada por última vez
 	private Area lastArea;
+	//Lista de etiquetas informativas de longitud máxima de datos
+	private List<JLabel> labelList = new ArrayList<JLabel>();
 	
 	
 	private JLabel infoLabel;
@@ -63,8 +63,8 @@ public class AreaUi extends JPanel {
 	private JButton deleteButton;
 	
 	//Lista de elementos que aparecen en los comboBox
-		private String[] areaComboList;
-		private String[] bUnitComboList;
+	private String[] areaComboList;
+	private String[] bUnitComboList;
 	
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -74,11 +74,6 @@ public class AreaUi extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = AreaUi.OK_ACTION_UNDEFINED;
 	
-//	public AreaUi() {
-//		
-//		
-//		// TODO Auto-generated constructor stub
-//	}
 	
 	public AreaUi(CurrentSession session) {
 		this.session = session;
@@ -127,8 +122,23 @@ public class AreaUi extends JPanel {
 		add(areaNameField);
 		
 		areaDescription = new JTextArea();
-		areaDescription.setBounds(260, 225, 600, 50);
+		areaDescription.setBounds(260, 225, 400, 80);
 		add(areaDescription);
+		
+		
+		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
+		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel.setBounds(670, 175, 146, 25);
+		maxCharsLabel.setVisible(false);
+		labelList.add(maxCharsLabel);
+		add(maxCharsLabel);
+		
+		JLabel maxCharsLabel2 = new JLabel("Max: 200 caracteres");
+		maxCharsLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel2.setBounds(670, 225, 146, 25);
+		maxCharsLabel2.setVisible(false);
+		labelList.add(maxCharsLabel2);
+		add(maxCharsLabel2);
 	}
 	
 	
