@@ -3,6 +3,8 @@ package main.java.gui;
 import java.sql.Timestamp;
 import java.util.Timer;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -12,6 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import main.java.company.Area;
+import main.java.gui.UserUI.CancelAction;
+import main.java.gui.UserUI.EditAction;
+import main.java.gui.UserUI.NewAction;
+import main.java.gui.UserUI.OKAction;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
@@ -20,6 +27,8 @@ import javax.swing.UIManager;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+
 import javax.swing.JTextArea;
 
 public class AreaUi extends JPanel {
@@ -42,6 +51,9 @@ public class AreaUi extends JPanel {
 	private JTextField areaNameField;
 	private JTextArea areaDescription;
 	
+	//Registra el area seleccionada por última vez
+	private Area lastArea;
+	
 	
 	private JLabel infoLabel;
 	private JButton editButton;
@@ -53,6 +65,14 @@ public class AreaUi extends JPanel {
 	//Lista de elementos que aparecen en los comboBox
 		private String[] areaComboList;
 		private String[] bUnitComboList;
+	
+	private final Action editAction = new EditAction();
+	private final Action cancelAction = new CancelAction();
+	private final Action oKAction = new OKAction();
+	private final Action newAction = new NewAction();
+	private final Action deleteAction = new DeleteAction();
+	//Registra la acción a realizar por el botón aceptar
+	private int okActionSelector = AreaUi.OK_ACTION_UNDEFINED;
 	
 //	public AreaUi() {
 //		
@@ -110,4 +130,72 @@ public class AreaUi extends JPanel {
 		areaDescription.setBounds(260, 225, 600, 50);
 		add(areaDescription);
 	}
+	
+	
+	
+	public class NewAction extends AbstractAction {
+		public NewAction() {
+			putValue(NAME, "Nuevo");
+			putValue(SHORT_DESCRIPTION, "Add new area");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	public class EditAction extends AbstractAction {
+		public EditAction() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Enable data edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	public class CancelAction extends AbstractAction {
+		public CancelAction() {
+			putValue(NAME, "Cancelar");
+			putValue(SHORT_DESCRIPTION, "Cancel data edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	public class DeleteAction extends AbstractAction {
+		public DeleteAction() {
+			putValue(NAME, "Borrar");
+			putValue(SHORT_DESCRIPTION, "Delete data");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	public class OKAction extends AbstractAction {
+		public OKAction() {
+			putValue(NAME, "Aceptar");
+			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 }

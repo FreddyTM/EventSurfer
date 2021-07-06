@@ -1299,9 +1299,25 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· AreaUI class (new):
 		Add attributes
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
-			infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
+			lastArea, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
+			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector
 		Add constructor, update constructor (area management)
+
+	· NewAction class (new inner AreaUI class):
+		Add actionPerformed() --empty--
+
+	· EditAction class (new inner AreaUI class):
+		Add actionPerformed() --empty--
+
+	· CancelAction class (new inner AreaUI class):
+		Add actionPerformed() --empty--
+
+	· DeleteAction class (new inner AreaUI class):
+		Add actionPerformed() --empty--
+
+	· OKAction class (new inner AreaUI class):
+		Add actionPerformed() --empty--
 	
 	* - package main.java.company
 
@@ -1338,3 +1354,5 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB() --ok--
 		Add testGetAreaEventsFromDB() --ok--
 		
+
+	
