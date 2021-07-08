@@ -7,6 +7,7 @@ import java.util.Timer;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -22,12 +23,14 @@ import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextArea;
+import javax.swing.JSeparator;
 
 public class AreaUi extends JPanel {
 
@@ -80,6 +83,7 @@ public class AreaUi extends JPanel {
 		setLayout(null);
 		panelVisible = true;
 		
+		
 		JTextPane areaTxt = new JTextPane();
 		areaTxt.setText("GESTIÓN DE AREAS");
 		areaTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -122,9 +126,17 @@ public class AreaUi extends JPanel {
 		add(areaNameField);
 		
 		areaDescription = new JTextArea();
-		areaDescription.setBounds(260, 225, 400, 80);
+		areaDescription.setBounds(260, 225, 400, 75);
+		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
+		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
+		areaDescription.setBorder(border);
+		areaDescription.setEditable(false);
 		add(areaDescription);
 		
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel.setBounds(50, 325, 1000, 25);
+		add(infoLabel);
 		
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -139,6 +151,40 @@ public class AreaUi extends JPanel {
 		maxCharsLabel2.setVisible(false);
 		labelList.add(maxCharsLabel2);
 		add(maxCharsLabel2);
+		
+		newButton = new JButton();
+		newButton.setAction(newAction);
+		newButton.setBounds(329, 375, 89, 23);
+		if (session.getUser().getUserType().equals("USER")) {
+			newButton.setEnabled(false);
+		}
+		add(newButton);
+		
+		editButton = new JButton();
+		editButton.setAction(editAction);
+		editButton.setBounds(429, 375, 89, 23);
+		if (session.getUser().getUserType().equals("USER")) {
+			editButton.setEnabled(false);
+		}
+		add(editButton);
+		
+		deleteButton = new JButton();
+		deleteButton.setAction(deleteAction);
+		deleteButton.setBounds(529, 375, 89, 23);
+		if (session.getUser().getUserType().equals("USER")) {
+			deleteButton.setEnabled(false);
+		}
+		add(deleteButton);
+		
+		cancelButton = new JButton();
+		cancelButton.setAction(cancelAction);
+		cancelButton.setBounds(628, 375, 89, 23);
+		cancelButton.setEnabled(false);
+		add(cancelButton);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(50, 425, 1000, 2);
+		add(separator);
 	}
 	
 	
@@ -207,5 +253,4 @@ public class AreaUi extends JPanel {
 		}
 		
 	}
-	
 }
