@@ -120,8 +120,13 @@ public class AreaUi extends JPanel {
 			areaComboList[0] = "<Ningún area seleccionable>";
 		}
 		
-		areaComboBox = new JComboBox();
+		areaComboBox = new JComboBox(areaComboList);
+		areaComboBox.setSelectedIndex(0);
 		areaComboBox.setBounds(260, 125, 400, 25);
+//		areaComboBox.addItemListener(new AreaComboListener());
+		areaComboBox.setEditable(false);
+		ToolBox.setBlackForeground(areaComboBox);
+		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
 		
 		areaNameField = new JTextField();
