@@ -2,6 +2,7 @@ package main.java.gui;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.java.company.Area;
+import main.java.company.BusinessUnit;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
@@ -111,6 +113,13 @@ public class AreaUi extends JPanel {
 		descriptionLabel.setBounds(50, 225, 200, 25);
 		add(descriptionLabel);
 		
+		areaComboList = getAreaCombolistItemsFromSession();
+		//Si la lista está vacía
+		if (areaComboList.length == 0) {
+			areaComboList = new String[1];
+			areaComboList[0] = "<Ningún area seleccionable>";
+		}
+		
 		areaComboBox = new JComboBox();
 		areaComboBox.setBounds(260, 125, 400, 25);
 		add(areaComboBox);
@@ -187,6 +196,36 @@ public class AreaUi extends JPanel {
 		add(separator);
 	}
 	
+	/**
+	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas. Si el usuario de la sesión es de tipo ADMIN,
+	 * aparecerán todas las areas de todas las unidades de negocio. Si es MANAGER o USER solo aparecerán las areas de la unidad
+	 * de negocio a la que pertenezcan.
+	 * @return array ordenado alfabéticamente con la lista de areas
+	 */
+	public String[] getAreaCombolistItemsFromSession() {
+		List<String> tempList = new ArrayList<String>();
+		if(session.getUser().getUserType() == "ADMIN") {
+			for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
+				for (Area area : bUnit.getAreas()) {
+					tempList.add(area.getArea());
+				}
+			}
+		} else {
+			for (Area area : session.getbUnit().getAreas()) {
+				tempList.add(area.getArea());
+			}			 
+		}
+		
+		return ToolBox.toSortedArray(tempList);
+		
+//		Object[] object = (Object[]) tempList.toArray();
+//		String[] itemList = new String[object.length];
+//		for (int i = 0; i < object.length; i++) {
+//			itemList[i] = object[i].toString();
+//		}
+//		Arrays.sort(itemList);
+//		return itemList;
+	}
 	
 	
 	public class NewAction extends AbstractAction {

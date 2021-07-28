@@ -1296,6 +1296,11 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.9--
 
+	* - Package main.java.toolbox
+
+	· ToolBox class:
+		Add toSortedArray()
+
 	· AreaUI class (new):
 		Add attributes
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
@@ -1303,6 +1308,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
 			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector
 		Add constructor, update constructor (area management)
+		Add getAreaCombolistItemsFromSession() --not tested yet--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
