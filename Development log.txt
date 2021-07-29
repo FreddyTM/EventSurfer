@@ -1296,10 +1296,11 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.9--
 
-	* - Package main.java.toolbox
+	· Selector class:
+		Add attribute areaAction
 
-	· ToolBox class:
-		Add toSortedArray()
+	· AreaAction class (new inner Selector class):
+		Update actionPerformed()
 
 	· AreaUI class (new):
 		Add attributes
@@ -1308,7 +1309,11 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
 			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector
 		Add constructor, update constructor (area management)
-		Add getAreaCombolistItemsFromSession() --not tested yet--
+		Add getAreaCombolistItemsFromSession() --ok--
+		Add populateAreaFields() --empty--
+
+	· AreaComboListener class (new inner AreaUI class): --in progress--
+		Add itemStateChanged() --in progress--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
@@ -1345,6 +1350,11 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 		Rename getEventsFromDB() >> getBunitEventsFromDB()
 		Add getAreaEventsFromDB()
+
+	* - Package main.java.toolbox
+
+	· ToolBox class:
+		Add toSortedArray()
 
 	* - package test.java
 

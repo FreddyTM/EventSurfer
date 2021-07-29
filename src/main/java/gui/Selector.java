@@ -24,6 +24,7 @@ public class Selector extends JPanel {
 	private final Action CompanyAction = new CompanyAction();
 	private final Action bUnitAction = new BunitAction();
 	private final Action userAction = new UserAction();
+	private final Action areaAction = new AreaAction();
 	private JButton eventButton;
 	private JButton eventTypeButton;
 	private JButton areaButton;
@@ -62,6 +63,7 @@ public class Selector extends JPanel {
 		add(eventTypeButton);
 		
 		areaButton = new JButton();
+		areaButton.setAction(areaAction);
 		areaButton.setMargin(new Insets(2,2,2,2));
 		areaButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		areaButton.setText("AREAS");
@@ -184,6 +186,10 @@ public class Selector extends JPanel {
 			showPanel(frame, companyUI);			
 		}
 	}
+	
+	/**
+	 * Acción del botón Unidad de negocio. Muestra los datos de las unidades de negocio
+	 */
 	private class BunitAction extends AbstractAction {
 		public BunitAction() {
 			putValue(NAME, "BunitAction");
@@ -198,6 +204,10 @@ public class Selector extends JPanel {
 			showPanel(frame, bUnitUI);
 		}
 	}
+	
+	/**
+	 * Acción del botón Usuarios. Muestra los datos de los usuarios
+	 */
 	private class UserAction extends AbstractAction {
 		public UserAction() {
 			putValue(NAME, "UserAction");
@@ -206,21 +216,30 @@ public class Selector extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			
-//			//Marcamos la unidad de negocio del usuario que abre sesión como unidad de negocio de la sesión
-//			session.setbUnit(session.getUser().getbUnit());
-//			
-//			if (session.getUser().getbUnit().isActivo()) {	
-//				session.setbUnit(session.getUser().getbUnit());
-//			} else {
-//				session.backToLogin();;
-//			}
-			
 			//Creamos panel de usuario
 			UserUI userUI = new UserUI(session);
 			//Mostramos el panel
 			showPanel(frame, userUI);
 		}
+	}
+	
+	/**
+	 * Acción del botón Areas. Muestra los datos de las areas
+	 */
+	private class AreaAction extends AbstractAction {
+		public AreaAction() {
+			putValue(NAME, "AreaAction");
+			putValue(SHORT_DESCRIPTION, "Show area screen");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//Vaciamos el panel base y le quitamos visibilidad
+			hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de usuario
+			AreaUI areaUI = new AreaUI(session);
+			//Mostramos el panel
+			showPanel(frame, areaUI);		
+		}		
 	}
 
 }

@@ -30,11 +30,13 @@ import javax.swing.border.Border;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 
-public class AreaUi extends JPanel {
+public class AreaUI extends JPanel {
 
 	//Se asignan a la variable okActionSelector para determinar el comportamiento
 	//de la acción okAction
@@ -77,10 +79,10 @@ public class AreaUi extends JPanel {
 	private final Action newAction = new NewAction();
 	private final Action deleteAction = new DeleteAction();
 	//Registra la acción a realizar por el botón aceptar
-	private int okActionSelector = AreaUi.OK_ACTION_UNDEFINED;
+	private int okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
 	
 	
-	public AreaUi(CurrentSession session) {
+	public AreaUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
 		panelVisible = true;
@@ -123,7 +125,7 @@ public class AreaUi extends JPanel {
 		areaComboBox = new JComboBox(areaComboList);
 		areaComboBox.setSelectedIndex(0);
 		areaComboBox.setBounds(260, 125, 400, 25);
-//		areaComboBox.addItemListener(new AreaComboListener());
+		areaComboBox.addItemListener(new AreaComboListener());
 		areaComboBox.setEditable(false);
 		ToolBox.setBlackForeground(areaComboBox);
 		areaComboBox.setBackground(Color.WHITE);
@@ -232,6 +234,25 @@ public class AreaUi extends JPanel {
 //		return itemList;
 	}
 	
+	/**
+	 * Refresca los datos del area seleccionada para que se visualicen en pantalla
+	 */
+	public void populateAreaFields() {
+		//Debug
+		System.out.println("Populating area fields");
+	}
+	
+	
+	private class AreaComboListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+
+			populateAreaFields();
+			
+		}
+		
+	}
 	
 	public class NewAction extends AbstractAction {
 		public NewAction() {
