@@ -1307,13 +1307,17 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
 			lastArea, labelList, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
-			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector
+			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector, allAreas
 		Add constructor, update constructor (area management)
 		Add getAreaCombolistItemsFromSession() --ok--
-		Add populateAreaFields() --empty--
+		Add populateAreaFields() --ok--
+		Add setFirstSelectedArea() --ok--
 
-	· AreaComboListener class (new inner AreaUI class): --in progress--
-		Add itemStateChanged() --in progress--
+		Update getAreaCombolistItemsFromSession()
+
+	· AreaComboListener class (new inner AreaUI class):
+		Add itemStateChanged() --ok--
+		Update itemStateChanged()
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
@@ -1339,6 +1343,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add deleteArea()
 		Add deleteBUnitAreaFromDB()
 		Add checkAllocatedAreasFromDB() 
+		Add getAreaByName() --overloaded method--
 
 	· BusinessUnit class:
 

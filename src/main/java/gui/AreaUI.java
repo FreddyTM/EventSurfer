@@ -43,6 +43,7 @@ public class AreaUI extends JPanel {
 	private static final int OK_ACTION_UNDEFINED = 0; //Por defecto
 	private static final int OK_ACTION_EDIT = 1;
 	private static final int OK_ACTION_NEW = 2;
+	private static final String NO_AREA = "<Ningún area seleccionable>";
 	
 	private CurrentSession session;
 	private Timestamp tNow = ToolBox.getTimestampNow();
@@ -53,9 +54,12 @@ public class AreaUI extends JPanel {
 	
 	private JComboBox areaComboBox = new JComboBox();
 	private JComboBox bUnitComboBox = new JComboBox();
-	private JTextField areaNameField;
-	private JTextArea areaDescription;
-	
+	private JTextField areaNameField = new JTextField();
+	private JTextArea areaDescription = new JTextArea();
+	//Lista de todas las areas existentes en la base de datos
+	private List<Area> allAreas;
+	//Registra el area seleccionada en cada momento
+	private Area selectedArea;
 	//Registra el area seleccionada por última vez
 	private Area lastArea;
 	//Lista de etiquetas informativas de longitud máxima de datos
@@ -63,11 +67,11 @@ public class AreaUI extends JPanel {
 	
 	
 	private JLabel infoLabel;
-	private JButton editButton;
+	private JButton editButton = new JButton();
 	private JButton cancelButton;
 	private JButton oKButton;
 	private JButton newButton;
-	private JButton deleteButton;
+	private JButton deleteButton = new JButton();
 	
 	//Lista de elementos que aparecen en los comboBox
 	private String[] areaComboList;
@@ -119,20 +123,20 @@ public class AreaUI extends JPanel {
 		//Si la lista está vacía
 		if (areaComboList.length == 0) {
 			areaComboList = new String[1];
-			areaComboList[0] = "<Ningún area seleccionable>";
-		}
-		
+			areaComboList[0] = NO_AREA;
+		}	
 		areaComboBox = new JComboBox(areaComboList);
 		areaComboBox.setSelectedIndex(0);
-		areaComboBox.setBounds(260, 125, 400, 25);
+		setFirstSelectedArea();
 		areaComboBox.addItemListener(new AreaComboListener());
+		areaComboBox.setBounds(260, 125, 400, 25);
 		areaComboBox.setEditable(false);
 		ToolBox.setBlackForeground(areaComboBox);
 		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
 		
-		areaNameField = new JTextField();
-		areaNameField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+//		areaNameField = new JTextField();
+//		areaNameField.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		areaNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		areaNameField.setBounds(260, 175, 400, 25);
 //		areaNameField.setText(session.getbUnit().getCompany().getNombre());
@@ -141,7 +145,7 @@ public class AreaUI extends JPanel {
 //		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(areaNameField);
 		
-		areaDescription = new JTextArea();
+//		areaDescription = new JTextArea();
 		areaDescription.setBounds(260, 225, 400, 75);
 		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
@@ -176,18 +180,20 @@ public class AreaUI extends JPanel {
 		}
 		add(newButton);
 		
-		editButton = new JButton();
+//		editButton = new JButton();
 		editButton.setAction(editAction);
 		editButton.setBounds(429, 375, 89, 23);
-		if (session.getUser().getUserType().equals("USER")) {
+		if (session.getUser().getUserType().equals("USER")
+				|| selectedArea == null) {
 			editButton.setEnabled(false);
 		}
 		add(editButton);
 		
-		deleteButton = new JButton();
+//		deleteButton = new JButton();
 		deleteButton.setAction(deleteAction);
 		deleteButton.setBounds(529, 375, 89, 23);
-		if (session.getUser().getUserType().equals("USER")) {
+		if (session.getUser().getUserType().equals("USER")
+				|| selectedArea == null) {
 			deleteButton.setEnabled(false);
 		}
 		add(deleteButton);
@@ -215,6 +221,7 @@ public class AreaUI extends JPanel {
 			for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
 				for (Area area : bUnit.getAreas()) {
 					tempList.add(area.getArea());
+					allAreas.add(area);
 				}
 			}
 		} else {
@@ -240,6 +247,27 @@ public class AreaUI extends JPanel {
 	public void populateAreaFields() {
 		//Debug
 		System.out.println("Populating area fields");
+		System.out.println(selectedArea == null);
+		
+		areaNameField.setText(selectedArea.getArea());
+		areaDescription.setText(selectedArea.getDescripcion());
+	}
+	
+	/**
+	 * Muestra los datos del area seleccionada por defecto la primera vez que se muestra la pantalla de gestión de areas,
+	 * si el area existe.
+	 */
+	private void setFirstSelectedArea() {
+		String item = (String) areaComboBox.getSelectedItem();
+		if(!item.equals(NO_AREA)) {
+			if(session.getUser().getUserType() == "ADMIN") {
+				selectedArea = new Area().getAreaByName(allAreas, item);
+			} else {
+				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
+			}
+			//Mostramos los datos del area seleccionada			
+			populateAreaFields();
+		} 
 	}
 	
 	
@@ -247,7 +275,23 @@ public class AreaUI extends JPanel {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-
+			String item = (String) areaComboBox.getSelectedItem();
+			if(item.equals(NO_AREA)) {
+				selectedArea = null;
+				//Deshabilitamos edit y delete
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+				//Vaciamos campos
+				areaNameField.setText(null);
+				areaDescription.setText(null);
+				return;
+			}
+			if(session.getUser().getUserType() == "ADMIN") {
+				selectedArea = new Area().getAreaByName(allAreas, item);
+			} else {
+				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
+			}
+			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
 			
 		}

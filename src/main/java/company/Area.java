@@ -286,13 +286,28 @@ public class Area {
 	}
 	
 	/**
-	 * Devuelve el area al que pertenece el id entrado por parámetro
+	 * Devuelve el area al que pertenece el nombre entrado por parámetro
 	 * @param bUnit BusinessUnit del que comprobamos la lista de areas
-	 * @param id id del area buscado
-	 * @return area con el id entrado por parámetro (null si no existe)
+	 * @param name nombre del area buscado
+	 * @return area con el nombre entrado por parámetro (null si no existe)
 	 */
 	public Area getAreaByName (BusinessUnit bUnit, String name) {
 		List<Area> areaList = bUnit.getAreas();
+		for (Area area: areaList) {
+			if (area.getArea() == name) {
+				return area;
+			}
+		}	
+		return null;
+	}
+	
+	/**
+	 * Devuelve el area al que pertenece el nombre entrado por parámetro
+	 * @param areaList Lista de areas de la que comprobamos el nombre
+	 * @param name nombre del area buscado
+	 * @return area con el nombre entrado por parámetro (null si no existe)
+	 */
+	public Area getAreaByName (List<Area> areaList, String name) {
 		for (Area area: areaList) {
 			if (area.getArea() == name) {
 				return area;
