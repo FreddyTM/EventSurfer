@@ -64,6 +64,10 @@ public class AreaUI extends JPanel {
 	private Area lastArea;
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
+
+	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
+	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	private List<String> textFieldContentList = new ArrayList<String>();
 	
 	
 	private JLabel infoLabel;
@@ -141,7 +145,6 @@ public class AreaUI extends JPanel {
 		areaNameField.setBounds(260, 175, 400, 25);
 //		areaNameField.setText(session.getbUnit().getCompany().getNombre());
 		areaNameField.setEditable(false);
-//		textFieldList.add(areaNameField);
 //		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(areaNameField);
 		
@@ -245,12 +248,25 @@ public class AreaUI extends JPanel {
 	 * Refresca los datos del area seleccionada para que se visualicen en pantalla
 	 */
 	public void populateAreaFields() {
-		//Debug
-		System.out.println("Populating area fields");
-		System.out.println(selectedArea == null);
+//		//Debug
+//		System.out.println("Populating area fields");
+//		System.out.println(selectedArea == null);
 		
 		areaNameField.setText(selectedArea.getArea());
 		areaDescription.setText(selectedArea.getDescripcion());
+	}
+	
+	/**
+	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de una
+	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
+	 * estaba seleccionada.
+	 */
+	public void updateDataCache() {
+		//Vaciamos la lista de datos del caché de datos
+		textFieldContentList.clear();
+		//Añadimos los nuevos datos al caché de datos
+		textFieldContentList.add(areaNameField.getText());
+		textFieldContentList.add(areaDescription.getText());
 	}
 	
 	/**
@@ -267,7 +283,36 @@ public class AreaUI extends JPanel {
 			}
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
+			//Copiamos los datos al caché de datos
+			textFieldContentList.add(areaNameField.getText());
+			textFieldContentList.add(areaDescription.getText());
 		} 
+	}
+	
+	/**
+	 * Habilita los campos del formulario para que pueda introducirse información
+	 */
+	public void editableDataOn() {
+		//Activar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(true);
+		}
+		//Datos editables
+		areaNameField.setEditable(true);
+		areaDescription.setEditable(true);
+	}
+	
+	/**
+	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
+	 */
+	public void editableDataOff() {
+		//Quitar visibilidad de etiquetas de longitud máxima de datos
+		for (JLabel label : labelList) {
+			label.setVisible(false);
+		}
+		//Datos no editables
+		areaNameField.setEditable(false);
+		areaDescription.setEditable(false);
 	}
 	
 	
@@ -293,6 +338,10 @@ public class AreaUI extends JPanel {
 			}
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
+			//Hacemos backup del contenido de los datos del formulario
+			updateDataCache();
+			//Vaciamos label de información
+			infoLabel.setText("");
 			
 		}
 		
@@ -318,8 +367,16 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			okActionSelector = AreaUI.OK_ACTION_EDIT;
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			editButton.setEnabled(false);
+			newButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			areaComboBox.setEnabled(false);
+			infoLabel.setText("");
+			//Formulario editable
+			editableDataOn();
 		}
 		
 	}
@@ -331,10 +388,21 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+			okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
+			//Cambio de estado de los botones y el combobox
+			editButton.setEnabled(true);
+			newButton.setEnabled(true);
+			deleteButton.setEnabled(true);
+			areaComboBox.setEnabled(true);
+			infoLabel.setText("");
+			oKButton.setEnabled(false);
+			cancelButton.setEnabled(false);
+			//Formulario no editable
+			editableDataOff();
+			//Recuperar valores previos a la edición de los datos
+			areaNameField.setText(textFieldContentList.get(0));
+			areaDescription.setText(textFieldContentList.get(1));
+		}		
 	}
 	
 	public class DeleteAction extends AbstractAction {
