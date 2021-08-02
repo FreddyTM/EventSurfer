@@ -177,7 +177,7 @@ public class AreaUI extends JPanel {
 		
 		newButton = new JButton();
 		newButton.setAction(newAction);
-		newButton.setBounds(329, 375, 89, 23);
+		newButton.setBounds(229, 375, 89, 23);
 		if (session.getUser().getUserType().equals("USER")) {
 			newButton.setEnabled(false);
 		}
@@ -185,7 +185,7 @@ public class AreaUI extends JPanel {
 		
 //		editButton = new JButton();
 		editButton.setAction(editAction);
-		editButton.setBounds(429, 375, 89, 23);
+		editButton.setBounds(329, 375, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
 				|| selectedArea == null) {
 			editButton.setEnabled(false);
@@ -194,7 +194,7 @@ public class AreaUI extends JPanel {
 		
 //		deleteButton = new JButton();
 		deleteButton.setAction(deleteAction);
-		deleteButton.setBounds(529, 375, 89, 23);
+		deleteButton.setBounds(429, 375, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
 				|| selectedArea == null) {
 			deleteButton.setEnabled(false);
@@ -203,9 +203,16 @@ public class AreaUI extends JPanel {
 		
 		cancelButton = new JButton();
 		cancelButton.setAction(cancelAction);
-		cancelButton.setBounds(628, 375, 89, 23);
+		cancelButton.setBounds(529, 375, 89, 23);
 		cancelButton.setEnabled(false);
 		add(cancelButton);
+		
+		oKButton = new JButton();
+		oKButton.setAction(oKAction);
+		oKButton.setBounds(629, 375, 89, 23);
+		oKButton.setEnabled(false);
+		add(oKButton);
+		
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(50, 425, 1000, 2);
@@ -300,6 +307,7 @@ public class AreaUI extends JPanel {
 		//Datos editables
 		areaNameField.setEditable(true);
 		areaDescription.setEditable(true);
+		areaDescription.setBackground(Color.WHITE);
 	}
 	
 	/**
@@ -313,6 +321,7 @@ public class AreaUI extends JPanel {
 		//Datos no editables
 		areaNameField.setEditable(false);
 		areaDescription.setEditable(false);
+		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
 	}
 	
 	
