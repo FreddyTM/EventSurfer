@@ -2,7 +2,6 @@ package main.java.gui;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
@@ -330,6 +329,9 @@ public class AreaUI extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			String item = (String) areaComboBox.getSelectedItem();
+			//Si no hay areas a visualizar (usuarios user o manager que solo tienen acceso a su propia
+			//unidad de negocio, y ésta no tiene areas asignadas, o bien si se han borrado todas las areas
+			//de la base de datos)
 			if(item.equals(NO_AREA)) {
 				selectedArea = null;
 				//Deshabilitamos edit y delete
@@ -340,6 +342,7 @@ public class AreaUI extends JPanel {
 				areaDescription.setText(null);
 				return;
 			}
+			
 			if(session.getUser().getUserType() == "ADMIN") {
 				selectedArea = new Area().getAreaByName(allAreas, item);
 			} else {
@@ -390,6 +393,12 @@ public class AreaUI extends JPanel {
 		
 	}
 	
+	/**
+	 * Acción del botón cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar, el
+	 * botón Borrar y el botón Nueva. Descarta los cambios en los datos introducidos en el formulario. No se graban
+	 * en la base de datos ni en el objeto Area. Se recupera la información que figuraba anteriormente en el formulario.
+	 * Se borra cualquier mensaje de error mostrado anteriormente
+	 */
 	public class CancelAction extends AbstractAction {
 		public CancelAction() {
 			putValue(NAME, "Cancelar");
@@ -434,8 +443,31 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			areaNameField.setBackground(Color.WHITE);
+			areaDescription.setBackground(Color.WHITE);
 			
+			//Selección de comportamiento
+			
+			//Aceptamos la creación de una nueva area
+			if (okActionSelector == AreaUI.OK_ACTION_NEW) {
+				//Debug
+				System.out.println("Acción de grabar un area nueva");
+				
+				//Creamos un area nueva a partir de los datos del formulario
+				Area newArea = new Area();
+				newArea.setArea(areaNameField.getText());
+				newArea.setDescripcion(areaDescription.getText());
+				//Validamos los datos del formulario
+			
+			//Aceptamos los cambios del area editada
+			} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
+				//Debug
+				System.out.println("Guardando los cambios de la unidad de negocio " + areaNameField.getText());
+				
+				
+			}
 		}
 		
 	}
