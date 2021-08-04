@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
+import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
@@ -534,6 +535,25 @@ public class AreaUI extends JPanel {
 				newArea.setArea(areaNameField.getText());
 				newArea.setDescripcion(areaDescription.getText());
 				//Validamos los datos del formulario
+				if (testData(newArea)) {
+					//Intentamos grabar la nueva area en la base de datos, retornando un objeto con idénticos
+					//datos que incluye también el id que le ha asignado dicha base de datos
+					Area storedArea = new Area().addNewArea(session.getConnection(), newArea);
+					//Si el area se almacena correctamente en la base de datos
+					if (storedArea != null) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						tNow = ToolBox.getTimestampNow();
+						infoLabel.setText("NUEVA AREA REGISTRADA: " + session.formatTimestamp(tNow, null));
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+						}
+					}
+				}
+				
 			
 			//Aceptamos los cambios del area editada
 			} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
