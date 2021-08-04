@@ -1314,16 +1314,18 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add setFirstSelectedArea() --ok--
 		Add editableDataOn()
 		Add editableDataOff()
+		Add testData()
 		Update getAreaCombolistItemsFromSession()
 		Update editableDataOn()
 		Update editableDataOff()
 
 	· AreaComboListener class (new inner AreaUI class):
-		Add itemStateChanged() --ok--
+		Add itemStateChanged() 
 		Update itemStateChanged()
 
 	· NewAction class (new inner AreaUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() 
+		Update itemStateChanged()
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed()

@@ -218,6 +218,8 @@ public class AreaUI extends JPanel {
 		add(separator);
 	}
 	
+
+	
 	/**
 	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas. Si el usuario de la sesión es de tipo ADMIN,
 	 * aparecerán todas las areas de todas las unidades de negocio. Si es MANAGER o USER solo aparecerán las areas de la unidad
@@ -323,7 +325,59 @@ public class AreaUI extends JPanel {
 		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
 	}
 	
+	/**
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
+	 * con el fondo del campo en amarillo
+	 * @param areaToCheck area de la que se comprueban los datos
+	 * @return true si son correctos, false si no lo son
+	 */
+	public boolean testData (Area areaToCheck) {
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
+		Boolean errorLength = false;
+		String errorAreaText = "YA EXISTE UN AREA CON ESE NOMBRE";
+		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		
+		//Si estamos creando un area nueva, comprobamos que el nombre del area no existe ya en la base de datos
+		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
+			//Obtenemos la lista de todas las areas
+			if (allAreas == null) {
+				for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
+					for (Area area : bUnit.getAreas()) {
+						allAreas.add(area);
+					}
+				}
+			}
+			//Comparamos el nombre del area nueva
+			if (new Area().getAreaByName(allAreas, areaToCheck.getArea()) != null) {
+				infoLabel.setText(errorAreaText);
+				areaNameField.setBackground(Color.YELLOW);
+				return false;
+			}
+		}
+		if (areaToCheck.getArea().length() > 100 || areaToCheck.getArea().length() == 0) {
+			areaNameField.setBackground(Color.YELLOW);
+			errorLength = true;
+		}
+		if (areaToCheck.getDescripcion().length() > 200 || areaToCheck.getDescripcion().length() == 0) {
+			areaNameField.setBackground(Color.YELLOW);
+			errorLength = true;
+		}
+		//Si hay un error, mensaje de error y retornamos false
+		if (errorLength) {
+			infoLabel.setText(errorLengthText);
+			return false;
+		}
+		return true;
+	}
 	
+	/**
+	 * Listener que define el comportamiento del comboBox. Cada elemento se corresponde con un area
+	 * guardada en la base de datos. Si el usuario que abre sesión es de tipo administrador aparecerán
+	 * todas las areas existentes, si es otro tipo de usuario solo aparecerán las areas asignadas a su
+	 * unidad de negocio, o ninguna si no se han asignado. El area seleccionada se almacena en la variable
+	 * selectedArea.
+	 *
+	 */
 	private class AreaComboListener implements ItemListener {
 
 		@Override
@@ -337,9 +391,9 @@ public class AreaUI extends JPanel {
 				//Deshabilitamos edit y delete
 				editButton.setEnabled(false);
 				deleteButton.setEnabled(false);
-				//Vaciamos campos
-				areaNameField.setText(null);
-				areaDescription.setText(null);
+				//Vaciamos campos de texto
+				areaNameField.setText("");
+				areaDescription.setText("");
 				return;
 			}
 			
@@ -359,6 +413,11 @@ public class AreaUI extends JPanel {
 		
 	}
 	
+	/**
+	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
+	 * campos de texto y habilitamos su edición para añadir la información de una nueva unidad de negocio.
+	 * Habilitamos el botón de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
+	 */
 	public class NewAction extends AbstractAction {
 		public NewAction() {
 			putValue(NAME, "Nuevo");
@@ -366,12 +425,28 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			okActionSelector = AreaUI.OK_ACTION_NEW;
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			editButton.setEnabled(false);
+			newButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			areaComboBox.setEnabled(false);
+			infoLabel.setText("");
+			//Formulario editable
+			editableDataOn();
+			//Vaciamos los campos de texto
+			areaNameField.setText("");
+			areaDescription.setText("");
 		}
 		
 	}
 	
+	/**
+	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
+	 * del formulario, el botón de Cancelar para que los cambios no se registren y el de Aceptar para
+	 * que sí lo hagan.
+	 */
 	public class EditAction extends AbstractAction {
 		public EditAction() {
 			putValue(NAME, "Editar");
@@ -390,7 +465,6 @@ public class AreaUI extends JPanel {
 			//Formulario editable
 			editableDataOn();
 		}
-		
 	}
 	
 	/**
@@ -464,7 +538,7 @@ public class AreaUI extends JPanel {
 			//Aceptamos los cambios del area editada
 			} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
 				//Debug
-				System.out.println("Guardando los cambios de la unidad de negocio " + areaNameField.getText());
+				System.out.println("Guardando los cambios del area " + areaNameField.getText());
 				
 				
 			}
