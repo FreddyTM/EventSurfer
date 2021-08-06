@@ -123,12 +123,28 @@ public class AreaUI extends JPanel {
 		descriptionLabel.setBounds(50, 225, 200, 25);
 		add(descriptionLabel);
 		
+//		areaComboList = getAreaCombolistItemsFromSession();
+//		//Si la lista está vacía
+//		if (areaComboList.length == 0) {
+//			areaComboList = new String[1];
+//			areaComboList[0] = NO_AREA;
+//		}	
+//		areaComboBox = new JComboBox(areaComboList);
+//		areaComboBox.setSelectedIndex(0);
+//		setFirstSelectedArea();
+//		areaComboBox.addItemListener(new AreaComboListener());
+//		areaComboBox.setBounds(260, 125, 400, 25);
+//		areaComboBox.setEditable(false);
+//		ToolBox.setBlackForeground(areaComboBox);
+//		areaComboBox.setBackground(Color.WHITE);
+//		add(areaComboBox);
+		
 		areaComboList = getAreaCombolistItemsFromSession();
-		//Si la lista está vacía
-		if (areaComboList.length == 0) {
-			areaComboList = new String[1];
-			areaComboList[0] = NO_AREA;
-		}	
+//		//Si la lista está vacía
+//		if (areaComboList.length == 0) {
+//			areaComboList = new String[1];
+//			areaComboList[0] = NO_AREA;
+//		}	
 		areaComboBox = new JComboBox(areaComboList);
 		areaComboBox.setSelectedIndex(0);
 		setFirstSelectedArea();
@@ -139,8 +155,7 @@ public class AreaUI extends JPanel {
 		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
 		
-//		areaNameField = new JTextField();
-//		areaNameField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+
 		areaNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		areaNameField.setBounds(260, 175, 400, 25);
 //		areaNameField.setText(session.getbUnit().getCompany().getNombre());
@@ -242,7 +257,20 @@ public class AreaUI extends JPanel {
 			}			 
 		}
 		
-		return ToolBox.toSortedArray(tempList);
+		//New code
+		
+		//Si la lista está vacía
+		if (tempList.size() == 0) {
+			String[] emptyList = new String[1];
+			emptyList[0] = NO_AREA;
+			return emptyList;
+		} else {
+			return ToolBox.toSortedArray(tempList);
+		}
+		
+		//End of new code
+		
+//		return ToolBox.toSortedArray(tempList);
 		
 //		Object[] object = (Object[]) tempList.toArray();
 //		String[] itemList = new String[object.length];
@@ -342,6 +370,7 @@ public class AreaUI extends JPanel {
 		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
 			//Obtenemos la lista de todas las areas
 			if (allAreas == null) {
+				allAreas = new ArrayList<Area>();
 				for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
 					for (Area area : bUnit.getAreas()) {
 						allAreas.add(area);
@@ -483,18 +512,40 @@ public class AreaUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
 			//Cambio de estado de los botones y el combobox
-			editButton.setEnabled(true);
-			newButton.setEnabled(true);
-			deleteButton.setEnabled(true);
-			areaComboBox.setEnabled(true);
-			infoLabel.setText("");
-			oKButton.setEnabled(false);
-			cancelButton.setEnabled(false);
+			if (selectedArea != null) {
+				editButton.setEnabled(true);
+				newButton.setEnabled(true);
+				deleteButton.setEnabled(true);
+				areaComboBox.setEnabled(true);
+				oKButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				infoLabel.setText("");
+				//Recuperar valores previos a la edición de los datos
+				areaNameField.setText(textFieldContentList.get(0));
+				areaDescription.setText(textFieldContentList.get(1));
+			} else {
+				newButton.setEnabled(true);
+				areaComboBox.setEnabled(true);
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+				oKButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				infoLabel.setText("");
+				//Campos vacíos
+				areaNameField.setText("");
+				areaDescription.setText("");
+			}
+			
 			//Formulario no editable
 			editableDataOff();
-			//Recuperar valores previos a la edición de los datos
-			areaNameField.setText(textFieldContentList.get(0));
-			areaDescription.setText(textFieldContentList.get(1));
+//			//Recuperar valores previos a la edición de los datos
+//			if (selectedArea != null) {			
+//				areaNameField.setText(textFieldContentList.get(0));
+//				areaDescription.setText(textFieldContentList.get(1));
+//			} else {
+//				areaNameField.setText("");
+//				areaDescription.setText("");
+//			}
 		}		
 	}
 	
