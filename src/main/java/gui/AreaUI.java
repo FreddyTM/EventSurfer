@@ -359,6 +359,26 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
+	 * Si el usuario de la sesión es de tipo manager, habilita la edición del area seleccionada
+	 * solo en el caso de que pertenezca a la misma unidad de negocio que el usuario manager y no
+	 * esté asignada a otras unidades de negocio
+	 * @return
+	 */
+	public boolean verifyManagerEditConditions() {
+		return false;
+	}
+	
+	/**
+	 * Si el usuario de la sesión es de tipo manager, habilita el borrado del area seleccionada
+	 * solo en el caso de que pertenezca a la misma unidad de negocio que el usuario manager y no
+	 * esté asignada a otras unidades de negocio ni a ningún evento registrado
+	 * @return
+	 */
+	public boolean verifyManagerDeleteConditions() {
+		return false;
+	}
+	
+	/**
 	 * Habilita los campos del formulario para que pueda introducirse información
 	 */
 	public void editableDataOn() {
