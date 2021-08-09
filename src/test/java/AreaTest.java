@@ -3,6 +3,7 @@ package test.java;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -141,4 +142,9 @@ class AreaTest {
 		assertFalse(area.checkAllocatedAreasFromDB(conn, area));
 	}
 
+	@Test
+	@Order(11)
+	void testGetAllAreasFromDB() {
+		assertTrue(new Area().getAllAreasFromDB(conn).size() > 0);
+	}
 }

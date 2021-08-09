@@ -254,6 +254,36 @@ public class Area {
 	}
 	
 	/**
+	 * Obtiene la lista de todas las areas almacenadas en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @return lista de areas almacenadas en la base de datos
+	 */
+	public List<Area> getAllAreasFromDB(Connection conn) {
+		List<Area> areaList = new ArrayList<Area>();
+		Area area = null;
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT * FROM area;";
+		try {
+			stm = conn.createStatement();
+			results = stm.executeQuery(sql);
+			while (results.next()) {
+				area = new Area();
+				area.setId(results.getInt(1));
+				area.setArea(results.getString(2));
+				area.setDescripcion(results.getString(3));
+				areaList.add(area);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
+		}
+		return areaList;
+	}
+	
+	/**
 	 * Comprueba si el area pasada por parámetro está asignada a alguna unidad de negocio
 	 * @param conn conexión con la base de datos
 	 * @param area area a comprobar

@@ -8,6 +8,7 @@ import java.util.Timer;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -279,6 +280,32 @@ public class AreaUI extends JPanel {
 //		}
 //		Arrays.sort(itemList);
 //		return itemList;
+	}
+	
+	/**
+	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
+	 * del array pasado por parámetro
+	 * @param array array con la lista de areas
+	 * @return índice del elemento a seleccionar por defecto
+	 */
+	public int getSelectedIndexFromArray(String[] array) {
+		if (!array[0].equals(NO_AREA)) {		
+			for (int i = 0; i < array.length; i++) {
+				if (array[i].equals(selectedArea.getArea())) {
+					return i;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
+	 */
+	public void refreshComboBox() {
+		areaComboList = getAreaCombolistItemsFromSession();
+		areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+		areaComboBox.setSelectedIndex(getSelectedIndexFromArray(areaComboList));
 	}
 	
 	/**
