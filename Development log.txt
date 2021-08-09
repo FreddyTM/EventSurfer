@@ -1321,6 +1321,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update editableDataOn()
 		Update editableDataOff()
 		Update testData()
+		Update setFirstSelectedArea()
 
 	· AreaComboListener class (new inner AreaUI class):
 		Add itemStateChanged() 

@@ -337,8 +337,8 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Muestra los datos del area seleccionada por defecto la primera vez que se muestra la pantalla de gestión de areas,
-	 * si el area existe.
+	 * Muestra los datos del area seleccionada por defecto la primera vez que se muestra la pantalla de
+	 * gestión de areas, si el area existe.
 	 */
 	private void setFirstSelectedArea() {
 		String item = (String) areaComboBox.getSelectedItem();
