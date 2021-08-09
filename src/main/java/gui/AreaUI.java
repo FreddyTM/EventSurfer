@@ -235,31 +235,34 @@ public class AreaUI extends JPanel {
 		add(separator);
 	}
 	
-
+//Si el usuario de la sesión es de tipo ADMIN, aparecerán todas las areas de todas las unidades de negocio.
+//Si es MANAGER o USER solo aparecerán las areas de la unidad de negocio a la que pertenezcan.
 	
 	/**
-	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas. Si el usuario de la sesión es de tipo ADMIN,
-	 * aparecerán todas las areas de todas las unidades de negocio. Si es MANAGER o USER solo aparecerán las areas de la unidad
-	 * de negocio a la que pertenezcan.
+	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas. 
 	 * @return array ordenado alfabéticamente con la lista de areas
 	 */
 	public String[] getAreaCombolistItemsFromSession() {
-		List<String> tempList = new ArrayList<String>();
-		if(session.getUser().getUserType() == "ADMIN") {
-			for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
-				for (Area area : bUnit.getAreas()) {
-					tempList.add(area.getArea());
-					allAreas.add(area);
-				}
-			}
-		} else {
-			for (Area area : session.getbUnit().getAreas()) {
-				tempList.add(area.getArea());
-			}			 
-		}
+//		List<String> tempList = new ArrayList<String>();
+//		if(session.getUser().getUserType() == "ADMIN") {
+//			for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
+//				for (Area area : bUnit.getAreas()) {
+//					tempList.add(area.getArea());
+//					allAreas.add(area);
+//				}
+//			}
+//		} else {
+//			for (Area area : session.getbUnit().getAreas()) {
+//				tempList.add(area.getArea());
+//			}			 
+//		}
 		
 		//New code
-		
+		List<String> tempList = new ArrayList<String>();
+		allAreas = new Area().getAllAreasFromDB(this.session.getConnection());
+		for (Area area: allAreas) {
+			tempList.add(area.getArea());
+		}
 		//Si la lista está vacía
 		if (tempList.size() == 0) {
 			String[] emptyList = new String[1];
@@ -300,7 +303,7 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
+	 * Actualiza el contenido del comboBox que selecciona el area activa
 	 */
 	public void refreshComboBox() {
 		areaComboList = getAreaCombolistItemsFromSession();
@@ -340,11 +343,13 @@ public class AreaUI extends JPanel {
 	private void setFirstSelectedArea() {
 		String item = (String) areaComboBox.getSelectedItem();
 		if(!item.equals(NO_AREA)) {
-			if(session.getUser().getUserType() == "ADMIN") {
-				selectedArea = new Area().getAreaByName(allAreas, item);
-			} else {
-				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
-			}
+//			if(session.getUser().getUserType() == "ADMIN") {
+//				selectedArea = new Area().getAreaByName(allAreas, item);
+//			} else {
+//				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
+//			}
+			
+			selectedArea = new Area().getAreaByName(allAreas, item);
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
 			//Copiamos los datos al caché de datos
@@ -395,6 +400,11 @@ public class AreaUI extends JPanel {
 		
 		//Si estamos creando un area nueva, comprobamos que el nombre del area no existe ya en la base de datos
 		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
+			
+			
+			////FIX THIS! 
+			
+			
 			//Obtenemos la lista de todas las areas
 			if (allAreas == null) {
 				allAreas = new ArrayList<Area>();
@@ -454,11 +464,13 @@ public class AreaUI extends JPanel {
 				return;
 			}
 			
-			if(session.getUser().getUserType() == "ADMIN") {
-				selectedArea = new Area().getAreaByName(allAreas, item);
-			} else {
-				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
-			}
+//			if(session.getUser().getUserType() == "ADMIN") {
+//				selectedArea = new Area().getAreaByName(allAreas, item);
+//			} else {
+//				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
+//			}
+			
+			selectedArea = new Area().getAreaByName(allAreas, item);
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
 			//Hacemos backup del contenido de los datos del formulario
