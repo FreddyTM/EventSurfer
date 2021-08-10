@@ -137,9 +137,9 @@ class AreaTest {
 	void testCheckAllocatedAreasFromDB() {
 		Area area = new Area();
 		area.setId(1);
-		assertTrue(area.checkAllocatedAreasFromDB(conn, area));
+		assertTrue(area.isAllocatedArea(conn, area));
 		area.setId(3);
-		assertFalse(area.checkAllocatedAreasFromDB(conn, area));
+		assertFalse(area.isAllocatedArea(conn, area));
 	}
 
 	@Test

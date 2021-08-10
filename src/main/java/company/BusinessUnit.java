@@ -306,6 +306,38 @@ public class BusinessUnit {
 		}	
 		return null;
 	}
+	
+	/**
+	 * Busca todos los objetos BusinessUnit que tengan asignada el area pasada por parámetro
+	 * @param conn Conexión con la base de datos
+	 * @param company empresa a la que pertenecen las unidades de negocio
+	 * @param area Area de la que se quiere saber dónde está asignada
+	 * @return Lista de unidades de negocio con el area asignada
+	 */
+	public List<BusinessUnit> getBunitsWithArea(Connection conn, Company company, Area area) {
+		List<BusinessUnit> bUnitList = new ArrayList<BusinessUnit>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT b_unit_id "
+				+ "FROM b_unit_area "
+				+ "WHERE area_id = ?"
+				+ "ORDER BY b_unit_id;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)));
+			}
+			return bUnitList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
 
 	
 	public int getId() {

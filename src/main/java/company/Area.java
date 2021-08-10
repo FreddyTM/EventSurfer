@@ -289,7 +289,7 @@ public class Area {
 	 * @param area area a comprobar
 	 * @return true si el area está asignada, false si no lo está
 	 */
-	public boolean checkAllocatedAreasFromDB(Connection conn, Area area) {
+	public boolean isAllocatedArea(Connection conn, Area area) {
 		Statement stm = null;
 		ResultSet results = null;
 		String sql = "SELECT DISTINCT area_id "

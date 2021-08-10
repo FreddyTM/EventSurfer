@@ -1358,9 +1358,12 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add checkAllocatedAreasFromDB() 
 		Add getAreaByName() --overloaded method--
 		Add getAllAreasFromDB()
+		Add getBunitsWithArea()
+		Rename checkAllocatedAreasFromDB() to isAllocatedArea()
 
 	· BusinessUnit class:
 
+		Add getBunitsWithArea()
 		Update addArea() --use addNewAreaToBunitArea() method
 
 	* - package main.java.event
