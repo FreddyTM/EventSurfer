@@ -1392,6 +1392,9 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB() --ok--
 		Add testGetAreaEventsFromDB() --ok--
-		
+	
+	· BusinessUnitTest class:
+
+		Add testGetBunitsWithArea() --ok--	
 
 	

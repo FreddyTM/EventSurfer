@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
+import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
@@ -120,6 +121,15 @@ class BusinessUnitTest {
 	void testGetBusinessUnitById() {
 		assertNotNull(new BusinessUnit().getBusinessUnitById(company, 3));
 		assertEquals("08999", new BusinessUnit().getBusinessUnitById(company, 2).getCpostal());
+	}
+	
+	@Test
+	@Order(6)
+	void testGetBunitsWithArea() {
+		Area area = new Area();
+		area.setId(1);
+		assertNotNull(new BusinessUnit().getBunitsWithArea(conn, company, area));
+		assertTrue(new BusinessUnit().getBunitsWithArea(conn, company, area).size() > 0);
 	}
 
 }
