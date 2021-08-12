@@ -553,6 +553,9 @@ public class AreaUI extends JPanel {
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
+			
+			//Prueba diálogo emergente
+			ToolBox.showDialog("Probando, probando...", AreaUI.this);
 		}
 	}
 	

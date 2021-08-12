@@ -1377,6 +1377,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· ToolBox class:
 		Add toSortedArray()
+		Add showDialog()
 
 	* - package test.java
 
