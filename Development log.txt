@@ -1335,7 +1335,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed()
-		Update actionPerformed()
+		Update actionPerformed() --show dialog in progress--
 
 	· CancelAction class (new inner AreaUI class):
 		Add actionPerformed()
@@ -1378,6 +1378,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· ToolBox class:
 		Add toSortedArray()
 		Add showDialog()
+		Update showDialog() --change showMessageDialog to showConfirmDialog--
 
 	* - package test.java
 

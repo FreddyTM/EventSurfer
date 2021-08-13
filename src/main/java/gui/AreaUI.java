@@ -12,6 +12,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 //import java.awt.LayoutManager;
 
@@ -555,7 +556,13 @@ public class AreaUI extends JPanel {
 			editableDataOn();
 			
 			//Prueba diálogo emergente
-			ToolBox.showDialog("Probando, probando...", AreaUI.this);
+			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada a más\n"
+					+ "de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this);
+			if (optionSelected == JOptionPane.YES_OPTION) {
+				System.out.println("Edición OK");
+			} else {
+				System.out.println("Edición cancelada");
+			}
 		}
 	}
 	
