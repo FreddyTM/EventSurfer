@@ -556,8 +556,8 @@ public class AreaUI extends JPanel {
 			editableDataOn();
 			
 			//Prueba diálogo emergente
-			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada a más\n"
-					+ "de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this);
+			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
+					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this);
 			if (optionSelected == JOptionPane.YES_OPTION) {
 				System.out.println("Edición OK");
 			} else {

@@ -98,7 +98,7 @@ public class ToolBox {
 				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
 		    }
 		}
-		int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.WARNING_MESSAGE);
+		int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 		return optionSelected;
 	}
 	
