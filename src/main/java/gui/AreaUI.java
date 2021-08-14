@@ -555,7 +555,14 @@ public class AreaUI extends JPanel {
 			//Formulario editable
 			editableDataOn();
 			
+			if (session.getUser().getUserType().equals("MANAGER")) {
+				verifyManagerEditConditions();
+			} else {
+				//Advertir admin de cambios en areas asignadas a multiples unidades de negocio
+			}
+			
 			//Prueba diálogo emergente
+			//Incorporar a ToolBox.showDialog() el parámetro que cambie el tipo de diálogo a mostrar
 			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
 					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this);
 			if (optionSelected == JOptionPane.YES_OPTION) {
