@@ -1363,7 +1363,8 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· BusinessUnit class:
 
-		Add getBunitsWithArea()
+		Add getBunitsWithArea() --get BUnit objects--
+		Add getBunitsWithArea() --overloaded, get BUnit ids--
 		Update addArea() --use addNewAreaToBunitArea() method
 
 	* - package main.java.event

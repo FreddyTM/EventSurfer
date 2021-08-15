@@ -338,6 +338,37 @@ public class BusinessUnit {
 			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
+	
+	/**
+	 * Devuelve una lista con los ids de las unidades de negocio a las que está asignada el area pasada
+	 * por parámetro
+	 * @param conn Conexión con la base de datos
+	 * @param area area a comprobar
+	 * @return Lista de ids
+	 */
+	public List<Integer> getBunitsWithArea(Connection conn, Area area) {
+		List<Integer> bUnitIds = new ArrayList<Integer>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT b_unit_id "
+				+ "FROM b_unit_area "
+				+ "WHERE area_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnitIds.add(results.getInt(1));			
+			}
+			return bUnitIds;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
 
 	
 	public int getId() {
