@@ -1307,7 +1307,8 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, session, tNow, timer, panelVisible,
 			lastArea, labelList, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton,
 			areaComboBox, bUnitComboBox, areaNameField, areaDescription, areaComboList, bUnitComboList,
-			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector, allAreas
+			editAction, cancelAction, oKAction, newAction, deleteAction, okActionSelector, allAreas,
+			NO_AREA, DIALOG_INFO, DIALOG_YES_NO
 		Add constructor, update constructor (area management)
 		Add getAreaCombolistItemsFromSession() --ok--
 		Add populateAreaFields() --ok--
@@ -1317,13 +1318,16 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testData() --not tested yet--
 		Add getSelectedIndexFromArray()
 		Add refreshComboBox()
-		Add verifyManagerEditConditions() --empty--
+		Add verifyManagerEditConditions()
 		Add verifyManagerDeleteConditions() --empty--
+		Add verifyAdminEditConditions() --not tested yet--
+		Add verifyAdminDeleteConditions() --empty--
 		Update getAreaCombolistItemsFromSession()
 		Update editableDataOn()
 		Update editableDataOff()
 		Update testData()
 		Update setFirstSelectedArea()
+		Update verifyManagerEditConditions() --not tested yet--
 
 	· AreaComboListener class (new inner AreaUI class):
 		Add itemStateChanged() 
@@ -1335,7 +1339,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed()
-		Update actionPerformed() --show dialog in progress (add conditions)--
+		Update actionPerformed() --show dialog finished, not tested yet--
 
 	· CancelAction class (new inner AreaUI class):
 		Add actionPerformed()
@@ -1380,6 +1384,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add toSortedArray()
 		Add showDialog()
 		Update showDialog() --change showMessageDialog to showConfirmDialog + info icon--
+		Update showDialog() --add dialogType parameter--
 
 	* - package test.java
 

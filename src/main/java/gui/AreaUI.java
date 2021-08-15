@@ -46,6 +46,8 @@ public class AreaUI extends JPanel {
 	private static final int OK_ACTION_EDIT = 1;
 	private static final int OK_ACTION_NEW = 2;
 	private static final String NO_AREA = "<Ningún area seleccionable>";
+	private static final String DIALOG_INFO = "info";
+	private static final String DIALOG_YES_NO = "yes_no";
 	
 	private CurrentSession session;
 	private Timestamp tNow = ToolBox.getTimestampNow();
@@ -361,21 +363,82 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Si el usuario de la sesión es de tipo manager, habilita la edición del area seleccionada
-	 * solo en el caso de que pertenezca a la misma unidad de negocio que el usuario manager y no
-	 * esté asignada a otras unidades de negocio
-	 * @return
+	 * solo en el caso de que esté asignada exclusivamente a la misma unidad de negocio que dicho
+	 * usuario, o bien que no esté asignada a ninguna unidad de negocio
+	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
 	public boolean verifyManagerEditConditions() {
-		return false;
+		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		//Area no asignada a ninguna unidad de negocio
+		if (bUnitsList.size() == 0) {
+			return true;
+		}
+		//Area asignada a más de una unidad de negocio
+		if (bUnitsList.size() > 1) {
+			ToolBox.showDialog("El area seleccionada está asignada\n"
+					+ "a más de una unidad de negocio.\n" + "No está permitida la edición/n"
+					+ "a usuarios de tipo Manager.", AreaUI.this,
+					DIALOG_INFO);
+			return false;
+		}
+		//Area asignada a la unidad de negocio de usuario manager que abre sesión
+		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
+			return true;
+		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
+		} else {
+			ToolBox.showDialog("El area seleccionada no está asignada\n"
+					+ "a la unidad de negocio del usuario.\n" + "Manager que abrió la sesión/n"
+					+ "No está permitida la edición.", AreaUI.this,
+					DIALOG_INFO);
+			return false;
+		}
+	}
+	
+	/**
+	 * Si el usuario de la sesión es de tipo admin y el area seleccionada está asignada a más de una 
+	 * unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta continuar,
+	 * se habilita la edición del area seleccionada. También se habilita la edición directamente en el
+	 * caso de que el area seleccionada esté asignada a una sola unidad de negocio o a ninguna. 
+	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
+	 */
+	public boolean verifyAdminEditConditions() {
+		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		if (bUnitsList.size() > 1) {
+			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
+					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this,
+					DIALOG_YES_NO);
+			if (optionSelected == JOptionPane.YES_OPTION) {
+				//Debug
+				System.out.println("Edición OK");
+				return true;
+			} else {
+				//Debug
+				System.out.println("Edición cancelada");
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
 	 * Si el usuario de la sesión es de tipo manager, habilita el borrado del area seleccionada
 	 * solo en el caso de que pertenezca a la misma unidad de negocio que el usuario manager y no
-	 * esté asignada a otras unidades de negocio ni a ningún evento registrado
-	 * @return
+	 * esté asignada a otras unidades de negocio ni a ningún evento registrado, o en el caso de
+	 * que no esté asignada a ninguna unidad de negocio.
+	 * @return true si se cumplen las condiciones para el borrado, false si no se cumplen
 	 */
 	public boolean verifyManagerDeleteConditions() {
+		return false;
+	}
+	
+	/**
+	 * Si el usuario de la sesión es de tipo admin, habilita el borrado del area seleccionada
+	 * solo en el caso de que no esté asignada a ningún evento registrado. si el area está asignada
+	 * a más de una unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta
+	 * continuar, se habilita el borrado del area seleccionada.
+	 * @return true si se cumplen las condiciones para el borrado, false si no se cumplen
+	 */
+	public boolean verifyAdminDeleteConditions() {
 		return false;
 	}
 	
@@ -544,32 +607,36 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			okActionSelector = AreaUI.OK_ACTION_EDIT;
-			oKButton.setEnabled(true);
-			cancelButton.setEnabled(true);
-			editButton.setEnabled(false);
-			newButton.setEnabled(false);
-			deleteButton.setEnabled(false);
-			areaComboBox.setEnabled(false);
-			infoLabel.setText("");
-			//Formulario editable
-			editableDataOn();
-			
+			boolean editEnabled = false;
 			if (session.getUser().getUserType().equals("MANAGER")) {
-				verifyManagerEditConditions();
+				editEnabled = verifyManagerEditConditions();
 			} else {
-				//Advertir admin de cambios en areas asignadas a multiples unidades de negocio
+				editEnabled = verifyAdminEditConditions();
 			}
 			
-			//Prueba diálogo emergente
-			//Incorporar a ToolBox.showDialog() el parámetro que cambie el tipo de diálogo a mostrar
-			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
-					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this);
-			if (optionSelected == JOptionPane.YES_OPTION) {
-				System.out.println("Edición OK");
-			} else {
-				System.out.println("Edición cancelada");
+			if (editEnabled) {
+				okActionSelector = AreaUI.OK_ACTION_EDIT;
+				oKButton.setEnabled(true);
+				cancelButton.setEnabled(true);
+				editButton.setEnabled(false);
+				newButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+				areaComboBox.setEnabled(false);
+				infoLabel.setText("");
+				//Formulario editable
+				editableDataOn();
 			}
+			
+//			//Prueba diálogo emergente
+//			//Incorporar a ToolBox.showDialog() el parámetro que cambie el tipo de diálogo a mostrar
+//			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
+//					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this,
+//					DIALOG_INFO);
+//			if (optionSelected == JOptionPane.YES_OPTION) {
+//				System.out.println("Edición OK");
+//			} else {
+//				System.out.println("Edición cancelada");
+//			}
 		}
 	}
 	

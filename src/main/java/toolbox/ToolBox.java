@@ -68,7 +68,7 @@ public class ToolBox {
 		return itemList;
 	}
 	
-	public static int showDialog(String message, JPanel panel) {
+	public static int showDialog(String message, JPanel panel, String dialogType) {
 //		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
 //		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
 		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) panel);
@@ -98,8 +98,17 @@ public class ToolBox {
 				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
 		    }
 		}
-		int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-		return optionSelected;
+		
+		if (dialogType.equals("info")) {
+			JOptionPane.showMessageDialog(messageFrame, message, "Información", JOptionPane.WARNING_MESSAGE);
+			return -1;
+		} else if (dialogType.equals("yes_no")) {		
+			int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			return optionSelected;
+		} else {
+			return -1;
+		}
+		
 	}
 	
 }
