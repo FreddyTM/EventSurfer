@@ -1318,7 +1318,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testData() --not tested yet--
 		Add getSelectedIndexFromArray()
 		Add refreshComboBox()
-		Add verifyManagerEditConditions()
+		Add verifyManagerEditConditions() --tested options 3 & 4--
 		Add verifyManagerDeleteConditions() --empty--
 		Add verifyAdminEditConditions() --not tested yet--
 		Add verifyAdminDeleteConditions() --empty--

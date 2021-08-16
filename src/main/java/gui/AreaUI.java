@@ -375,9 +375,8 @@ public class AreaUI extends JPanel {
 		}
 		//Area asignada a más de una unidad de negocio
 		if (bUnitsList.size() > 1) {
-			ToolBox.showDialog("El area seleccionada está asignada\n"
-					+ "a más de una unidad de negocio.\n" + "No está permitida la edición/n"
-					+ "a usuarios de tipo Manager.", AreaUI.this,
+			ToolBox.showDialog(
+					"Un usuario Manager no puede editar areas asignadas a más de una unidad de negocio", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -386,9 +385,8 @@ public class AreaUI extends JPanel {
 			return true;
 		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
 		} else {
-			ToolBox.showDialog("El area seleccionada no está asignada\n"
-					+ "a la unidad de negocio del usuario.\n" + "Manager que abrió la sesión/n"
-					+ "No está permitida la edición.", AreaUI.this,
+			ToolBox.showDialog(
+					"Un usuario Manager no puede editar areas no asignadas a su unidad de negocio", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -404,8 +402,8 @@ public class AreaUI extends JPanel {
 	public boolean verifyAdminEditConditions() {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		if (bUnitsList.size() > 1) {
-			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
-					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this,
+			int optionSelected = ToolBox.showDialog(
+					"Area seleccionada asignada a más de una unidad de negocio. ¿Desea continuar?", AreaUI.this,
 					DIALOG_YES_NO);
 			if (optionSelected == JOptionPane.YES_OPTION) {
 				//Debug
