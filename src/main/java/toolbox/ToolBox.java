@@ -45,7 +45,7 @@ public class ToolBox {
 	 * @param pattern patrón de formateo, si es null se usa el patrón por defecto del método
 	 * @return Timestamp formateado
 	 */
-	public String formatTimestamp(Timestamp timestamp, String pattern) {
+	public static String formatTimestamp(Timestamp timestamp, String pattern) {
 		if (pattern == null) {
 			pattern = "EEEE, dd-MM-yyyy HH:mm:ss";
 		}

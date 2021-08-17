@@ -726,7 +726,7 @@ public class AreaUI extends JPanel {
 					if (storedArea != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
 						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVA AREA REGISTRADA: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("NUEVA AREA REGISTRADA: " + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
 						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area

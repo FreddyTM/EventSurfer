@@ -531,7 +531,7 @@ public class CompanyUI extends JPanel {
 					if(!changeRegister) {
 						infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
 					} else {
-						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 					}
 					editButton.setEnabled(true);
 					oKButton.setEnabled(false);
