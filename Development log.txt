@@ -1322,6 +1322,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add verifyManagerDeleteConditions() --empty--
 		Add verifyAdminEditConditions() --not tested yet--
 		Add verifyAdminDeleteConditions() --empty--
+		Add afterNewOrEditArea() --not tested yet--
 		Update getAreaCombolistItemsFromSession()
 		Update editableDataOn()
 		Update editableDataOff()

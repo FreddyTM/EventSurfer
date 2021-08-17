@@ -469,6 +469,24 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de un area
+	 */
+	public void afterNewOrEditArea() {
+		//Hacemos backup del contenido de los datos del formulario
+		updateDataCache();
+		//Formulario no editable
+		editableDataOff();
+		editButton.setEnabled(true);
+		newButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+		areaComboBox.setEnabled(true);
+		oKButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		//El selector de acción retorna al estado sin definir
+		okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
+	}
+	
+	/**
 	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
 	 * con el fondo del campo en amarillo
 	 * @param areaToCheck area de la que se comprueban los datos
@@ -534,13 +552,7 @@ public class AreaUI extends JPanel {
 				areaDescription.setText("");
 				return;
 			}
-			
-//			if(session.getUser().getUserType() == "ADMIN") {
-//				selectedArea = new Area().getAreaByName(allAreas, item);
-//			} else {
-//				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
-//			}
-			
+				
 			selectedArea = new Area().getAreaByName(allAreas, item);
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
@@ -614,16 +626,6 @@ public class AreaUI extends JPanel {
 				editableDataOn();
 			}
 			
-//			//Prueba diálogo emergente
-//			//Incorporar a ToolBox.showDialog() el parámetro que cambie el tipo de diálogo a mostrar
-//			int optionSelected = ToolBox.showDialog("El area seleccionada está asignada\n"
-//					+ "a más de una unidad de negocio.\n" + "¿Seguro que quiere continuar?", AreaUI.this,
-//					DIALOG_INFO);
-//			if (optionSelected == JOptionPane.YES_OPTION) {
-//				System.out.println("Edición OK");
-//			} else {
-//				System.out.println("Edición cancelada");
-//			}
 		}
 	}
 	
