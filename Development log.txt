@@ -1362,7 +1362,6 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add checkAllocatedAreasFromDB() 
 		Add getAreaByName() --overloaded method--
 		Add getAllAreasFromDB()
-		Add getBunitsWithArea()
 		Rename checkAllocatedAreasFromDB() to isAllocatedArea()
 
 	· BusinessUnit class:
@@ -1403,6 +1402,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	
 	· BusinessUnitTest class:
 
-		Add testGetBunitsWithArea() --ok--	
+		Add testGetBunitsWithArea() --ok--
+		Add testGetBunitsWithAreaIds() --ok--
 
 	

@@ -476,43 +476,32 @@ public class AreaUI extends JPanel {
 	 */
 	public boolean testData (Area areaToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
-		Boolean errorLength = false;
-		String errorAreaText = "YA EXISTE UN AREA CON ESE NOMBRE";
+		Boolean error = false;
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorNameText = "YA EXISTE UN AREA CON ESE NOMBRE";
 		
-		//Si estamos creando un area nueva, comprobamos que el nombre del area no existe ya en la base de datos
-		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
-			
-			
-			////FIX THIS! 
-			
-			
-			//Obtenemos la lista de todas las areas
-			if (allAreas == null) {
-				allAreas = new ArrayList<Area>();
-				for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
-					for (Area area : bUnit.getAreas()) {
-						allAreas.add(area);
-					}
-				}
-			}
-			//Comparamos el nombre del area nueva
-			if (new Area().getAreaByName(allAreas, areaToCheck.getArea()) != null) {
-				infoLabel.setText(errorAreaText);
+		//Comprobamos que el nombre del area no existe ya en la base de datos
+		//Obtenemos la lista de todas las areas
+		List<Area> areaList = new Area().getAllAreasFromDB(session.getConnection());
+		//Si el nombre del area creada ya existe no se permite su creación
+		for (Area area: areaList) {
+			if (areaToCheck.getArea().equals(area.getArea())) {
+				infoLabel.setText(errorNameText);
 				areaNameField.setBackground(Color.YELLOW);
 				return false;
 			}
 		}
+
 		if (areaToCheck.getArea().length() > 100 || areaToCheck.getArea().length() == 0) {
 			areaNameField.setBackground(Color.YELLOW);
-			errorLength = true;
+			error = true;
 		}
 		if (areaToCheck.getDescripcion().length() > 200 || areaToCheck.getDescripcion().length() == 0) {
 			areaNameField.setBackground(Color.YELLOW);
-			errorLength = true;
+			error = true;
 		}
 		//Si hay un error, mensaje de error y retornamos false
-		if (errorLength) {
+		if (error) {
 			infoLabel.setText(errorLengthText);
 			return false;
 		}

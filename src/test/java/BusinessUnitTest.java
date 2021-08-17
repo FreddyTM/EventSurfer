@@ -131,5 +131,14 @@ class BusinessUnitTest {
 		assertNotNull(new BusinessUnit().getBunitsWithArea(conn, company, area));
 		assertTrue(new BusinessUnit().getBunitsWithArea(conn, company, area).size() > 0);
 	}
+	
+	@Test
+	@Order(7)
+	void testGetBunitsWithAreaIds() {
+		Area area = new Area();
+		area.setId(1);
+		assertNotNull(new BusinessUnit().getBunitsWithArea(conn, area));
+		assertTrue(new BusinessUnit().getBunitsWithArea(conn, area).size() > 0);
+	}
 
 }
