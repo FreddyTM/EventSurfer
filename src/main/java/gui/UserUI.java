@@ -1381,7 +1381,7 @@ public class UserUI extends JPanel {
 					if (storedUser != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
 						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + session.formatTimestamp(tNow, null));
+						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
 						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
@@ -1473,7 +1473,7 @@ public class UserUI extends JPanel {
 						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
 						boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 								User.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
 						boolean stillOpenSession = true;
 						//Localizar en la lista de usuarios de la unidad de negocio de la sesión al usuario con el mismo id que el usuario editado 
@@ -1640,7 +1640,7 @@ public class UserUI extends JPanel {
 						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
 						//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
 						UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
-						session.formatTimestamp(updatedTable.getValue(), null));
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}	

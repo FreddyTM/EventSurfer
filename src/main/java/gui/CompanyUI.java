@@ -599,7 +599,7 @@ public class CompanyUI extends JPanel {
 						}
 						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
 						//updatedTable.getValue().toString());
-						session.formatTimestamp(updatedTable.getValue(), null));
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}

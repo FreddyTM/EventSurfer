@@ -851,7 +851,7 @@ public class BusinessUnitUI extends JPanel {
 					if (storedBunit != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
 						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVA UNIDAD DE NEGOCIO REGISTRADA: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("NUEVA UNIDAD DE NEGOCIO REGISTRADA: " + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
 						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
@@ -931,7 +931,7 @@ public class BusinessUnitUI extends JPanel {
 						//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
 						boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 								BusinessUnit.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + session.formatTimestamp(tNow, null));
+						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 						//Variable de control para saber si la sesión sigue activa tras la edición de una unidad de negocio
 						boolean stillOpenSession = true;
 						//Si el usuario que abre sesión deja activa la unidad de negocio editada, se actualizan los datos de la sesión
@@ -1052,7 +1052,7 @@ public class BusinessUnitUI extends JPanel {
 								//Sobreescribimos la notificación de la actualización de la unidad de negocio editada citando su nombre porque ya no
 								//se visualizará por pantalla
 								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
-										session.formatTimestamp(tNow, null));
+										ToolBox.formatTimestamp(tNow, null));
 								//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
 								if (updatedUserList != null && updatedUserList.size() > 0) {
 									//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
@@ -1189,7 +1189,7 @@ public class BusinessUnitUI extends JPanel {
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
 						//que alguna unidad de negocio ha sido modificada o añadida
 						BusinessUnitUI.this.infoLabel.setText("DATOS DE LAS UNIDADES DE NEGOCIO ACTUALIZADOS: " +
-						session.formatTimestamp(updatedTable.getValue(), null));
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}
