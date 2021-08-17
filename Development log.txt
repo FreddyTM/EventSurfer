@@ -1383,6 +1383,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· ToolBox class:
 		Add toSortedArray()
 		Add showDialog()
+		Add formatTimestamp() --moved from CurrentSession--
 		Update showDialog() --change showMessageDialog to showConfirmDialog + info icon--
 		Update showDialog() --add dialogType parameter--
 
