@@ -206,20 +206,20 @@ public class CurrentSession {
 		TypesStatesContainer.setEvState(eventStateList);
 	}
 	
-	/**
-	 * Da formato a la fecha y la hora del Timestamp pasado por parámetro
-	 * @param timestamp Timestamp a formatear
-	 * @param pattern patrón de formateo, si es null se usa el patrón por defecto del método
-	 * @return Timestamp formateado
-	 */
-	public String formatTimestamp(Timestamp timestamp, String pattern) {
-		if (pattern == null) {
-			pattern = "EEEE, dd-MM-yyyy HH:mm:ss";
-		}
-		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-		String niceTimestamp = formatter.format(timestamp);
-		return niceTimestamp;
-	}
+//	/**
+//	 * Da formato a la fecha y la hora del Timestamp pasado por parámetro
+//	 * @param timestamp Timestamp a formatear
+//	 * @param pattern patrón de formateo, si es null se usa el patrón por defecto del método
+//	 * @return Timestamp formateado
+//	 */
+//	public String formatTimestamp(Timestamp timestamp, String pattern) {
+//		if (pattern == null) {
+//			pattern = "EEEE, dd-MM-yyyy HH:mm:ss";
+//		}
+//		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+//		String niceTimestamp = formatter.format(timestamp);
+//		return niceTimestamp;
+//	}
 	
 	/**
 	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro usuario desde otra
