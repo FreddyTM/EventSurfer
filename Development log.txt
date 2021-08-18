@@ -1315,19 +1315,19 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add setFirstSelectedArea() --ok--
 		Add editableDataOn()
 		Add editableDataOff()
-		Add testData() --not tested yet--
-		Add getSelectedIndexFromArray()
-		Add refreshComboBox()
+		Add testData() --ok--
+		Add getSelectedIndexFromArray() --ok--
+		Add refreshComboBox() --ok--
 		Add verifyManagerEditConditions() --tested options 3 & 4--
 		Add verifyManagerDeleteConditions() --empty--
 		Add verifyAdminEditConditions() --not tested yet--
 		Add verifyAdminDeleteConditions() --empty--
-		Add afterNewOrEditArea() --not tested yet--
-		Update getAreaCombolistItemsFromSession()
-		Update editableDataOn()
-		Update editableDataOff()
-		Update testData()
-		Update setFirstSelectedArea()
+		Add afterNewOrEditArea() --ok--
+		Update getAreaCombolistItemsFromSession() --ok--
+		Update editableDataOn() --ok--
+		Update editableDataOff() --ok--
+		Update testData() --ok--
+		Update setFirstSelectedArea() --ok--
 		Update verifyManagerEditConditions() --not tested yet--
 
 	· AreaComboListener class (new inner AreaUI class):
@@ -1336,7 +1336,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() 
-		Update itemStateChanged()
+		Update actionPerformed()
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed()
@@ -1350,7 +1350,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --in progress--
+		Add actionPerformed() --NEW finished--
 	
 	* - package main.java.company
 

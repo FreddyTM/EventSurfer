@@ -465,6 +465,7 @@ public class AreaUI extends JPanel {
 		//Datos no editables
 		areaNameField.setEditable(false);
 		areaDescription.setEditable(false);
+		areaNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
 	}
 	
@@ -515,7 +516,7 @@ public class AreaUI extends JPanel {
 			error = true;
 		}
 		if (areaToCheck.getDescripcion().length() > 200 || areaToCheck.getDescripcion().length() == 0) {
-			areaNameField.setBackground(Color.YELLOW);
+			areaDescription.setBackground(Color.YELLOW);
 			error = true;
 		}
 		//Si hay un error, mensaje de error y retornamos false
@@ -734,6 +735,15 @@ public class AreaUI extends JPanel {
 						if(!changeRegister) {
 							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 						}
+						//Asignamos el area guardada como area seleccionada
+						selectedArea = storedArea;
+						//Renovamos la lista de areas del comboBox
+						refreshComboBox();
+						//Devolvemos el formulario a su estado previo
+						afterNewOrEditArea();
+						//Si el area no se almacena correctamente en la base de datos 
+					} else {
+						infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA AREA EN LA BASE DE DATOS");
 					}
 				}
 				
