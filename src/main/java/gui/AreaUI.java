@@ -403,7 +403,7 @@ public class AreaUI extends JPanel {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		if (bUnitsList.size() > 1) {
 			int optionSelected = ToolBox.showDialog(
-					"Area seleccionada asignada a más de una unidad de negocio. ¿Desea continuar?", AreaUI.this,
+					"Area asignada a más de una unidad de negocio. ¿Desea continuar?", AreaUI.this,
 					DIALOG_YES_NO);
 			if (optionSelected == JOptionPane.YES_OPTION) {
 				//Debug

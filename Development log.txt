@@ -1318,9 +1318,9 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testData() 
 		Add getSelectedIndexFromArray() --ok--
 		Add refreshComboBox() --ok--
-		Add verifyManagerEditConditions() --tested options 3 & 4--
+		Add verifyManagerEditConditions() --ok--
 		Add verifyManagerDeleteConditions() --empty--
-		Add verifyAdminEditConditions() --not tested yet--
+		Add verifyAdminEditConditions() --ok--
 		Add verifyAdminDeleteConditions() --empty--
 		Add afterNewOrEditArea() --ok--
 		Update getAreaCombolistItemsFromSession() --ok--
@@ -1350,7 +1350,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --NEW finished, EDIT finished, testData on edit fails--
+		Add actionPerformed() --NEW finished, EDIT finished--
 	
 	* - package main.java.company
 
