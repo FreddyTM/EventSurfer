@@ -753,7 +753,30 @@ public class AreaUI extends JPanel {
 				//Debug
 				System.out.println("Guardando los cambios del area " + areaNameField.getText());
 				
+				//Objeto que recoge los datos actualizados
+				Area updatedArea = new Area();
+				updatedArea.setId(selectedArea.getId());
+				updatedArea.setArea(areaNameField.getText());
+				updatedArea.setDescripcion(areaDescription.getText());
 				
+				//Si los datos están validados
+				if (testData(updatedArea)) {
+					//Si los datos actualizados se graban en la base de datos
+					if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						tNow = ToolBox.getTimestampNow();
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+								Area.TABLE_NAME, tNow);
+						infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+						//Devolvemos el formulario a su estado previo
+						afterNewOrEditArea();
+						
+					//Si los datos actualizados no se graban en la base de datos
+					} else {
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+					}
+				}
 			}
 		}
 		
