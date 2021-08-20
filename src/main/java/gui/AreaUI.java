@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
+import main.java.event.Event;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
@@ -369,6 +370,14 @@ public class AreaUI extends JPanel {
 	 */
 	public boolean verifyManagerEditConditions() {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		String action = "";
+		//Si estamos editando el area
+		if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
+			action = "editar";
+		//Si queremos borrar el area
+		} else {
+			action = "borrar";
+		}
 		//Area no asignada a ninguna unidad de negocio
 		if (bUnitsList.size() == 0) {
 			return true;
@@ -376,7 +385,7 @@ public class AreaUI extends JPanel {
 		//Area asignada a más de una unidad de negocio
 		if (bUnitsList.size() > 1) {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede editar areas asignadas a más de una unidad de negocio", AreaUI.this,
+					"Un usuario Manager no puede " + action + " areas asignadas a más de una unidad de negocio", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -386,7 +395,7 @@ public class AreaUI extends JPanel {
 		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
 		} else {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede editar areas no asignadas a su unidad de negocio", AreaUI.this,
+					"Un usuario Manager no puede " + action + " areas no asignadas a su unidad de negocio", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -624,6 +633,7 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			okActionSelector = AreaUI.OK_ACTION_EDIT;
 			boolean editEnabled = false;
 			if (session.getUser().getUserType().equals("MANAGER")) {
 				editEnabled = verifyManagerEditConditions();
@@ -632,7 +642,6 @@ public class AreaUI extends JPanel {
 			}
 			
 			if (editEnabled) {
-				okActionSelector = AreaUI.OK_ACTION_EDIT;
 				oKButton.setEnabled(true);
 				cancelButton.setEnabled(true);
 				editButton.setEnabled(false);
@@ -699,6 +708,11 @@ public class AreaUI extends JPanel {
 		}		
 	}
 	
+	/**
+	 * Acción del botón borrar.
+	 * FALTA VERIFICAR ADMIN CONDITIONS & WARNINGS PARA CADA BORRADO AUTORIZADO
+	 *
+	 */
 	public class DeleteAction extends AbstractAction {
 		public DeleteAction() {
 			putValue(NAME, "Borrar");
@@ -706,8 +720,41 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
+			boolean deleteOK = false;
+			//Comprobamos que el area a borrar no tiene eventos registrados
+			List<Event> eventList = new Event().getAreaEventsFromDB(session.getConnection(), selectedArea, session.getCompany());
+			//Si hay eventos, borrado prohibido para cualquier usuario
+			if (eventList.size() > 0) {
+				//Debug
+				System.out.println("Borrado prohibido (ALL)");
+				
+				ToolBox.showDialog(
+						"No se puede borrar areas asignadas a eventos registrados", AreaUI.this,
+						DIALOG_INFO);
+			} else {
+				//Si el usuario de la sesión es de tipo manager
+				if (session.getUser().getUserType().equals("MANAGER")) {			
+					if (verifyManagerEditConditions()) {
+						//Debug
+						System.out.println("Borrado autorizado (MANAGER)");
+						deleteOK = true;
+					} else {
+						//Debug
+						System.out.println("Borrado prohibido (MANAGER)");				
+					}
+					//Si el usuario de la sesión es de tipo admin
+				} else {
+					//Debug
+					System.out.println("Borrado autorizado (ADMIN)");
+					deleteOK = true;
+				}
+			}
+			//Si el borrado se autoriza, se borra el area seleccionada de la base de datos
+			if (deleteOK) {
+				//Debug
+				System.out.println("Borrando area de la base de datos...");
+			}
 		}
 		
 	}
