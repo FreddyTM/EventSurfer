@@ -502,12 +502,29 @@ public class AreaUI extends JPanel {
 		//Comprobamos que el nombre del area no existe ya en la base de datos
 		//Obtenemos la lista de todas las areas
 		List<Area> areaList = new Area().getAllAreasFromDB(session.getConnection());
-		//Si el nombre del area creada ya existe no se permite su creación
-		for (Area area: areaList) {
-			if (areaToCheck.getArea().equals(area.getArea())) {
-				infoLabel.setText(errorNameText);
-				areaNameField.setBackground(Color.YELLOW);
-				return false;
+		
+		//Si estamos creando una area nueva
+		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
+			//Si el nombre del area creada ya existe no se permite su creación
+			for (Area area: areaList) {
+				if (areaToCheck.getArea().equals(area.getArea())) {
+					infoLabel.setText(errorNameText);
+					areaNameField.setBackground(Color.YELLOW);
+					return false;
+				}
+			}
+		//Si estamos editando una area existente
+		} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
+			//Si cambiamos el nombre del area editada
+			if (!selectedArea.getArea().equals(areaToCheck.getArea())) {
+				//Comprobamos que el nombre editado no pertenezca a otra area existente
+				for (Area area: areaList) {
+					if (areaToCheck.getArea().equals(area.getArea())) {
+						infoLabel.setText(errorNameText);
+						areaNameField.setBackground(Color.YELLOW);
+						return false;
+					}
+				}
 			}
 		}
 

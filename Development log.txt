@@ -1315,7 +1315,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add setFirstSelectedArea() --ok--
 		Add editableDataOn()
 		Add editableDataOff()
-		Add testData() --ok--
+		Add testData() 
 		Add getSelectedIndexFromArray() --ok--
 		Add refreshComboBox() --ok--
 		Add verifyManagerEditConditions() --tested options 3 & 4--
@@ -1326,7 +1326,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update getAreaCombolistItemsFromSession() --ok--
 		Update editableDataOn() --ok--
 		Update editableDataOff() --ok--
-		Update testData() --ok--
+		Update testData() --edit error fixed--
 		Update setFirstSelectedArea() --ok--
 		Update verifyManagerEditConditions() --not tested yet--
 
