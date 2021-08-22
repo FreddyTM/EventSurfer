@@ -1329,7 +1329,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update testData() --edit error fixed--
 		Update setFirstSelectedArea() --ok--
 		Update verifyManagerEditConditions() --check edit & delete--
-		Update verifyAdminEditConditions() --ok check edit--
+		Update verifyAdminEditConditions() --ok check edit & delete not tested--
 
 	· AreaComboListener class (new inner AreaUI class):
 		Add itemStateChanged() 
@@ -1348,7 +1348,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update actionPerformed() --cancel ok with no areas--
 
 	· DeleteAction class (new inner AreaUI class):
-		Add actionPerformed() --manager delete check ok, admin in progress, delete warnings missing--
+		Add actionPerformed() --manager delete check ok, admin ok not tested, delete warnings ok not tested--
 
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() --NEW finished, EDIT finished--

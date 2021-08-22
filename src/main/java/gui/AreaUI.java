@@ -412,21 +412,44 @@ public class AreaUI extends JPanel {
 	 */
 	public boolean verifyAdminEditConditions() {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		String info = "";
+		//Si estamos editando el area
+		if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
+			info = "Edición de area asignada a más de una unidad de negocio. ¿Desea continuar?";
+		//Si queremos borrar el area
+		} else {
+			info = "Borrado de area asignada a más de una unidad de negocio. "
+					+ "No se puede deshacer. " + "¿Desea continuar?";
+		}
+		//Area seleccionada asignada a más de una unidad de negocio
 		if (bUnitsList.size() > 1) {
 			int optionSelected = ToolBox.showDialog(
-					"Area asignada a más de una unidad de negocio. ¿Desea continuar?", AreaUI.this,
+					info, AreaUI.this,
 					DIALOG_YES_NO);
 			if (optionSelected == JOptionPane.YES_OPTION) {
 				//Debug
-				System.out.println("Edición OK");
+				System.out.println("Edición o borrado OK");
 				return true;
 			} else {
 				//Debug
-				System.out.println("Edición cancelada");
+				System.out.println("Edición o borrado cancelado");
+				return false;
+			}
+		//Area seleccionada asignada a una o ninguna unidad de negocio
+		} else {
+			int optionSelected = ToolBox.showDialog(
+					"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
+					DIALOG_YES_NO);
+			if (optionSelected == JOptionPane.YES_OPTION) {
+				//Debug
+				System.out.println("Borrado OK");
+				return true;
+			} else {							
+				//Debug
+				System.out.println("Borrado cancelado");
 				return false;
 			}
 		}
-		return true;
 	}
 	
 	/**
@@ -734,22 +757,38 @@ public class AreaUI extends JPanel {
 				ToolBox.showDialog(
 						"No se puede borrar areas asignadas a eventos registrados", AreaUI.this,
 						DIALOG_INFO);
+				
 			} else {
 				//Si el usuario de la sesión es de tipo manager
 				if (session.getUser().getUserType().equals("MANAGER")) {			
+					//Verificamos que el usuario está autorizado a borrar el area seleccionada
 					if (verifyManagerEditConditions()) {
 						//Debug
 						System.out.println("Borrado autorizado (MANAGER)");
-						deleteOK = true;
+						
+						int optionSelected = ToolBox.showDialog(
+								"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
+								DIALOG_YES_NO);
+						if (optionSelected != JOptionPane.YES_OPTION) {
+							//Debug
+							System.out.println("Borrado cancelado");
+							return;
+						} else {							
+							deleteOK = true;
+						}
+					//El usuario no está autorizado a borrar el area seleccionada		
 					} else {
 						//Debug
 						System.out.println("Borrado prohibido (MANAGER)");				
 					}
-					//Si el usuario de la sesión es de tipo admin
+				//Si el usuario de la sesión es de tipo admin
 				} else {
 					//Debug
 					System.out.println("Borrado autorizado (ADMIN)");
-					deleteOK = true;
+					
+					if (verifyAdminEditConditions()) {						
+						deleteOK = true;
+					}
 				}
 			}
 			//Si el borrado se autoriza, se borra el area seleccionada de la base de datos
