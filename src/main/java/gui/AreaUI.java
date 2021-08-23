@@ -795,6 +795,29 @@ public class AreaUI extends JPanel {
 			if (deleteOK) {
 				//Debug
 				System.out.println("Borrando area de la base de datos...");
+				
+				//Si el area se borra correctamente de la base de datos
+				if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
+					//Registramos fecha y hora de la actualización de los datos de la tabla area
+					tNow = ToolBox.getTimestampNow();
+					infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
+					//Actualizamos los datos de la tabla last_modification
+					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
+					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+					//no queda registrada
+					if(!changeRegister) {
+						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+					}
+					//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
+					
+					
+					
+					
+				//Si el area no se borra correctamente de la base de datos
+				} else {
+					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
+				}
+				
 			}
 		}
 		

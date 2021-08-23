@@ -1348,7 +1348,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update actionPerformed() --cancel ok with no areas--
 
 	· DeleteAction class (new inner AreaUI class):
-		Add actionPerformed() --manager delete check ok, admin ok not tested, delete warnings ok not tested--
+		Add actionPerformed() --manager delete check ok, admin ok, delete warnings ok, delete in progress--
 
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() --NEW finished, EDIT finished--
@@ -1411,4 +1411,6 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testGetBunitsWithArea() --ok--
 		Add testGetBunitsWithAreaIds() --ok--
 
+
+931518158
 	
