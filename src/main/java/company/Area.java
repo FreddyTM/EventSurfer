@@ -80,39 +80,38 @@ public class Area {
 	}
 	
 	/**
-	 * Borra de la lista de areas de la unidad de negocio pasada por parámetro el área
-	 * pasada por parámetro, si es que está en la lista
+	 * Borra de la lista de areas de la unidad de negocio pasada por parámetro
+	 * el área pasada por parámetro, si es que está en la lista
 	 * @param bUnit unidad de negocio de la que borramos el area
 	 * @param area area a borrar
-	 * @return true si borramos el area, false si no está en la lista
+	 * @return true si se ha borrado alguna area, false si no
 	 */
 	public boolean deleteArea(BusinessUnit bUnit, Area area) {
+		boolean areaDeleted = false;
 		for (int i = 0; i < bUnit.getAreas().size(); i++) {
 			if (bUnit.getAreas().get(i).getId() == area.getId()) {
 				bUnit.getAreas().remove(i);
-				return true;
+				areaDeleted = true;
+				break;
 			}
 		}
-		return false;
+		return areaDeleted;
 	}
 	
 	/**
-	 * Borra el registro de la tabla b_unit_area con los id de la unidad de negocio y el area
-	 * pasados por parámetro. El area dejará de estar asignada a la unidad de negocio.
+	 * Borra los registros de la tabla b_unit_area con el id del area pasada por
+	 * parámetro. El area dejará de estar asignada a cualquier unidad de negocio.
 	 * @param conn conexión a la base de datos
-	 * @param bUnit bUnit unidad de negocio a la que pertenece el area
 	 * @param area area que deja de estar asignada a la unidad de negocio
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
-	public boolean deleteBUnitAreaFromDB (Connection conn, BusinessUnit bUnit, Area area) {
+	public boolean deleteBUnitAreaFromDB (Connection conn, Area area) {
 		PreparedStatement pstm = null;
 		String sql = "DELETE FROM b_unit_area "
-				+ "WHERE b_unit_id = ? "
-				+ "AND area_id = ?;";
+				+ "WHERE area_id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, bUnit.getId());
-			pstm.setInt(2, area.getId());
+			pstm.setInt(1, area.getId());
 			pstm.executeUpdate();
 			return true;
 		} catch (SQLException e) {

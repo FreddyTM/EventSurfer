@@ -343,25 +343,26 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Muestra los datos del area seleccionada por defecto la primera vez que se muestra la pantalla de
-	 * gestión de areas, si el area existe.
+	 * Muestra los datos del area seleccionada por defecto si el area existe, y la asigna como
+	 * area seleccionada. Si no hay areas no se muestran datos y el area seleccionada se iguala a null.
 	 */
 	private void setFirstSelectedArea() {
 		String item = (String) areaComboBox.getSelectedItem();
+		//Hay un area seleccionada
 		if(!item.equals(NO_AREA)) {
-//			if(session.getUser().getUserType() == "ADMIN") {
-//				selectedArea = new Area().getAreaByName(allAreas, item);
-//			} else {
-//				selectedArea = new Area().getAreaByName(session.getbUnit(), item);
-//			}
-			
 			selectedArea = new Area().getAreaByName(allAreas, item);
 			//Mostramos los datos del area seleccionada			
 			populateAreaFields();
 			//Copiamos los datos al caché de datos
-			textFieldContentList.add(areaNameField.getText());
-			textFieldContentList.add(areaDescription.getText());
-		} 
+			updateDataCache();
+		//No hay areas a seleccionar
+		} else {
+			selectedArea = null;
+			areaNameField.setText("");
+			areaDescription.setText("");
+			//Vaciamos el caché de datos
+			updateDataCache();
+		}
 	}
 	
 	/**
@@ -591,9 +592,7 @@ public class AreaUI extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			String item = (String) areaComboBox.getSelectedItem();
-			//Si no hay areas a visualizar (usuarios user o manager que solo tienen acceso a su propia
-			//unidad de negocio, y ésta no tiene areas asignadas, o bien si se han borrado todas las areas
-			//de la base de datos)
+			//Si no hay areas a visualizar 
 			if(item.equals(NO_AREA)) {
 				selectedArea = null;
 				//Deshabilitamos edit y delete
@@ -734,9 +733,12 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón borrar.
-	 * FALTA VERIFICAR ADMIN CONDITIONS & WARNINGS PARA CADA BORRADO AUTORIZADO
-	 *
+	 * Acción del botón borrar. Se comprueba que el area a borrar no tenga eventos registrados
+	 * y que el usuario que abre sesión tiene permiso para borrar dicha area. En caso de que el
+	 * area esté asignada a varias unidades de negocio se emite un aviso (admin), y siempre se pide
+	 * confirmación para realizar el borrado. Una vez borrada el area de la base de datos, se
+	 * elimina también de la tabla b_unit_area y de la lista de areas asignadas de las unidades
+	 * de negocio cargadas en la sesión (si es que procede)
 	 */
 	public class DeleteAction extends AbstractAction {
 		public DeleteAction() {
@@ -808,11 +810,30 @@ public class AreaUI extends JPanel {
 					if(!changeRegister) {
 						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 					}
-					//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
 					
-					
-					
-					
+					//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
+					if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
+						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
+						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
+							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
+							//Debug
+							if (areaDeleted) {	
+								System.out.println("Borrando area " + selectedArea.getArea()
+								+ " de la unidad de negocio " + bUnit.getNombre());
+							}
+						}
+					//Si el area no se borra correctamente de la tabla b_unit_area
+					} else {
+						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
+					}
+				
+				//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
+				//por defecto
+				areaComboList = getAreaCombolistItemsFromSession();
+				areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+				areaComboBox.setSelectedIndex(0);
+				setFirstSelectedArea();
+				
 				//Si el area no se borra correctamente de la base de datos
 				} else {
 					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");

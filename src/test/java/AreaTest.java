@@ -129,7 +129,7 @@ class AreaTest {
 		bUnit.setId(2);
 		Area area = new Area();
 		area.setId(2);
-		assertTrue(new Area().deleteBUnitAreaFromDB(conn, bUnit, area));
+		assertTrue(new Area().deleteBUnitAreaFromDB(conn, area));
 	}
 	
 	@Test
