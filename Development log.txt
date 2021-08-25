@@ -1404,7 +1404,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testDeleteBUnitAreaFromDB() --ok--
 		Add testCheckAllocatedAreasFromDB() --ok--
 		Add testGetAllAreasFromDB() --ok--
-		Update testDeleteBUnitAreaFromDB() --not tested yet--
+		Update testDeleteBUnitAreaFromDB() --ok--
 
 	· EventTest class:
 

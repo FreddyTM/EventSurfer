@@ -125,10 +125,8 @@ class AreaTest {
 	@Test
 	@Order(9)
 	void testDeleteBUnitAreaFromDB() {
-		BusinessUnit bUnit = new BusinessUnit();
-		bUnit.setId(2);
 		Area area = new Area();
-		area.setId(2);
+		area.setId(8);
 		assertTrue(new Area().deleteBUnitAreaFromDB(conn, area));
 	}
 	

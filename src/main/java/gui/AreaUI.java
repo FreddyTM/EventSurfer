@@ -798,6 +798,25 @@ public class AreaUI extends JPanel {
 				//Debug
 				System.out.println("Borrando area de la base de datos...");
 				
+				//Nueva lógica para respetar referencias de la base de datos
+				
+				//Si el area a borrar está asignada a alguna unidad de negocio en la tabla b_unit area
+				
+					//Borramos primero las referencias a dicha area en la tabla b_unit_area
+					//Borramos el area de la tabla area
+					//Borramos el area de cualquier unidad de negocio de la sesión
+				
+				//Si el area a borrar no está asignada a ninguna unidad de negocio
+				
+					//Borramos el area de la tabla area
+				
+				//En cualquier caso
+				
+					//Refrescamos el combobox y los datos mostrados por pantalla
+
+					
+			
+				
 				//Si el area se borra correctamente de la base de datos
 				if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
 					//Registramos fecha y hora de la actualización de los datos de la tabla area
