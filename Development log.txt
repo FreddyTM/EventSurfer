@@ -1350,7 +1350,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 	· DeleteAction class (new inner AreaUI class):
 		Add actionPerformed() --manager delete check ok, admin ok, delete warnings ok, delete in progress--
 		Update actionPerformed() --need to test first if area to delete exists in b_unit_area table. If so, delete there
-					 --and then delete from area table--
+					 --and then delete from area table. Completed, not tested yet--
 
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() --NEW finished, EDIT finished--

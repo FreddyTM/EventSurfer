@@ -801,37 +801,23 @@ public class AreaUI extends JPanel {
 				//Nueva lógica para respetar referencias de la base de datos
 				
 				//Si el area a borrar está asignada a alguna unidad de negocio en la tabla b_unit area
+				//Borramos primero las referencias a dicha area en la tabla b_unit_area
 				
-					//Borramos primero las referencias a dicha area en la tabla b_unit_area
+				//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
+				if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
 					//Borramos el area de la tabla area
-					//Borramos el area de cualquier unidad de negocio de la sesión
-				
-				//Si el area a borrar no está asignada a ninguna unidad de negocio
-				
-					//Borramos el area de la tabla area
-				
-				//En cualquier caso
-				
-					//Refrescamos el combobox y los datos mostrados por pantalla
-
-					
-			
-				
-				//Si el area se borra correctamente de la base de datos
-				if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
-					//Registramos fecha y hora de la actualización de los datos de la tabla area
-					tNow = ToolBox.getTimestampNow();
-					infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
-					//Actualizamos los datos de la tabla last_modification
-					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
-					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-					//no queda registrada
-					if(!changeRegister) {
-						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-					}
-					
-					//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
-					if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
+					//Si el area se borra correctamente de la base de datos
+					if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						tNow = ToolBox.getTimestampNow();
+						infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+						}
 						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
 						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
@@ -841,22 +827,75 @@ public class AreaUI extends JPanel {
 								+ " de la unidad de negocio " + bUnit.getNombre());
 							}
 						}
-					//Si el area no se borra correctamente de la tabla b_unit_area
+						//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
+						//por defecto
+						areaComboList = getAreaCombolistItemsFromSession();
+						areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+						areaComboBox.setSelectedIndex(0);
+						setFirstSelectedArea();	
+					//Si el area no se borra correctamente de la base de datos
 					} else {
-						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
+						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
 					}
-				
-				//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
-				//por defecto
-				areaComboList = getAreaCombolistItemsFromSession();
-				areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
-				areaComboBox.setSelectedIndex(0);
-				setFirstSelectedArea();
-				
-				//Si el area no se borra correctamente de la base de datos
+				//Si el area no se borra correctamente de la tabla b_unit_area
 				} else {
-					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
+					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
 				}
+					
+				
+				//Borramos el area de la tabla area
+					//Borramos el area de cualquier unidad de negocio de la sesión
+				
+				//Si el area a borrar no está asignada a ninguna unidad de negocio
+				
+					//Borramos el area de la tabla area
+				
+				//En cualquier caso
+				
+					//Refrescamos el combobox y los datos mostrados por pantalla
+					
+			
+				
+//				//Si el area se borra correctamente de la base de datos
+//				if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
+//					//Registramos fecha y hora de la actualización de los datos de la tabla area
+//					tNow = ToolBox.getTimestampNow();
+//					infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
+//					//Actualizamos los datos de la tabla last_modification
+//					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
+//					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+//					//no queda registrada
+//					if(!changeRegister) {
+//						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+//					}
+//					
+//					//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
+//					if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
+//						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
+//						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
+//							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
+//							//Debug
+//							if (areaDeleted) {	
+//								System.out.println("Borrando area " + selectedArea.getArea()
+//								+ " de la unidad de negocio " + bUnit.getNombre());
+//							}
+//						}
+//					//Si el area no se borra correctamente de la tabla b_unit_area
+//					} else {
+//						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
+//					}
+//				
+//				//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
+//				//por defecto
+//				areaComboList = getAreaCombolistItemsFromSession();
+//				areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+//				areaComboBox.setSelectedIndex(0);
+//				setFirstSelectedArea();
+//				
+//				//Si el area no se borra correctamente de la base de datos
+//				} else {
+//					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
+//				}
 				
 			}
 		}
