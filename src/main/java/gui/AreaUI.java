@@ -3,7 +3,9 @@ package main.java.gui;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -239,6 +241,22 @@ public class AreaUI extends JPanel {
 		JSeparator separator = new JSeparator();
 		separator.setBounds(50, 425, 1000, 2);
 		add(separator);
+		
+		/*Iniciamos la comprobación periódica de actualizaciones
+		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
+		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
+		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
+		* por error que no había cambios.
+		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
+		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
+		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
+		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
+		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
+		* o más lenta que la comprobación de los datos que hace el objeto session.
+		*/
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 1000, 30000);
 	}
 	
 //Si el usuario de la sesión es de tipo ADMIN, aparecerán todas las areas de todas las unidades de negocio.
@@ -841,62 +859,6 @@ public class AreaUI extends JPanel {
 				} else {
 					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
 				}
-					
-				
-				//Borramos el area de la tabla area
-					//Borramos el area de cualquier unidad de negocio de la sesión
-				
-				//Si el area a borrar no está asignada a ninguna unidad de negocio
-				
-					//Borramos el area de la tabla area
-				
-				//En cualquier caso
-				
-					//Refrescamos el combobox y los datos mostrados por pantalla
-					
-			
-				
-//				//Si el area se borra correctamente de la base de datos
-//				if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
-//					//Registramos fecha y hora de la actualización de los datos de la tabla area
-//					tNow = ToolBox.getTimestampNow();
-//					infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
-//					//Actualizamos los datos de la tabla last_modification
-//					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
-//					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//					//no queda registrada
-//					if(!changeRegister) {
-//						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//					}
-//					
-//					//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
-//					if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
-//						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
-//						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
-//							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
-//							//Debug
-//							if (areaDeleted) {	
-//								System.out.println("Borrando area " + selectedArea.getArea()
-//								+ " de la unidad de negocio " + bUnit.getNombre());
-//							}
-//						}
-//					//Si el area no se borra correctamente de la tabla b_unit_area
-//					} else {
-//						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
-//					}
-//				
-//				//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
-//				//por defecto
-//				areaComboList = getAreaCombolistItemsFromSession();
-//				areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
-//				areaComboBox.setSelectedIndex(0);
-//				setFirstSelectedArea();
-//				
-//				//Si el area no se borra correctamente de la base de datos
-//				} else {
-//					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
-//				}
-				
 			}
 		}
 		
@@ -988,4 +950,52 @@ public class AreaUI extends JPanel {
 		}
 		
 	}
+	
+	/**
+	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
+	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel se encuentra en modo
+	 * de edición de los datos, o no está visible, no se produce la comprobación porque no es necesaria.
+	 */
+	private class TimerJob extends TimerTask {
+		
+		@Override
+		public void run() {
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
+			if (!AreaUI.this.isShowing()) {
+				AreaUI.this.panelVisible = false;
+				this.cancel();
+				AreaUI.this.timer.cancel();
+				 System.out.println("Se ha cerrado la ventana Unidad de negocio");
+			}
+			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
+			if (cancelButton.isEnabled() && oKButton.isEnabled() && AreaUI.this.isShowing()) {
+				//Do nothing
+			//Se comprueba la actualización de los datos si no los estamos modificando
+			} else if (AreaUI.this.panelVisible == true){
+				//Debug
+				System.out.println("Comprobando actualización de datos de area");
+				System.out.println(session.getUpdatedTables().size());
+				
+				//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
+				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					
+					//Debug
+					System.out.println(updatedTable.getKey());
+					System.out.println(updatedTable.getValue());
+					
+					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
+					if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
+						
+						//LÓGICA DE ACTUALIZACIÓN
+						
+					}
+				}
+			}
+			
+		}
+		
+	}
 }
+
+
+
