@@ -988,9 +988,8 @@ public class AreaUI extends JPanel {
 						
 						//LÓGICA DE ACTUALIZACIÓN
 						
-						//Si se ha borrado el area que se está mostrando en pantalla, refrescamos la lista
-						//de areas del combobox y mostramos los datos de la nueva area seleccionada
-						//por defecto
+						//Si se ha borrado el area seleccionada, refrescamos la lista de areas del
+						//combobox y mostramos los datos de la nueva area seleccionada por defecto
 						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
 						boolean areaDeleted = true;
 						for (Area area: updatedAreaList) {
@@ -998,11 +997,20 @@ public class AreaUI extends JPanel {
 								areaDeleted = false;
 							}
 						}
+						//Area seleccionada borrada
 						if (areaDeleted) {							
 							areaComboList = getAreaCombolistItemsFromSession();
 							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 							areaComboBox.setSelectedIndex(0);
 							setFirstSelectedArea();	
+						//Area seleccionada no borrada
+						} else {
+							//Renovamos la lista de areas del comboBox
+							refreshComboBox();
+							//Asignamos el nuevo contenido a los textfields
+							populateAreaFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
 						}
 						
 						//Informamos por pantalla de la actualización
