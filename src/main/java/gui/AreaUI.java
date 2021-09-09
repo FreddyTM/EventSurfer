@@ -976,7 +976,7 @@ public class AreaUI extends JPanel {
 				System.out.println("Comprobando actualización de datos de area");
 				System.out.println(session.getUpdatedTables().size());
 				
-				//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
+				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					
 					//Debug
@@ -988,6 +988,29 @@ public class AreaUI extends JPanel {
 						
 						//LÓGICA DE ACTUALIZACIÓN
 						
+						//Si se ha borrado el area que se está mostrando en pantalla, refrescamos la lista
+						//de areas del combobox y mostramos los datos de la nueva area seleccionada
+						//por defecto
+						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
+						boolean areaDeleted = true;
+						for (Area area: updatedAreaList) {
+							if (area.getArea().equals(selectedArea.getArea()) ) {
+								areaDeleted = false;
+							}
+						}
+						if (areaDeleted) {							
+							areaComboList = getAreaCombolistItemsFromSession();
+							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+							areaComboBox.setSelectedIndex(0);
+							setFirstSelectedArea();	
+						}
+						
+						//Informamos por pantalla de la actualización
+						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
+						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+						//que alguna unidad de negocio ha sido modificada o añadida
+						AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: " +
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}

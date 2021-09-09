@@ -1357,7 +1357,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· TimerJob class (new AreaUI class):
 		Add run()
-		update run() --update conditions finished, update logic empty--
+		update run() --update conditions finished, update logic finished, not tested yet--
 	
 	* - package main.java.company
 
