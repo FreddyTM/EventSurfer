@@ -1421,6 +1421,14 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 		Add testGetBunitsWithArea() --ok--
 		Add testGetBunitsWithAreaIds() --ok--
 
+ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
+	* - Package main.java.gui
 
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.10--
+
+	· AreaUI class:
+		Add attributes
+			
 	

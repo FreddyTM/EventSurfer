@@ -242,6 +242,18 @@ public class AreaUI extends JPanel {
 		separator.setBounds(50, 425, 1000, 2);
 		add(separator);
 		
+		//Layout de asignación de areas
+		
+		JTextPane areaAllocateTxt = new JTextPane();
+		areaAllocateTxt.setText("ASIGNACIÓN DE AREAS");
+		areaAllocateTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
+		areaAllocateTxt.setFocusable(false);
+		areaAllocateTxt.setEditable(false);
+		areaAllocateTxt.setBackground(UIManager.getColor(this.getBackground()));
+		areaAllocateTxt.setBounds(50, 475, 380, 30);
+		add(areaAllocateTxt);
+		
+		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
 		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
