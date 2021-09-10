@@ -456,41 +456,23 @@ public class AreaUI extends JPanel {
 			}
 		//Area seleccionada asignada a una o ninguna unidad de negocio
 		} else {
-			int optionSelected = ToolBox.showDialog(
-					"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
-					DIALOG_YES_NO);
-			if (optionSelected == JOptionPane.YES_OPTION) {
-				//Debug
-				System.out.println("Borrado OK");
+			if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
 				return true;
-			} else {							
-				//Debug
-				System.out.println("Borrado cancelado");
-				return false;
+			} else {	
+				int optionSelected = ToolBox.showDialog(
+						"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
+						DIALOG_YES_NO);
+				if (optionSelected == JOptionPane.YES_OPTION) {
+					//Debug
+					System.out.println("Borrado OK");
+					return true;
+				} else {							
+					//Debug
+					System.out.println("Borrado cancelado");
+					return false;
+				}
 			}
 		}
-	}
-	
-	/**
-	 * Si el usuario de la sesión es de tipo manager, habilita el borrado del area seleccionada
-	 * solo en el caso de que pertenezca a la misma unidad de negocio que el usuario manager y no
-	 * esté asignada a otras unidades de negocio ni a ningún evento registrado, o en el caso de
-	 * que no esté asignada a ninguna unidad de negocio.
-	 * @return true si se cumplen las condiciones para el borrado, false si no se cumplen
-	 */
-	public boolean verifyManagerDeleteConditions() {
-		return false;
-	}
-	
-	/**
-	 * Si el usuario de la sesión es de tipo admin, habilita el borrado del area seleccionada
-	 * solo en el caso de que no esté asignada a ningún evento registrado. si el area está asignada
-	 * a más de una unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta
-	 * continuar, se habilita el borrado del area seleccionada.
-	 * @return true si se cumplen las condiciones para el borrado, false si no se cumplen
-	 */
-	public boolean verifyAdminDeleteConditions() {
-		return false;
 	}
 	
 	/**

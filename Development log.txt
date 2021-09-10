@@ -1289,7 +1289,7 @@ ver 0.1.8 - MULTIPLE SCREEN MANAGEMENT UPDATED & IMPROVED, VERSION & USER TO TIT
 	· Create DatabaseObjects diagram
 	· Update DatabaseObjects diagram
 
-ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS 
+ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS 
 
 	* - Package main.java.gui
 
@@ -1328,8 +1328,9 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Update editableDataOff() --ok--
 		Update testData() --edit error fixed--
 		Update setFirstSelectedArea() --added no area behaviour--
-		Update verifyManagerEditConditions() --check edit & delete--
-		Update verifyAdminEditConditions() --ok check edit & delete not tested--
+		Update verifyManagerEditConditions() --ok edit & delete--
+		Update verifyAdminEditConditions() --ok edit & delete--
+		Delete verifyManagerDeleteConditions(), verifyAdminDeleteConditions() --finally we don't need them--
 
 	· AreaComboListener class (new inner AreaUI class):
 		Add itemStateChanged() 
@@ -1357,7 +1358,7 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 
 	· TimerJob class (new AreaUI class):
 		Add run()
-		update run() --update conditions finished, update logic updated, not tested yet--
+		update run() --update conditions finished, update logic updated, ok--
 	
 	* - package main.java.company
 
@@ -1421,5 +1422,5 @@ ver 0.1.9 - AREAUI BASIC LAYOUT, AREA ADD & DELETE OPTIONS
 		Add testGetBunitsWithAreaIds() --ok--
 
 
-931518158
+
 	
