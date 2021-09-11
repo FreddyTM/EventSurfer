@@ -2,6 +2,7 @@ package main.java.gui;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -11,14 +12,17 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 //import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import main.java.company.Area;
@@ -28,6 +32,7 @@ import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -60,7 +65,7 @@ public class AreaUI extends JPanel {
 	private boolean panelVisible;
 	
 	private JComboBox areaComboBox = new JComboBox();
-	private JComboBox bUnitComboBox = new JComboBox();
+//	private JComboBox bUnitComboBox = new JComboBox();
 	private JTextField areaNameField = new JTextField();
 	private JTextArea areaDescription = new JTextArea();
 	//Lista de todas las areas existentes en la base de datos
@@ -68,10 +73,9 @@ public class AreaUI extends JPanel {
 	//Registra el area seleccionada en cada momento
 	private Area selectedArea;
 	//Registra el area seleccionada por última vez
-	private Area lastArea;
+//	private Area lastArea;
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
-
 	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
 	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
 	private List<String> textFieldContentList = new ArrayList<String>();
@@ -84,9 +88,22 @@ public class AreaUI extends JPanel {
 	private JButton newButton;
 	private JButton deleteButton = new JButton();
 	
-	//Lista de elementos que aparecen en los comboBox
+	//Lista de elementos que aparecen en el comboBox
 	private String[] areaComboList;
-	private String[] bUnitComboList;
+//	private String[] bUnitComboList;
+	
+	//Lista de elementos que aparecerán en las listas de asignación
+	List<String> availableBunits;
+	List<String> allocatedBunits;
+	//Modelos de datos de las listas de asignación
+	DefaultListModel availableModel = new DefaultListModel();
+	DefaultListModel allocatedModel = new DefaultListModel();
+	//Listas de asignación
+	JList availableList;
+	JList allocatedList;
+	//Contenedores de las listas de asignación
+	JScrollPane availableScrollPane;
+	JScrollPane allocatedScrollPane;
 	
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -207,7 +224,6 @@ public class AreaUI extends JPanel {
 		}
 		add(newButton);
 		
-//		editButton = new JButton();
 		editButton.setAction(editAction);
 		editButton.setBounds(329, 375, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
@@ -216,7 +232,6 @@ public class AreaUI extends JPanel {
 		}
 		add(editButton);
 		
-//		deleteButton = new JButton();
 		deleteButton.setAction(deleteAction);
 		deleteButton.setBounds(429, 375, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
@@ -239,7 +254,7 @@ public class AreaUI extends JPanel {
 		
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(50, 425, 1000, 2);
+		separator.setBounds(50, 425, 855, 2);
 		add(separator);
 		
 		//Layout de asignación de areas
@@ -253,6 +268,44 @@ public class AreaUI extends JPanel {
 		areaAllocateTxt.setBounds(50, 475, 380, 30);
 		add(areaAllocateTxt);
 		
+		JLabel availableLabel = new JLabel("Unidades de negocio disponibles");
+		availableLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		availableLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		availableLabel.setBounds(100, 525, 300, 25);
+		add(availableLabel);
+		
+		JLabel allocatedLabel = new JLabel("Unidades de negocio asignadas");
+		allocatedLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		allocatedLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		allocatedLabel.setBounds(600, 525, 300, 25);
+		add(allocatedLabel);
+		
+		availableList = new JList(availableModel);
+		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		availableList.setVisibleRowCount(10);
+		availableScrollPane = new JScrollPane(availableList);
+		availableScrollPane.setBounds(100, 575, 300, 300);
+		add(availableScrollPane);
+		
+		if (selectedArea != null) {
+			
+			//Debug
+			System.out.println("selectedArea no es null");
+			
+			allocatedBunits = getAllocatedBunitList(selectedArea);
+			
+			//Debug
+			System.out.println(allocatedBunits.size());
+			System.out.println(allocatedBunits.get(0));
+		}
+		allocatedModel.addAll(allocatedBunits);
+		allocatedModel.addElement("Hello");
+		allocatedList = new JList(allocatedModel);
+		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		allocatedList.setVisibleRowCount(10);
+		allocatedScrollPane = new JScrollPane(availableList);
+		allocatedScrollPane.setBounds(600, 575, 300, 300);
+		add(allocatedScrollPane);
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -589,6 +642,21 @@ public class AreaUI extends JPanel {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro ha sido asignada
+	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
+	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
+	 */
+	public List<String> getAllocatedBunitList(Area area) {
+		List<BusinessUnit> allocatedBunits = new BusinessUnit().getBunitsWithArea(session.getConnection(), session.getCompany(), area);
+		List<String> allocatedList = new ArrayList<String>();
+		for (BusinessUnit bUnit : allocatedBunits) {
+			allocatedList.add(bUnit.getNombre());
+		}
+		Collections.sort(allocatedList);
+		return allocatedList;
 	}
 	
 	/**
