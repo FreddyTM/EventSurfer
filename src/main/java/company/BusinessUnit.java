@@ -308,7 +308,7 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Busca todos los objetos BusinessUnit que tengan asignada el area pasada por parámetro
+	 * Obtiene todos los objetos BusinessUnit que tengan asignada el area pasada por parámetro
 	 * @param conn Conexión con la base de datos
 	 * @param company empresa a la que pertenecen las unidades de negocio
 	 * @param area Area de la que se quiere saber dónde está asignada
@@ -340,7 +340,7 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Devuelve una lista con los ids de las unidades de negocio a las que está asignada el area pasada
+	 * Obtiene una lista con los ids de las unidades de negocio a las que está asignada el area pasada
 	 * por parámetro
 	 * @param conn Conexión con la base de datos
 	 * @param area area a comprobar
@@ -369,6 +369,70 @@ public class BusinessUnit {
 			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
+	
+	/**
+	 * Obtiene los nombres de todas las unidades de negocio que tengan asignada el area pasada por parámetro
+	 * @param conn Conexión con la base de datos
+	 * @param company empresa a la que pertenecen las unidades de negocio
+	 * @param area Area de la que se quiere saber dónde está asignada
+	 * @return Lista de nombres de las unidades de negocio con el area asignada
+	 */
+	public List<String> getAllBunitNamesWithArea(Connection conn, Company company, Area area) {
+		List<String> bUnitList = new ArrayList<String>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT b_unit_id "
+				+ "FROM b_unit_area "
+				+ "WHERE area_id = ?"
+				+ "ORDER BY b_unit_id;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)).getNombre());
+			}
+			return bUnitList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Obtiene la lista de todas las unidades de negocio de la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param company objeto del que queremos recuperar sus BusinessUnits
+	 * @return lista de nombres de las unidades de negocio almacenadas en la base de datos
+	 */
+	public List<String> getAllBunitNames(Connection conn, Company company) {
+		List<String> bUnitNames = new ArrayList<String>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT nombre "
+				+ "FROM business_unit "
+				+ "WHERE company_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, company.getId());
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnitNames.add(results.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return bUnitNames;
+	}
+	
+	
 
 	
 	public int getId() {

@@ -1436,5 +1436,11 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
 		Update constructor (area allocation)
+
+	* - package main.java.company
+
+		· BusinessUnit class:
+			Add getAllBunitNamesWithArea() --not tested yet--
+			Add getAllBunitNames() --not tested yet--
 			
 	
