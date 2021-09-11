@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -38,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -93,17 +95,17 @@ public class AreaUI extends JPanel {
 //	private String[] bUnitComboList;
 	
 	//Lista de elementos que aparecerán en las listas de asignación
-	List<String> availableBunits;
-	List<String> allocatedBunits;
-	//Modelos de datos de las listas de asignación
-	DefaultListModel availableModel = new DefaultListModel();
-	DefaultListModel allocatedModel = new DefaultListModel();
+	private String[] availableBunits;
+	private String[] allocatedBunits;
+//	Modelos de datos de las listas de asignación
+//	private DefaultListModel availableModel = new DefaultListModel();
+//	private DefaultListModel allocatedModel = new DefaultListModel();
 	//Listas de asignación
-	JList availableList;
-	JList allocatedList;
+	private JList availableList;
+	private JList allocatedList;
 	//Contenedores de las listas de asignación
-	JScrollPane availableScrollPane;
-	JScrollPane allocatedScrollPane;
+	private JScrollPane availableScrollPane;
+	private JScrollPane allocatedScrollPane;
 	
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -280,31 +282,46 @@ public class AreaUI extends JPanel {
 		allocatedLabel.setBounds(600, 525, 300, 25);
 		add(allocatedLabel);
 		
-		availableList = new JList(availableModel);
+		
+		
+		//TEST CODE ***************************************************************************************************
+		
+//		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
+//
+//		JList nameList = new JList(names);
+//		nameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		nameList.setLayoutOrientation(JList.VERTICAL);
+//		nameList.setVisibleRowCount(5);
+//		
+//		JScrollPane listScroller = new JScrollPane(nameList);
+//		listScroller.setPreferredSize(new Dimension(250, 80));
+//		listScroller.setBounds(100, 575, 300, 100);
+//		add(listScroller);
+		
+		//TEST CODE ***************************************************************************************************
+		
+		//Demo data
+		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
+		availableList = new JList(names);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		availableList.setVisibleRowCount(10);
+		availableList.setLayoutOrientation(JList.VERTICAL);		
+		availableList.setVisibleRowCount(8);
+		availableList.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		availableScrollPane = new JScrollPane(availableList);
-		availableScrollPane.setBounds(100, 575, 300, 300);
+		availableScrollPane.setBounds(100, 575, 300, 200);
 		add(availableScrollPane);
 		
-		if (selectedArea != null) {
-			
-			//Debug
-			System.out.println("selectedArea no es null");
-			
+		if (selectedArea != null) {			
 			allocatedBunits = getAllocatedBunitList(selectedArea);
-			
-			//Debug
-			System.out.println(allocatedBunits.size());
-			System.out.println(allocatedBunits.get(0));
 		}
-		allocatedModel.addAll(allocatedBunits);
-		allocatedModel.addElement("Hello");
-		allocatedList = new JList(allocatedModel);
+
+		allocatedList = new JList(allocatedBunits);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		allocatedList.setVisibleRowCount(10);
-		allocatedScrollPane = new JScrollPane(availableList);
-		allocatedScrollPane.setBounds(600, 575, 300, 300);
+		allocatedList.setLayoutOrientation(JList.VERTICAL);
+		allocatedList.setVisibleRowCount(5);
+		allocatedList.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		allocatedScrollPane = new JScrollPane(allocatedList);
+		allocatedScrollPane.setBounds(600, 575, 300, 200);
 		add(allocatedScrollPane);
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
@@ -649,14 +666,13 @@ public class AreaUI extends JPanel {
 	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
 	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
 	 */
-	public List<String> getAllocatedBunitList(Area area) {
+	public String[] getAllocatedBunitList(Area area) {
 		List<BusinessUnit> allocatedBunits = new BusinessUnit().getBunitsWithArea(session.getConnection(), session.getCompany(), area);
 		List<String> allocatedList = new ArrayList<String>();
 		for (BusinessUnit bUnit : allocatedBunits) {
 			allocatedList.add(bUnit.getNombre());
 		}
-		Collections.sort(allocatedList);
-		return allocatedList;
+		return ToolBox.toSortedArray(allocatedList);
 	}
 	
 	/**

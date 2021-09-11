@@ -1430,8 +1430,8 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· AreaUI class:
 		Add attributes
-			availableBunits, allocatedBunits, availableModel, allocatedModel, availableList,
-			allocatedList, availableScrollPane, allocatedScrollPane
+			availableBunits, allocatedBunits, availableList, allocatedList, availableScrollPane,
+			allocatedScrollPane
 		Delete attributes
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
