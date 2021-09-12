@@ -300,19 +300,22 @@ public class AreaUI extends JPanel {
 		
 		//TEST CODE ***************************************************************************************************
 		
-		//Demo data
-//		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
+
+//		ADD MANAGER / USER CONDITION
 		
-		if (selectedArea != null) {			
-			availableBunits = getAvailableBunitList(selectedArea);
-		} else {
-			availableBunits = new String[1];
-			availableBunits[0] = "";
+		if (session.getUser().getUserType().equals("ADMIN" )) {			
+			if (selectedArea != null) {			
+				availableBunits = getAvailableBunitList(selectedArea);
+			} else {
+				availableBunits = new String[1];
+				availableBunits[0] = "";
+			}
+			
+			for (String item : availableBunits) {
+				availableModel.addElement(item);
+			}
 		}
 		
-		for (String item : availableBunits) {
-			availableModel.addElement(item);
-		}
 		
 //		availableList = new JList(availableBunits);
 		availableList = new JList(availableModel);
@@ -324,16 +327,21 @@ public class AreaUI extends JPanel {
 		availableScrollPane.setBounds(100, 575, 300, 200);
 		add(availableScrollPane);
 		
-		if (selectedArea != null) {			
-			allocatedBunits = getAllocatedBunitList(selectedArea);
-		} else {
-			allocatedBunits = new String[1];
-			allocatedBunits[0] = "";
+//		ADD MANAGER / USER CONDITION
+		
+		if (session.getUser().getUserType().equals("ADMIN" )) {					
+			if (selectedArea != null) {			
+				allocatedBunits = getAllocatedBunitList(selectedArea);
+			} else {
+				allocatedBunits = new String[1];
+				allocatedBunits[0] = "";
+			}
+			
+			for (String item : allocatedBunits) {
+				allocatedModel.addElement(item);
+			}
 		}
 		
-		for (String item : allocatedBunits) {
-			allocatedModel.addElement(item);
-		}
 
 //		allocatedList = new JList(allocatedBunits);
 		allocatedList = new JList(allocatedModel);
