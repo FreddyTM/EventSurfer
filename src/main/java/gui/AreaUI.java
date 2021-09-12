@@ -301,8 +301,16 @@ public class AreaUI extends JPanel {
 		//TEST CODE ***************************************************************************************************
 		
 		//Demo data
-		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
-		availableList = new JList(names);
+//		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
+		
+		if (selectedArea != null) {			
+			availableBunits = getAvailableBunitList(selectedArea);
+		} else {
+			availableBunits = new String[1];
+			availableBunits[0] = "";
+		}
+		
+		availableList = new JList(availableBunits);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		availableList.setLayoutOrientation(JList.VERTICAL);		
 		availableList.setVisibleRowCount(8);
@@ -313,6 +321,9 @@ public class AreaUI extends JPanel {
 		
 		if (selectedArea != null) {			
 			allocatedBunits = getAllocatedBunitList(selectedArea);
+		} else {
+			allocatedBunits = new String[1];
+			allocatedBunits[0] = "";
 		}
 
 		allocatedList = new JList(allocatedBunits);
@@ -674,6 +685,18 @@ public class AreaUI extends JPanel {
 //		}
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
 		return ToolBox.toSortedArray(allocatedList);
+	}
+	
+	/**
+	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro no ha sido asignada
+	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
+	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
+	 */
+	public String[] getAvailableBunitList(Area area) {
+		List<String> allBunits = new BusinessUnit().getAllBunitNames(session.getConnection(), session.getCompany());
+		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
+		allBunits.removeAll(allocatedList);
+		return ToolBox.toSortedArray(allBunits);
 	}
 	
 	/**

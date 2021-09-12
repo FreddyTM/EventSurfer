@@ -1431,6 +1431,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		Delete attributes
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
+		Add getAvailableBunitList()
 		Update constructor (area allocation)
 		Update getAllocatedBunitList()
 		
