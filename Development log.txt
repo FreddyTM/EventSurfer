@@ -1432,9 +1432,12 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
 		Add getAvailableBunitList()
+		Add refreshLists()
 		Update constructor (area allocation)
 		Update getAllocatedBunitList()
-		
+	
+	· AreaComboListener class (inner AreaUI class):
+		Update itemStateChanged()
 
 	* - package main.java.company
 

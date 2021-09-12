@@ -98,8 +98,8 @@ public class AreaUI extends JPanel {
 	private String[] availableBunits;
 	private String[] allocatedBunits;
 //	Modelos de datos de las listas de asignación
-//	private DefaultListModel availableModel = new DefaultListModel();
-//	private DefaultListModel allocatedModel = new DefaultListModel();
+	private DefaultListModel availableModel = new DefaultListModel();
+	private DefaultListModel allocatedModel = new DefaultListModel();
 	//Listas de asignación
 	private JList availableList;
 	private JList allocatedList;
@@ -310,7 +310,12 @@ public class AreaUI extends JPanel {
 			availableBunits[0] = "";
 		}
 		
-		availableList = new JList(availableBunits);
+		for (String item : availableBunits) {
+			availableModel.addElement(item);
+		}
+		
+//		availableList = new JList(availableBunits);
+		availableList = new JList(availableModel);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		availableList.setLayoutOrientation(JList.VERTICAL);		
 		availableList.setVisibleRowCount(8);
@@ -325,8 +330,13 @@ public class AreaUI extends JPanel {
 			allocatedBunits = new String[1];
 			allocatedBunits[0] = "";
 		}
+		
+		for (String item : allocatedBunits) {
+			allocatedModel.addElement(item);
+		}
 
-		allocatedList = new JList(allocatedBunits);
+//		allocatedList = new JList(allocatedBunits);
+		allocatedList = new JList(allocatedModel);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		allocatedList.setLayoutOrientation(JList.VERTICAL);
 		allocatedList.setVisibleRowCount(5);
@@ -700,6 +710,32 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
+	 * Refresca el contenido de las listas de asignación de areas
+	 */
+	public void refreshLists() {
+		if (selectedArea != null) {
+			availableBunits = getAvailableBunitList(selectedArea);
+			allocatedBunits = getAllocatedBunitList(selectedArea);
+			availableModel.clear();
+			allocatedModel.clear();
+			for (String item : availableBunits) {
+				availableModel.addElement(item);
+			}
+			for (String item : allocatedBunits) {
+				allocatedModel.addElement(item);
+			}
+			
+			availableList.setModel(availableModel);;
+			allocatedList.setModel(allocatedModel);;
+		} else {
+			availableBunits = new String[1];
+			availableBunits[0] = "";
+			allocatedBunits = new String[1];
+			allocatedBunits[0] = "";
+		}
+	}
+	
+	/**
 	 * Listener que define el comportamiento del comboBox. Cada elemento se corresponde con un area
 	 * guardada en la base de datos. Si el usuario que abre sesión es de tipo administrador aparecerán
 	 * todas las areas existentes, si es otro tipo de usuario solo aparecerán las areas asignadas a su
@@ -731,6 +767,8 @@ public class AreaUI extends JPanel {
 			updateDataCache();
 			//Vaciamos label de información
 			infoLabel.setText("");
+			//Refrescamos listas
+			refreshLists();
 			
 		}
 		
