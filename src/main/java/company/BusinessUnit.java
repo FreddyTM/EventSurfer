@@ -378,28 +378,12 @@ public class BusinessUnit {
 	 * @return Lista de nombres de las unidades de negocio con el area asignada
 	 */
 	public List<String> getAllBunitNamesWithArea(Connection conn, Company company, Area area) {
-		List<String> bUnitList = new ArrayList<String>();
-		PreparedStatement pstm = null;
-		ResultSet results = null;
-		String sql = "SELECT b_unit_id "
-				+ "FROM b_unit_area "
-				+ "WHERE area_id = ?"
-				+ "ORDER BY b_unit_id;";
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, area.getId());
-			results = pstm.executeQuery();
-			while (results.next()) {
-				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)).getNombre());
-			}
-			return bUnitList;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			PersistenceManager.closeResultSet(results);
-			PersistenceManager.closePrepStatement(pstm);
+		List<String> bUnitNameList = new ArrayList<String>();
+		List<BusinessUnit> bUnitList = getBunitsWithArea(conn, company, area);
+		for (BusinessUnit bUnit : bUnitList) {
+			bUnitNameList.add(bUnit.getNombre());
 		}
+		return bUnitNameList;
 	}
 	
 	/**

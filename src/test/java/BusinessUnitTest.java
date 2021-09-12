@@ -3,6 +3,7 @@ package test.java;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -139,6 +140,26 @@ class BusinessUnitTest {
 		area.setId(1);
 		assertNotNull(new BusinessUnit().getBunitsWithArea(conn, area));
 		assertTrue(new BusinessUnit().getBunitsWithArea(conn, area).size() > 0);
+	}
+	
+	@Test
+	@Order(8)
+	void testGetAllBunitNamesWithArea() {
+		Area area = new Area();
+		area.setId(1);
+		List<BusinessUnit> allBunits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
+		company.setBusinessUnits(allBunits);
+		assertNotNull(new BusinessUnit().getAllBunitNamesWithArea(conn,company, area));
+		assertTrue(new BusinessUnit().getAllBunitNamesWithArea(conn,company, area).size() > 0);
+	}
+	
+	@Test
+	@Order(9)
+	void testGetAllBunitNames() {
+		Area area = new Area();
+		area.setId(1);
+		assertNotNull(new BusinessUnit().getAllBunitNames(conn,company));
+		assertTrue(new BusinessUnit().getAllBunitNames(conn,company).size() > 0);
 	}
 
 }

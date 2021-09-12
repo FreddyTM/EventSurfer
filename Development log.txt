@@ -1384,7 +1384,6 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 	* - package main.java.event
 
 	· Event class:
-
 		Rename getEventsFromDB() >> getBunitEventsFromDB()
 		Add getAreaEventsFromDB()
 
@@ -1403,7 +1402,6 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 	* - package test.java
 
 	· AreaTest class:
-
 		Update testAddNewArea() --ok--
 		Add testAddNewAreaToBunitArea() --ok--
 		Add testDeleteBUnitAreaFromDB() --ok--
@@ -1412,12 +1410,10 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 		Update testDeleteBUnitAreaFromDB() --ok--
 
 	· EventTest class:
-
 		Rename testGetEventsFromDB() >> testGetBunitEventsFromDB() --ok--
 		Add testGetAreaEventsFromDB() --ok--
 	
 	· BusinessUnitTest class:
-
 		Add testGetBunitsWithArea() --ok--
 		Add testGetBunitsWithAreaIds() --ok--
 
@@ -1436,11 +1432,20 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
 		Update constructor (area allocation)
+		Update getAllocatedBunitList()
+		
 
 	* - package main.java.company
 
 		· BusinessUnit class:
-			Add getAllBunitNamesWithArea() --not tested yet--
-			Add getAllBunitNames() --not tested yet--
+			Add getAllBunitNamesWithArea() --ok--
+			Add getAllBunitNames() --ok--
+			Update getAllBunitNamesWithArea() --ok--
+
+	* - package test.java
+
+		· BusinessUnitTest class:
+			Add testGetAllBunitNamesWithArea() --ok--
+			Add testGetAllBunitNames() --ok--
 			
 	
