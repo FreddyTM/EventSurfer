@@ -667,11 +667,12 @@ public class AreaUI extends JPanel {
 	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
 	 */
 	public String[] getAllocatedBunitList(Area area) {
-		List<BusinessUnit> allocatedBunits = new BusinessUnit().getBunitsWithArea(session.getConnection(), session.getCompany(), area);
-		List<String> allocatedList = new ArrayList<String>();
-		for (BusinessUnit bUnit : allocatedBunits) {
-			allocatedList.add(bUnit.getNombre());
-		}
+//		List<BusinessUnit> allocatedBunits = new BusinessUnit().getBunitsWithArea(session.getConnection(), session.getCompany(), area);
+//		List<String> allocatedList = new ArrayList<String>();
+//		for (BusinessUnit bUnit : allocatedBunits) {
+//			allocatedList.add(bUnit.getNombre());
+//		}
+		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
 		return ToolBox.toSortedArray(allocatedList);
 	}
 	
