@@ -303,18 +303,18 @@ public class AreaUI extends JPanel {
 
 //		ADD MANAGER / USER CONDITION
 		
-		if (session.getUser().getUserType().equals("ADMIN" )) {			
-			if (selectedArea != null) {			
-				availableBunits = getAvailableBunitList(selectedArea);
-			} else {
-				availableBunits = new String[1];
-				availableBunits[0] = "";
-			}
-			
-			for (String item : availableBunits) {
-				availableModel.addElement(item);
-			}
+//		if (session.getUser().getUserType().equals("ADMIN" )) {			
+		if (selectedArea != null) {			
+			availableBunits = getAvailableBunitList(selectedArea);
+		} else {
+			availableBunits = new String[1];
+			availableBunits[0] = "";
 		}
+		
+		for (String item : availableBunits) {
+			availableModel.addElement(item);
+		}
+//		}
 		
 		
 //		availableList = new JList(availableBunits);
@@ -329,18 +329,18 @@ public class AreaUI extends JPanel {
 		
 //		ADD MANAGER / USER CONDITION
 		
-		if (session.getUser().getUserType().equals("ADMIN" )) {					
-			if (selectedArea != null) {			
-				allocatedBunits = getAllocatedBunitList(selectedArea);
-			} else {
-				allocatedBunits = new String[1];
-				allocatedBunits[0] = "";
-			}
-			
-			for (String item : allocatedBunits) {
-				allocatedModel.addElement(item);
-			}
+//		if (session.getUser().getUserType().equals("ADMIN" )) {					
+		if (selectedArea != null) {			
+			allocatedBunits = getAllocatedBunitList(selectedArea);
+		} else {
+			allocatedBunits = new String[1];
+			allocatedBunits[0] = "";
 		}
+		
+		for (String item : allocatedBunits) {
+			allocatedModel.addElement(item);
+		}
+//		}
 		
 
 //		allocatedList = new JList(allocatedBunits);

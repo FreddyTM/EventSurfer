@@ -1444,12 +1444,17 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		· BusinessUnit class:
 			Add getAllBunitNamesWithArea() --ok--
 			Add getAllBunitNames() --ok--
+			Add getBusinessUnitNameByIdFromDb()
 			Update getAllBunitNamesWithArea() --ok--
+			Update refresh()
+			Update getBunitsWithArea() --ok--
+
 
 	* - package test.java
 
 		· BusinessUnitTest class:
 			Add testGetAllBunitNamesWithArea() --ok--
 			Add testGetAllBunitNames() --ok--
-			
+			Add testGetBusinessUnitNameByIdFromDb() --ok--
+			Update testGetAllBunitNames() --ok--
 	
