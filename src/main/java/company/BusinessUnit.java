@@ -232,6 +232,9 @@ public class BusinessUnit {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
 	
@@ -307,6 +310,41 @@ public class BusinessUnit {
 		return null;
 	}
 	
+	public BusinessUnit getBusinessUnitNameByIdFromDb(Connection conn, Company company, int id) {
+		BusinessUnit bUnit = null;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT nombre, direccion, provincia, estado, "
+				+ "cpostal, telefono, mail, activo "
+				+ "FROM business_unit "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, id);
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnit = new BusinessUnit();
+				bUnit.setId(id);
+				bUnit.setCompany(company);
+				bUnit.setNombre(results.getString(1));
+				bUnit.setDireccion(results.getString(2));
+				bUnit.setProvincia(results.getString(3));
+				bUnit.setEstado(results.getString(4));
+				bUnit.setCpostal(results.getString(5));
+				bUnit.setTelefono(results.getString(6));
+				bUnit.setMail(results.getString(7));
+				bUnit.setActivo(results.getBoolean(8));
+			}
+			return bUnit;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
 	/**
 	 * Obtiene todos los objetos BusinessUnit que tengan asignada el area pasada por parámetro
 	 * @param conn Conexión con la base de datos
@@ -327,7 +365,8 @@ public class BusinessUnit {
 			pstm.setInt(1, area.getId());
 			results = pstm.executeQuery();
 			while (results.next()) {
-				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)));
+//				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)));
+				bUnitList.add(new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, results.getInt(1)));
 			}
 			return bUnitList;
 		} catch (SQLException e) {

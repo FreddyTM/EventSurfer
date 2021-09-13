@@ -156,10 +156,19 @@ class BusinessUnitTest {
 	@Test
 	@Order(9)
 	void testGetAllBunitNames() {
-		Area area = new Area();
-		area.setId(1);
 		assertNotNull(new BusinessUnit().getAllBunitNames(conn,company));
 		assertTrue(new BusinessUnit().getAllBunitNames(conn,company).size() > 0);
 	}
 
+	@Test
+	@Order(10)
+	void testGetBusinessUnitNameByIdFromDb() {
+		assertNotNull(new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, 1));
+		assertEquals("OFICINA CENTRAL", new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, 1).getNombre());
+		assertNotNull(new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, 2));
+		assertEquals("TIENDA 1", new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, 2).getNombre());
+	}
+	
+	
+	
 }
