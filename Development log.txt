@@ -1349,7 +1349,7 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 		Update actionPerformed() --cancel ok with no areas--
 
 	· DeleteAction class (new inner AreaUI class):
-		Add actionPerformed() --manager delete check ok, admin ok, delete warnings ok, delete in progress--
+		Add actionPerformed() --manager delete check ok, admin ok, delete warnings ok, delete ok--
 		Update actionPerformed() --need to test first if area to delete exists in b_unit_area table. If so, delete there
 					 --and then delete from area table. Completed, works ok--
 
@@ -1437,7 +1437,19 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		Update getAllocatedBunitList()
 	
 	· AreaComboListener class (inner AreaUI class):
-		Update itemStateChanged()
+		Update itemStateChanged() --add refreshLists()--
+
+	· NewAction class (inner AreaUI class):
+		Update actionPerformed() --add emptyLists()--
+
+	· CancelAction class (inner AreaUI class):
+		Update actionPerformed() --add refreshLists()--
+
+	· DeleteAction class (inner AreaUI class):
+		Update actionPerformed() --add refreshLists()--
+
+	· OKAction class (inner AreaUI class):
+		Add actionPerformed() --add refreshLists()--
 
 	* - package main.java.company
 

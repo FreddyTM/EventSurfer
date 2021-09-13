@@ -300,10 +300,7 @@ public class AreaUI extends JPanel {
 		
 		//TEST CODE ***************************************************************************************************
 		
-
-//		ADD MANAGER / USER CONDITION
-		
-//		if (session.getUser().getUserType().equals("ADMIN" )) {			
+	
 		if (selectedArea != null) {			
 			availableBunits = getAvailableBunitList(selectedArea);
 		} else {
@@ -314,10 +311,7 @@ public class AreaUI extends JPanel {
 		for (String item : availableBunits) {
 			availableModel.addElement(item);
 		}
-//		}
-		
-		
-//		availableList = new JList(availableBunits);
+
 		availableList = new JList(availableModel);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		availableList.setLayoutOrientation(JList.VERTICAL);		
@@ -325,11 +319,12 @@ public class AreaUI extends JPanel {
 		availableList.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		availableScrollPane = new JScrollPane(availableList);
 		availableScrollPane.setBounds(100, 575, 300, 200);
+		if (session.getUser().getUserType().equals("USER")
+				|| selectedArea == null) {
+			availableList.setEnabled(false);
+		}
 		add(availableScrollPane);
-		
-//		ADD MANAGER / USER CONDITION
-		
-//		if (session.getUser().getUserType().equals("ADMIN" )) {					
+				
 		if (selectedArea != null) {			
 			allocatedBunits = getAllocatedBunitList(selectedArea);
 		} else {
@@ -340,10 +335,7 @@ public class AreaUI extends JPanel {
 		for (String item : allocatedBunits) {
 			allocatedModel.addElement(item);
 		}
-//		}
-		
 
-//		allocatedList = new JList(allocatedBunits);
 		allocatedList = new JList(allocatedModel);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		allocatedList.setLayoutOrientation(JList.VERTICAL);
@@ -351,6 +343,10 @@ public class AreaUI extends JPanel {
 		allocatedList.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		allocatedScrollPane = new JScrollPane(allocatedList);
 		allocatedScrollPane.setBounds(600, 575, 300, 200);
+		if (session.getUser().getUserType().equals("USER")
+				|| selectedArea == null) {
+			allocatedList.setEnabled(false);
+		}
 		add(allocatedScrollPane);
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
@@ -744,6 +740,16 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
+	 * Vacía el contenido de las listas de asignación de areas
+	 */
+	public void emptyLists() {
+		availableModel.clear();
+		allocatedModel.clear();
+		availableList.setModel(availableModel);;
+		allocatedList.setModel(allocatedModel);;
+	}
+	
+	/**
 	 * Listener que define el comportamiento del comboBox. Cada elemento se corresponde con un area
 	 * guardada en la base de datos. Si el usuario que abre sesión es de tipo administrador aparecerán
 	 * todas las areas existentes, si es otro tipo de usuario solo aparecerán las areas asignadas a su
@@ -807,6 +813,8 @@ public class AreaUI extends JPanel {
 			//Vaciamos los campos de texto
 			areaNameField.setText("");
 			areaDescription.setText("");
+			//Vaciamos las listas de asignación de areas
+			emptyLists();
 		}
 		
 	}
@@ -884,7 +892,8 @@ public class AreaUI extends JPanel {
 				areaNameField.setText("");
 				areaDescription.setText("");
 			}
-			
+			//Refrescamos listas
+			refreshLists();
 			//Formulario no editable
 			editableDataOff();
 //			//Recuperar valores previos a la edición de los datos
@@ -925,7 +934,7 @@ public class AreaUI extends JPanel {
 				ToolBox.showDialog(
 						"No se puede borrar areas asignadas a eventos registrados", AreaUI.this,
 						DIALOG_INFO);
-				
+			//Si no hay eventos, se comprueban las condiciones para el borrado del area seleccionada	
 			} else {
 				//Si el usuario de la sesión es de tipo manager
 				if (session.getUser().getUserType().equals("MANAGER")) {			
@@ -999,6 +1008,8 @@ public class AreaUI extends JPanel {
 						areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 						areaComboBox.setSelectedIndex(0);
 						setFirstSelectedArea();	
+						//Refrescamos listas
+						refreshLists();
 					//Si el area no se borra correctamente de la base de datos
 					} else {
 						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
@@ -1058,7 +1069,9 @@ public class AreaUI extends JPanel {
 						refreshComboBox();
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditArea();
-						//Si el area no se almacena correctamente en la base de datos 
+						//Refrescamos listas
+						refreshLists();
+						//Si el area no se almacena correctamente en la base de datos
 					} else {
 						infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA AREA EN LA BASE DE DATOS");
 					}
@@ -1150,7 +1163,7 @@ public class AreaUI extends JPanel {
 							areaComboList = getAreaCombolistItemsFromSession();
 							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 							areaComboBox.setSelectedIndex(0);
-							setFirstSelectedArea();	
+							setFirstSelectedArea();
 						//Area seleccionada no borrada
 						} else {
 							//Renovamos la lista de areas del comboBox
@@ -1160,6 +1173,8 @@ public class AreaUI extends JPanel {
 							//Hacemos backup del contenido de los datos del formulario
 							updateDataCache();
 						}
+						//Refrescamos listas
+						refreshLists();
 						
 						//Informamos por pantalla de la actualización
 						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
