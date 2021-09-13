@@ -280,7 +280,7 @@ public class BusinessUnit {
 	
 	/**
 	 * Devuelve la unidad de negocio al que pertenece el nombre entrado por parámetro
-	 * @param company empresa de la que comprobamos la lista de unidades de negocio
+	 * @param company empresa de la que comprobamos la unidad de negocio
 	 * @param name nombre de la unidad de negocio buscada
 	 * @return unidad de negocio con el nombre entrado por parámetro (null si no existe)
 	 */
@@ -296,9 +296,9 @@ public class BusinessUnit {
 	
 	/**
 	 * Devuelve la unidad de negocio al que pertenece el id entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
+	 * @param company empresa de la que comprobamos la unidad de negocio
 	 * @param id id del usuario buscado
-	 * @return usuario con el id entrado por parámetro (null si no existe)
+	 * @return unidad de negocio con el id entrado por parámetro (null si no existe)
 	 */
 	public BusinessUnit getBusinessUnitById (Company company, int id) {
 		List<BusinessUnit> bUnitList = company.getBusinessUnits();
@@ -310,6 +310,13 @@ public class BusinessUnit {
 		return null;
 	}
 	
+	/**
+	 * Devuelve la unidad de negocio al que pertenece el id entrado por parámetro
+	 * @param conn Conexión con la base de datos
+	 * @param company empresa de la que comprobamos la unidad de negocio
+	 * @param id id del usuario buscado
+	 * @return unidad de negocio con el id entrado por parámetro (null si no existe)
+	 */
 	public BusinessUnit getBusinessUnitNameByIdFromDb(Connection conn, Company company, int id) {
 		BusinessUnit bUnit = null;
 		PreparedStatement pstm = null;
