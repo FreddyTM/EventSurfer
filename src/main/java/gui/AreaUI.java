@@ -84,11 +84,14 @@ public class AreaUI extends JPanel {
 	
 	
 	private JLabel infoLabel;
+	private JLabel infoLabel2;
 	private JButton editButton = new JButton();
 	private JButton cancelButton;
 	private JButton oKButton;
 	private JButton newButton;
 	private JButton deleteButton = new JButton();
+	private JButton allocateButton;
+	private JButton revokeButton;
 	
 	//Lista de elementos que aparecen en el comboBox
 	private String[] areaComboList;
@@ -112,6 +115,8 @@ public class AreaUI extends JPanel {
 	private final Action oKAction = new OKAction();
 	private final Action newAction = new NewAction();
 	private final Action deleteAction = new DeleteAction();
+	private final Action allocateAction = new AllocateAction();
+	private final Action revokeAllocationAction = new RevokeAllocationAction();
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
 	
@@ -201,7 +206,7 @@ public class AreaUI extends JPanel {
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 325, 1000, 25);
+		infoLabel.setBounds(50, 325, 900, 25);
 		add(infoLabel);
 		
 		JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
@@ -303,14 +308,18 @@ public class AreaUI extends JPanel {
 	
 		if (selectedArea != null) {			
 			availableBunits = getAvailableBunitList(selectedArea);
-		} else {
-			availableBunits = new String[1];
-			availableBunits[0] = "";
-		}
+			for (String item : availableBunits) {
+				availableModel.addElement(item);
+			}
+		} 
+//		else {
+//			availableBunits = new String[1];
+//			availableBunits[0] = "";
+//		}
 		
-		for (String item : availableBunits) {
-			availableModel.addElement(item);
-		}
+//		for (String item : availableBunits) {
+//			availableModel.addElement(item);
+//		}
 
 		availableList = new JList(availableModel);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -327,14 +336,18 @@ public class AreaUI extends JPanel {
 				
 		if (selectedArea != null) {			
 			allocatedBunits = getAllocatedBunitList(selectedArea);
-		} else {
-			allocatedBunits = new String[1];
-			allocatedBunits[0] = "";
-		}
+			for (String item : allocatedBunits) {
+				allocatedModel.addElement(item);
+			}
+		} 
+//		else {
+//			allocatedBunits = new String[1];
+//			allocatedBunits[0] = "";
+//		}
 		
-		for (String item : allocatedBunits) {
-			allocatedModel.addElement(item);
-		}
+//		for (String item : allocatedBunits) {
+//			allocatedModel.addElement(item);
+//		}
 
 		allocatedList = new JList(allocatedModel);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -348,6 +361,28 @@ public class AreaUI extends JPanel {
 			allocatedList.setEnabled(false);
 		}
 		add(allocatedScrollPane);
+		
+		allocateButton = new JButton();
+		allocateButton.setAction(allocateAction);
+		allocateButton.setBounds(465, 595, 75, 75);
+		allocateButton.setFont(new Font("Tahoma", Font.BOLD, 40));
+//		allocateButton.setText("<html><center>"+"►"+ "</center></html>");
+		allocateButton.setText("►");
+		allocateButton.setEnabled(false);
+		add(allocateButton);
+		
+		revokeButton = new JButton();
+		revokeButton.setAction(revokeAllocationAction);
+		revokeButton.setBounds(465, 685, 75, 75);
+		revokeButton.setFont(new Font("Tahoma", Font.BOLD, 40));
+		revokeButton.setText("►");
+		revokeButton.setEnabled(false);
+		add(revokeButton);		
+		
+		infoLabel2 = new JLabel();
+		infoLabel2.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel2.setBounds(50, 800, 900, 25);
+		add(infoLabel2);
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -896,14 +931,6 @@ public class AreaUI extends JPanel {
 			refreshLists();
 			//Formulario no editable
 			editableDataOff();
-//			//Recuperar valores previos a la edición de los datos
-//			if (selectedArea != null) {			
-//				areaNameField.setText(textFieldContentList.get(0));
-//				areaDescription.setText(textFieldContentList.get(1));
-//			} else {
-//				areaNameField.setText("");
-//				areaDescription.setText("");
-//			}
 		}		
 	}
 	
@@ -1023,6 +1050,14 @@ public class AreaUI extends JPanel {
 		
 	}
 	
+	/**
+	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar y el botón. Se habilitan los
+	 * botones Editar, Nueva y Borrar. Se intentan guardar los datos del araea actualizados en la base
+	 * de datos, o bien los datos de una area nueva. Si se consigue, se actualiza el objeto Area con dichos datos
+	 * o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación del objeto Area y se
+	 * muestra un mensaje de error. Se intenta guardar el registro de la actualización de datos en la base de datos.
+	 * Si no se consigue se muestra un mensaje de error.
+	 */
 	public class OKAction extends AbstractAction {
 		public OKAction() {
 			putValue(NAME, "Aceptar");
@@ -1108,6 +1143,44 @@ public class AreaUI extends JPanel {
 					}
 				}
 			}
+		}
+		
+	}
+	
+	/**
+	 * Acción del botón Asignar. Los usuarios de tipo ADMIN pueden asignar cualquier area a cualquier unidad de negocio.
+	 * Los usuarios de tipo MANAGER solo pueden asignar areas a su propia unidad de negocio. Los usuarios de tipo USER no
+	 * pueden asignar areas. Se intenta añadir a la tabla b_unit_area una nueva entrada con el id del area y el id de la
+	 * unidad de negocio a la que se asigna. Si se consigue, se añade el area a la lista de areas del objeto BusinessUnit
+	 * al que se ha asignado
+	 */
+	public class AllocateAction extends AbstractAction {
+		public AllocateAction() {
+			putValue(NAME, "Asignar");
+			putValue(SHORT_DESCRIPTION, "Allocate area");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+		
+	}
+	
+	/**
+	 * Acción del botón Revocar Asignación. Los usuarios de tipo ADMIN pueden revocar la asignación de cualquier area a
+	 * cualquier unidad de negocio. Los usuarios de tipo MANAGER solo pueden revocar asignaciones de areas de su propia
+	 * unidad de negocio. Los usuarios de tipo USER no pueden revocar asignaciones de areas. Se intenta eliminar de la
+	 * tabla b_unit_area la entrada que contenga el id del area y el id de la unidad de negocio a la que estaba asignada.
+	 * Si se consigue, se elimina el area a la lista de areas del objeto BusinessUnit al que estaba asignado.
+	 */
+	public class RevokeAllocationAction extends AbstractAction {
+		public RevokeAllocationAction() {
+			putValue(NAME, "Revocar asignación");
+			putValue(SHORT_DESCRIPTION, "Revoke area allocation");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
 		}
 		
 	}

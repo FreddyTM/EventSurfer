@@ -1427,7 +1427,8 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 	· AreaUI class:
 		Add attributes
 			availableBunits, allocatedBunits, availableList, allocatedList, availableScrollPane,
-			allocatedScrollPane
+			allocatedScrollPane, allocateButton, revokeButton, allocateAction, revokeAllocationAction
+			infoLabel2
 		Delete attributes
 			bUnitComboBox, bUnitComboList, lastArea
 		Add getAllocatedBunitList()
@@ -1450,6 +1451,12 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· OKAction class (inner AreaUI class):
 		Add actionPerformed() --add refreshLists()--
+
+	· AllocateAction class (new inner AreaUI class):
+		Add actionPerformed()
+
+	· RevokeAllocationAction class (new inner AreaUI class):
+		Add actionPerformed()
 
 	* - package main.java.company
 
