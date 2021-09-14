@@ -37,6 +37,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -101,11 +103,11 @@ public class AreaUI extends JPanel {
 	private String[] availableBunits;
 	private String[] allocatedBunits;
 //	Modelos de datos de las listas de asignación
-	private DefaultListModel availableModel = new DefaultListModel();
-	private DefaultListModel allocatedModel = new DefaultListModel();
+	private DefaultListModel<String> availableModel = new DefaultListModel<String>();
+	private DefaultListModel<String> allocatedModel = new DefaultListModel<String>();
 	//Listas de asignación
-	private JList availableList;
-	private JList allocatedList;
+	private JList<String> availableList;
+	private JList <String>allocatedList;
 	//Contenedores de las listas de asignación
 	private JScrollPane availableScrollPane;
 	private JScrollPane allocatedScrollPane;
@@ -321,11 +323,31 @@ public class AreaUI extends JPanel {
 //			availableModel.addElement(item);
 //		}
 
-		availableList = new JList(availableModel);
+		availableList = new JList<String>(availableModel);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		availableList.setLayoutOrientation(JList.VERTICAL);		
 		availableList.setVisibleRowCount(8);
 		availableList.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		availableList.addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting() == false) {
+			        if (availableList.getSelectedIndex() != -1) {
+			        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
+			        		allocateButton.setEnabled(true);
+			        	} else if (session.getUser().getUserType().equals("MANAGER")) {
+			        		//Comparar bunit seleccionada con bunit de la sesión
+			        		//Si coincide, habilitar botón
+			        		
+			        		//Debug
+			        		infoLabel2.setText("");
+			        		infoLabel2.setText("Manager intentando asignar area...");
+			        	}
+			        }
+			    }			
+			}
+			
+		});
 		availableScrollPane = new JScrollPane(availableList);
 		availableScrollPane.setBounds(100, 575, 300, 200);
 		if (session.getUser().getUserType().equals("USER")
@@ -349,11 +371,32 @@ public class AreaUI extends JPanel {
 //			allocatedModel.addElement(item);
 //		}
 
-		allocatedList = new JList(allocatedModel);
+		allocatedList = new JList<String>(allocatedModel);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		allocatedList.setLayoutOrientation(JList.VERTICAL);
 		allocatedList.setVisibleRowCount(5);
 		allocatedList.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		allocatedList.addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (e.getValueIsAdjusting() == false) {
+			        if (allocatedList.getSelectedIndex() != -1) {
+			        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
+			        		revokeButton.setEnabled(true);
+			        	} else if (session.getUser().getUserType().equals("MANAGER")) {
+			        		//Comparar bunit seleccionada con bunit de la sesión
+			        		//Si coincide, habilitar botón
+			        		
+			        		//Debug
+			        		infoLabel2.setText("");
+			        		infoLabel2.setText("Manager intentando revocar asignación de area...");
+			        	}
+			        }
+			    }
+			}
+			
+		});
 		allocatedScrollPane = new JScrollPane(allocatedList);
 		allocatedScrollPane.setBounds(600, 575, 300, 200);
 		if (session.getUser().getUserType().equals("USER")
@@ -366,7 +409,6 @@ public class AreaUI extends JPanel {
 		allocateButton.setAction(allocateAction);
 		allocateButton.setBounds(465, 595, 75, 75);
 		allocateButton.setFont(new Font("Tahoma", Font.BOLD, 40));
-//		allocateButton.setText("<html><center>"+"►"+ "</center></html>");
 		allocateButton.setText("►");
 		allocateButton.setEnabled(false);
 		add(allocateButton);
@@ -375,7 +417,7 @@ public class AreaUI extends JPanel {
 		revokeButton.setAction(revokeAllocationAction);
 		revokeButton.setBounds(465, 685, 75, 75);
 		revokeButton.setFont(new Font("Tahoma", Font.BOLD, 40));
-		revokeButton.setText("►");
+		revokeButton.setText("◄");
 		revokeButton.setEnabled(false);
 		add(revokeButton);		
 		

@@ -1434,6 +1434,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		Add getAllocatedBunitList()
 		Add getAvailableBunitList()
 		Add refreshLists()
+		Add listeners to allocateButton & revokeButton --convert to listener classes pending--
 		Update constructor (area allocation)
 		Update getAllocatedBunitList()
 	
