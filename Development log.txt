@@ -1437,6 +1437,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		Add listeners to allocateButton & revokeButton --listener classes ok--
 		Update constructor (area allocation)
 		Update getAllocatedBunitList()
+		Update refreshLists()
 	
 	· AreaComboListener class (inner AreaUI class):
 		Update itemStateChanged() --add refreshLists()--
@@ -1463,9 +1464,11 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· AllocateAction class (new inner AreaUI class):
 		Add actionPerformed()
+		Update actionPerformed()
 
 	· RevokeAllocationAction class (new inner AreaUI class):
 		Add actionPerformed()
+		Update actionPerformed()
 
 	* - package main.java.company
 

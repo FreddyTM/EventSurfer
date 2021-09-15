@@ -57,6 +57,7 @@ public class AreaUI extends JPanel {
 	private static final int OK_ACTION_UNDEFINED = 0; //Por defecto
 	private static final int OK_ACTION_EDIT = 1;
 	private static final int OK_ACTION_NEW = 2;
+	
 	private static final String NO_AREA = "<Ningún area seleccionable>";
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
@@ -172,12 +173,7 @@ public class AreaUI extends JPanel {
 //		areaComboBox.setBackground(Color.WHITE);
 //		add(areaComboBox);
 		
-		areaComboList = getAreaCombolistItemsFromSession();
-//		//Si la lista está vacía
-//		if (areaComboList.length == 0) {
-//			areaComboList = new String[1];
-//			areaComboList[0] = NO_AREA;
-//		}	
+		areaComboList = getAreaCombolistItemsFromSession();	
 		areaComboBox = new JComboBox(areaComboList);
 		areaComboBox.setSelectedIndex(0);
 		setFirstSelectedArea();
@@ -295,14 +291,6 @@ public class AreaUI extends JPanel {
 				availableModel.addElement(item);
 			}
 		} 
-//		else {
-//			availableBunits = new String[1];
-//			availableBunits[0] = "";
-//		}
-		
-//		for (String item : availableBunits) {
-//			availableModel.addElement(item);
-//		}
 
 		availableList = new JList<String>(availableModel);
 		availableList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -324,14 +312,6 @@ public class AreaUI extends JPanel {
 				allocatedModel.addElement(item);
 			}
 		} 
-//		else {
-//			allocatedBunits = new String[1];
-//			allocatedBunits[0] = "";
-//		}
-		
-//		for (String item : allocatedBunits) {
-//			allocatedModel.addElement(item);
-//		}
 
 		allocatedList = new JList<String>(allocatedModel);
 		allocatedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -385,29 +365,11 @@ public class AreaUI extends JPanel {
 		timer.scheduleAtFixedRate(task, 1000, 30000);
 	}
 	
-//Si el usuario de la sesión es de tipo ADMIN, aparecerán todas las areas de todas las unidades de negocio.
-//Si es MANAGER o USER solo aparecerán las areas de la unidad de negocio a la que pertenezcan.
-	
 	/**
 	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas.
 	 * @return array ordenado alfabéticamente con la lista de areas
 	 */
 	public String[] getAreaCombolistItemsFromSession() {
-//		List<String> tempList = new ArrayList<String>();
-//		if(session.getUser().getUserType() == "ADMIN") {
-//			for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
-//				for (Area area : bUnit.getAreas()) {
-//					tempList.add(area.getArea());
-//					allAreas.add(area);
-//				}
-//			}
-//		} else {
-//			for (Area area : session.getbUnit().getAreas()) {
-//				tempList.add(area.getArea());
-//			}			 
-//		}
-		
-		//New code
 		List<String> tempList = new ArrayList<String>();
 		allAreas = new Area().getAllAreasFromDB(this.session.getConnection());
 		for (Area area: allAreas) {
@@ -465,10 +427,6 @@ public class AreaUI extends JPanel {
 	 * Refresca los datos del area seleccionada para que se visualicen en pantalla
 	 */
 	public void populateAreaFields() {
-//		//Debug
-//		System.out.println("Populating area fields");
-//		System.out.println(selectedArea == null);
-		
 		areaNameField.setText(selectedArea.getArea());
 		areaDescription.setText(selectedArea.getDescripcion());
 	}
@@ -711,11 +669,6 @@ public class AreaUI extends JPanel {
 	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
 	 */
 	public String[] getAllocatedBunitList(Area area) {
-//		List<BusinessUnit> allocatedBunits = new BusinessUnit().getBunitsWithArea(session.getConnection(), session.getCompany(), area);
-//		List<String> allocatedList = new ArrayList<String>();
-//		for (BusinessUnit bUnit : allocatedBunits) {
-//			allocatedList.add(bUnit.getNombre());
-//		}
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
 		return ToolBox.toSortedArray(allocatedList);
 	}
@@ -751,10 +704,8 @@ public class AreaUI extends JPanel {
 			availableList.setModel(availableModel);;
 			allocatedList.setModel(allocatedModel);;
 		} else {
-			availableBunits = new String[1];
-			availableBunits[0] = "";
-			allocatedBunits = new String[1];
-			allocatedBunits[0] = "";
+			availableModel.clear();
+			allocatedModel.clear();
 		}
 	}
 	
@@ -827,9 +778,6 @@ public class AreaUI extends JPanel {
 		        		} else {
 		        			allocateButton.setEnabled(false);
 		        		}
-		        		//Debug
-		        		infoLabel2.setText("");
-		        		infoLabel2.setText("Manager intentando asignar area...");
 		        	}
 		        }
 		    }
@@ -855,9 +803,6 @@ public class AreaUI extends JPanel {
 		        		} else {
 		        			revokeButton.setEnabled(false);
 		        		}
-		        		//Debug
-		        		infoLabel2.setText("");
-		        		infoLabel2.setText("Manager intentando revocar asignación de area...");
 		        	}
 		        }
 		    }
@@ -1193,7 +1138,7 @@ public class AreaUI extends JPanel {
 	 * Los usuarios de tipo MANAGER solo pueden asignar areas a su propia unidad de negocio. Los usuarios de tipo USER no
 	 * pueden asignar areas. Se intenta añadir a la tabla b_unit_area una nueva entrada con el id del area y el id de la
 	 * unidad de negocio a la que se asigna. Si se consigue, se añade el area a la lista de areas del objeto BusinessUnit
-	 * al que se ha asignado
+	 * al que se ha asignado.
 	 */
 	public class AllocateAction extends AbstractAction {
 		public AllocateAction() {
@@ -1202,7 +1147,16 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
+			if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
+				//Añadir el area al objeto BusinessUnit
+				bUnit.getAreas().add(selectedArea);
+				//Refrescar listas
+				refreshLists();
+				//Deshabilitar botones de asignación
+				allocateButton.setEnabled(false);
+				revokeButton.setEnabled(false);
+			}
 		}
 		
 	}
@@ -1221,7 +1175,16 @@ public class AreaUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
+			if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
+				//Eliminar el area del objeto BusinessUnit
+				bUnit.getAreas().remove(selectedArea);
+				//Refrescar listas
+				refreshLists();
+				//Deshabilitar botones de asignación
+				allocateButton.setEnabled(false);
+				revokeButton.setEnabled(false);
+			}
 		}
 		
 	}
