@@ -1485,4 +1485,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 			Add testGetAllBunitNames() --ok--
 			Add testGetBusinessUnitNameByIdFromDb() --ok--
 			Update testGetAllBunitNames() --ok--
+
+		· AreaTest class:
+			Add testDeleteOneBUnitAreaFromDB() --ok--
 	

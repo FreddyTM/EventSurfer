@@ -145,4 +145,14 @@ class AreaTest {
 	void testGetAllAreasFromDB() {
 		assertTrue(new Area().getAllAreasFromDB(conn).size() > 0);
 	}
+	
+	@Test
+	@Order(12)
+	void testDeleteOneBUnitAreaFromDB() {
+		Area area = new Area();
+		area.setId(9);
+		BusinessUnit bUnit = new BusinessUnit();
+		bUnit.setId(4);
+		assertTrue(new Area().deleteOneBUnitAreaFromDB(conn, bUnit, area));
+	}
 }

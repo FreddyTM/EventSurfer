@@ -123,6 +123,33 @@ public class Area {
 	}
 	
 	/**
+	 * Borra el registro de la tabla b_unit_area con los id del area y la unidad de negocio
+	 * pasados por parámetro. El area dejará de estar asignada a dicha unidad de negocio.
+	 * @param conn conexión a la base de datos
+	 * @param area area que deja de estar asignada a la unidad de negocio
+	 * @param bUnit unidad de negocio a la que está asignada el area
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteOneBUnitAreaFromDB (Connection conn, BusinessUnit bUnit, Area area) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM b_unit_area "
+				+ "WHERE area_id = ? "
+				+ "AND b_unit_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, area.getId());
+			pstm.setInt(2, bUnit.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
 	 * Inserta un nuevo registro en la tabla b_unit_area con los id del area nueva
 	 * y de la unidad de negocio a la que pertenece
 	 * @param conn conexión a la base de datos
