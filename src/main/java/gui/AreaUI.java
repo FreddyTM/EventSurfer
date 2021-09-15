@@ -288,25 +288,6 @@ public class AreaUI extends JPanel {
 		allocatedLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		allocatedLabel.setBounds(600, 525, 300, 25);
 		add(allocatedLabel);
-		
-		
-		
-		//TEST CODE ***************************************************************************************************
-		
-//		String[] names = {"John", "Mary", "Peter", "Elisabeth", "James", "Sarah", "Robert", "Emilia", "Liam", "Sophie"};
-//
-//		JList nameList = new JList(names);
-//		nameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		nameList.setLayoutOrientation(JList.VERTICAL);
-//		nameList.setVisibleRowCount(5);
-//		
-//		JScrollPane listScroller = new JScrollPane(nameList);
-//		listScroller.setPreferredSize(new Dimension(250, 80));
-//		listScroller.setBounds(100, 575, 300, 100);
-//		add(listScroller);
-		
-		//TEST CODE ***************************************************************************************************
-		
 	
 		if (selectedArea != null) {			
 			availableBunits = getAvailableBunitList(selectedArea);
@@ -328,26 +309,7 @@ public class AreaUI extends JPanel {
 		availableList.setLayoutOrientation(JList.VERTICAL);		
 		availableList.setVisibleRowCount(8);
 		availableList.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		availableList.addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) {
-			        if (availableList.getSelectedIndex() != -1) {
-			        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
-			        		allocateButton.setEnabled(true);
-			        	} else if (session.getUser().getUserType().equals("MANAGER")) {
-			        		//Comparar bunit seleccionada con bunit de la sesión
-			        		//Si coincide, habilitar botón
-			        		
-			        		//Debug
-			        		infoLabel2.setText("");
-			        		infoLabel2.setText("Manager intentando asignar area...");
-			        	}
-			        }
-			    }			
-			}
-			
-		});
+		availableList.addListSelectionListener(new AvailableListener());
 		availableScrollPane = new JScrollPane(availableList);
 		availableScrollPane.setBounds(100, 575, 300, 200);
 		if (session.getUser().getUserType().equals("USER")
@@ -376,27 +338,7 @@ public class AreaUI extends JPanel {
 		allocatedList.setLayoutOrientation(JList.VERTICAL);
 		allocatedList.setVisibleRowCount(5);
 		allocatedList.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		allocatedList.addListSelectionListener((ListSelectionListener) new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting() == false) {
-			        if (allocatedList.getSelectedIndex() != -1) {
-			        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
-			        		revokeButton.setEnabled(true);
-			        	} else if (session.getUser().getUserType().equals("MANAGER")) {
-			        		//Comparar bunit seleccionada con bunit de la sesión
-			        		//Si coincide, habilitar botón
-			        		
-			        		//Debug
-			        		infoLabel2.setText("");
-			        		infoLabel2.setText("Manager intentando revocar asignación de area...");
-			        	}
-			        }
-			    }
-			}
-			
-		});
+		allocatedList.addListSelectionListener(new AllocatedListener());
 		allocatedScrollPane = new JScrollPane(allocatedList);
 		allocatedScrollPane.setBounds(600, 575, 300, 200);
 		if (session.getUser().getUserType().equals("USER")
@@ -447,7 +389,7 @@ public class AreaUI extends JPanel {
 //Si es MANAGER o USER solo aparecerán las areas de la unidad de negocio a la que pertenezcan.
 	
 	/**
-	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas. 
+	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas.
 	 * @return array ordenado alfabéticamente con la lista de areas
 	 */
 	public String[] getAreaCombolistItemsFromSession() {
@@ -860,9 +802,66 @@ public class AreaUI extends JPanel {
 			infoLabel.setText("");
 			//Refrescamos listas
 			refreshLists();
-			
-		}
-		
+			//Deshabilitamos los botones de asignación de areas
+			allocateButton.setEnabled(false);
+			revokeButton.setEnabled(false);
+		}	
+	}
+	
+	/**
+	 * Listener que monitoriza la selección de la lista de unidades de negocio disponibles
+	 */
+	private class AvailableListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if (e.getValueIsAdjusting() == false) {
+		        if (availableList.getSelectedIndex() != -1) {
+		        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
+		        		allocateButton.setEnabled(true);
+		        	} else if (session.getUser().getUserType().equals("MANAGER")) {
+		        		//Comparar bunit seleccionada con bunit de la sesión
+		        		//Si coincide, habilitar botón
+		        		if (session.getUser().getbUnit().getNombre().equals(availableList.getSelectedValue())) {
+		        			allocateButton.setEnabled(true);
+		        		} else {
+		        			allocateButton.setEnabled(false);
+		        		}
+		        		//Debug
+		        		infoLabel2.setText("");
+		        		infoLabel2.setText("Manager intentando asignar area...");
+		        	}
+		        }
+		    }
+		}		
+	}
+	
+	/**
+	 * Listener que monitoriza la selección de la lista de unidades de negocio asignadas
+	 */
+	private class AllocatedListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if (e.getValueIsAdjusting() == false) {
+		        if (allocatedList.getSelectedIndex() != -1) {
+		        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
+		        		revokeButton.setEnabled(true);
+		        	} else if (session.getUser().getUserType().equals("MANAGER")) {
+		        		//Comparar bunit seleccionada con bunit de la sesión
+		        		//Si coincide, habilitar botón
+		        		if (session.getUser().getbUnit().getNombre().equals(allocatedList.getSelectedValue())) {
+		        			revokeButton.setEnabled(true);
+		        		} else {
+		        			revokeButton.setEnabled(false);
+		        		}
+		        		//Debug
+		        		infoLabel2.setText("");
+		        		infoLabel2.setText("Manager intentando revocar asignación de area...");
+		        	}
+		        }
+		    }
+		}	
 	}
 	
 	/**

@@ -1434,12 +1434,20 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 		Add getAllocatedBunitList()
 		Add getAvailableBunitList()
 		Add refreshLists()
-		Add listeners to allocateButton & revokeButton --convert to listener classes pending--
+		Add listeners to allocateButton & revokeButton --listener classes ok--
 		Update constructor (area allocation)
 		Update getAllocatedBunitList()
 	
 	· AreaComboListener class (inner AreaUI class):
 		Update itemStateChanged() --add refreshLists()--
+
+	· AvailableListener class (new inner AreaUI class):
+		Add valueChanged()
+		Update valueChanged()
+
+	· AllocatedListener class (new inner AreaUI class):
+		Add valueChanged()
+		Update valueChanged()
 
 	· NewAction class (inner AreaUI class):
 		Update actionPerformed() --add emptyLists()--
