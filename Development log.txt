@@ -1480,6 +1480,10 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 			Update refresh()
 			Update getBunitsWithArea() --ok--
 
+		· Area class:
+			Add attribute
+				
+
 
 	* - package test.java
 

@@ -15,7 +15,7 @@ import main.java.persistence.PersistenceManager;
 public class Area {
 
 	public static final String TABLE_NAME = "area";
-//	public static final String B_UNIT_AREA_TABLE_NAME = "b_unit_area";
+	public static final String B_UNIT_AREA_TABLE_NAME = "b_unit_area";
 	private int id;
 	private String area;
 	private String descripcion;
