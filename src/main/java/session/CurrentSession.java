@@ -502,6 +502,7 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":
+							case "b_unit_area":
 								//Recargamos los datos de las areas de todas las unidades de negocio
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 									List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
