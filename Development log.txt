@@ -1464,39 +1464,42 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· AllocateAction class (new inner AreaUI class):
 		Add actionPerformed()
-		Update actionPerformed()
+		Update actionPerformed() --add last_modification table update--
 
 	· RevokeAllocationAction class (new inner AreaUI class):
 		Add actionPerformed()
 		Update actionPerformed()
 
+	· TimerJob class (inner AreaUI class):
+		Update run() --update for changes in b_unit_area table--
+
 	* - package main.java.company
 
-		· BusinessUnit class:
-			Add getAllBunitNamesWithArea() --ok--
-			Add getAllBunitNames() --ok--
-			Add getBusinessUnitNameByIdFromDb()
-			Update getAllBunitNamesWithArea() --ok--
-			Update refresh()
-			Update getBunitsWithArea() --ok--
+	· BusinessUnit class:
+		Add getAllBunitNamesWithArea() --ok--
+		Add getAllBunitNames() --ok--
+		Add getBusinessUnitNameByIdFromDb()
+		Update getAllBunitNamesWithArea() --ok--
+		Update refresh()
+		Update getBunitsWithArea() --ok--
 
-		· Area class:
-			Add attribute
+	· Area class:
+		Add attribute
 	
 	* - package main.java.session
 
-		· TimerJob class (inner CurrentSession class):
+	· TimerJob class (inner CurrentSession class):
 				
-			Update run() --case area updates all business units' areas--
+		Update run() --case area updates all business units' areas--
 
 	* - package test.java
 
-		· BusinessUnitTest class:
-			Add testGetAllBunitNamesWithArea() --ok--
-			Add testGetAllBunitNames() --ok--
-			Add testGetBusinessUnitNameByIdFromDb() --ok--
-			Update testGetAllBunitNames() --ok--
+	· BusinessUnitTest class:
+		Add testGetAllBunitNamesWithArea() --ok--
+		Add testGetAllBunitNames() --ok--
+		Add testGetBusinessUnitNameByIdFromDb() --ok--
+		Update testGetAllBunitNames() --ok--
 
-		· AreaTest class:
-			Add testDeleteOneBUnitAreaFromDB() --ok--
+	· AreaTest class:
+		Add testDeleteOneBUnitAreaFromDB() --ok--
 	

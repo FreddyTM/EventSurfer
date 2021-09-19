@@ -1114,7 +1114,7 @@ public class AreaUI extends JPanel {
 				if (testData(updatedArea)) {
 					//Si los datos actualizados se graban en la base de datos
 					if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+						//Registramos fecha y hora de la actualización de los datos de la tabla area
 						tNow = ToolBox.getTimestampNow();
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
@@ -1149,6 +1149,12 @@ public class AreaUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
 			if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
+				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
+				tNow = ToolBox.getTimestampNow();
+				//Actualizamos los datos de la tabla last_modification
+				boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+						Area.B_UNIT_AREA_TABLE_NAME, tNow);
+				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 				//Añadir el area al objeto BusinessUnit
 				bUnit.getAreas().add(selectedArea);
 				//Refrescar listas
@@ -1156,6 +1162,9 @@ public class AreaUI extends JPanel {
 				//Deshabilitar botones de asignación
 				allocateButton.setEnabled(false);
 				revokeButton.setEnabled(false);
+			//Si los datos actualizados no se graban en la base de datos
+			} else {
+				infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 			}
 		}
 		
@@ -1177,6 +1186,12 @@ public class AreaUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
 			if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
+				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
+				tNow = ToolBox.getTimestampNow();
+				//Actualizamos los datos de la tabla last_modification
+				boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+						Area.B_UNIT_AREA_TABLE_NAME, tNow);
+				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 				//Eliminar el area del objeto BusinessUnit
 				bUnit.getAreas().remove(selectedArea);
 				//Refrescar listas
@@ -1184,6 +1199,9 @@ public class AreaUI extends JPanel {
 				//Deshabilitar botones de asignación
 				allocateButton.setEnabled(false);
 				revokeButton.setEnabled(false);
+			//Si los datos actualizados no se graban en la base de datos
+			} else {
+				infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 			}
 		}
 		
@@ -1258,6 +1276,18 @@ public class AreaUI extends JPanel {
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
 						//que alguna unidad de negocio ha sido modificada o añadida
 						AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: " +
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
+					}
+					//Si en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME
+					if (updatedTable.getKey().equals(Area.B_UNIT_AREA_TABLE_NAME)) {
+						//Refrescamos listas
+						refreshLists();
+						
+						//Informamos por pantalla de la actualización
+						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
+						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+						//que alguna unidad de negocio ha sido modificada o añadida
+						AreaUI.this.infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " +
 						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
