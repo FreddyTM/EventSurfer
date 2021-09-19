@@ -498,13 +498,16 @@ public class CurrentSession {
 								//Reset usersUpdated
 								usersUpdated = false;
 								
-//								//Añadimos la tabla user a la lista de tablas actualizadas
+								//Añadimos la tabla user a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":
-								List<Area> areaList = new Area().getAreasFromDB(conn, session.getbUnit());
-								//Asignamos la lista de areas actualizada a la unidad de negocio de la sesión
-								session.getbUnit().setAreas(areaList);
+								//Recargamos los datos de las areas de todas las unidades de negocio
+								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+									List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
+									oneUnit.setAreas(areaList);		
+								}
+								//Añadimos la tabla area a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event":

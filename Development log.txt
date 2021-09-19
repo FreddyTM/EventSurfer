@@ -1482,8 +1482,12 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 		· Area class:
 			Add attribute
-				
+	
+	* - package main.java.session
 
+		· TimerJob class (inner CurrentSession class):
+				
+			Update run() --case area updates all business units' areas--
 
 	* - package test.java
 
