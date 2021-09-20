@@ -1490,7 +1490,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· TimerJob class (inner CurrentSession class):
 				
-		Update run() --case area & b_unit_area updates all business units' areas--
+		Update run() --case area & b_unit_area updates all business units' areas, error fixed--
 
 	* - package test.java
 

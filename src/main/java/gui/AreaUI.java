@@ -1259,15 +1259,21 @@ public class AreaUI extends JPanel {
 							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 							areaComboBox.setSelectedIndex(0);
 							setFirstSelectedArea();
-						//Area seleccionada no borrada
-						} else {
-							//Renovamos la lista de areas del comboBox
-							refreshComboBox();
-							//Asignamos el nuevo contenido a los textfields
-							populateAreaFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
+//						//Area seleccionada no borrada
+//						} else {
+//							//Renovamos la lista de areas del comboBox
+//							refreshComboBox();
+//							//Asignamos el nuevo contenido a los textfields
+//							populateAreaFields();
+//							//Hacemos backup del contenido de los datos del formulario
+//							updateDataCache();
 						}
+						//Renovamos la lista de areas del comboBox
+						refreshComboBox();
+						//Asignamos el nuevo contenido a los textfields
+						populateAreaFields();
+						//Hacemos backup del contenido de los datos del formulario
+						updateDataCache();
 						//Refrescamos listas
 						refreshLists();
 						
