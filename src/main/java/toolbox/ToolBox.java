@@ -84,6 +84,13 @@ public class ToolBox {
 		return itemList;
 	}
 	
+	/**
+	 * Muestra un cuadro de diálogo centrado en el monitor en el que se esté ejecutando la aplicación.
+	 * @param message Mensaje que aparecerá en el cuadro de diálogo
+	 * @param panel componente raíz del cuadro de diálogo
+	 * @param dialogType tipo de cuadro de diálogo a mostrar
+	 * @return valor numérico de la opción escogida por el usuario
+	 */
 	public static int showDialog(String message, JPanel panel, String dialogType) {
 //		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
 //		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);

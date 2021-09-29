@@ -1419,6 +1419,11 @@ ver 0.1.9 - AREAUI AREA MANAGEMENT LAYOUT, AREA ADD, EDIT & DELETE OPTIONS
 
 ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
+	* - Package main.java.toolbox (new)
+
+	· ToolBox class (new):
+		Add javadoc comments to showDialog()
+
 	* - Package main.java.gui
 
 	· AppWindow class:
