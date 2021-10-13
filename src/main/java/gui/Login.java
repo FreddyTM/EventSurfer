@@ -182,10 +182,6 @@ public class Login extends JPanel {
 				frame.setUpWindow();
 				break;
 			case 2: //Usuario manager
-				//Cargamos datos de la sesión
-				session.loadCurrentSessionData(conn, bUnitId, userId);
-				frame.setUpWindow();
-				break;
 			case 3: //Usuario user
 				//Cargamos datos de la sesión
 				session.loadCurrentSessionData(conn, bUnitId, userId);

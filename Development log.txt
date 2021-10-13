@@ -1517,6 +1517,9 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 		Update intialize() --use centerFrame()--
 		Delete useless comments
 
+	· Login class:
+		Update userLogin() --case 2 = case 3--
+
 	· Selector class:
 		Add attributes
 			eventTypeAction, eventAction
