@@ -21,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
+import main.java.toolbox.ToolBox;
 
 public class AppWindow extends JFrame {
 	
@@ -31,7 +32,7 @@ public class AppWindow extends JFrame {
 	private JPanel rightPanel;
 	private JPanel basePanel;
 	private JLabel infoLabel;
-	private String versionNumber = "0.1.10";
+	private String versionNumber = "0.1.11";
 	//private TabbedDesk desk;
 	private CurrentSession session;
 	private Connection conn;
@@ -44,24 +45,9 @@ public class AppWindow extends JFrame {
 	}
 	
 	public AppWindow() throws HeadlessException {
-		// TODO Auto-generated constructor stub
+
 	}
 
-//	public AppWindow(GraphicsConfiguration gc) {
-//		super(gc);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public AppWindow(String title) throws HeadlessException {
-//		super(title);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public AppWindow(String title, GraphicsConfiguration gc) {
-//		super(title, gc);
-//		// TODO Auto-generated constructor stub
-//	}
-	
 	/**
 	 * Crea la ventana de la aplicación y la centra en la pantalla. Envía a la sesión la información de las pantallas del sistema
 	 * y de la pantalla en la que se está ejecutando la aplicación. Actualiza dicha información de manera continuada para que,
@@ -79,28 +65,7 @@ public class AppWindow extends JFrame {
 		//Debug
 		System.out.println("Monitor actual: " + currentDisplay.getIDstring());
 		
-	    int appWidth = 1000;
-	    int appHeight = 700;
-	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
-	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
-	    int currentWidth = 0;
-	    int currentHeight = 0;
-		//Centrado de pantalla multimonitor
-		for (int i = 0; i < displays.length; i++) {
-		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-				currentWidth = currentDisplay.getDisplayMode().getWidth();
-				currentHeight = currentDisplay.getDisplayMode().getHeight();
-				setBounds((currentWidth - appWidth) / 2 + coordinateX, (currentHeight - appHeight) / 2 + coordinateY, appWidth, appHeight);
-		    }
-		}
-
-		//OLD CODE
-//		Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-//	    int appWidth = 1000;
-//	    int appHeight = 700;
-//		setPreferredSize(new Dimension(appWidth, appHeight));
-//		setBounds(center.x - appWidth / 2, center.y - appHeight / 2, appWidth, appHeight);
-	    //OLD CODE
+		ToolBox.centerFrame(this, displays, currentDisplay, 1000, 700);
 
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
@@ -167,7 +132,6 @@ public class AppWindow extends JFrame {
 
 		@Override
 		public void componentResized(ComponentEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
@@ -184,13 +148,11 @@ public class AppWindow extends JFrame {
 
 		@Override
 		public void componentShown(ComponentEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void componentHidden(ComponentEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 	}

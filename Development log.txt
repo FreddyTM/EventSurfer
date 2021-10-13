@@ -1507,4 +1507,21 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 	· AreaTest class:
 		Add testDeleteOneBUnitAreaFromDB() --ok--
+
+ver 0.1.11 - CLEAN CODE & REFACTORING
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.11--
+		Update intialize() --use centerFrame()--
+		Delete useless comments
+
+	* - Package main.java.toolbox (new)
+
+	· ToolBox class:
+		Add centerFrame() --multimonitor center window algorithm--
+		Update ShowDialog() --use centerFrame()--
+		Delete useless comments
+
 	

@@ -25,7 +25,7 @@ import javax.swing.SwingUtilities;
 public class ToolBox {
 
 	public ToolBox() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	/**
@@ -85,6 +85,31 @@ public class ToolBox {
 	}
 	
 	/**
+	 * Centra la ventana del JFrame pasádo por parámetro en el monitor que esté ejecutando la aplicación
+	 * @param messageFrame ventana a centrar
+	 * @param displays lista de monitores del sistema
+	 * @param currentDisplay monitor en el que se está ejecutando la aplicación
+	 * @param width anchura de la ventana
+	 * @param height altura de la ventana 
+	 */
+	public static void centerFrame(Frame messageFrame, GraphicsDevice [] displays, GraphicsDevice currentDisplay, int width, int height) {
+		int panelWidth = width;
+		int panelHeight = height;
+		int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
+		int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
+		int currentWidth = 0;
+		int currentHeight = 0;
+		//Centrado de pantalla multimonitor
+		for (int i = 0; i < displays.length; i++) {
+			if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
+				currentWidth = currentDisplay.getDisplayMode().getWidth();
+				currentHeight = currentDisplay.getDisplayMode().getHeight();
+				messageFrame.setBounds((currentWidth - panelWidth) / 2 + coordinateX, (currentHeight - panelHeight) / 2 + coordinateY, panelWidth, panelHeight);
+			}
+		}
+	}
+	
+	/**
 	 * Muestra un cuadro de diálogo centrado en el monitor en el que se esté ejecutando la aplicación.
 	 * @param message Mensaje que aparecerá en el cuadro de diálogo
 	 * @param panel componente raíz del cuadro de diálogo
@@ -92,35 +117,16 @@ public class ToolBox {
 	 * @return valor numérico de la opción escogida por el usuario
 	 */
 	public static int showDialog(String message, JPanel panel, String dialogType) {
-//		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
-//		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
-		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) panel);
-		
-		
-//		Rectangle rectangle = testPane.getBounds();
-//	    int paneWidth = rectangle.width;
-//	    int paneHeight = rectangle.height;
+
+		Frame parentFrame = (Frame) SwingUtilities.getRoot((Component) panel);
 		
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
 		
 		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
 		Rectangle frameRectangle = messageFrame.getBounds();
-	    int paneWidth = frameRectangle.width;
-	    int paneHeight = frameRectangle.height;
 		
-	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
-	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
-	    int currentWidth = 0;
-	    int currentHeight = 0;
-		//Centrado de pantalla multimonitor
-		for (int i = 0; i < displays.length; i++) {
-		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-				currentWidth = currentDisplay.getDisplayMode().getWidth();
-				currentHeight = currentDisplay.getDisplayMode().getHeight();
-				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
-		    }
-		}
+		centerFrame(messageFrame, displays, currentDisplay, frameRectangle.width, frameRectangle.height);
 		
 		if (dialogType.equals("info")) {
 			JOptionPane.showMessageDialog(messageFrame, message, "Información", JOptionPane.WARNING_MESSAGE);
@@ -133,5 +139,6 @@ public class ToolBox {
 		}
 		
 	}
+	
 	
 }
