@@ -33,7 +33,6 @@ public class AppWindow extends JFrame {
 	private JPanel basePanel;
 	private JLabel infoLabel;
 	private String versionNumber = "0.1.11";
-	//private TabbedDesk desk;
 	private CurrentSession session;
 	private Connection conn;
 
