@@ -1520,6 +1520,9 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 	· Login class:
 		Update userLogin() --case 2 = case 3--
 
+	· DefaultAdmin class:
+		Delete useless comments
+
 	· Selector class:
 		Add attributes
 			eventTypeAction, eventAction

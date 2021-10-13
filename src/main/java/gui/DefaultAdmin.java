@@ -36,9 +36,7 @@ public class DefaultAdmin extends JPanel {
 	private CurrentSession session;
 	private AppWindow frame;
 
-	/**
-	 * Create the panel.
-	 */
+
 	public DefaultAdmin(Connection conn, User user, CurrentSession session, AppWindow frame) {
 		this.conn = conn ;
 		this.user = user;
@@ -308,7 +306,6 @@ public class DefaultAdmin extends JPanel {
 		//Cargar paneles
 		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + user.getUserAlias();
 		frame.setTitle(title);
-//		frame.setTitle(frame.getTitle() + "\t\tVersión " + frame.getVersionNumber() + "\t\tUsuario: " + user.getUserAlias());
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		frame.setUpWindow();
 	}
