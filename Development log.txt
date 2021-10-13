@@ -1517,6 +1517,17 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 		Update intialize() --use centerFrame()--
 		Delete useless comments
 
+	· Selector class:
+		Add attributes
+			eventTypeAction, eventAction
+		Delete useless comments
+
+	· EventTypeAction class (new inner Selector class):
+		Add actionPerformed() --empty--
+
+	· EventAction class (new inner Selector class):
+		Add actionPerformed() --empty--
+
 	* - Package main.java.toolbox (new)
 
 	· ToolBox class:

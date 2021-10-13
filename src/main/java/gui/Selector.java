@@ -25,6 +25,8 @@ public class Selector extends JPanel {
 	private final Action bUnitAction = new BunitAction();
 	private final Action userAction = new UserAction();
 	private final Action areaAction = new AreaAction();
+	private final Action eventTypeAction = null;
+	private final Action eventAction = null;
 	private JButton eventButton;
 	private JButton eventTypeButton;
 	private JButton areaButton;
@@ -34,9 +36,6 @@ public class Selector extends JPanel {
 	private JButton logOutButton;
 
 
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public Selector(AppWindow frame, CurrentSession session) {
 		this.frame = frame;
 		this.session = session;
@@ -109,21 +108,6 @@ public class Selector extends JPanel {
 		logOutButton.setPreferredSize(dim);
 		add(logOutButton);
 	}
-	
-//	public Selector(LayoutManager layout) {
-//		super(layout);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public Selector(boolean isDoubleBuffered) {
-//		super(isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	public Selector(LayoutManager layout, boolean isDoubleBuffered) {
-//		super(layout, isDoubleBuffered);
-//		// TODO Auto-generated constructor stub
-//	}
 	
 	/**
 	 * Asigna el panel entrado por parámetro al centerPanel del frame, lo coloca
@@ -240,6 +224,32 @@ public class Selector extends JPanel {
 			//Mostramos el panel
 			showPanel(frame, areaUI);		
 		}		
+	}
+	
+	/**
+	 * Acción del botón Tipos de evento. Muestra los tipos de eventos
+	 */
+	private class EventTypeAction extends AbstractAction {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	/**
+	 * Acción del botón Eventos. Muestra los datos de los eventos
+	 */
+	private class EventAction extends AbstractAction {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 
 }
