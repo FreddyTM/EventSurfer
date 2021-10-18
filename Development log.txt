@@ -1551,4 +1551,8 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 
 	· BusinessUnit class:
 		Delete useless comments
+
+	· Area class:
+		Update getAreasFromDB() --change parameter name--
+		Delete useless comments
 	

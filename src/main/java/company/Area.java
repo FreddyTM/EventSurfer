@@ -126,8 +126,8 @@ public class Area {
 	 * Borra el registro de la tabla b_unit_area con los id del area y la unidad de negocio
 	 * pasados por parámetro. El area dejará de estar asignada a dicha unidad de negocio.
 	 * @param conn conexión a la base de datos
-	 * @param area area que deja de estar asignada a la unidad de negocio
 	 * @param bUnit unidad de negocio a la que está asignada el area
+	 * @param area area que deja de estar asignada a la unidad de negocio
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteOneBUnitAreaFromDB (Connection conn, BusinessUnit bUnit, Area area) {
@@ -188,8 +188,6 @@ public class Area {
 			int id = PersistenceManager.getLastElementIdFromDB(conn, TABLE_NAME);
 			area.setId(id);
 			return area;
-//			if (saveBUnitAreaToDB (conn, bUnit, area)) {
-//			}
 		}	
 		return null;
 	}
@@ -246,10 +244,10 @@ public class Area {
 	/**
 	 * Obtiene la lista de areas del objeto BusinessUnit pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param bu objeto del que queremos recuperar sus areas
+	 * @param bUnit objeto del que queremos recuperar sus areas
 	 * @return lista de areas del objeto almacenados en la base de datos
 	 */
-	public List<Area> getAreasFromDB (Connection conn, BusinessUnit bu) {
+	public List<Area> getAreasFromDB (Connection conn, BusinessUnit bUnit) {
 		List<Area> areaList = new ArrayList<Area>();
 		Area area = null;
 		PreparedStatement pstm = null;
@@ -260,7 +258,7 @@ public class Area {
 				+ "AND bua.area_id = a.id;";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, bu.getId());
+			pstm.setInt(1, bUnit.getId());
 			results = pstm.executeQuery();
 			while (results.next()) {
 				area = new Area();
@@ -336,8 +334,6 @@ public class Area {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closeStatement(stm);
 		}
-		//postgres=# select distinct(col1) from test order by col1;
-		//select distinct area ids from db, iterate through resultset, if area id found, return true, otherwise return false
 		return false;
 	}
 	
