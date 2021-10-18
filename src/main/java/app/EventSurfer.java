@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.sql.Connection;
 import main.java.company.User;
+import main.java.exceptions.DatabaseError;
 import main.java.gui.AppWindow;
 import main.java.gui.DefaultAdmin;
 import main.java.gui.Login;
@@ -42,10 +43,20 @@ public class EventSurfer {
 	public void go(String[] args) {
 		
 		if (args.length == 1) {
-			connection = PersistenceManager.connectToDatabase(args[0]);
+			try {
+				connection = PersistenceManager.connectToDatabase(args[0]);
+			} catch (DatabaseError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} else {
-			connection = PersistenceManager.connectToDatabase("LOCAL_TEST_DB");			
+			try {
+				connection = PersistenceManager.connectToDatabase("LOCAL_TEST_DB");
+			} catch (DatabaseError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 		
 		while(connection == null) {

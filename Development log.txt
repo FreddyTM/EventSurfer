@@ -1513,6 +1513,7 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 	* - Package main.java.app
 	
 	· EventSurfer class:
+		Update go() --add try/catch to initial database connection (DatabaseError exception)
 		Delete useless comments
 
 	* - Package main.java.gui
