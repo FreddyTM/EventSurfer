@@ -8,18 +8,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import main.java.exceptions.DatabaseError;
+
 
 
 public class PersistenceManager {
 	
-	private static String url; //URL de la base de datos
-	private static String user; //usuario de la base de datos
-	private static String password; //contraseña del usuario de la base de datos
+	//URL de la base de datos
+	private static String url; 
+	//usuario de la base de datos
+	private static String user; 
+	//contraseña del usuario de la base de datos
+	private static String password; 
 
 	//LOCAL_DB - Local database
 	//LOCAL_TEST_DB - Local test database
 	//REMOTE_DB - Remote database (Heroku)
-	public static Connection connectToDatabase(String database) {
+	
+	/**
+	 * Realiza la conexión inicial con la base de datos
+	 * @param database nombre de la base de datos
+	 * @return conexión a la base de datos que se usará durante la ejecución del programa
+	 * @throws DatabaseError
+	 */
+	public static Connection connectToDatabase(String database) throws DatabaseError {
 		String url = null;
 		String user = null;
 		String password = null;
@@ -71,8 +83,9 @@ public class PersistenceManager {
 	 * Devuelve una conexión a una base de datos
 	 * Los parámetros de la conexión son los atributos de la propia clase PersistenceManager
 	 * @return conexión con la base de datos
+	 * @throws DatabaseError 
 	 */
-	public static Connection getConnection () {		
+	public static Connection getConnection () throws DatabaseError {		
 		Connection connection = null;
 		String dbName = null;
 		if (url != null) {
@@ -94,6 +107,7 @@ public class PersistenceManager {
 			System.out.println("Error: " + e.getMessage());
 			System.out.println("Estado: " + e.getSQLState());
 			System.out.println("Código: " + e.getErrorCode());
+			throw new DatabaseError("Error de conexión con la base de datos");
 		}		
 		return connection;
 	}
