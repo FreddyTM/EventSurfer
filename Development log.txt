@@ -1514,7 +1514,7 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.11--
-		Update intialize() --use centerFrame()--
+		Update intialize() --make use of Toolbox.centerFrame()--
 		Delete useless comments
 
 	· Login class:
@@ -1544,7 +1544,11 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 	* - Package main.java.session
 
 	· CurrentSession class:
-		Update backToLogin() --make use of Toolbox.centerFrame in backToLogin()--
+		Update backToLogin() --make use of Toolbox.centerFrame()--
 		Delete useless comments
 		
+	* - Package main.java.company
+
+	· BusinessUnit class:
+		Delete useless comments
 	

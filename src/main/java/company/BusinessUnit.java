@@ -30,7 +30,6 @@ public class BusinessUnit {
 	
 	public BusinessUnit(int id, Company company, String nombre, String direccion,
 			String provincia, String estado, String cpostal, String telefono, String mail, boolean activo) {			
-		//this.connection = connection;
 		this.id = id;
 		this.company = company;
 		this.nombre = nombre;
@@ -139,25 +138,6 @@ public class BusinessUnit {
 		}	
 	}
 	
-//	/**
-//	 * Actualiza los datos de una unidad de negocio que ya esté en la lista de unidades de negocio
-//	 * de la empresa, si la actualización de dichos datos en la base de datos se realiza con éxito
-//	 * @param conn conexión con la base de datos
-//	 * @param bUnit unidad de negocio que contiene los datos que se actualizan
-//	 */
-//	public void updateBusinessUnit(Connection conn, BusinessUnit bUnit) {
-//		if (updateBusinessUnitToDB(conn, bUnit)) {
-//			this.company = bUnit.getCompany();
-//			this.nombre = bUnit.getNombre();
-//			this.direccion = bUnit.getDireccion();
-//			this.provincia = bUnit.getProvincia();
-//			this.estado = bUnit.getEstado();
-//			this.cpostal = bUnit.getCpostal();
-//			this.telefono = bUnit.getTelefono();
-//			this.mail = bUnit.getMail();
-//		}
-//	}
-	
 	/**
 	 * Obtiene la lista de BusinessUnits del objeto Company pasado por parámetro
 	 * @param conn conexión con la base de datos
@@ -202,8 +182,7 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Refresca los datos de la unidad de negocio recargándolos de
-	 * la base de datos
+	 * Refresca los datos de la unidad de negocio recargándolos de la base de datos
 	 * @param conn conexión con la base de datos
 	 * @return true si se refrescan los datos, false si no
 	 */
@@ -372,7 +351,6 @@ public class BusinessUnit {
 			pstm.setInt(1, area.getId());
 			results = pstm.executeQuery();
 			while (results.next()) {
-//				bUnitList.add(new BusinessUnit().getBusinessUnitById(company, results.getInt(1)));
 				bUnitList.add(new BusinessUnit().getBusinessUnitNameByIdFromDb(conn,company, results.getInt(1)));
 			}
 			return bUnitList;
@@ -461,10 +439,7 @@ public class BusinessUnit {
 		}
 		return bUnitNames;
 	}
-	
-	
 
-	
 	public int getId() {
 		return id;
 	}
@@ -497,7 +472,6 @@ public class BusinessUnit {
 		this.direccion = direccion;
 	}
 
-
 	public String getProvincia() {
 		return provincia;
 	}
@@ -522,26 +496,21 @@ public class BusinessUnit {
 		this.cpostal = cpostal;
 	}
 
-
 	public String getTelefono() {
 		return telefono;
 	}
-
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
 
-
 	public String getMail() {
 		return mail;
 	}
 
-
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
 
 	public Boolean isActivo() {
 		return activo;
@@ -555,11 +524,9 @@ public class BusinessUnit {
 		return users;
 	}
 
-
 	public void setUsers(List<User> users) {
 		this.users = users;
 	}
-
 
 	public List<Area> getAreas() {
 		return areas;
