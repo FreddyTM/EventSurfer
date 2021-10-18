@@ -1,5 +1,6 @@
 package main.java.exceptions;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class DatabaseError extends Exception {
@@ -12,7 +13,12 @@ public class DatabaseError extends Exception {
 
 	public DatabaseError(String message) {
 		super(message);
-		JOptionPane.showMessageDialog(null, message, TITLE, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(new JFrame(), message, TITLE, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public DatabaseError(String message, JFrame frame) {
+		super(message);
+		JOptionPane.showMessageDialog(frame, message, TITLE, JOptionPane.ERROR_MESSAGE);
 	}
 
 	public DatabaseError(Throwable cause) {

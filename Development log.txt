@@ -1516,6 +1516,10 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 		Update go() --add try/catch to initial database connection (DatabaseError exception)
 		Delete useless comments
 
+	* - Package main.java.exceptions
+		Add DatabaseError(String message, JFrame frame) --overloaded constructor--
+		Update DatabaseError(String message) --JOptionPane on new empty frame--
+
 	* - Package main.java.gui
 
 	· AppWindow class:
