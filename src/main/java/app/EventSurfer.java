@@ -22,7 +22,6 @@ public class EventSurfer {
 			public void run() {
 				try {
 					EventSurfer eventSurfer = new EventSurfer();
-					//eventSurfer.frame.setVisible(true);
 					eventSurfer.go(args);
 				} catch (Exception e) {
 					e.printStackTrace();

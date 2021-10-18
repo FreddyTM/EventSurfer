@@ -1510,6 +1510,11 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 
 ver 0.1.11 - CLEAN CODE & REFACTORING
 
+	* - Package main.java.app
+	
+	· EventSurfer class:
+		Delete useless comments
+
 	* - Package main.java.gui
 
 	· AppWindow class:
