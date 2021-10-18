@@ -1570,4 +1570,10 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 	· Area class:
 		Update getAreasFromDB() --change parameter name--
 		Delete useless comments
-	
+
+	* - Package main.java.test
+
+	· PersistenceManagerTest class:
+		Rename testConnectToDatabase() to testConnectToLocalDatabase()
+		Update testConnectToLocalDatabase() --delete remote connection test--
+		Add testConnectToRemoteDatabase() --not working yet--
