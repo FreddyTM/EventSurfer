@@ -1127,7 +1127,7 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 	· EventUpdateTest class:
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 
-	· PersistenceManager class:
+	· PersistenceManagerTest class:
 		Update reference PersistenceManager.getTimestampNow() to ToolBox.getTimestampNow()
 
 	* - Package main.java.event
@@ -1508,7 +1508,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 	· AreaTest class:
 		Add testDeleteOneBUnitAreaFromDB() --ok--
 
-ver 0.1.11 - CLEAN CODE & REFACTORING
+ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION MANAGEMENT CLASS
 
 	* - Package main.java.app
 	
@@ -1519,6 +1519,11 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 	* - Package main.java.exceptions
 		Add DatabaseError(String message, JFrame frame) --overloaded constructor--
 		Update DatabaseError(String message) --JOptionPane on new empty frame--
+
+	* - Package main.java.persistence:
+
+	· PersistenceManager class:
+		Update connectToDatabase(), getConnection() --add use of DatabaseError exception--
 
 	* - Package main.java.gui
 

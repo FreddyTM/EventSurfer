@@ -23,6 +23,7 @@ import main.java.company.Company;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.exceptions.DatabaseError;
 import main.java.persistence.PersistenceManager;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
@@ -250,7 +251,12 @@ public class CurrentSession {
 			CurrentSession.this.updatedTables.clear();
 			Connection conn = session.getConnection();
 			if (conn == null) {
-				conn = PersistenceManager.getConnection();
+				try {
+					conn = PersistenceManager.getConnection();
+				} catch (DatabaseError e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			//Registramos el timestamp de la sessión y lo asignamos también a una
 			//variable temporal que registrará los incrementos que puedan existir 
