@@ -1541,4 +1541,10 @@ ver 0.1.11 - CLEAN CODE & REFACTORING
 		Update ShowDialog() --use centerFrame()--
 		Delete useless comments
 
+	* - Package main.java.session
+
+	· CurrentSession class:
+		Update backToLogin() --make use of Toolbox.centerFrame in backToLogin()--
+		Delete useless comments
+		
 	

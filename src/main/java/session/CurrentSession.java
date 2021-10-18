@@ -24,6 +24,7 @@ import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.persistence.PersistenceManager;
+import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
@@ -174,17 +175,6 @@ public class CurrentSession {
 		timer.scheduleAtFixedRate(task, 10000, 60000);
 	}
 	
-//	/**
-//	 * Método de carga de datos unificado. ** Declarado, pero sin desarrollar todavía **
-//	 * @param conn conexión con la base de datos
-//	 * @param bUnitId id de la unidad de negocio
-//	 * @param userId id del usuario que abre la sesión
-//	 */
-//	public void loadData (Connection conn, int bUnitId, int userId) {
-//		//Crear método en user getUserTypeFromDb(Connection conn, int userId) para filtrar la carga de datos en
-//		//función del tipo de usuario que abrió sesión
-//	}
-	
 	/**
 	 * Carga los tipos de usuarios, tipos de eventos y estados de eventos almacenados en la base
 	 * de datos, y los agrupa en un objeto contenedor TypesStatesContainer
@@ -206,27 +196,14 @@ public class CurrentSession {
 		TypesStatesContainer.setEvState(eventStateList);
 	}
 	
-//	/**
-//	 * Da formato a la fecha y la hora del Timestamp pasado por parámetro
-//	 * @param timestamp Timestamp a formatear
-//	 * @param pattern patrón de formateo, si es null se usa el patrón por defecto del método
-//	 * @return Timestamp formateado
-//	 */
-//	public String formatTimestamp(Timestamp timestamp, String pattern) {
-//		if (pattern == null) {
-//			pattern = "EEEE, dd-MM-yyyy HH:mm:ss";
-//		}
-//		SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-//		String niceTimestamp = formatter.format(timestamp);
-//		return niceTimestamp;
-//	}
-	
 	/**
 	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro usuario desde otra
 	 * sesión. Se mostrará un mensaje informativo antes de cerrar la sesión local. El usuario que abrió sesión ya no podrá hacer
 	 * login de nuevo hasta que no sea reactivado por algún administrador.
 	 * @param tableName origen de la desactivación del usuario, bien sea por la desactivación de la unidad de negocio a la que pertenece
 	 * o por la desactivación directa del usuario
+	 * @param displays lista de monitores del sistema
+	 * @param currentDisplay monitor en el que se está ejecutando la aplicación
 	 */
 	public void backToLogin(String tableName, GraphicsDevice [] displays, GraphicsDevice currentDisplay) {
 		
@@ -244,22 +221,10 @@ public class CurrentSession {
 		}
 
 		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
-		Rectangle frameRectangle = messageFrame.getBounds();
+		Rectangle frameRectangle = messageFrame.getBounds();	
 	    int paneWidth = frameRectangle.width;
-	    int paneHeight = frameRectangle.height;
-		
-	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
-	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
-	    int currentWidth = 0;
-	    int currentHeight = 0;
-		//Centrado de pantalla multimonitor
-		for (int i = 0; i < displays.length; i++) {
-		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-				currentWidth = currentDisplay.getDisplayMode().getWidth();
-				currentHeight = currentDisplay.getDisplayMode().getHeight();
-				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
-		    }
-		}
+	    int paneHeight = frameRectangle.height;	
+		ToolBox.centerFrame(messageFrame, displays, currentDisplay, paneWidth, paneHeight);	
 		JOptionPane.showMessageDialog(messageFrame, infoMessage, title, JOptionPane.WARNING_MESSAGE);
 		
 		//Replicamos la acción de logout del selector
@@ -271,8 +236,6 @@ public class CurrentSession {
 	 * con posterioridad a la última carga de datos de la sesión en curso
 	*/
 	private class TimerJob extends TimerTask {
-		
-//		private volatile boolean usersUpdated = false;
 		
 		@Override
 		public void run() {
@@ -546,11 +509,7 @@ public class CurrentSession {
 					//Actualizamos timestamp de la sesión con el valor del timestamp temporal
 					session.setDateTimeReference(tempDateTime);
 				}
-				
-				//Actualizar el panel que esté visible si su información ha cambiado
-				//1º - Identificar panel visible
-				//2º - Comprobar si el panel visible tiene datos de la tabla que ha cambiado
-				//3º - Recargar datos del panel visible
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
