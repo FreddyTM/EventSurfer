@@ -1517,8 +1517,11 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 		Delete useless comments
 
 	* - Package main.java.exceptions
+	
+	· DatabaseError class:
 		Add DatabaseError(String message, JFrame frame) --overloaded constructor--
 		Update DatabaseError(String message) --JOptionPane on new empty frame--
+		Delete useless comments
 
 	* - Package main.java.persistence:
 
