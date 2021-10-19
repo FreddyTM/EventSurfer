@@ -160,7 +160,7 @@ class UserTest {
 		user.setNombre("NewAdminName");
 		user.setApellido("NewAdminLastName");
 		user.setPassword("NewSurferPass");
-		assertTrue(user.updateDefaultAdminUserToDb(conn, user));
+		assertTrue(user.updateDefaultAdminUserToDB(conn, user));
 	}
 	
 	@Test

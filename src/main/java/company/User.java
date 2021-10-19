@@ -30,7 +30,6 @@ public class User {
 	
 	public User(int id, BusinessUnit bUnit, String userType, String userAlias, 
 			String nombre, String apellido, String password, boolean activo) {
-		//this.connection = connection;
 		this.id = id;
 		this.bUnit = bUnit;
 		this.userType = userType;
@@ -170,7 +169,7 @@ public class User {
 	 * @param user usuario administrador por defecto
 	 * @return true si la actualización se hizo con éxito, false si no 
 	 */
-	public boolean updateDefaultAdminUserToDb (Connection conn, User user) {
+	public boolean updateDefaultAdminUserToDB (Connection conn, User user) {
 		PreparedStatement pstm = null;
 		String sql = "UPDATE \"user\" "
 				+ "SET "
@@ -242,7 +241,7 @@ public class User {
 	 * @param bUnit unidad de negocio cuyos usuarios se marcarán como inactivos
 	 * @return lista de usuarios actualizados en la base de datos, null si la lista no se obtiene
 	 */
-	public List<User> setNoActiveUsersToDb (Connection conn, BusinessUnit bUnit) {
+	public List<User> setNoActiveUsersToDB (Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
 		
 		//Debug

@@ -1574,6 +1574,11 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 		Update getAreasFromDB() --change parameter name--
 		Delete useless comments
 
+	· User class:
+		Rename updateDefaultAdminUserToDb() to updateDefaultAdminUserToDB()
+		Rename setNoActiveUsersToDb() to setNoActiveUsersToDB()
+		Delete useless comments
+
 	* - Package main.java.test
 
 	· PersistenceManagerTest class:
