@@ -288,7 +288,7 @@ public class DefaultAdmin extends JPanel {
 		user.setPassword(user.passwordHash(String.valueOf(newPassField.getPassword())));
 		//Actualizamos datos de usuario en la base de datos
 		//Si se actualizan correctamente, iniciamos sesión
-		if (user.updateDefaultAdminUserToDb(conn, user)) {
+		if (user.updateDefaultAdminUserToDB(conn, user)) {
 			return true;
 		}
 		return false;

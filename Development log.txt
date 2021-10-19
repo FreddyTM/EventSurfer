@@ -1585,3 +1585,6 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 		Rename testConnectToDatabase() to testConnectToLocalDatabase()
 		Update testConnectToLocalDatabase() --delete remote connection test--
 		Add testConnectToRemoteDatabase() --not working yet--
+
+	· UserTest class:
+		Delete useless comments

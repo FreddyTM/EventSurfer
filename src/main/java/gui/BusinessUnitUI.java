@@ -982,7 +982,7 @@ public class BusinessUnitUI extends JPanel {
 								System.out.println("Marcando usuarios inactivos");
 								
 								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-								updatedUserList = new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
+								updatedUserList = new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
 								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 								UserChangeRegister = PersistenceManager.updateTimeStampToDB(
 										session.getConnection(), User.TABLE_NAME, tNow);
@@ -1083,7 +1083,7 @@ public class BusinessUnitUI extends JPanel {
 							System.out.println("lastActive: " + lastActive);
 											
 							//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
-							new User().setNoActiveUsersToDb(session.getConnection(), updatedBunit);
+							new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
 							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 							PersistenceManager.updateTimeStampToDB(session.getConnection(),
 									User.TABLE_NAME, tNow);
