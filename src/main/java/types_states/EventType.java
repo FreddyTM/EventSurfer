@@ -14,11 +14,12 @@ import main.java.persistence.PersistenceManager;
 public class EventType {
 
 	public static final String TABLE_NAME = "event_type";
+	
 	//Map <id, descripcion> Almacena la tabla event_type de la base de datos
 	private Map <Integer, String> eventTypes = new LinkedHashMap<Integer, String>();
 	
 	public EventType () {
-		//this.connection = connection;
+
 	}
 	
 	/**
@@ -97,10 +98,7 @@ public class EventType {
 		System.out.println("Tipos de eventos cargados correctamente");
 		System.out.print(eventTypes.entrySet());
 		System.out.println();
-//		System.out.println("TIPOS DE USUARIO: ");
-//		for (int i = 0; i < getNumberOfUserTypes(); i++) {
-//			System.out.print(getUserTypes()[i] + ", ");
-//		}
+
 	}
 	
 	/**
