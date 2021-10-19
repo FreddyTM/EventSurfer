@@ -13,12 +13,13 @@ import main.java.persistence.PersistenceManager;
 
 public class UserType {
 
-	//private Connection connection;
+	public static final String TABLE_NAME = "user_type";
+	
 	//Map <id, user_type> Almacena la tabla user_type de la base de datos
 	private Map <Integer, String> userTypes = new LinkedHashMap<Integer, String>();
 	
 	public UserType () {
-		//this.connection = connection;
+		
 	}
 	
 	/**
@@ -96,10 +97,7 @@ public class UserType {
 		System.out.println("Tipos de usuario cargados correctamente");
 		System.out.print(userTypes.entrySet());
 		System.out.println();
-//		System.out.println("TIPOS DE USUARIO: ");
-//		for (int i = 0; i < getNumberOfUserTypes(); i++) {
-//			System.out.print(getUserTypes()[i] + ", ");
-//		}
+
 	}
 	
 	public Map <Integer, String> getUserTypes() {

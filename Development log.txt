@@ -1584,6 +1584,13 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 	· EventState class:
 		Delete useless comments
 
+	· EventType class:
+		Delete useless comments
+
+	· UserType class:
+		Add attribute
+			TABLE_NAME
+		Delete useless comments
 
 	* - Package main.java.test
 
