@@ -1579,6 +1579,12 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 		Rename setNoActiveUsersToDb() to setNoActiveUsersToDB()
 		Delete useless comments
 
+	* - Package main.java.types_states
+
+	· EventState class:
+		Delete useless comments
+
+
 	* - Package main.java.test
 
 	· PersistenceManagerTest class:

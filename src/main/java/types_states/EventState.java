@@ -12,12 +12,11 @@ import main.java.persistence.PersistenceManager;
 
 public class EventState {
 
-	//private Connection connection;
 	//Map <id, descripcion> Almacena la tabla event_state de la base de datos
 	private Map <Integer, String> eventStates = new LinkedHashMap<Integer, String>();
 	
 	public EventState () {
-		//this.connection = connection;
+		
 	}
 	
 	/**
@@ -95,10 +94,7 @@ public class EventState {
 		System.out.println("Estados de eventos cargados correctamente");
 		System.out.print(eventStates.entrySet());
 		System.out.println();
-//		System.out.println("TIPOS DE USUARIO: ");
-//		for (int i = 0; i < getNumberOfUserTypes(); i++) {
-//			System.out.print(getUserTypes()[i] + ", ");
-//		}
+
 	}
 	
 	public Map <Integer, String> getEventStates() {
