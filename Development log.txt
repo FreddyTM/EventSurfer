@@ -1582,6 +1582,8 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 	* - Package main.java.types_states
 
 	· EventState class:
+		Add attribute
+			TABLE_NAME
 		Delete useless comments
 
 	· EventType class:
