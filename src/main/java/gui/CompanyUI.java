@@ -56,9 +56,7 @@ public class CompanyUI extends JPanel {
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
+
 	public CompanyUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
@@ -512,7 +510,6 @@ public class CompanyUI extends JPanel {
 			//Si los datos están validados
 			if (testData(updatedCompany)) {
 				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
-				//if (session.getCompany().updateCompanyToDB(session.getConnection(), updatedCompany)) {
 				if (new Company().updateCompanyToDB(session.getConnection(), updatedCompany)) {
 					session.getCompany().setNombre(updatedCompany.getNombre());
 					session.getCompany().setDireccion(updatedCompany.getDireccion());
@@ -598,7 +595,6 @@ public class CompanyUI extends JPanel {
 							textFieldContentList.add(textFieldList.get(i).getText());
 						}
 						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
-						//updatedTable.getValue().toString());
 						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}

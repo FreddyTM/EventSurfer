@@ -1508,7 +1508,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 	· AreaTest class:
 		Add testDeleteOneBUnitAreaFromDB() --ok--
 
-ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION MANAGEMENT CLASS
+ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTION MANAGEMENT CLASS
 
 	* - Package main.java.app
 	
@@ -1551,6 +1551,9 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 
 	· EventAction class (new inner Selector class):
 		Add actionPerformed() --empty--
+
+	· CompanyUI class:
+		Delete useless comments
 
 	* - Package main.java.toolbox (new)
 
