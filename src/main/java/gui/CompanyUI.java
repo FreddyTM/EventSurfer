@@ -28,7 +28,7 @@ import javax.swing.Action;
 public class CompanyUI extends JPanel {
 
 	private CurrentSession session;
-	Timestamp tNow = ToolBox.getTimestampNow();
+	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 	//Registra si el panel está visible o no
