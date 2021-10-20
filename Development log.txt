@@ -1587,7 +1587,8 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCE USE OF DatabaseError EXCEPTION 
 		Delete useless comments
 
 	· EventType class:
-		Delete useless comments 
+		Delete useless comments
+		Add new methods ideas in comments
 
 	· UserType class:
 		Add attribute

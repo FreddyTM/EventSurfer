@@ -140,6 +140,13 @@ public class EventType {
 		}
 	}
 	
+	/*
+	 * Métodos necesarios para completar la clase
+	 * deleteEventTypeFromDB(Connection conn, String descripcion)
+	 * updateEventTypeToDB(Connection conn, String descripcion)
+	 * isEventTypeUsed(Connection conn, String descripcion) --comprobar todos los eventos para saber si se ha usado un tipo de evento determinado--
+	 */
+	
 	public Map <Integer, String> getEventTypes() {
 		return this.eventTypes;
 	}
