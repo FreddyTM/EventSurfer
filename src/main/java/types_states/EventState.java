@@ -12,7 +12,7 @@ import main.java.persistence.PersistenceManager;
 
 public class EventState {
 
-	public static final String TABLE_NAME = "event_type";
+	public static final String TABLE_NAME = "event_state";
 	
 	//Map <id, descripcion> Almacena la tabla event_state de la base de datos
 	private Map <Integer, String> eventStates = new LinkedHashMap<Integer, String>();
