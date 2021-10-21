@@ -1553,7 +1553,10 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Add actionPerformed() --empty--
 
 	· CompanyUI class:
-		Change tNow attribute visibility to private
+		Change attribute visibility to private
+			tNow
+		Change attribute visibility to private
+			populateTextFields(), testData()
 		Delete useless comments
 
 	* - Package main.java.toolbox (new)

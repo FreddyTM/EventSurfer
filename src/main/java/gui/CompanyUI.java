@@ -357,7 +357,7 @@ public class CompanyUI extends JPanel {
 	/**
 	 * Refresca los datos de la compañía de la sesión para que se visualicen en pantalla
 	 */
-	public void populateTextFields() {
+	private void populateTextFields() {
 		nameField.setText(session.getCompany().getNombre());
 		addressField.setText(session.getCompany().getDireccion());
 		provinceField.setText(session.getCompany().getProvincia());
@@ -373,7 +373,7 @@ public class CompanyUI extends JPanel {
 	 * dato incorrecto se resalta con el fondo del campo en amarillo
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean testData(Company company) {
+	private boolean testData(Company company) {
 		//Comprobamos que los datos no exceden el tamaño máximo
 		Boolean error = false;
 		String errorText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
