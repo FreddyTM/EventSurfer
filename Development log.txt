@@ -979,7 +979,7 @@ ver 0.1.5 BUSINESSUNITUI FULLY FUNCTIONAL
 		Add attributes
 			editAction, cancelAction, oKAction, newAction, panelVisible, timer, tNow, comboBox, comboList, okActionSelector
 		Add attributes
-			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, companyValueLabel
+			bUnitShowing, OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, companyValueLabel
 		Add testData()
 		Add populateTextFields()
 		Add getComboBoxItemsFromSession()
@@ -1555,8 +1555,16 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	· CompanyUI class:
 		Change attribute visibility to private
 			tNow
-		Change attribute visibility to private
+		Change methods visibility to private
 			populateTextFields(), testData()
+		Delete useless comments
+
+	· BusinessUnitUI class:
+		Delete attribute
+			bUnitShowing --no use--
+		Change methods visibility to private
+			populateTextFields(), testData(), getComboBoxItemsFromSession(), getSelectedIndexFromArray(), refreshComboBox(),
+			editableDataOn(), editableDataOff(), updateDataCache(), afterNewOrEditBunit(), 
 		Delete useless comments
 
 	* - Package main.java.toolbox (new)

@@ -60,7 +60,6 @@ public class BusinessUnitUI extends JPanel {
 	private JCheckBox activeFilterCheckBox;
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
-	private BusinessUnit bUnitShowing;
 	private JButton editButton;
 	private JButton cancelButton;
 	private JButton oKButton;
@@ -83,9 +82,7 @@ public class BusinessUnitUI extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
 
-	/**
-	 * @wbp.parser.constructor
-	 */
+
 	public BusinessUnitUI(CurrentSession session) {
 
 		this.session = session;
@@ -442,7 +439,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Refresca los datos de la unidad de negocio de la sesión para que se visualicen en pantalla
 	 */
-	public void populateTextFields() {
+	private void populateTextFields() {
 		companyField.setText(session.getCompany().getNombre());
 		nameField.setText(session.getbUnit().getNombre());
 		addressField.setText(session.getbUnit().getDireccion());
@@ -461,7 +458,7 @@ public class BusinessUnitUI extends JPanel {
 	 * @param bUnit unidad de negocio de la que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean testData(BusinessUnit bUnit) {
+	private boolean testData(BusinessUnit bUnit) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean error = false;
 		String errorLengthText = "LA LONGITUD DE LOS DATOS EXCEDE EL TAMAÑO MÁXIMO O FALTAN DATOS";
@@ -521,7 +518,7 @@ public class BusinessUnitUI extends JPanel {
 	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
 	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
 	 */
-	public String[] getComboBoxItemsFromSession(boolean active) {
+	private String[] getComboBoxItemsFromSession(boolean active) {
 		List<String> tempList = new ArrayList<String>();
 		for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 			if (active) {
@@ -547,7 +544,7 @@ public class BusinessUnitUI extends JPanel {
 	 * @param array array con la lista de unidades de negocio
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	public int getSelectedIndexFromArray(String[] array) {
+	private int getSelectedIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getbUnit().getNombre())) {
 				return i;
@@ -559,7 +556,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
 	 */
-	public void refreshComboBox() {
+	private void refreshComboBox() {
 		comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 		comboBox.setModel(new DefaultComboBoxModel(comboList));
 		comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
@@ -568,7 +565,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Habilita los campos del formulario para que pueda introducirse información
 	 */
-	public void editableDataOn() {
+	private void editableDataOn() {
 		//Activar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(true);
@@ -591,7 +588,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
 	 */
-	public void editableDataOff() {
+	private void editableDataOff() {
 		//Quitar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(false);
@@ -610,7 +607,7 @@ public class BusinessUnitUI extends JPanel {
 	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
 	 * estaba seleccionada.
 	 */
-	public void updateDataCache() {
+	private void updateDataCache() {
 		//Vaciamos la lista de datos del caché de datos
 		textFieldContentList.clear();
 		//Añadimos los nuevos datos
@@ -624,7 +621,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Devuelve el formulario a su estado previo tras la creación o la edición de una unidad de negocio
 	 */
-	public void afterNewOrEditBunit() {
+	private void afterNewOrEditBunit() {
 		//Hacemos backup del contenido de los datos del formulario
 		updateDataCache();
 		//Formulario no editable
@@ -657,8 +654,6 @@ public class BusinessUnitUI extends JPanel {
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
-			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-			bUnitShowing = selectedBunit;
 			//Mostramos sus datos
 			populateTextFields();
 			//Hacemos backup del contenido de los datos del formulario
@@ -690,8 +685,6 @@ public class BusinessUnitUI extends JPanel {
 					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
-					//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-					bUnitShowing = userBunit;
 					//Mostramos sus datos
 					populateTextFields();
 					//Hacemos backup del contenido de los datos del formulario
@@ -869,8 +862,6 @@ public class BusinessUnitUI extends JPanel {
 							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 							//La asignamos como bUnit de la sesión
 							session.setbUnit(userBunit);
-							//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-							bUnitShowing = userBunit;
 							//Mostramos sus datos
 							populateTextFields();
 							//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
@@ -881,8 +872,6 @@ public class BusinessUnitUI extends JPanel {
 						} else {
 							//Asignamos la nueva unidad de negocio como unidad de negocio de la sesión
 							session.setbUnit(storedBunit);
-							//Registramos que la nueva unidad de negocio es la que se está mostrando
-							bUnitShowing = storedBunit;							
 							//Renovamos la lista de las unidades de negocio del comboBox
 							refreshComboBox();
 						}
@@ -914,11 +903,6 @@ public class BusinessUnitUI extends JPanel {
 				updatedBunit.setTelefono(telephoneField.getText());
 				updatedBunit.setMail(mailField.getText());
 				updatedBunit.setActivo(activeCheckBox.isSelected());
-				
-//				//Comprobamos que no se intenta marcar como inactiva la unidad de negocio por defecto de la base de datos
-//				if (updatedBunit.getId() == 1 && updatedBunit.isActivo() == false) {
-//					infoLabel.setText("LA UNIDAD DE NEGOCIO " + updatedBunit.getNombre() + " NO SE PUEDE MARCAR COMO INACTIVA");
-//				} else { }
 				
 				//Si los datos están validados
 				if (testData(updatedBunit)) {
@@ -1065,8 +1049,6 @@ public class BusinessUnitUI extends JPanel {
 								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 								//La asignamos como bUnit de la sesión
 								session.setbUnit(userBunit);
-								//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-								bUnitShowing = userBunit;
 								//Mostramos sus datos
 								populateTextFields();
 								//Renovamos la lista de las unidades de negocio del comboBox
@@ -1163,7 +1145,7 @@ public class BusinessUnitUI extends JPanel {
 							//Debug
 							System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
 							
-							bUnitShowing = session.getbUnit();
+							session.getbUnit();
 
 							//Renovamos la lista de las unidades de negocio del comboBox
 							refreshComboBox();
