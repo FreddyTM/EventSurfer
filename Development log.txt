@@ -1562,6 +1562,7 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	· BusinessUnitUI class:
 		Delete attribute
 			bUnitShowing --no use--
+		Update getComboBoxItemsFromSession() --use ToolBox.toSortedArray()
 		Change methods visibility to private
 			populateTextFields(), testData(), getComboBoxItemsFromSession(), getSelectedIndexFromArray(), refreshComboBox(),
 			editableDataOn(), editableDataOff(), updateDataCache(), afterNewOrEditBunit(), 

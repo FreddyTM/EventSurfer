@@ -528,14 +528,8 @@ public class BusinessUnitUI extends JPanel {
 			} else {
 				tempList.add(bUnit.getNombre());
 			}
-		}
-		Object[] object = (Object[]) tempList.toArray();
-		String[] itemList = new String[object.length];
-		for (int i = 0; i < object.length; i++) {
-			itemList[i] = object[i].toString();
-		}
-		Arrays.sort(itemList);
-		return itemList;
+		}	
+		return ToolBox.toSortedArray(tempList);
 	}
 	
 	/**
