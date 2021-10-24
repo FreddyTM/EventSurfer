@@ -109,9 +109,7 @@ public class UserUI extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = UserUI.OK_ACTION_UNDEFINED;
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
+
 	public UserUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
@@ -487,13 +485,16 @@ public class UserUI extends JPanel {
 				tempList.add(bUnit.getNombre());
 			}
 		}
-		Object[] object = (Object[]) tempList.toArray();
-		String[] itemList = new String[object.length];
-		for (int i = 0; i < object.length; i++) {
-			itemList[i] = object[i].toString();
-		}
-		Arrays.sort(itemList);
-		return itemList;
+		
+		return ToolBox.toSortedArray(tempList);
+		
+//		Object[] object = (Object[]) tempList.toArray();
+//		String[] itemList = new String[object.length];
+//		for (int i = 0; i < object.length; i++) {
+//			itemList[i] = object[i].toString();
+//		}
+//		Arrays.sort(itemList);
+//		return itemList;
 	}
 	
 	/**
@@ -530,13 +531,16 @@ public class UserUI extends JPanel {
 				tempList.add(user.getUserAlias());
 			}
 		}
-		Object[] object = (Object[]) tempList.toArray();
-		String[] itemList = new String[object.length];
-		for (int i = 0; i < object.length; i++) {
-			itemList[i] = object[i].toString();
-		}
-		Arrays.sort(itemList);
-		return itemList;
+		
+		return ToolBox.toSortedArray(tempList);
+		
+//		Object[] object = (Object[]) tempList.toArray();
+//		String[] itemList = new String[object.length];
+//		for (int i = 0; i < object.length; i++) {
+//			itemList[i] = object[i].toString();
+//		}
+//		Arrays.sort(itemList);
+//		return itemList;
 	}
 	
 	/**

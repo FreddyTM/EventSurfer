@@ -1562,11 +1562,18 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	· BusinessUnitUI class:
 		Delete attribute
 			bUnitShowing --no use--
-		Update getComboBoxItemsFromSession() --use ToolBox.toSortedArray()
+		Update getComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
 		Change methods visibility to private
 			populateTextFields(), testData(), getComboBoxItemsFromSession(), getSelectedIndexFromArray(), refreshComboBox(),
 			editableDataOn(), editableDataOff(), updateDataCache(), afterNewOrEditBunit(), 
 		Delete useless comments
+
+	· UserUI class:
+		Update getBunitComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
+		Update getUserComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
+
+		Delete useless comments
+		
 
 	* - Package main.java.toolbox (new)
 
