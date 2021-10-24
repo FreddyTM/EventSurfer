@@ -1572,6 +1572,13 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Update getBunitComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
 		Update getUserComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
 		Update constructor --change maxCharsLabel4, maxCharsLabel5 setVisible(false)--
+		Change methods visibility to private
+			getBunitComboBoxItemsFromSession(), getSelectedBunitIndexFromArray(), getUserComboBoxItemsFromSession(),
+			getSelectedUserIndexFromArray(), buildUserSelected(), getUserTypeComboBoxItemsFromSession(), 
+			getSelectedUserTypeIndexFromArray(), getSelectedItemIndex(), populateUserFields(), updateDataCache(),
+			editableDataOn(), editableDataOff(), afterNewOrEditUser(), testData(), refreshBunitComboBox(),
+			refreshUserComboBox(), refreshUserTypeComboBox(), verifyManagerEditConditions(), verifyAdminEditConditions(),
+			disableEditIfDummyUserSelected()
 		Delete messageTest() --only test purpose--
 		Delete UserTypeComboListener class --no use--
 		Delete useless comments

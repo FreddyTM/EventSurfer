@@ -1,12 +1,7 @@
 package main.java.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -14,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,11 +29,8 @@ import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
@@ -477,7 +468,7 @@ public class UserUI extends JPanel {
 	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
 	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
 	 */
-	public String[] getBunitComboBoxItemsFromSession(boolean active) {
+	private String[] getBunitComboBoxItemsFromSession(boolean active) {
 		List<String> tempList = new ArrayList<String>();
 		for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 			if (active) {
@@ -497,7 +488,7 @@ public class UserUI extends JPanel {
 	 * @param array array con la lista de unidades de negocio
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	public int getSelectedBunitIndexFromArray(String[] array) {
+	private int getSelectedBunitIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(session.getbUnit().getNombre())) {
 				return i;
@@ -513,7 +504,7 @@ public class UserUI extends JPanel {
 	 * @param active true si se muestran solo los usuarios activos, false para mostrarlos todos
 	 * @return array ordenado alfabéticamente con la lista de usuarios
 	 */
-	public String[] getUserComboBoxItemsFromSession(boolean active) {
+	private String[] getUserComboBoxItemsFromSession(boolean active) {
 		List<String> tempList = new ArrayList<String>();
 		for (User user : session.getbUnit().getUsers()) {
 			if (active) {
@@ -536,7 +527,7 @@ public class UserUI extends JPanel {
 	 * creado o editado (si no queda inactivo y el filtro de usuarios está activo), o bien 0 si el usuario no está en la lista
 	 * (se escoge el primer usuario de la lista)
 	 */
-	public int getSelectedUserIndexFromArray(String[] array, boolean firstSearch) {
+	private int getSelectedUserIndexFromArray(String[] array, boolean firstSearch) {
 		if (firstSearch) {
 			for (int i = 0; i < array.length; i++) {
 				if (array[i].equals(session.getUser().getUserAlias())) {
@@ -563,7 +554,7 @@ public class UserUI extends JPanel {
 	 * @param user objeto User, o null
 	 * @return usuario entrado por parámetro sin modificar, o un usuario vacío
 	 */
-	public User buildUserSelected (User user) {
+	private User buildUserSelected (User user) {
 		if (user == null) {
 			user = new User(-1, session.getbUnit(), "", "", "", "", "", false);
 		}
@@ -575,7 +566,7 @@ public class UserUI extends JPanel {
 	 * y no estamos creando un usuario nuevo, la lista tendrá un único elemento vacío.
 	 * @return lista de tipos de usuarios, o lista con un único elemento vacío
 	 */
-	public String [] getUserTypeComboBoxItemsFromSession() {
+	private String [] getUserTypeComboBoxItemsFromSession() {
 		String[] fullList = TypesStatesContainer.getuType().getUserTypesArray();
 		if (selectedUser.getId() == -1 && okActionSelector != UserUI.OK_ACTION_NEW) {
 			String[] emptyList = {""};
@@ -592,7 +583,7 @@ public class UserUI extends JPanel {
 	 * userSelected es un usuario dummy con id -1
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	public int getSelectedUserTypeIndexFromArray(String[] array) {
+	private int getSelectedUserTypeIndexFromArray(String[] array) {
 		for (int i = 0; i < array.length; i++) {
 			if (selectedUser.getUserType().equals(array[i])) {
 				return i;
@@ -607,7 +598,7 @@ public class UserUI extends JPanel {
 	 * @param itemValue valor del que buscamos el índice
 	 * @return índice del valor buscado, o 0 si el valor no está en la lista
 	 */
-	public int getSelectedItemIndex (String[] itemList, String itemValue) {
+	private int getSelectedItemIndex (String[] itemList, String itemValue) {
 		for (int i = 0; i < itemList.length; i++) {
 			if (itemList[i].equals(itemValue)) {
 				return i;
@@ -619,7 +610,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Refresca los datos del usuario seleccionado para que se visualicen en pantalla
 	 */
-	public void populateUserFields() {
+	private void populateUserFields() {
 		companyField.setText(session.getCompany().getNombre());
 		userTypeComboList = getUserTypeComboBoxItemsFromSession();
 		userTypeComboBox.setModel(new DefaultComboBoxModel(userTypeComboList));
@@ -635,7 +626,7 @@ public class UserUI extends JPanel {
 	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de un
 	 * nuev usuario, podremos recuperar por pantalla los datos del último usuario que estaba seleccionado
 	 */
-	public void updateDataCache() {
+	private void updateDataCache() {
 		//Vaciamos la lista de datos del caché de datos
 		textFieldContentList.clear();
 		//Añadimos los nuevos datos
@@ -654,7 +645,7 @@ public class UserUI extends JPanel {
 	 * no puede cambiar su condición de administrador. Un usuario de tipo user no puede cambiar su tipo de usuario. Los
 	 * usuarios de tipo user y el administrador por defecto tampoco pueden cambiar su condición de activos.
 	 */
-	public void editableDataOn() {
+	private void editableDataOn() {
 		//Activar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(true);
@@ -688,7 +679,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
 	 */
-	public void editableDataOff() {
+	private void editableDataOff() {
 		//Quitar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(false);
@@ -717,7 +708,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Devuelve el formulario a su estado previo tras la creación o la edición de una unidad de negocio
 	 */
-	public void afterNewOrEditUser() {
+	private void afterNewOrEditUser() {
 		//Hacemos backup del contenido de los datos del formulario
 		updateDataCache();
 		//Formulario no editable
@@ -756,7 +747,7 @@ public class UserUI extends JPanel {
 	 * @param userToCheck usuario del que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean testData(User userToCheck) {
+	private boolean testData(User userToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean errorLength = false;
 		Boolean oldPasswordOk = false;
@@ -884,7 +875,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
 	 */
-	public void refreshBunitComboBox() {
+	private void refreshBunitComboBox() {
 		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
 		bUnitComboBox.setModel(new DefaultComboBoxModel(bUnitComboList));
 		bUnitComboBox.setSelectedIndex(getSelectedBunitIndexFromArray(bUnitComboList));
@@ -893,7 +884,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Actualiza el contenido del comboBox que selecciona los usuarios
 	 */
-	public void refreshUserComboBox() {
+	private void refreshUserComboBox() {
 		userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
 		//Si la lista está vacía
 		if (userComboList.length == 0) {
@@ -909,7 +900,7 @@ public class UserUI extends JPanel {
 	 * es de tipo manager, y dicho usuario edita un usuario existente o crea uno nuevo, se elimina de la lista
 	 * de tipos de usuario el usuario admin porque solo puede crear usuarios de tipo manager o user. 
 	 */
-	public void refreshUserTypeComboBox() {
+	private void refreshUserTypeComboBox() {
 		//Almacenamos la anterior lista de tipos de usuario
 		lastUserType = userTypeComboBox.getSelectedItem().toString();
 		lastUserTypeIndex = getSelectedItemIndex(userTypeComboList, lastUserType);
@@ -927,7 +918,7 @@ public class UserUI extends JPanel {
 	 * Si el usuario de la sesión es de tipo manager y el usuario seleccionado no es de tipo administrador, habilita
 	 * la edición de datos del usuario seleccionado 
 	 */
-	public void verifyManagerEditConditions() {
+	private void verifyManagerEditConditions() {
 
 		//Un usuario manager no puede editar los datos de un usuario administrador
 		if (session.getUser().getUserType().equals("MANAGER") && selectedUser.getUserType().equals("ADMIN")) {
@@ -942,7 +933,7 @@ public class UserUI extends JPanel {
 	 * otro usuario que no sea de tipo administrador. Si el usuario de la sesión es el administrador por defecto también
 	 * habilita la edición de los datos de cualquier usuario administrador.
 	 */
-	public void verifyAdminEditConditions() {
+	private void verifyAdminEditConditions() {
 
 		//Si el usuario de la sesión es un usuario administrador y el usuario seleccionado no lo es, habilitamos
 		//siempre la edición del usuario seleccionado
@@ -971,7 +962,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Si userSelected es un usuario dummy con id -1, la edición de datos se deshabilita
 	 */
-	public void disableEditIfDummyUserSelected() {
+	private void disableEditIfDummyUserSelected() {
 		if (selectedUser.getId() == -1) {
 			editButton.setEnabled(false);
 		}
