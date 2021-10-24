@@ -70,15 +70,12 @@ public class AreaUI extends JPanel {
 	private boolean panelVisible;
 	
 	private JComboBox areaComboBox = new JComboBox();
-//	private JComboBox bUnitComboBox = new JComboBox();
 	private JTextField areaNameField = new JTextField();
 	private JTextArea areaDescription = new JTextArea();
 	//Lista de todas las areas existentes en la base de datos
 	private List<Area> allAreas;
 	//Registra el area seleccionada en cada momento
 	private Area selectedArea;
-	//Registra el area seleccionada por última vez
-//	private Area lastArea;
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
@@ -98,12 +95,10 @@ public class AreaUI extends JPanel {
 	
 	//Lista de elementos que aparecen en el comboBox
 	private String[] areaComboList;
-//	private String[] bUnitComboList;
-	
 	//Lista de elementos que aparecerán en las listas de asignación
 	private String[] availableBunits;
 	private String[] allocatedBunits;
-//	Modelos de datos de las listas de asignación
+	//Modelos de datos de las listas de asignación
 	private DefaultListModel<String> availableModel = new DefaultListModel<String>();
 	private DefaultListModel<String> allocatedModel = new DefaultListModel<String>();
 	//Listas de asignación
@@ -157,22 +152,6 @@ public class AreaUI extends JPanel {
 		descriptionLabel.setBounds(50, 225, 200, 25);
 		add(descriptionLabel);
 		
-//		areaComboList = getAreaCombolistItemsFromSession();
-//		//Si la lista está vacía
-//		if (areaComboList.length == 0) {
-//			areaComboList = new String[1];
-//			areaComboList[0] = NO_AREA;
-//		}	
-//		areaComboBox = new JComboBox(areaComboList);
-//		areaComboBox.setSelectedIndex(0);
-//		setFirstSelectedArea();
-//		areaComboBox.addItemListener(new AreaComboListener());
-//		areaComboBox.setBounds(260, 125, 400, 25);
-//		areaComboBox.setEditable(false);
-//		ToolBox.setBlackForeground(areaComboBox);
-//		areaComboBox.setBackground(Color.WHITE);
-//		add(areaComboBox);
-		
 		areaComboList = getAreaCombolistItemsFromSession();	
 		areaComboBox = new JComboBox(areaComboList);
 		areaComboBox.setSelectedIndex(0);
@@ -187,12 +166,9 @@ public class AreaUI extends JPanel {
 
 		areaNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		areaNameField.setBounds(260, 175, 400, 25);
-//		areaNameField.setText(session.getbUnit().getCompany().getNombre());
 		areaNameField.setEditable(false);
-//		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(areaNameField);
-		
-//		areaDescription = new JTextArea();
+
 		areaDescription.setLineWrap(true);
 		areaDescription.setWrapStyleWord(true);
 		areaDescription.setBounds(260, 225, 400, 75);
@@ -256,8 +232,7 @@ public class AreaUI extends JPanel {
 		oKButton.setBounds(629, 375, 89, 23);
 		oKButton.setEnabled(false);
 		add(oKButton);
-		
-		
+			
 		JSeparator separator = new JSeparator();
 		separator.setBounds(50, 425, 855, 2);
 		add(separator);
@@ -383,18 +358,6 @@ public class AreaUI extends JPanel {
 		} else {
 			return ToolBox.toSortedArray(tempList);
 		}
-		
-		//End of new code
-		
-//		return ToolBox.toSortedArray(tempList);
-		
-//		Object[] object = (Object[]) tempList.toArray();
-//		String[] itemList = new String[object.length];
-//		for (int i = 0; i < object.length; i++) {
-//			itemList[i] = object[i].toString();
-//		}
-//		Arrays.sort(itemList);
-//		return itemList;
 	}
 	
 	/**
@@ -1259,14 +1222,6 @@ public class AreaUI extends JPanel {
 							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 							areaComboBox.setSelectedIndex(0);
 							setFirstSelectedArea();
-//						//Area seleccionada no borrada
-//						} else {
-//							//Renovamos la lista de areas del comboBox
-//							refreshComboBox();
-//							//Asignamos el nuevo contenido a los textfields
-//							populateAreaFields();
-//							//Hacemos backup del contenido de los datos del formulario
-//							updateDataCache();
 						}
 						//Renovamos la lista de areas del comboBox
 						refreshComboBox();

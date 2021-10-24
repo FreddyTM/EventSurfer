@@ -1582,6 +1582,9 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Delete messageTest() --only test purpose--
 		Delete UserTypeComboListener class --no use--
 		Delete useless comments
+
+	· AreaUI class:
+		Delete useless comments
 		
 
 	* - Package main.java.toolbox (new)
