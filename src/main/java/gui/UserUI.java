@@ -364,7 +364,6 @@ public class UserUI extends JPanel {
 		userTypeComboBox = new JComboBox(userTypeComboList);
 		userTypeComboBox.setSelectedIndex(getSelectedUserTypeIndexFromArray(userTypeComboList));
 		userTypeComboBox.setBounds(260, 275, 400, 25);
-		userTypeComboBox.addItemListener(new UserTypeComboListener());
 		userTypeComboBox.setEditable(false);
 		userTypeComboBox.setEnabled(false);
 		ToolBox.setBlackForeground(userTypeComboBox);
@@ -464,7 +463,7 @@ public class UserUI extends JPanel {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 1000, 30000);
-		
+
 	}
 
 	/**
@@ -485,16 +484,7 @@ public class UserUI extends JPanel {
 				tempList.add(bUnit.getNombre());
 			}
 		}
-		
 		return ToolBox.toSortedArray(tempList);
-		
-//		Object[] object = (Object[]) tempList.toArray();
-//		String[] itemList = new String[object.length];
-//		for (int i = 0; i < object.length; i++) {
-//			itemList[i] = object[i].toString();
-//		}
-//		Arrays.sort(itemList);
-//		return itemList;
 	}
 	
 	/**
@@ -531,16 +521,7 @@ public class UserUI extends JPanel {
 				tempList.add(user.getUserAlias());
 			}
 		}
-		
 		return ToolBox.toSortedArray(tempList);
-		
-//		Object[] object = (Object[]) tempList.toArray();
-//		String[] itemList = new String[object.length];
-//		for (int i = 0; i < object.length; i++) {
-//			itemList[i] = object[i].toString();
-//		}
-//		Arrays.sort(itemList);
-//		return itemList;
 	}
 	
 	/**
@@ -993,39 +974,6 @@ public class UserUI extends JPanel {
 		}
 	}
 	
-	public void messageTest() {
-		String testMessage = "PROBANDO MENSAJE CENTRADO EN MONITOR DE APLICACIÓN";
-//		JOptionPane testPane = new JOptionPane(testMessage, JOptionPane.WARNING_MESSAGE);
-		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) this);
-		
-		
-//		Rectangle rectangle = testPane.getBounds();
-//	    int paneWidth = rectangle.width;
-//	    int paneHeight = rectangle.height;
-		
-		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
-		
-		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
-		Rectangle frameRectangle = messageFrame.getBounds();
-	    int paneWidth = frameRectangle.width;
-	    int paneHeight = frameRectangle.height;
-		
-	    int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
-	    int coordinateY = currentDisplay.getDefaultConfiguration().getBounds().y;
-	    int currentWidth = 0;
-	    int currentHeight = 0;
-		//Centrado de pantalla multimonitor
-		for (int i = 0; i < displays.length; i++) {
-		    if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
-				currentWidth = currentDisplay.getDisplayMode().getWidth();
-				currentHeight = currentDisplay.getDisplayMode().getHeight();
-				messageFrame.setBounds((currentWidth - paneWidth) / 2 + coordinateX, (currentHeight - paneHeight) / 2 + coordinateY, paneWidth, paneHeight);
-		    }
-		}
-		JOptionPane.showMessageDialog(messageFrame, testMessage, "Prueba", JOptionPane.WARNING_MESSAGE);
-	}
-	
 	/**
 	 * Listener que define el comportamiento del comboBox bUnitComboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
@@ -1159,40 +1107,6 @@ public class UserUI extends JPanel {
 			verifyAdminEditConditions();
 			disableEditIfDummyUserSelected();
 		}
-	}
-	
-	/**
-	 * Listener que define el comportamiento del comboBox userTypeComboBox. Cada elemento se corresponde con los tipos de usuarios
-	 * que existen en la aplicación: ADMIN, MANAGER y USER. Al crear o editar un usuario se podrá asignar dicho tipo.
-	 * 
-	 */
-	private class UserTypeComboListener implements ItemListener {
-
-		@Override
-		public void itemStateChanged(ItemEvent e) {
-			
-//			String item = (String) userTypeComboBox.getSelectedItem();
-//			if (session.getUser().getUserType().equals("MANAGER") && userSelected.getUserType().equals("ADMIN") 
-//					&& !item.equals("ADMIN")) {
-//				infoLabel.setText("UN USUARIO MANAGER NO PUEDE CAMBIAR EL TIPO DE USUARIO DE UN USUARIO ADMINISTRADOR");
-//			}
-
-//			//Recuperamos la unidad de negocio seleccionada
-//			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
-//			//La asignamos a la sesión
-//			session.setbUnit(selectedBunit);
-
-			
-//			//Registramos que la unidad de negocio seleccionada es la que se está mostrando
-//			bUnitShowing = selectedBunit;
-//			//Mostramos sus datos
-//			populateTextFields();
-//			//Hacemos backup del contenido de los datos del formulario
-//			updateDataCache();
-//			//Vaciamos label de información
-//			infoLabel.setText("");
-		}
-		
 	}
 	
 	/**
@@ -1527,12 +1441,6 @@ public class UserUI extends JPanel {
 							refreshUserComboBox();
 							//Mostramos los datos del usuario seleccionado
 							populateUserFields();
-//							//Si la edición del usuario cambia el usuario seleccionado, comprobamos las condiciones de edición de datos
-//							//de los usuarios manager y administrador y deshabilitamos la edición de datos si el usuario seleccionado es
-//							//un usuario dummy
-//							verifyManagerEditConditions();
-//							verifyAdminEditConditions();
-//							disableEditIfDummyUserSelected();
 	
 						//Si el usuario que abre sesión deja inactivo su propio usuario	
 						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
