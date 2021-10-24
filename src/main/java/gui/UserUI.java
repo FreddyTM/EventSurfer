@@ -441,11 +441,15 @@ public class UserUI extends JPanel {
 		JLabel maxCharsLabel4 = new JLabel("Min: 8 caracteres");
 		maxCharsLabel4.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		maxCharsLabel4.setBounds(670, 515, 146, 25);
+		maxCharsLabel4.setVisible(false);
+		labelList.add(maxCharsLabel4);
 		add(maxCharsLabel4);
 		
 		JLabel maxCharsLabel5 = new JLabel("Max: 25 caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]");
 		maxCharsLabel5.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		maxCharsLabel5.setBounds(670, 535, 380, 25);
+		maxCharsLabel5.setVisible(false);
+		labelList.add(maxCharsLabel5);
 		add(maxCharsLabel5);
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
@@ -490,7 +494,6 @@ public class UserUI extends JPanel {
 	/**
 	 * Obiene el índice del elemento de bUnitComboBox que será seleccionado por defecto a partir
 	 * del array pasado por parámetro
-	 * --- CANDIDATO A REFACTOR >> MANDAR A CURRENTSESSION ---
 	 * @param array array con la lista de unidades de negocio
 	 * @return índice del elemento a seleccionar por defecto
 	 */

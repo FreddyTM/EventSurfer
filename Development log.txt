@@ -1571,6 +1571,7 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	· UserUI class:
 		Update getBunitComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
 		Update getUserComboBoxItemsFromSession() --use ToolBox.toSortedArray()--
+		Update constructor --change maxCharsLabel4, maxCharsLabel5 setVisible(false)--
 		Delete messageTest() --only test purpose--
 		Delete UserTypeComboListener class --no use--
 		Delete useless comments
