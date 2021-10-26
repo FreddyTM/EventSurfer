@@ -344,7 +344,7 @@ public class AreaUI extends JPanel {
 	 * Obtiene la liste de areas que aparecerán en el combobox de gestión de areas.
 	 * @return array ordenado alfabéticamente con la lista de areas
 	 */
-	public String[] getAreaCombolistItemsFromSession() {
+	private String[] getAreaCombolistItemsFromSession() {
 		List<String> tempList = new ArrayList<String>();
 		allAreas = new Area().getAllAreasFromDB(this.session.getConnection());
 		for (Area area: allAreas) {
@@ -366,7 +366,7 @@ public class AreaUI extends JPanel {
 	 * @param array array con la lista de areas
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	public int getSelectedIndexFromArray(String[] array) {
+	private int getSelectedIndexFromArray(String[] array) {
 		if (!array[0].equals(NO_AREA)) {		
 			for (int i = 0; i < array.length; i++) {
 				if (array[i].equals(selectedArea.getArea())) {
@@ -380,7 +380,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Actualiza el contenido del comboBox que selecciona el area activa
 	 */
-	public void refreshComboBox() {
+	private void refreshComboBox() {
 		areaComboList = getAreaCombolistItemsFromSession();
 		areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 		areaComboBox.setSelectedIndex(getSelectedIndexFromArray(areaComboList));
@@ -389,7 +389,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Refresca los datos del area seleccionada para que se visualicen en pantalla
 	 */
-	public void populateAreaFields() {
+	private void populateAreaFields() {
 		areaNameField.setText(selectedArea.getArea());
 		areaDescription.setText(selectedArea.getDescripcion());
 	}
@@ -399,7 +399,7 @@ public class AreaUI extends JPanel {
 	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
 	 * estaba seleccionada.
 	 */
-	public void updateDataCache() {
+	private void updateDataCache() {
 		//Vaciamos la lista de datos del caché de datos
 		textFieldContentList.clear();
 		//Añadimos los nuevos datos al caché de datos
@@ -436,7 +436,7 @@ public class AreaUI extends JPanel {
 	 * usuario, o bien que no esté asignada a ninguna unidad de negocio
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
-	public boolean verifyManagerEditConditions() {
+	private boolean verifyManagerEditConditions() {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		String action = "";
 		//Si estamos editando el area
@@ -476,7 +476,7 @@ public class AreaUI extends JPanel {
 	 * caso de que el area seleccionada esté asignada a una sola unidad de negocio o a ninguna. 
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
-	public boolean verifyAdminEditConditions() {
+	private boolean verifyAdminEditConditions() {
 		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		String info = "";
 		//Si estamos editando el area
@@ -525,7 +525,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Habilita los campos del formulario para que pueda introducirse información
 	 */
-	public void editableDataOn() {
+	private void editableDataOn() {
 		//Activar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(true);
@@ -539,7 +539,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
 	 */
-	public void editableDataOff() {
+	private void editableDataOff() {
 		//Quitar visibilidad de etiquetas de longitud máxima de datos
 		for (JLabel label : labelList) {
 			label.setVisible(false);
@@ -554,7 +554,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Devuelve el formulario a su estado previo tras la creación o la edición de un area
 	 */
-	public void afterNewOrEditArea() {
+	private void afterNewOrEditArea() {
 		//Hacemos backup del contenido de los datos del formulario
 		updateDataCache();
 		//Formulario no editable
@@ -575,7 +575,7 @@ public class AreaUI extends JPanel {
 	 * @param areaToCheck area de la que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
-	public boolean testData (Area areaToCheck) {
+	private boolean testData (Area areaToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean error = false;
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
@@ -631,7 +631,7 @@ public class AreaUI extends JPanel {
 	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
 	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
 	 */
-	public String[] getAllocatedBunitList(Area area) {
+	private String[] getAllocatedBunitList(Area area) {
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
 		return ToolBox.toSortedArray(allocatedList);
 	}
@@ -641,7 +641,7 @@ public class AreaUI extends JPanel {
 	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
 	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
 	 */
-	public String[] getAvailableBunitList(Area area) {
+	private String[] getAvailableBunitList(Area area) {
 		List<String> allBunits = new BusinessUnit().getAllBunitNames(session.getConnection(), session.getCompany());
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
 		allBunits.removeAll(allocatedList);
@@ -651,7 +651,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Refresca el contenido de las listas de asignación de areas
 	 */
-	public void refreshLists() {
+	private void refreshLists() {
 		if (selectedArea != null) {
 			availableBunits = getAvailableBunitList(selectedArea);
 			allocatedBunits = getAllocatedBunitList(selectedArea);
@@ -675,7 +675,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Vacía el contenido de las listas de asignación de areas
 	 */
-	public void emptyLists() {
+	private void emptyLists() {
 		availableModel.clear();
 		allocatedModel.clear();
 		availableList.setModel(availableModel);;

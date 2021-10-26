@@ -1584,6 +1584,10 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Delete useless comments
 
 	· AreaUI class:
+		Change methods visibility to private
+			getAreaCombolistItemsFromSession(), getSelectedIndexFromArray(), refreshComboBox(), populateAreaFields(),
+			updateDataCache(), setFirstSelectedArea(), verifyManagerEditConditions(), verifyAdminEditConditions(),
+			editableDataOn(), editableDataOff(), afterNewOrEditArea(), testData(), getAllocatedBunitList(), 			getAvailableBunitList(), refreshLists(), emptyLists()
 		Delete useless comments
 		
 
