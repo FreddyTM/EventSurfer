@@ -1119,10 +1119,15 @@ public class AreaUI extends JPanel {
 			if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
 				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
 				tNow = ToolBox.getTimestampNow();
+				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 				//Actualizamos los datos de la tabla last_modification
 				boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 						Area.B_UNIT_AREA_TABLE_NAME, tNow);
-				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+				//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+				//no queda registrada
+				if(!changeRegister) {
+					infoLabel2.setText(infoLabel2.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+				}
 				//Añadir el area al objeto BusinessUnit
 				bUnit.getAreas().add(selectedArea);
 				//Refrescar listas

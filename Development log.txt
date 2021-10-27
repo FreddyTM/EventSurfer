@@ -1592,6 +1592,9 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 
 	· OKAction class (AreaUI inner class):
 		Update actionPerformed() --fix infoLabel info on edit--
+
+	· AllocateAction class (AreaUI inner class):
+		Update actionPerformed() --fix infoLabel2 info--
 		
 
 	* - Package main.java.toolbox (new)
