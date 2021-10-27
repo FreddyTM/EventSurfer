@@ -1587,8 +1587,11 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Change methods visibility to private
 			getAreaCombolistItemsFromSession(), getSelectedIndexFromArray(), refreshComboBox(), populateAreaFields(),
 			updateDataCache(), setFirstSelectedArea(), verifyManagerEditConditions(), verifyAdminEditConditions(),
-			editableDataOn(), editableDataOff(), afterNewOrEditArea(), testData(), getAllocatedBunitList(), 			getAvailableBunitList(), refreshLists(), emptyLists()
+			editableDataOn(), editableDataOff(), afterNewOrEditArea(), testData(), getAllocatedBunitList(), 						getAvailableBunitList(), refreshLists(), emptyLists()
 		Delete useless comments
+
+	· OKAction class (AreaUI inner class):
+		Update actionPerformed() --fix infoLabel info on edit--
 		
 
 	* - Package main.java.toolbox (new)

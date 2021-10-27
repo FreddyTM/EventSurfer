@@ -1079,10 +1079,15 @@ public class AreaUI extends JPanel {
 					if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
 						tNow = ToolBox.getTimestampNow();
+						infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 								Area.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+						}
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditArea();
 						
