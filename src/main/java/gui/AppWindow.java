@@ -32,7 +32,7 @@ public class AppWindow extends JFrame {
 	private JPanel rightPanel;
 	private JPanel basePanel;
 	private JLabel infoLabel;
-	private String versionNumber = "0.1.11";
+	private String versionNumber = "0.1.12";
 	private CurrentSession session;
 	private Connection conn;
 
