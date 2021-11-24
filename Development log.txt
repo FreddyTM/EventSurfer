@@ -1651,3 +1651,18 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 
 	· UserTest class:
 		Delete useless comments
+
+ver 0.1.12 - EVENTTYPEUI
+
+	* - Package main.java.gui
+
+		· AppWindow class:
+			Update attribute versionNumber --ver 0.1.12--
+
+		· EventTypeUI class:
+			Add attributes
+				OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, NO_AREA, DIALOG_INFO, DIALOG_YES_NO, session,
+				tNow, timer, panelVisible, EventTypeNameField, allEventTypes, selectedEventType,maxLengthLabel,
+				textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
+				okActionSelector
+			Add constructor
