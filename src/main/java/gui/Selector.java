@@ -25,7 +25,7 @@ public class Selector extends JPanel {
 	private final Action bUnitAction = new BunitAction();
 	private final Action userAction = new UserAction();
 	private final Action areaAction = new AreaAction();
-	private final Action eventTypeAction = null;
+	private final Action eventTypeAction = new EventTypeAction();
 	private final Action eventAction = null;
 	private JButton eventButton;
 	private JButton eventTypeButton;
@@ -54,6 +54,7 @@ public class Selector extends JPanel {
 		add(eventButton);
 		
 		eventTypeButton = new JButton();
+		eventTypeButton.setAction(eventTypeAction);
 		eventTypeButton.setMargin(new Insets(2,2,2,2));
 		eventTypeButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		eventTypeButton.setText("<html><center>"+"TIPOS" + "<br>" + "DE" + "<br>" + "EVENTO" + "</center></html>");
@@ -230,11 +231,18 @@ public class Selector extends JPanel {
 	 * Acción del botón Tipos de evento. Muestra los tipos de eventos
 	 */
 	private class EventTypeAction extends AbstractAction {
-
+		public EventTypeAction() {
+			putValue(NAME, "EventTypeAction");
+			putValue(SHORT_DESCRIPTION, "Show event type screen");
+		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			//Vaciamos el panel base y le quitamos visibilidad
+			hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de usuario
+			EventTypeUI eTypeUI = new EventTypeUI(session);
+			//Mostramos el panel
+			showPanel(frame, eTypeUI);
 		}
 		
 	}
