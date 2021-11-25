@@ -16,8 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
@@ -48,7 +51,7 @@ public class EventTypeUI extends JPanel {
 	//Registra el area seleccionada en cada momento
 	private EventType selectedEventType;
 	//Etiqueta informativa de longitud máxima de datos
-	private JLabel maxLengthLabel = new JLabel();
+	private JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 	//Backup del contenido del campo Tipo de Evento
 	private String textFieldBackup;
 	
@@ -94,13 +97,18 @@ public class EventTypeUI extends JPanel {
 		add(eventTypeTxt);
 		
 		JLabel eventTypeLabel = new JLabel("Tipo de evento");
-		eventTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		eventTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		eventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		eventTypeLabel.setBounds(50, 125, 200, 25);
+		eventTypeLabel.setBounds(100, 125, 140, 25);
 		add(eventTypeLabel);
 		
+		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsLabel.setBounds(655, 125, 146, 25);
+		maxCharsLabel.setVisible(false);
+		add(maxCharsLabel);
+		
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-		eventTypeNameField.setBounds(260, 125, 400, 25);
+		eventTypeNameField.setBounds(245, 125, 400, 25);
 		eventTypeNameField.setEditable(false);
 		add(eventTypeNameField);
 		
@@ -111,14 +119,14 @@ public class EventTypeUI extends JPanel {
 		
 		newButton = new JButton();
 		newButton.setAction(newAction);
-		newButton.setBounds(229, 225, 89, 23);
+		newButton.setBounds(204, 225, 89, 23);
 		if (session.getUser().getUserType().equals("USER")) {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
 		
 		editButton.setAction(editAction);
-		editButton.setBounds(329, 225, 89, 23);
+		editButton.setBounds(304, 225, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
 				|| selectedEventType == null) {
 			editButton.setEnabled(false);
@@ -126,7 +134,7 @@ public class EventTypeUI extends JPanel {
 		add(editButton);
 		
 		deleteButton.setAction(deleteAction);
-		deleteButton.setBounds(429, 225, 89, 23);
+		deleteButton.setBounds(404, 225, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
 				|| selectedEventType == null) {
 			deleteButton.setEnabled(false);
@@ -135,18 +143,63 @@ public class EventTypeUI extends JPanel {
 		
 		cancelButton = new JButton();
 		cancelButton.setAction(cancelAction);
-		cancelButton.setBounds(529, 225, 89, 23);
+		cancelButton.setBounds(504, 225, 89, 23);
 		cancelButton.setEnabled(false);
 		add(cancelButton);
 		
 		oKButton = new JButton();
 		oKButton.setAction(oKAction);
-		oKButton.setBounds(629, 225, 89, 23);
+		oKButton.setBounds(604, 225, 89, 23);
 		oKButton.setEnabled(false);
 		add(oKButton);
+		
+		JLabel availableLabel = new JLabel("Tipos de eventos registrados");
+		availableLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		availableLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		availableLabel.setBounds(100, 300, 300, 25);
+		add(availableLabel);
+		
+		registeredList = new JList<String>(registeredModel);
+		registeredList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		registeredList.setLayoutOrientation(JList.VERTICAL);		
+		registeredList.setVisibleRowCount(8);
+		registeredList.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		registeredList.addListSelectionListener(new RegisteredListener());
+		registeredScrollPane = new JScrollPane(registeredList);
+		registeredScrollPane.setBounds(100, 350, 300, 200);
+		if (session.getUser().getUserType().equals("USER")
+				|| selectedEventType == null) {
+			registeredList.setEnabled(false);
+		}
+		add(registeredScrollPane);
 	}
 	
 	
+	
+	/**
+	 * Listener que monitoriza la selección de la lista de unidades de negocio disponibles
+	 */
+	private class RegisteredListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+//			if (e.getValueIsAdjusting() == false) {
+//		        if (availableList.getSelectedIndex() != -1) {
+//		        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
+//		        		allocateButton.setEnabled(true);
+//		        	} else if (session.getUser().getUserType().equals("MANAGER")) {
+//		        		//Comparar bunit seleccionada con bunit de la sesión
+//		        		//Si coincide, habilitar botón
+//		        		if (session.getUser().getbUnit().getNombre().equals(availableList.getSelectedValue())) {
+//		        			allocateButton.setEnabled(true);
+//		        		} else {
+//		        			allocateButton.setEnabled(false);
+//		        		}
+//		        	}
+//		        }
+//		    }
+		}		
+	}
 	
 	public class NewAction extends AbstractAction {
 		public NewAction() {
