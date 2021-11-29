@@ -1660,6 +1660,11 @@ ver 0.1.12 - EVENTTYPEUI
 		· PersistenceManager class:
 			Update connectToDatabase() --add dynamic connection credentials to remote database--
 
+	* - Package main.java.company
+
+		· EventType class:
+			Update getEventTypesArray() --return alphabetically sorted array--
+
 	* - Package main.java.gui
 
 		· AppWindow class:
@@ -1675,13 +1680,14 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· EventTypeUI class:
 		Add attributes
-			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, NO_AREA, DIALOG_INFO, DIALOG_YES_NO, session,
+			OK_ACTION_UNDEFINED, OK_ACTION_EDIT, OK_ACTION_NEW, NO_EVENT_TYPE, DIALOG_INFO, DIALOG_YES_NO, session,
 			tNow, timer, panelVisible, eventTypeNameField, allEventTypes, selectedEventType, maxLengthLabel,
 			textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
 			okActionSelector, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton, editAction, 
 			cancelAction, oKAction, newAction, deleteAction,
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
+		Add getEventTypesFromSession()
 		Update constructor --all graphical elements--
 		Realign graphical elements
 

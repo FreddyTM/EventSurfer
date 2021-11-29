@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,13 +32,16 @@ public class EventType {
 	}
 	
 	/**
-	 * Devuelve un array con el nombre de los diferentes tipos de eventos
+	 * Devuelve un array ordenado alfabéticamente con el nombre de los diferentes tipos de eventos
 	 * @return Tipos de eventos
 	 */
 	public String[] getEventTypesArray() {
 		String[] tiposDeEvento = new String[getNumberOfEventTypes()];
-		Collection<String> tipos = eventTypes.values();
-		tiposDeEvento = tipos.toArray(tiposDeEvento);
+		if (tiposDeEvento.length > 0) {
+			Collection<String> tipos = eventTypes.values();
+			tiposDeEvento = tipos.toArray(tiposDeEvento);
+			Arrays.sort(tiposDeEvento);
+		}
 		return tiposDeEvento;
 	}
 	
