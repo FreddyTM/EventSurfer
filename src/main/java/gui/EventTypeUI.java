@@ -48,9 +48,10 @@ public class EventTypeUI extends JPanel {
 	
 //	private JTextField EventTypeNameField = new JTextField();
 	//Lista de todas las areas existentes en la base de datos
-	private List<EventType> allEventTypes;
+//	private List<EventType> allEventTypes;
+	private String[] registeredEventTypes = getEventTypesFromSession();
 	//Registra el area seleccionada en cada momento
-	private EventType selectedEventType;
+	private String selectedEventType;
 	//Etiqueta informativa de longitud máxima de datos
 	private JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 	//Backup del contenido del campo Tipo de Evento
@@ -65,8 +66,8 @@ public class EventTypeUI extends JPanel {
 	private JButton newButton;
 	private JButton deleteButton = new JButton();
 	
-	//Elementos que aparecerán en la lista de tipos de eventos
-	private String[] registeredEventTypes;
+//	//Elementos que aparecerán en la lista de tipos de eventos
+//	private String[] registeredEventTypes;
 	//Modelo de datos de la lista de tipos de eventos
 	private DefaultListModel<String> registeredModel = new DefaultListModel<String>();
 	//Lista de tipos de evento
@@ -110,7 +111,7 @@ public class EventTypeUI extends JPanel {
 		
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		eventTypeNameField.setBounds(245, 125, 400, 25);
-		eventTypeNameField.setText(getEventTypesFromSession()[0]);
+		eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
 		eventTypeNameField.setEditable(false);
 		add(eventTypeNameField);
 		
@@ -126,6 +127,8 @@ public class EventTypeUI extends JPanel {
 			newButton.setEnabled(false);
 		}
 		add(newButton);
+		
+		selectedEventType = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
 		
 		editButton.setAction(editAction);
 		editButton.setBounds(304, 225, 89, 23);
@@ -161,18 +164,25 @@ public class EventTypeUI extends JPanel {
 		availableLabel.setBounds(100, 300, 300, 25);
 		add(availableLabel);
 		
+//		if (selectedEventType != null) {			
+//		} 
+		for (String item : registeredEventTypes) {
+			registeredModel.addElement(item);
+		}
+		
 		registeredList = new JList<String>(registeredModel);
 		registeredList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		registeredList.setLayoutOrientation(JList.VERTICAL);		
 		registeredList.setVisibleRowCount(8);
 		registeredList.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		registeredList.setSelectedIndex(0);
 		registeredList.addListSelectionListener(new RegisteredListener());
 		registeredScrollPane = new JScrollPane(registeredList);
 		registeredScrollPane.setBounds(100, 350, 300, 200);
-		if (session.getUser().getUserType().equals("USER")
-				|| selectedEventType == null) {
-			registeredList.setEnabled(false);
-		}
+//		if (session.getUser().getUserType().equals("USER")
+//				|| selectedEventType == null) {
+//			registeredList.setEnabled(false);
+//		}
 		add(registeredScrollPane);
 	}
 	

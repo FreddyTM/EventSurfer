@@ -1685,10 +1685,11 @@ ver 0.1.12 - EVENTTYPEUI
 			textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
 			okActionSelector, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton, editAction, 
 			cancelAction, oKAction, newAction, deleteAction,
+		Delete attribute allEventTypes --useless--
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
 		Add getEventTypesFromSession() --ok--
-		Update constructor --all graphical elements--
+		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
 
 	· RegisteredListener (new inner AreaUI class):
