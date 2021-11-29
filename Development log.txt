@@ -1655,6 +1655,11 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 
 ver 0.1.12 - EVENTTYPEUI
 
+	* - Package main.java.persistence
+
+		· PersistenceManager class:
+			Update connectToDatabase() --add dynamic connection credentials to remote database--
+
 	* - Package main.java.gui
 
 		· AppWindow class:
