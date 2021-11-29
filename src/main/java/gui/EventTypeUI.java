@@ -25,6 +25,7 @@ import javax.swing.event.ListSelectionListener;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventType;
+import main.java.types_states.TypesStatesContainer;
 
 public class EventTypeUI extends JPanel {
 
@@ -34,7 +35,7 @@ public class EventTypeUI extends JPanel {
 	private static final int OK_ACTION_EDIT = 1;
 	private static final int OK_ACTION_NEW = 2;
 	
-	private static final String NO_AREA = "<Ningún area seleccionable>";
+	private static final String NO_EVENT_TYPE = "<Ningún tipo de evento seleccionable>";
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
 	
@@ -109,6 +110,7 @@ public class EventTypeUI extends JPanel {
 		
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		eventTypeNameField.setBounds(245, 125, 400, 25);
+		eventTypeNameField.setText(getEventTypesFromSession()[0]);
 		eventTypeNameField.setEditable(false);
 		add(eventTypeNameField);
 		
@@ -172,6 +174,20 @@ public class EventTypeUI extends JPanel {
 			registeredList.setEnabled(false);
 		}
 		add(registeredScrollPane);
+	}
+	
+	/**
+	 * Obtiene la lista de tipos de evento registrados 
+	 * @return
+	 */
+	private String[] getEventTypesFromSession() {
+		String[] itemList = TypesStatesContainer.getEvType().getEventTypesArray();
+		if (itemList.length == 0) {
+			itemList = new String[1];
+			itemList[0] = NO_EVENT_TYPE;
+			return itemList;
+		}
+		return itemList;
 	}
 	
 	

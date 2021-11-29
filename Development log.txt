@@ -1687,7 +1687,7 @@ ver 0.1.12 - EVENTTYPEUI
 			cancelAction, oKAction, newAction, deleteAction,
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
-		Add getEventTypesFromSession()
+		Add getEventTypesFromSession() --ok--
 		Update constructor --all graphical elements--
 		Realign graphical elements
 
