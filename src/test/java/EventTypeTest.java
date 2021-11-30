@@ -96,4 +96,11 @@ class EventTypeTest {
 	void testUpdateEventTypeToDB() {
 		assertTrue(eType.updateEventTypeToDB(conn, 4, "CERRADURA AVERIADA"));
 	}
+	
+	@Test
+	@Order(8)
+	void testIsEventTypeUsed() {
+		assertTrue(eType.isEventTypeUsed(conn, 2));
+		assertFalse(eType.isEventTypeUsed(conn, 4));
+	}
 }
