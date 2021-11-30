@@ -152,7 +152,7 @@ public class Event {
 				event.setbUnit(bUnit);
 				Area area = new Area().getAreaById(bUnit, results.getInt(2));
 				event.setArea(area);
-				event.setEventType(TypesStatesContainer.getEvType().getEventType(results.getInt(3)));
+				event.setEventType(TypesStatesContainer.getEvType().getEventTypeDescription(results.getInt(3)));
 				event.setTitulo(results.getString(4));
 				event.setDescripcion(results.getString(5));
 				event.setEventState(TypesStatesContainer.getEvState().getEventState(results.getInt(6)));
@@ -193,7 +193,7 @@ public class Event {
 				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitById(company, results.getInt(2));
 				event.setbUnit(bUnit);
 				event.setArea(area);
-				event.setEventType(TypesStatesContainer.getEvType().getEventType(results.getInt(3)));
+				event.setEventType(TypesStatesContainer.getEvType().getEventTypeDescription(results.getInt(3)));
 				event.setTitulo(results.getString(4));
 				event.setDescripcion(results.getString(5));
 				event.setEventState(TypesStatesContainer.getEvState().getEventState(results.getInt(6)));

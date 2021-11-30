@@ -172,7 +172,7 @@ public class EventType {
 	 * @param key
 	 * @return tipo de evento o null si la clave no existe
 	 */
-	public String getEventType (int key) {
+	public String getEventTypeDescription (int key) {
 		if (eventTypes.containsKey(key)) {
 			return eventTypes.get(key);
 		} else {

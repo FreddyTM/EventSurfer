@@ -65,9 +65,9 @@ class EventTypeTest {
 	@Test
 	@Order(6)
 	void testGetEventType() {
-		assertEquals("GOTERAS", eType.getEventType(2));
-		assertNotNull(eType.getEventType(3));
-		assertNull(eType.getEventType(4));
+		assertEquals("GOTERAS", eType.getEventTypeDescription(2));
+		assertNotNull(eType.getEventTypeDescription(3));
+		assertNull(eType.getEventTypeDescription(4));
 	}
 
 	@Test

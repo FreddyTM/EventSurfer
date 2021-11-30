@@ -1665,6 +1665,7 @@ ver 0.1.12 - EVENTTYPEUI
 	· EventType class:
 		Add updateEventTypeToDB() --ok--
 		Update getEventTypesArray() --return alphabetically sorted array--
+		Rename getEventType() to getEventTypeDescription()
 
 	* - Package main.java.gui
 
