@@ -22,6 +22,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.company.BusinessUnit;
+import main.java.event.Event;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventType;
@@ -200,7 +202,46 @@ public class EventTypeUI extends JPanel {
 		return itemList;
 	}
 	
-	
+	/**
+	 * Si el usuario de la sesión es de tipo manager, habilita la edición del tipo de evento seleccionado solo en el caso
+	 * de que esté asignado exclusivamente a eventos registrados en la misma unidad de negocio que dicho usuario, o bien que
+	 * no esté asignado a ningún evento
+	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
+	 */
+	private boolean verifyManagerEditConditions() {
+		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
+		//List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
+		String action = "";
+		//Si estamos editando el area
+		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+			action = "editar";
+		//Si queremos borrar el area
+		} else {
+			action = "borrar";
+		}
+		//Area no asignada a ninguna unidad de negocio
+		if (bUnitsList.size() == 0) {
+			return true;
+		}
+		//Area asignada a más de una unidad de negocio
+		if (bUnitsList.size() > 1) {
+			ToolBox.showDialog(
+					"Un usuario Manager no puede " + action + " tipos de eventos registrados en eventos de varias unidades de negocio", EventTypeUI.this,
+					DIALOG_INFO);
+			return false;
+		}
+		//Area asignada a la unidad de negocio de usuario manager que abre sesión
+		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
+			return true;
+		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
+		} else {
+			ToolBox.showDialog(
+					"Un usuario Manager no puede " + action + " tipos de evento registrados en eventos de unidades de negocio distintas a la suya", EventTypeUI.this,
+					DIALOG_INFO);
+			return false;
+		}
+	}
 	
 	/**
 	 * Listener que monitoriza la selección de la lista de unidades de negocio disponibles
