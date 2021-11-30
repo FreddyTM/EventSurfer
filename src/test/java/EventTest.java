@@ -92,7 +92,7 @@ class EventTest {
 	}
 
 	@Test
-	@Order(5)
+	@Order(6)
 	void testUpdateEventToDB() {
 		Event oldEvent = new Event().getEventById(bUnit, 2);
 		Event newEvent = new Event();
@@ -127,4 +127,11 @@ class EventTest {
 		assertNotEquals(0, new Event().getAreaEventsFromDB(conn, bUnit.getAreas().get(0), company).size());
 	}
 
+	@Test
+	@Order(7)
+	void testGetBunitsIdsWithEventTypes() {
+		assertTrue(new Event().getBunitsIdsWithEventTypes(conn, 1).size() == 0);
+		assertTrue(new Event().getBunitsIdsWithEventTypes(conn, 2).size() > 0);
+		assertTrue(new Event().getBunitsIdsWithEventTypes(conn, 3).size() == 1);
+	}
 }

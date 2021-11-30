@@ -1669,6 +1669,11 @@ ver 0.1.12 - EVENTTYPEUI
 		Update getEventTypesArray() --return alphabetically sorted array--
 		Rename getEventType() to getEventTypeDescription() --updates Event & EventTypeTest
 
+	* - Package main.java.event
+
+	· Event class:
+		Add getBunitsIdsWithEventTypes() --ok--
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -1693,6 +1698,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
 		Add getEventTypesFromSession() --ok--
+		Add verifyManagerEditConditions() --not tested yet--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
 
@@ -1722,3 +1728,6 @@ ver 0.1.12 - EVENTTYPEUI
 		Add testIsEventTypeUsed() --ok--
 		Add testDeleteEventTypeFromDB() --ok--
 		Update testGetEventTypesArray() --sorted array ok--
+
+	· EventTest class:
+		Add testGetBunitsIdsWithEventTypes() --ok--
