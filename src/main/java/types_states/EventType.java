@@ -24,56 +24,6 @@ public class EventType {
 	}
 	
 	/**
-	 * Devuelve el número de tipos de evento almacenados en la base de datos
-	 * @return Número de tipos de eventos 
-	 */
-	public int getNumberOfEventTypes() {
-		return eventTypes.size();
-	}
-	
-	/**
-	 * Devuelve un array ordenado alfabéticamente con el nombre de los diferentes tipos de eventos
-	 * @return Tipos de eventos
-	 */
-	public String[] getEventTypesArray() {
-		String[] tiposDeEvento = new String[getNumberOfEventTypes()];
-		if (tiposDeEvento.length > 0) {
-			Collection<String> tipos = eventTypes.values();
-			tiposDeEvento = tipos.toArray(tiposDeEvento);
-			Arrays.sort(tiposDeEvento);
-		}
-		return tiposDeEvento;
-	}
-	
-	/**
-	 * Retorna el id del tipo de evento pasado por parámetro
-	 * @param eventType tipo de evento del que queremos saber su id
-	 * @return id del tipo de evento (-1 si no existe)
-	 */
-	public int getEventTypeId (String eventType) {
-		for (Integer key : eventTypes.keySet()) {
-			if (eventType.equals(eventTypes.get(key))) {
-				return key;
-			}
-		}
-		//El tipo de evento no existe
-		return -1;	
-	}
-	
-	/**
-	 * Retorna el tipo de evento que corresponde a la clave pasada por parámetro
-	 * @param key
-	 * @return tipo de evento o null si la clave no existe
-	 */
-	public String getEventType (int key) {
-		if (eventTypes.containsKey(key)) {
-			return eventTypes.get(key);
-		} else {
-			return null;
-		}
-	}
-	
-	/**
 	 * Conecta con la base de datos y almacena cada tipo de evento con su clave
 	 * en eventTypes
 	 * @param conn conexión con la base de datos
@@ -144,12 +94,92 @@ public class EventType {
 		}
 	}
 	
+	
 	/*
 	 * Métodos necesarios para completar la clase
 	 * deleteEventTypeFromDB(Connection conn, String descripcion)
 	 * updateEventTypeToDB(Connection conn, String descripcion)
 	 * isEventTypeUsed(Connection conn, String descripcion) --comprobar todos los eventos para saber si se ha usado un tipo de evento determinado--
 	 */
+	
+	/**
+	 * Actualiza la descripción de un tipo de evento que ya existe en la base de datos
+	 * @param conn conexión a la base de datos
+	 * @param id id del tipo de evento buscado
+	 * @param descripcion descripción actualizada del tipo de evento
+	 * @return true si la actualización se hizo con éxito, false si no
+	 */
+	public boolean updateEventTypeToDB(Connection conn, int id, String descripcion) {
+		PreparedStatement pstm = null;
+		String sql = "UPDATE event_type "
+				+ "SET "				
+				+ "descripcion = ? "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, descripcion);
+			pstm.setInt(2, id);
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	
+	/**
+	 * Devuelve el número de tipos de evento almacenados en la base de datos
+	 * @return Número de tipos de eventos 
+	 */
+	public int getNumberOfEventTypes() {
+		return eventTypes.size();
+	}
+	
+	/**
+	 * Devuelve un array ordenado alfabéticamente con el nombre de los diferentes tipos de eventos
+	 * @return Tipos de eventos
+	 */
+	public String[] getEventTypesArray() {
+		String[] tiposDeEvento = new String[getNumberOfEventTypes()];
+		if (tiposDeEvento.length > 0) {
+			Collection<String> tipos = eventTypes.values();
+			tiposDeEvento = tipos.toArray(tiposDeEvento);
+			Arrays.sort(tiposDeEvento);
+		}
+		return tiposDeEvento;
+	}
+	
+	/**
+	 * Retorna el id del tipo de evento pasado por parámetro
+	 * @param eventType tipo de evento del que queremos saber su id
+	 * @return id del tipo de evento (-1 si no existe)
+	 */
+	public int getEventTypeId (String eventType) {
+		for (Integer key : eventTypes.keySet()) {
+			if (eventType.equals(eventTypes.get(key))) {
+				return key;
+			}
+		}
+		//El tipo de evento no existe
+		return -1;	
+	}
+	
+	/**
+	 * Retorna el tipo de evento que corresponde a la clave pasada por parámetro
+	 * @param key
+	 * @return tipo de evento o null si la clave no existe
+	 */
+	public String getEventType (int key) {
+		if (eventTypes.containsKey(key)) {
+			return eventTypes.get(key);
+		} else {
+			return null;
+		}
+	}
+	
 	
 	public Map <Integer, String> getEventTypes() {
 		return this.eventTypes;
