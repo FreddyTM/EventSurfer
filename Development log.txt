@@ -1693,7 +1693,8 @@ ver 0.1.12 - EVENTTYPEUI
 		Realign graphical elements
 
 	· RegisteredListener (new inner AreaUI class):
-		Add valueChanged() --empty--
+		Add valueChanged()
+		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--

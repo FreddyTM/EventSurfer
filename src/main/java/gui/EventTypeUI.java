@@ -209,6 +209,11 @@ public class EventTypeUI extends JPanel {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
+			selectedEventType = registeredList.getSelectedValue();
+			eventTypeNameField.setText(selectedEventType);
+			
+			//Avería eléctrica, goteras, rotura de material
+			
 //			if (e.getValueIsAdjusting() == false) {
 //		        if (availableList.getSelectedIndex() != -1) {
 //		        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
