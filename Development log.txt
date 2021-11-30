@@ -1663,7 +1663,7 @@ ver 0.1.12 - EVENTTYPEUI
 	* - Package main.java.company
 
 	· EventType class:
-		Add updateEventTypeToDB() --not tested yet--
+		Add updateEventTypeToDB() --ok--
 		Update getEventTypesArray() --return alphabetically sorted array--
 
 	* - Package main.java.gui
@@ -1715,5 +1715,5 @@ ver 0.1.12 - EVENTTYPEUI
 	* - Package main.java.test
 
 	· EventTypeTest class:
-		Add
+		Add testUpdateEventTypeToDB() --ok--
 		Update testGetEventTypesArray() --sorted array ok--

@@ -91,4 +91,9 @@ class EventTypeTest {
 		assertTrue(eType.addNewEventType(conn, "ROTURA DE MATERIAL"));
 	}
 
+	@Test
+	@Order(7)
+	void testUpdateEventTypeToDB() {
+		assertTrue(eType.updateEventTypeToDB(conn, 4, "CERRADURA AVERIADA"));
+	}
 }
