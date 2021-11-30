@@ -98,8 +98,6 @@ public class EventType {
 	/*
 	 * Métodos necesarios para completar la clase
 	 * deleteEventTypeFromDB(Connection conn, String descripcion)
-	 * updateEventTypeToDB(Connection conn, String descripcion)
-	 * isEventTypeUsed(Connection conn, String descripcion) --comprobar todos los eventos para saber si se ha usado un tipo de evento determinado--
 	 */
 	
 	/**
@@ -159,6 +157,28 @@ public class EventType {
 		return false;
 	}
 	
+	/**
+	 * Borra un tipo de evento de la base de datos 
+	 * @param conn conexión a la base de datos
+	 * @param descripcion descripción del tipo de evento a borrar de la base de datos
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteEventTypeFromDB(Connection conn, String descripcion) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM event_type "
+				+ "WHERE descripcion = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, descripcion);
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
 	
 	/**
 	 * Devuelve el número de tipos de evento almacenados en la base de datos

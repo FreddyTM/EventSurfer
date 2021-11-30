@@ -1665,6 +1665,7 @@ ver 0.1.12 - EVENTTYPEUI
 	· EventType class:
 		Add updateEventTypeToDB() --ok--
 		Add isEventTypeUsed() --ok--
+		Add deleteEventTypeFromDB() --not tested yet--
 		Update getEventTypesArray() --return alphabetically sorted array--
 		Rename getEventType() to getEventTypeDescription() --updates Event & EventTypeTest
 
