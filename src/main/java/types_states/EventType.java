@@ -129,6 +129,36 @@ public class EventType {
 		}
 	}
 	
+	/**
+	 * Comprueba si el tipo de evento con id pasado por parámetro se ha usado en algún evento registrado en la base de datos
+	 * @param conn conexión a la base de datos
+	 * @param id id del tipo de evento buscado
+	 * @return true si el tipo de evento se ha utilizado, false si no
+	 */
+	public boolean isEventTypeUsed(Connection conn, int id) {
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT DISTINCT event_type_id "
+				+ "FROM event "
+				+ "ORDER BY event_type_id;";
+		try {
+			stm = conn.createStatement();
+			results = stm.executeQuery(sql);
+			while (results.next()) {
+				if (results.getInt(1) == id) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * Devuelve el número de tipos de evento almacenados en la base de datos
