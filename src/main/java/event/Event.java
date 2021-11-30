@@ -211,7 +211,7 @@ public class Event {
 	}
 	
 	/**
-	 * Devuelve el usuario al que pertenece el id entrado por parámetro
+	 * Devuelve el evento al que pertenece el id entrado por parámetro
 	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
 	 * @param id id del usuario buscado
 	 * @return usuario con el id entrado por parámetro (null si no existe)
@@ -224,6 +224,38 @@ public class Event {
 			}
 		}	
 		return null;
+	}
+	
+	/**
+	 * Obtiene una lista con los ids de las unidades de negocio en las que hay eventos registrados con el tipo de evento
+	 * del id pasado por parámetro
+	 * @param conn Conexión con la base de datos
+	 * @param id id del tipo de evento a comprobar
+	 * @return Lista de ids de las unidades de negocio
+	 */
+	public List<Integer> getBunitsIdsWithEventTypes(Connection conn, int id) {
+		List<Integer> bUnitIds = new ArrayList<Integer>();
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT DISTINCT b_unit_id "
+				+ "FROM event "
+				+ "WHERE event_type_id = ? "
+				+ "ORDER BY b_unit_id;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, id);
+			results = pstm.executeQuery();
+			while (results.next()) {
+				bUnitIds.add(results.getInt(1));			
+			}
+			return bUnitIds;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
 	}
 	
 	public int getId() {
