@@ -46,7 +46,8 @@ class EventTypeTest {
 	@Test
 	@Order(4)
 	void testGetEventTypesArray() {
-		String[] tipos = {"AVERÍA ELÉCTRICA", "GOTERAS", "ROTURA DE MATERIAL"};
+		eType.loadData(conn);
+		String[] tipos = {"AVERÍA ELÉCTRICA", "CERRADURA INUTILIZADA", "GOTERAS", "ROTURA DE MATERIAL"};
 		String[] dbTipos = eType.getEventTypesArray();
 		for (int i = 0; i < tipos.length; i++) {
 			assertEquals(tipos[i], dbTipos[i]);
