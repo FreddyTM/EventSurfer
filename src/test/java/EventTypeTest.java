@@ -103,4 +103,10 @@ class EventTypeTest {
 		assertTrue(eType.isEventTypeUsed(conn, 2));
 		assertFalse(eType.isEventTypeUsed(conn, 4));
 	}
+	
+	@Test
+	@Order(9)
+	void testDeleteEventTypeFromDB() {
+		assertTrue(eType.deleteEventTypeFromDB(conn, "CERRADURA AVERIADA"));
+	}
 }
