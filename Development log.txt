@@ -1700,6 +1700,9 @@ ver 0.1.12 - EVENTTYPEUI
 		Add getEventTypesFromSession() --ok--
 		Add verifyManagerEditConditions() --not tested yet--
 		Add verifyAdminEditConditions() --not tested yet--
+		Add testData() --not tested yet--
+		Add editableDataOn() --not tested yet--
+		Add editableDataOff() --not tested yet--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
 
@@ -1708,7 +1711,8 @@ ver 0.1.12 - EVENTTYPEUI
 		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
 
 	· NewAction class (new inner AreaUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() 
+		Update actionPerformed() --ok--
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
@@ -1721,6 +1725,9 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
+
+	· TimerJob class (new AreaUI class):
+		Add run() --empty--
 
 	* - Package main.java.test
 

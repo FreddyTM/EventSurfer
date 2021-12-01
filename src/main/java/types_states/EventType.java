@@ -94,12 +94,6 @@ public class EventType {
 		}
 	}
 	
-	
-	/*
-	 * Métodos necesarios para completar la clase
-	 * deleteEventTypeFromDB(Connection conn, String descripcion)
-	 */
-	
 	/**
 	 * Actualiza la descripción de un tipo de evento que ya existe en la base de datos
 	 * @param conn conexión a la base de datos

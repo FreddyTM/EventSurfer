@@ -1,10 +1,12 @@
 package main.java.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -23,11 +25,9 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import main.java.company.BusinessUnit;
 import main.java.event.Event;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
-import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
 
 public class EventTypeUI extends JPanel {
@@ -49,9 +49,7 @@ public class EventTypeUI extends JPanel {
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	
-//	private JTextField EventTypeNameField = new JTextField();
-	//Lista de todas las areas existentes en la base de datos
-//	private List<EventType> allEventTypes;
+	//Elementos que aparecerán en la lista de tipos de eventos
 	private String[] registeredEventTypes = getEventTypesFromSession();
 	//Registra el area seleccionada en cada momento
 	private String selectedEventType;
@@ -69,8 +67,6 @@ public class EventTypeUI extends JPanel {
 	private JButton newButton;
 	private JButton deleteButton = new JButton();
 	
-//	//Elementos que aparecerán en la lista de tipos de eventos
-//	private String[] registeredEventTypes;
 	//Modelo de datos de la lista de tipos de eventos
 	private DefaultListModel<String> registeredModel = new DefaultListModel<String>();
 	//Lista de tipos de evento
@@ -118,6 +114,9 @@ public class EventTypeUI extends JPanel {
 		eventTypeNameField.setEditable(false);
 		add(eventTypeNameField);
 		
+		textFieldBackup = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
+		selectedEventType = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
+		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoLabel.setBounds(50, 175, 900, 25);
@@ -131,7 +130,6 @@ public class EventTypeUI extends JPanel {
 		}
 		add(newButton);
 		
-		selectedEventType = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
 		
 		editButton.setAction(editAction);
 		editButton.setBounds(304, 225, 89, 23);
@@ -167,8 +165,6 @@ public class EventTypeUI extends JPanel {
 		availableLabel.setBounds(100, 300, 300, 25);
 		add(availableLabel);
 		
-//		if (selectedEventType != null) {			
-//		} 
 		for (String item : registeredEventTypes) {
 			registeredModel.addElement(item);
 		}
@@ -182,16 +178,28 @@ public class EventTypeUI extends JPanel {
 		registeredList.addListSelectionListener(new RegisteredListener());
 		registeredScrollPane = new JScrollPane(registeredList);
 		registeredScrollPane.setBounds(100, 350, 300, 200);
-//		if (session.getUser().getUserType().equals("USER")
-//				|| selectedEventType == null) {
-//			registeredList.setEnabled(false);
-//		}
 		add(registeredScrollPane);
+		
+		/*Iniciamos la comprobación periódica de actualizaciones
+		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
+		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
+		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
+		* por error que no había cambios.
+		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
+		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
+		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
+		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
+		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
+		* o más lenta que la comprobación de los datos que hace el objeto session.
+		*/
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 1000, 30000);
 	}
 	
 	/**
-	 * Obtiene la lista de tipos de evento registrados 
-	 * @return
+	 * Obtiene la lista de tipos de evento registrados en la sesión abierta
+	 * @return lista de tipos de evento registrados. Si no hay ninguno, la lista incluye solo NO_EVENT_TYPE 
 	 */
 	private String[] getEventTypesFromSession() {
 		String[] itemList = TypesStatesContainer.getEvType().getEventTypesArray();
@@ -211,7 +219,6 @@ public class EventTypeUI extends JPanel {
 	 */
 	private boolean verifyManagerEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
-		//List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
 		String action = "";
 		//Si estamos editando el tipo de evento
@@ -253,7 +260,6 @@ public class EventTypeUI extends JPanel {
 	 */
 	private boolean verifyAdminEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
-//		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
 		String info = "";
 		//Si estamos editando el tipo de evento
@@ -300,7 +306,86 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que monitoriza la selección de la lista de unidades de negocio disponibles
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
+	 * con el fondo del campo en amarillo
+	 * @return true si son correctos, false si no lo son
+	 */
+	private boolean testData () {
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
+		Boolean error = false;
+		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorNameText = "YA EXISTE UN TIPO DE EVENTO CON ESE NOMBRE";
+		
+		//Comprobamos que el nombre del tipo de evento no existe ya en la base de datos
+		//Obtenemos la lista de todos los tipos de evento
+		String[] itemList = TypesStatesContainer.getEvType().getEventTypesArray();
+		
+		//Si estamos creando tipo de evento nuevo
+		if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
+			//Si el nombre del tipo de evento creado ya existe no se permite su creación
+			for (String eType: itemList) {
+				if (eType.equals(eventTypeNameField.getText())) {
+					infoLabel.setText(errorNameText);
+					eventTypeNameField.setBackground(Color.YELLOW);
+					return false;
+				}
+			}
+		//Si estamos editando un tipo de evento existente
+		} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+			//Si cambiamos el nombre del tipo de evento editado
+			if (!selectedEventType.equals(eventTypeNameField.getText())) {
+				//Comprobamos que el nombre editado no pertenezca a otra area existente
+				for (String eType: itemList) {
+					if (eType.equals(eventTypeNameField.getText())) {
+						infoLabel.setText(errorNameText);
+						eventTypeNameField.setBackground(Color.YELLOW);
+						return false;
+					}
+				}
+			}
+		}
+
+		if (eventTypeNameField.getText().length() > 100 || eventTypeNameField.getText().length() == 0) {
+			eventTypeNameField.setBackground(Color.YELLOW);
+			infoLabel.setText(errorLengthText);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Habilita los campos del formulario para que pueda introducirse información
+	 */
+	private void editableDataOn() {
+		//Activar visibilidad de etiqueta de longitud máxima de datos
+		maxCharsLabel.setVisible(true);
+		//Datos editables
+		eventTypeNameField.setEditable(true);
+		eventTypeNameField.setBackground(Color.WHITE);
+	}
+	
+	/**
+	 * Deshabilita los campos del formulario para impedir que se modifique su contenido
+	 */
+	private void editableDataOff() {
+		//Quitar visibilidad de etiquetas de longitud máxima de datos
+		maxCharsLabel.setVisible(false);
+		//Datos no editables
+		eventTypeNameField.setEditable(true);
+		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+
+	}
+	
+	/**
+	 * Vacía el contenido de la lista de tipos de evento
+	 */
+	private void emptyList() {
+		registeredModel.clear();
+		registeredList.setModel(registeredModel);
+	}
+	
+	/**
+	 * Listener que monitoriza la selección de la lista de tipos de evento disponibles
 	 */
 	private class RegisteredListener implements ListSelectionListener {
 
@@ -310,38 +395,35 @@ public class EventTypeUI extends JPanel {
 				selectedEventType = registeredList.getSelectedValue();
 				eventTypeNameField.setText(selectedEventType);
 			}
-			
-			//Avería eléctrica, goteras, rotura de material
-			
-//			if (e.getValueIsAdjusting() == false) {
-//		        if (availableList.getSelectedIndex() != -1) {
-//		        	if (session.getUser().getUserType().equals("ADMIN")) {			        		
-//		        		allocateButton.setEnabled(true);
-//		        	} else if (session.getUser().getUserType().equals("MANAGER")) {
-//		        		//Comparar bunit seleccionada con bunit de la sesión
-//		        		//Si coincide, habilitar botón
-//		        		if (session.getUser().getbUnit().getNombre().equals(availableList.getSelectedValue())) {
-//		        			allocateButton.setEnabled(true);
-//		        		} else {
-//		        			allocateButton.setEnabled(false);
-//		        		}
-//		        	}
-//		        }
-//		    }
 		}		
 	}
 	
+	/**
+	 * Acción del botón Nueva. Se deshabilita el propio botón y el botón Editar. Vaciamos los campos de texto
+	 * y habilitamos su edición para añadir la información de un nuevo tipo de evento. Habilitamos el botón de
+	 * Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
+	 */
 	public class NewAction extends AbstractAction {
 		public NewAction() {
 			putValue(NAME, "Nuevo");
-			putValue(SHORT_DESCRIPTION, "Add new area");
+			putValue(SHORT_DESCRIPTION, "Add new event type");
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+			okActionSelector = EventTypeUI.OK_ACTION_NEW;
+			oKButton.setEnabled(true);
+			cancelButton.setEnabled(true);
+			editButton.setEnabled(false);
+			newButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+			infoLabel.setText("");
+			//Formulario editable
+			editableDataOn();
+			//Vaciamos los campos de texto
+			eventTypeNameField.setText("");
+			//Vaciamos las listas de asignación de areas
+			emptyList();
+		}	
 	}
 	
 	public class EditAction extends AbstractAction {
@@ -390,6 +472,21 @@ public class EventTypeUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	/**
+	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
+	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel se encuentra en modo
+	 * de edición de los datos, o no está visible, no se produce la comprobación porque no es necesaria.
+	 */
+	private class TimerJob extends TimerTask {
+
+		@Override
+		public void run() {
 			// TODO Auto-generated method stub
 			
 		}
