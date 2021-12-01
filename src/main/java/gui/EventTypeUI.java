@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -213,33 +214,88 @@ public class EventTypeUI extends JPanel {
 		//List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
 		String action = "";
-		//Si estamos editando el area
+		//Si estamos editando el tipo de evento
 		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 			action = "editar";
-		//Si queremos borrar el area
+		//Si queremos borrar el tipo de evento
 		} else {
 			action = "borrar";
 		}
-		//Area no asignada a ninguna unidad de negocio
+		//Tipo de evento no registrado en eventos de ninguna unidad de negocio
 		if (bUnitsList.size() == 0) {
 			return true;
 		}
-		//Area asignada a más de una unidad de negocio
+		//Tipo de evento registrado en eventos de más de una unidad de negocio
 		if (bUnitsList.size() > 1) {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de eventos registrados en eventos de varias unidades de negocio", EventTypeUI.this,
-					DIALOG_INFO);
+					"Un usuario Manager no puede " + action + " tipos de eventos registrados en eventos de varias unidades de negocio",
+					EventTypeUI.this, DIALOG_INFO);
 			return false;
 		}
-		//Area asignada a la unidad de negocio de usuario manager que abre sesión
+		//Tipo de evento registrado en eventos de la unidad de negocio de usuario manager que abre sesión
 		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
 			return true;
-		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
+		//Tipo de evento registrado en eventos de una unidad de negocio distinta a la del usuario manager que abre sesión
 		} else {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de evento registrados en eventos de unidades de negocio distintas a la suya", EventTypeUI.this,
-					DIALOG_INFO);
+					"Un usuario Manager no puede " + action + " tipos de evento registrados en eventos de unidades de negocio distintas a la suya",
+					EventTypeUI.this, DIALOG_INFO);
 			return false;
+		}
+	}
+	
+	/**
+	 * Si el usuario de la sesión es de tipo admin y el tipo de evento seleccionado está registrado en eventos de más
+	 * de una unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta continuar, se habilita
+	 * la edición del tipo de evento seleccionado. También se habilita la edición directamente en el caso de que el
+	 * tipo de evento seleccionado esté registrado en eventos de una sola unidad de negocio o de ninguna. 
+	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
+	 */
+	private boolean verifyAdminEditConditions() {
+		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
+//		List<Integer> bUnitsList = new BusinessUnit().getBunitsWithArea(session.getConnection(), selectedArea);
+		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
+		String info = "";
+		//Si estamos editando el tipo de evento
+		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+			info = "Edición de tipo de evento registrado en más de una unidad de negocio. ¿Desea continuar?";
+		//Si queremos borrar el tipo de evento 
+		} else {
+			info = "Borrado de tipo de evento registrado en más de más de una unidad de negocio. "
+					+ "No se puede deshacer. " + "¿Desea continuar?";
+		}
+		//Tipo de evento registrado en eventos de más de una unidad de negocio
+		if (bUnitsList.size() > 1) {
+			int optionSelected = ToolBox.showDialog(
+					info, EventTypeUI.this,
+					DIALOG_YES_NO);
+			if (optionSelected == JOptionPane.YES_OPTION) {
+				//Debug
+				System.out.println("Edición o borrado OK");
+				return true;
+			} else {
+				//Debug
+				System.out.println("Edición o borrado cancelado");
+				return false;
+			}
+		//Tipo de evento registrado en eventos de una o ninguna unidad de negocio
+		} else {
+			if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+				return true;
+			} else {	
+				int optionSelected = ToolBox.showDialog(
+						"El borrado de tipos de eventos no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+						DIALOG_YES_NO);
+				if (optionSelected == JOptionPane.YES_OPTION) {
+					//Debug
+					System.out.println("Borrado OK");
+					return true;
+				} else {							
+					//Debug
+					System.out.println("Borrado cancelado");
+					return false;
+				}
+			}
 		}
 	}
 	
@@ -250,8 +306,10 @@ public class EventTypeUI extends JPanel {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			selectedEventType = registeredList.getSelectedValue();
-			eventTypeNameField.setText(selectedEventType);
+			if (e.getValueIsAdjusting() == false) {
+				selectedEventType = registeredList.getSelectedValue();
+				eventTypeNameField.setText(selectedEventType);
+			}
 			
 			//Avería eléctrica, goteras, rotura de material
 			
