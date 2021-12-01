@@ -202,11 +202,42 @@ public class EventType {
 	 * @return id del tipo de evento (-1 si no existe)
 	 */
 	public int getEventTypeId (String eventType) {
-		for (Integer key : eventTypes.keySet()) {
+		//Debug
+		System.out.println(eventTypes.keySet());
+//		Object[] keys = eventTypes.keySet().toArray();
+		Integer[] numKeys = eventTypes.keySet().toArray(new Integer[0]);
+		int[] intKeys = new int[numKeys.length];
+		
+		for (int i = 0; i < intKeys.length; i++) {
+			intKeys[i] = numKeys[i].intValue();
+		}
+		
+		
+		for (int key : intKeys) {
+			System.out.println(key);
+			System.out.println(eventTypes.get(key));
 			if (eventType.equals(eventTypes.get(key))) {
 				return key;
 			}
 		}
+		
+//		for (Integer key : numKeys) {
+//			if (eventType.equals(eventTypes.get(key.intValue()))) {
+//				return (int) key;
+//			}
+//		}
+		
+//		for (Integer key : keys) {
+//			if (eventType.equals(eventTypes.get(key))) {
+//				return (int) key;
+//			}
+//		}
+		
+//		for (int key : eventTypes.keySet()) {
+//			if (eventType.equals(eventTypes.get(key))) {
+//				return key;
+//			}
+//		}
 		//El tipo de evento no existe
 		return -1;	
 	}

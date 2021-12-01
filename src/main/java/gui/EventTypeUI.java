@@ -114,8 +114,12 @@ public class EventTypeUI extends JPanel {
 		eventTypeNameField.setEditable(false);
 		add(eventTypeNameField);
 		
-		textFieldBackup = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
-		selectedEventType = registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0];
+		selectedEventType = eventTypeNameField.getText();
+		textFieldBackup = selectedEventType;
+		
+		//Debug
+		System.out.println("Constructor. Tipo de evento seleccionado: " + selectedEventType);
+		System.out.println("Constructor. Backup tipo de evento seleccionado: " + selectedEventType);
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -362,6 +366,9 @@ public class EventTypeUI extends JPanel {
 		//Datos editables
 		eventTypeNameField.setEditable(true);
 		eventTypeNameField.setBackground(Color.WHITE);
+		
+		//Debug
+				System.out.println("EditableDataOn. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
@@ -374,6 +381,8 @@ public class EventTypeUI extends JPanel {
 		eventTypeNameField.setEditable(true);
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 
+		//Debug
+				System.out.println("EditableDataOff. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
@@ -382,6 +391,34 @@ public class EventTypeUI extends JPanel {
 	private void emptyList() {
 		registeredModel.clear();
 		registeredList.setModel(registeredModel);
+		
+		//Debug
+				System.out.println("EmptyList. Tipo de evento seleccionado: " + selectedEventType);
+	}
+	
+	/**
+	 * Refresca el contenido de las listas de asignación de areas
+	 */
+	private void refreshList() {
+		if (selectedEventType != null) {
+			//Obtenemos la lista de todos los tipos de evento
+			registeredEventTypes = getEventTypesFromSession();
+			registeredModel.clear();
+			for (String item : registeredEventTypes) {
+				registeredModel.addElement(item);
+			}
+			registeredList.setModel(registeredModel);
+			int lastSelectedIndex = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
+			
+			//Debug
+			System.out.println("LastSelectedIndex es: " + lastSelectedIndex);
+			
+			registeredList.setSelectedIndex(lastSelectedIndex); //Change to select last selected item
+		} else {
+			//Debug
+			System.out.println("selectedEventType = null y el modelo se borra");
+			registeredModel.clear();
+		}
 	}
 	
 	/**
@@ -394,6 +431,9 @@ public class EventTypeUI extends JPanel {
 			if (e.getValueIsAdjusting() == false) {
 				selectedEventType = registeredList.getSelectedValue();
 				eventTypeNameField.setText(selectedEventType);
+//				textFieldBackup = selectedEventType;
+				//Debug
+				System.out.println("Listener. Tipo de evento seleccionado: " + selectedEventType);
 			}
 		}		
 	}
@@ -446,10 +486,31 @@ public class EventTypeUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
+			//Cambio de estado de los botones y el combobox
+			if (selectedEventType != null) {
+				editButton.setEnabled(true);
+				newButton.setEnabled(true);
+				deleteButton.setEnabled(true);
+				oKButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				infoLabel.setText("");
+			} else {
+				newButton.setEnabled(true);
+				editButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+				oKButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				infoLabel.setText("");
+			}
+			//Recuperar valores previos a la edición de los datos
+			eventTypeNameField.setText(textFieldBackup);
+			selectedEventType = textFieldBackup;
+			//Refrescamos listas
+			refreshList();
+			//Formulario no editable
+			editableDataOff();
 		}
-		
 	}
 	
 	public class DeleteAction extends AbstractAction {
@@ -460,7 +521,6 @@ public class EventTypeUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			
 		}
 		
 	}

@@ -1667,6 +1667,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Add isEventTypeUsed() --ok--
 		Add deleteEventTypeFromDB() --ok--
 		Update getEventTypesArray() --return alphabetically sorted array--
+		Update getEventTypeId() --not working yet--
 		Rename getEventType() to getEventTypeDescription() --updates Event & EventTypeTest
 
 	* - Package main.java.event
@@ -1701,8 +1702,11 @@ ver 0.1.12 - EVENTTYPEUI
 		Add verifyManagerEditConditions() --not tested yet--
 		Add verifyAdminEditConditions() --not tested yet--
 		Add testData() --not tested yet--
-		Add editableDataOn() --not tested yet--
+		Add editableDataOn() --ok--
 		Add editableDataOff() --not tested yet--
+		Add emptyList() --ok--
+		Add refreshList() --not working yet--
+		Update refreshList() --not working yet--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
 
