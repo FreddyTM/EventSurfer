@@ -1694,7 +1694,7 @@ ver 0.1.12 - EVENTTYPEUI
 			tNow, timer, panelVisible, eventTypeNameField, allEventTypes, selectedEventType, maxLengthLabel,
 			textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
 			okActionSelector, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton, editAction, 
-			cancelAction, oKAction, newAction, deleteAction,
+			cancelAction, oKAction, newAction, deleteAction, itemSelectedIndex, itemSelectedBackupIndex
 		Delete attribute allEventTypes --useless--
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
@@ -1703,10 +1703,10 @@ ver 0.1.12 - EVENTTYPEUI
 		Add verifyAdminEditConditions() --not tested yet--
 		Add testData() --not tested yet--
 		Add editableDataOn() --ok--
-		Add editableDataOff() --not tested yet--
+		Add editableDataOff() --ok--
 		Add emptyList() --ok--
-		Add refreshList() --not working yet--
-		Update refreshList() --not working yet--
+		Add refreshList()
+		Update refreshList() --ok--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
 
@@ -1722,7 +1722,8 @@ ver 0.1.12 - EVENTTYPEUI
 		Add actionPerformed() --empty--
 
 	· CancelAction class (new inner AreaUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed()
+		Update actionPerformed() --ok--
 
 	· DeleteAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--

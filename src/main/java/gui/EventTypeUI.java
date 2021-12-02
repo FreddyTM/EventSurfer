@@ -51,15 +51,19 @@ public class EventTypeUI extends JPanel {
 	
 	//Elementos que aparecerán en la lista de tipos de eventos
 	private String[] registeredEventTypes = getEventTypesFromSession();
-	//Registra el area seleccionada en cada momento
+	//Registra el tipo de evento seleccionado en cada momento
 	private String selectedEventType;
-	//Etiqueta informativa de longitud máxima de datos
-	private JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
-	//Backup del contenido del campo Tipo de Evento
-	private String textFieldBackup;
+	//Backup del tipo de evento seleccionado
+	private String selectedEventTypeBackup;
+	//Registra el índice del elemento seleccionado en la lista
+	private int itemSelectedIndex = 0;
+	//Backup del índice seleccionado en la lista
+	private int itemSelectedBackupIndex = itemSelectedIndex;
 	
 	//Elementos gráficos
 	private JTextField eventTypeNameField = new JTextField();
+	//Etiqueta informativa de longitud máxima de datos
+	private JLabel maxCharsLabel = new JLabel("Max: 100 caracteres");
 	private JLabel infoLabel;
 	private JButton editButton = new JButton();
 	private JButton cancelButton;
@@ -115,7 +119,7 @@ public class EventTypeUI extends JPanel {
 		add(eventTypeNameField);
 		
 		selectedEventType = eventTypeNameField.getText();
-		textFieldBackup = selectedEventType;
+		selectedEventTypeBackup = selectedEventType;
 		
 		//Debug
 		System.out.println("Constructor. Tipo de evento seleccionado: " + selectedEventType);
@@ -178,7 +182,7 @@ public class EventTypeUI extends JPanel {
 		registeredList.setLayoutOrientation(JList.VERTICAL);		
 		registeredList.setVisibleRowCount(8);
 		registeredList.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		registeredList.setSelectedIndex(0);
+		registeredList.setSelectedIndex(itemSelectedIndex);
 		registeredList.addListSelectionListener(new RegisteredListener());
 		registeredScrollPane = new JScrollPane(registeredList);
 		registeredScrollPane.setBounds(100, 350, 300, 200);
@@ -368,7 +372,7 @@ public class EventTypeUI extends JPanel {
 		eventTypeNameField.setBackground(Color.WHITE);
 		
 		//Debug
-				System.out.println("EditableDataOn. Tipo de evento seleccionado: " + selectedEventType);
+		System.out.println("EditableDataOn. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
@@ -382,18 +386,23 @@ public class EventTypeUI extends JPanel {
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 
 		//Debug
-				System.out.println("EditableDataOff. Tipo de evento seleccionado: " + selectedEventType);
+		System.out.println("EditableDataOff. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
 	 * Vacía el contenido de la lista de tipos de evento
 	 */
 	private void emptyList() {
+		
+		//Debug
+		System.out.println("EmptyList. Tipo de evento seleccionado PRE CLEAR: " + selectedEventType);
+		
+		selectedEventType = null;
 		registeredModel.clear();
 		registeredList.setModel(registeredModel);
 		
 		//Debug
-				System.out.println("EmptyList. Tipo de evento seleccionado: " + selectedEventType);
+		System.out.println("EmptyList. Tipo de evento seleccionado POST CLEAR: " + selectedEventType);
 	}
 	
 	/**
@@ -408,12 +417,6 @@ public class EventTypeUI extends JPanel {
 				registeredModel.addElement(item);
 			}
 			registeredList.setModel(registeredModel);
-			int lastSelectedIndex = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
-			
-			//Debug
-			System.out.println("LastSelectedIndex es: " + lastSelectedIndex);
-			
-			registeredList.setSelectedIndex(lastSelectedIndex); //Change to select last selected item
 		} else {
 			//Debug
 			System.out.println("selectedEventType = null y el modelo se borra");
@@ -428,10 +431,19 @@ public class EventTypeUI extends JPanel {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			if (e.getValueIsAdjusting() == false) {
-				selectedEventType = registeredList.getSelectedValue();
+			if (e.getValueIsAdjusting() == false) {			
+				if (selectedEventType != null) {
+					selectedEventType = registeredList.getSelectedValue();
+					itemSelectedIndex = registeredList.getSelectedIndex();
+				} else {
+					selectedEventType = selectedEventTypeBackup;
+					itemSelectedIndex = itemSelectedBackupIndex;
+				}
+				//Debug
+				System.out.println("Listener. Indice seleccionado: " + itemSelectedIndex);
+				
 				eventTypeNameField.setText(selectedEventType);
-//				textFieldBackup = selectedEventType;
+
 				//Debug
 				System.out.println("Listener. Tipo de evento seleccionado: " + selectedEventType);
 			}
@@ -457,12 +469,19 @@ public class EventTypeUI extends JPanel {
 			newButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 			infoLabel.setText("");
+			selectedEventTypeBackup = selectedEventType;
+			itemSelectedBackupIndex = registeredList.getSelectedIndex();
+			
+			//Debug
+			System.out.println("NewAction. Tipo de evento seleccionado: " + selectedEventTypeBackup);
+			System.out.println("NewAction. Indice de evento seleccionado: " + itemSelectedBackupIndex);
+			
 			//Formulario editable
 			editableDataOn();
-			//Vaciamos los campos de texto
-			eventTypeNameField.setText("");
 			//Vaciamos las listas de asignación de areas
 			emptyList();
+			//Vaciamos los campos de texto
+			eventTypeNameField.setText("");
 		}	
 	}
 	
@@ -503,11 +522,12 @@ public class EventTypeUI extends JPanel {
 				cancelButton.setEnabled(false);
 				infoLabel.setText("");
 			}
-			//Recuperar valores previos a la edición de los datos
-			eventTypeNameField.setText(textFieldBackup);
-			selectedEventType = textFieldBackup;
+
 			//Refrescamos listas
 			refreshList();
+			//Recuperamos valores previos a la edición de los datos
+			eventTypeNameField.setText(selectedEventType);
+			registeredList.setSelectedIndex(itemSelectedIndex);
 			//Formulario no editable
 			editableDataOff();
 		}
