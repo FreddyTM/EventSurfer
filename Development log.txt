@@ -1701,11 +1701,14 @@ ver 0.1.12 - EVENTTYPEUI
 		Add getEventTypesFromSession() --ok--
 		Add verifyManagerEditConditions() --not tested yet--
 		Add verifyAdminEditConditions() --not tested yet--
-		Add testData() --not tested yet--
+		Add testData() --ok--
 		Add editableDataOn() --ok--
 		Add editableDataOff() --ok--
 		Add emptyList() --ok--
-		Add refreshList()
+		Add refreshList() --ok, not fully tested--
+		Add afterNewOrEditData() --in progress--
+		Add getIndexOfNewElement() --not tested yet--
+		Add updateDataCache() --not tested yet--
 		Update refreshList() --ok--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
@@ -1729,7 +1732,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() --okaction new in progress--
 
 	· TimerJob class (new AreaUI class):
 		Add run() --empty--

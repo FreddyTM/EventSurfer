@@ -612,7 +612,7 @@ public class EventTypeUI extends JPanel {
 
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de una nueva area
+			//Aceptamos la creación de un nuevo tipo de evento
 			if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
 				//Debug
 				System.out.println("Acción de grabar un tipo de evento nuevo");
@@ -660,7 +660,7 @@ public class EventTypeUI extends JPanel {
 					}
 				}
 				
-				
+			//Aceptamos la edición de un tipo de evento	existente
 			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 				
 				
