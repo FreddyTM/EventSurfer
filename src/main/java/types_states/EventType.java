@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import main.java.persistence.PersistenceManager;
 
@@ -198,48 +199,17 @@ public class EventType {
 	
 	/**
 	 * Retorna el id del tipo de evento pasado por parámetro
-	 * @param eventType tipo de evento del que queremos saber su id
+	 * @param description tipo de evento del que queremos saber su id
 	 * @return id del tipo de evento (-1 si no existe)
 	 */
-	public int getEventTypeId (String eventType) {
-		//Debug
-		System.out.println(eventTypes.keySet());
-//		Object[] keys = eventTypes.keySet().toArray();
-		Integer[] numKeys = eventTypes.keySet().toArray(new Integer[0]);
-		int[] intKeys = new int[numKeys.length];
-		
-		for (int i = 0; i < intKeys.length; i++) {
-			intKeys[i] = numKeys[i].intValue();
-		}
-		
-		
-		for (int key : intKeys) {
-			System.out.println(key);
-			System.out.println(eventTypes.get(key));
-			if (eventType.equals(eventTypes.get(key))) {
-				return key;
+	public int getEventTypeId (String description) {
+		int id = -1;
+		for (Entry<Integer, String> item : eventTypes.entrySet()) {
+			if (item.getValue().equals(description)) {
+				id = item.getKey();
 			}
 		}
-		
-//		for (Integer key : numKeys) {
-//			if (eventType.equals(eventTypes.get(key.intValue()))) {
-//				return (int) key;
-//			}
-//		}
-		
-//		for (Integer key : keys) {
-//			if (eventType.equals(eventTypes.get(key))) {
-//				return (int) key;
-//			}
-//		}
-		
-//		for (int key : eventTypes.keySet()) {
-//			if (eventType.equals(eventTypes.get(key))) {
-//				return key;
-//			}
-//		}
-		//El tipo de evento no existe
-		return -1;	
+		return id;	
 	}
 	
 	/**

@@ -1667,7 +1667,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Add isEventTypeUsed() --ok--
 		Add deleteEventTypeFromDB() --ok--
 		Update getEventTypesArray() --return alphabetically sorted array--
-		Update getEventTypeId() --not working yet--
+		Update getEventTypeId() --ok--
 		Rename getEventType() to getEventTypeDescription() --updates Event & EventTypeTest
 
 	* - Package main.java.event
