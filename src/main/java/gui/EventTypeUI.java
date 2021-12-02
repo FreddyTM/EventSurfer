@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -25,9 +26,12 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.company.Area;
 import main.java.event.Event;
+import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
+import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
 
 public class EventTypeUI extends JPanel {
@@ -320,7 +324,6 @@ public class EventTypeUI extends JPanel {
 	 */
 	private boolean testData () {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
-		Boolean error = false;
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
 		String errorNameText = "YA EXISTE UN TIPO DE EVENTO CON ESE NOMBRE";
 		
@@ -425,6 +428,46 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
+	 * Busca el índice de la lista de tipos de evenot que ocupa el nuevo tipo de evento pasado por parámetro
+	 * @param newElement tipo de evento del que buscamos su índice en la lista
+	 * @return índice del tipo de evento (-1 si el elemento no está en la lista)
+	 */
+	private int getIndexOfNewElement(String newElement) {
+		for (int i = 0; i < registeredList.getModel().getSize(); i++) {
+			Object item = registeredList.getModel().getElementAt(i);
+			if (newElement.equals((String)item)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de un area
+	 */
+	private void afterNewOrEditData() {
+		//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+		updateDataCache();
+		//Formulario no editable
+		editableDataOff();
+		editButton.setEnabled(true);
+		newButton.setEnabled(true);
+		deleteButton.setEnabled(true);
+		oKButton.setEnabled(false);
+		cancelButton.setEnabled(false);
+		//El selector de acción retorna al estado sin definir
+		okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
+	}
+	
+	/**
+	 * Hace una copia del tipo de evento seleccionado y del índice que ocupa en la lista de tipos de evento
+	 */
+	private void updateDataCache() {
+		selectedEventTypeBackup = selectedEventType;
+		itemSelectedBackupIndex = registeredList.getSelectedIndex();
+	}
+	
+	/**
 	 * Listener que monitoriza la selección de la lista de tipos de evento disponibles
 	 */
 	private class RegisteredListener implements ListSelectionListener {
@@ -469,8 +512,11 @@ public class EventTypeUI extends JPanel {
 			newButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 			infoLabel.setText("");
-			selectedEventTypeBackup = selectedEventType;
-			itemSelectedBackupIndex = registeredList.getSelectedIndex();
+			
+			//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+			updateDataCache();
+//			selectedEventTypeBackup = selectedEventType;
+//			itemSelectedBackupIndex = registeredList.getSelectedIndex();
 			
 			//Debug
 			System.out.println("NewAction. Tipo de evento seleccionado: " + selectedEventTypeBackup);
@@ -493,6 +539,10 @@ public class EventTypeUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			
+			//Debug
+			infoLabel.setText("AÚN NO PODEMOS EDITAR...");
+			
 			
 		}
 		
@@ -541,6 +591,10 @@ public class EventTypeUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			
+			//Debug
+			infoLabel.setText("AÚN NO PODEMOS BORAR...");
+			
 		}
 		
 	}
@@ -552,8 +606,66 @@ public class EventTypeUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			eventTypeNameField.setBackground(Color.WHITE);
+
+			//Selección de comportamiento
 			
+			//Aceptamos la creación de una nueva area
+			if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
+				//Debug
+				System.out.println("Acción de grabar un tipo de evento nuevo");
+				//Validamos los datos del formulario
+				if (testData()) {
+					
+					//Debug
+					System.out.println("Pasamos el test!!");
+					
+					//Intentamos grabar el nuevo tipo de evento en la base de datos, insertando una nueva entrada de tipos
+					//de eventos en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
+					if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
+						//Si el area se almacena correctamente en la base de datos
+						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						tNow = ToolBox.getTimestampNow();
+						infoLabel.setText("NUEVO TIPO DE DATOS REGISTRADO: " + ToolBox.formatTimestamp(tNow, null));
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+						}
+						
+						//Asignamos el tipo de datos guardado como tipo de datos seleccionado
+						selectedEventType = eventTypeNameField.getText();
+						//Refrescamos la lista de tipos de evento
+						refreshList();
+						//Buscamos el índice del nuevo tipo de evento
+						int newElementIndex = getIndexOfNewElement(selectedEventType);
+						registeredList.setSelectedIndex(newElementIndex);
+						
+						//Devolvemos el formulario a su estado previo
+						afterNewOrEditData();
+						
+					//Si el area no se almacena correctamente en la base de datos	
+					} else {
+						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE DATOS EN LA BASE DE DATOS");
+					}
+					
+					
+					//Debug
+					for (Entry<Integer, String> item : TypesStatesContainer.getEvType().getEventTypes().entrySet()) {
+						System.out.print(item);
+					}
+				}
+				
+				
+			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+				
+				
+				
+			}
 		}
 		
 	}
