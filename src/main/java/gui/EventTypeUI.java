@@ -575,8 +575,11 @@ public class EventTypeUI extends JPanel {
 			//Refrescamos listas
 			refreshList();
 			//Recuperamos valores previos a la edición de los datos
-			eventTypeNameField.setText(selectedEventType);
-			registeredList.setSelectedIndex(itemSelectedIndex);
+//			eventTypeNameField.setText(selectedEventType);
+//			registeredList.setSelectedIndex(itemSelectedIndex);
+			eventTypeNameField.setText(selectedEventTypeBackup);
+			registeredList.setSelectedIndex(itemSelectedBackupIndex);
+
 			//Formulario no editable
 			editableDataOff();
 		}
