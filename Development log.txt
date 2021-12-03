@@ -1719,7 +1719,7 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --ok--
+		Update actionPerformed() --ok, add focus to field--
 
 	· EditAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
@@ -1732,7 +1732,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --okaction new in progress--
+		Add actionPerformed() --okaction ok--
 
 	· TimerJob class (new AreaUI class):
 		Add run() --empty--

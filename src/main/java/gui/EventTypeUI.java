@@ -515,8 +515,6 @@ public class EventTypeUI extends JPanel {
 			
 			//Hacemos backup del tipo de evento y del índice que ocupa en la lista
 			updateDataCache();
-//			selectedEventTypeBackup = selectedEventType;
-//			itemSelectedBackupIndex = registeredList.getSelectedIndex();
 			
 			//Debug
 			System.out.println("NewAction. Tipo de evento seleccionado: " + selectedEventTypeBackup);
@@ -528,6 +526,7 @@ public class EventTypeUI extends JPanel {
 			emptyList();
 			//Vaciamos los campos de texto
 			eventTypeNameField.setText("");
+			eventTypeNameField.requestFocusInWindow(); //REPLICATE IN OTHER SCREENS IF IT WORKS
 		}	
 	}
 	
@@ -641,7 +640,7 @@ public class EventTypeUI extends JPanel {
 						selectedEventType = eventTypeNameField.getText();
 						//Refrescamos la lista de tipos de evento
 						refreshList();
-						//Buscamos el índice del nuevo tipo de evento
+						//Buscamos el índice del nuevo tipo de evento y lo seleccionamos en la lista
 						int newElementIndex = getIndexOfNewElement(selectedEventType);
 						registeredList.setSelectedIndex(newElementIndex);
 						
