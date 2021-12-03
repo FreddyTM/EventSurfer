@@ -81,6 +81,8 @@ public class EventTypeUI extends JPanel {
 	private JList<String> registeredList;
 	//Contenedor de la lista de tipos de evento
 	private JScrollPane registeredScrollPane;
+	//Registra si la lista de tipos de evento ha sido modificada
+	private boolean listModified = false;
 	
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -403,6 +405,7 @@ public class EventTypeUI extends JPanel {
 		selectedEventType = null;
 		registeredModel.clear();
 		registeredList.setModel(registeredModel);
+		listModified = true;
 		
 		//Debug
 		System.out.println("EmptyList. Tipo de evento seleccionado POST CLEAR: " + selectedEventType);
@@ -537,12 +540,28 @@ public class EventTypeUI extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			okActionSelector = EventTypeUI.OK_ACTION_EDIT;
+			boolean editEnabled = false;
+			if (session.getUser().getUserType().equals("MANAGER")) {
+				editEnabled = verifyManagerEditConditions();
+			} else {
+				editEnabled = verifyAdminEditConditions();
+			}
 			
-			//Debug
-			infoLabel.setText("AÚN NO PODEMOS EDITAR...");
-			
-			
+			if (editEnabled) {
+				//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+				updateDataCache();
+				oKButton.setEnabled(true);
+				cancelButton.setEnabled(true);
+				editButton.setEnabled(false);
+				newButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+				registeredList.setEnabled(false);
+				infoLabel.setText("");
+				//Formulario editable
+				editableDataOn();
+				eventTypeNameField.requestFocusInWindow(); //REPLICATE IN OTHER SCREENS IF IT WORKS
+			}
 		}
 		
 	}
@@ -572,8 +591,14 @@ public class EventTypeUI extends JPanel {
 				infoLabel.setText("");
 			}
 
-			//Refrescamos listas
-			refreshList();
+			//Si la lista de tipos de evento ha cambiado
+			if (listModified) {
+				//Refrescamos listas
+				refreshList();
+				listModified = false;
+			}
+			
+			registeredList.setEnabled(true);
 			//Recuperamos valores previos a la edición de los datos
 //			eventTypeNameField.setText(selectedEventType);
 //			registeredList.setSelectedIndex(itemSelectedIndex);
@@ -665,7 +690,8 @@ public class EventTypeUI extends JPanel {
 			//Aceptamos la edición de un tipo de evento	existente
 			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 				
-				
+				//Debug
+				infoLabel.setText("AÚN NO PODEMOS ACEPTAR LA EDICIÓN...");
 				
 			}
 		}

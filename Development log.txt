@@ -1681,10 +1681,10 @@ ver 0.1.12 - EVENTTYPEUI
 		Update attribute versionNumber --ver 0.1.12--
 
 	· Selector class:
-		Update attribute areaAction
+		Update attribute EventTypeAction
 		Update constructor
 
-	· AreaAction class (new inner Selector class):
+	· EventTypeAction class (new inner Selector class):
 		Update actionPerformed()
 			
 
@@ -1694,21 +1694,21 @@ ver 0.1.12 - EVENTTYPEUI
 			tNow, timer, panelVisible, eventTypeNameField, allEventTypes, selectedEventType, maxLengthLabel,
 			textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
 			okActionSelector, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton, editAction, 
-			cancelAction, oKAction, newAction, deleteAction, itemSelectedIndex, itemSelectedBackupIndex
+			cancelAction, oKAction, newAction, deleteAction, itemSelectedIndex, itemSelectedBackupIndex, listModified
 		Delete attribute allEventTypes --useless--
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
 		Add getEventTypesFromSession() --ok--
-		Add verifyManagerEditConditions() --not tested yet--
-		Add verifyAdminEditConditions() --not tested yet--
+		Add verifyManagerEditConditions() --ok edit, delete not tested yet--
+		Add verifyAdminEditConditions() --ok edit, delete not tested yet--
 		Add testData() --ok--
 		Add editableDataOn() --ok--
 		Add editableDataOff() --ok--
-		Add emptyList() --ok--
-		Add refreshList() --ok, not fully tested--
-		Add afterNewOrEditData() --in progress--
-		Add getIndexOfNewElement() --not tested yet--
-		Add updateDataCache() --not tested yet--
+		Add emptyList() --ok, use of listModified--
+		Add refreshList() --ok--
+		Add afterNewOrEditData() --ok--
+		Add getIndexOfNewElement() --ok--
+		Add updateDataCache() --ok--
 		Update refreshList() --ok--
 		Update constructor --all graphical elements, initial data ok--
 		Realign graphical elements
@@ -1722,17 +1722,17 @@ ver 0.1.12 - EVENTTYPEUI
 		Update actionPerformed() --ok, add focus to field--
 
 	· EditAction class (new inner AreaUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() --ok, add focus to field--
 
 	· CancelAction class (new inner AreaUI class):
 		Add actionPerformed()
-		Update actionPerformed() --ok--
+		Update actionPerformed() --ok cancel new, ok cancel edit, use of listModified--
 
 	· DeleteAction class (new inner AreaUI class):
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --okaction ok--
+		Add actionPerformed() --okaction_new ok, okaction_edit in progress--
 
 	· TimerJob class (new AreaUI class):
 		Add run() --empty--
