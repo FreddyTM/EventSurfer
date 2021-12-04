@@ -1715,6 +1715,7 @@ ver 0.1.12 - EVENTTYPEUI
 	· RegisteredListener (new inner AreaUI class):
 		Add valueChanged()
 		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
+		Update valueChanged() --new okaction_edit behaviour, not tested yet--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() 

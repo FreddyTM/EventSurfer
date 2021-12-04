@@ -479,8 +479,13 @@ public class EventTypeUI extends JPanel {
 		public void valueChanged(ListSelectionEvent e) {
 			if (e.getValueIsAdjusting() == false) {			
 				if (selectedEventType != null) {
-					selectedEventType = registeredList.getSelectedValue();
-					itemSelectedIndex = registeredList.getSelectedIndex();
+					if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+						selectedEventType = selectedEventTypeBackup;
+						itemSelectedIndex = itemSelectedBackupIndex;
+					} else {
+						selectedEventType = registeredList.getSelectedValue();
+						itemSelectedIndex = registeredList.getSelectedIndex();						
+					}
 				} else {
 					selectedEventType = selectedEventTypeBackup;
 					itemSelectedIndex = itemSelectedBackupIndex;
@@ -489,7 +494,7 @@ public class EventTypeUI extends JPanel {
 				System.out.println("Listener. Indice seleccionado: " + itemSelectedIndex);
 				
 				eventTypeNameField.setText(selectedEventType);
-
+				
 				//Debug
 				System.out.println("Listener. Tipo de evento seleccionado: " + selectedEventType);
 			}
@@ -692,10 +697,6 @@ public class EventTypeUI extends JPanel {
 				//Debug
 				System.out.println("Guardando los cambios del area " + eventTypeNameField.getText());
 				
-				//Actualizamos los datos de backup
-				selectedEventTypeBackup = eventTypeNameField.getText();
-				itemSelectedBackupIndex = itemSelectedIndex; 
-				
 				//Validamos los datos del formulario
 				if (testData()) {
 					//Buscamos el id del tipo de evento a editar
@@ -716,20 +717,23 @@ public class EventTypeUI extends JPanel {
 								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 							}
 							
-//							//Actualizamos los datos de backup
-//							selectedEventTypeBackup = eventTypeNameField.getText();
-//							itemSelectedBackupIndex = itemSelectedIndex; 
+							//Actualizamos los datos de backup
+							selectedEventTypeBackup = eventTypeNameField.getText();
+							itemSelectedBackupIndex = itemSelectedIndex;
+							//Actualizamos la lista de tipos de evento
+							TypesStatesContainer.getEvType().getEventTypes().replace(itemId, eventTypeNameField.getText());
 							
 							//Debug
-							System.out.println("Tipo de evento seleccionado tras la edición: " + selectedEventType);
+							System.out.println("Tipo de evento seleccionado antes de la edición: " + selectedEventType);
+							System.out.println("Nuevo valor del tipo de evento: " + eventTypeNameField.getText());
 							
 							//Refrescamos la lista de tipos de evento
 							refreshList();
 							
 //							//Reasignamos el tipo de evento seleccionado y su índice en la lista
-							selectedEventType = selectedEventTypeBackup;
+//							selectedEventType = selectedEventTypeBackup;
+//							itemSelectedIndex = itemSelectedBackupIndex;
 							eventTypeNameField.setText(selectedEventType);
-							itemSelectedIndex = itemSelectedBackupIndex;
 							registeredList.setSelectedIndex(itemSelectedIndex);
 //							int newElementIndex = getIndexOfElement(selectedEventType);
 //							registeredList.setSelectedIndex(newElementIndex);
