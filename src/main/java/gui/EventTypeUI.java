@@ -431,11 +431,11 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Busca el índice de la lista de tipos de evenot que ocupa el nuevo tipo de evento pasado por parámetro
+	 * Busca el índice de la lista de tipos de evento que ocupa el nuevo tipo de evento pasado por parámetro
 	 * @param newElement tipo de evento del que buscamos su índice en la lista
 	 * @return índice del tipo de evento (-1 si el elemento no está en la lista)
 	 */
-	private int getIndexOfNewElement(String newElement) {
+	private int getIndexOfElement(String newElement) {
 		for (int i = 0; i < registeredList.getModel().getSize(); i++) {
 			Object item = registeredList.getModel().getElementAt(i);
 			if (newElement.equals((String)item)) {
@@ -597,7 +597,7 @@ public class EventTypeUI extends JPanel {
 				refreshList();
 				listModified = false;
 			}
-			
+			//Reactivamos la lista de tipos de evento
 			registeredList.setEnabled(true);
 			//Recuperamos valores previos a la edición de los datos
 //			eventTypeNameField.setText(selectedEventType);
@@ -669,9 +669,8 @@ public class EventTypeUI extends JPanel {
 						//Refrescamos la lista de tipos de evento
 						refreshList();
 						//Buscamos el índice del nuevo tipo de evento y lo seleccionamos en la lista
-						int newElementIndex = getIndexOfNewElement(selectedEventType);
-						registeredList.setSelectedIndex(newElementIndex);
-						
+						int newElementIndex = getIndexOfElement(selectedEventType);
+						registeredList.setSelectedIndex(newElementIndex);		
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditData();
 						
@@ -691,8 +690,60 @@ public class EventTypeUI extends JPanel {
 			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 				
 				//Debug
-				infoLabel.setText("AÚN NO PODEMOS ACEPTAR LA EDICIÓN...");
+				System.out.println("Guardando los cambios del area " + eventTypeNameField.getText());
 				
+				//Actualizamos los datos de backup
+				selectedEventTypeBackup = eventTypeNameField.getText();
+				itemSelectedBackupIndex = itemSelectedIndex; 
+				
+				//Validamos los datos del formulario
+				if (testData()) {
+					//Buscamos el id del tipo de evento a editar
+					int itemId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventTypeBackup);
+					//Si el id obtenido corresponde a un tipo de evento almacenado en la base de datos
+					if (itemId != -1) {
+						//Si los datos actualizados se graban en la base de datos
+						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							tNow = ToolBox.getTimestampNow();
+							infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+							//Actualizamos los datos de la tabla last_modification
+							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									EventType.TABLE_NAME, tNow);
+							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+							//no queda registrada
+							if(!changeRegister) {
+								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+							}
+							
+//							//Actualizamos los datos de backup
+//							selectedEventTypeBackup = eventTypeNameField.getText();
+//							itemSelectedBackupIndex = itemSelectedIndex; 
+							
+							//Debug
+							System.out.println("Tipo de evento seleccionado tras la edición: " + selectedEventType);
+							
+							//Refrescamos la lista de tipos de evento
+							refreshList();
+							
+//							//Reasignamos el tipo de evento seleccionado y su índice en la lista
+							selectedEventType = selectedEventTypeBackup;
+							eventTypeNameField.setText(selectedEventType);
+							itemSelectedIndex = itemSelectedBackupIndex;
+							registeredList.setSelectedIndex(itemSelectedIndex);
+//							int newElementIndex = getIndexOfElement(selectedEventType);
+//							registeredList.setSelectedIndex(newElementIndex);
+							//Reactivamos la lista de tipos de evento
+							registeredList.setEnabled(true);
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditData();
+						
+						//Si los datos actualizados no se graban en la base de datos
+						} else {
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");							
+						}
+					}
+				}
 			}
 		}
 		

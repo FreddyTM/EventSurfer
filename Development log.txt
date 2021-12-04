@@ -262,7 +262,7 @@ Ver 0.0.13
 			id, bUnit, eventType, titulo, descripcion, eventState, updates
 		Add constructor, setters & getters
 
-	· UpdateVerent class
+	· UpdateEvent class
 		Update attributes:
 			id, event, fechaHora, descripcion, autor
 		Add constructor, setters & getters
@@ -1208,9 +1208,6 @@ ver 0.1.7 - USERUI FULLY FUNCTIONAL, MULTIPLE SCREEN MANAGEMENT OK
 	· UserCheckBoxListener class (new UserUI inner class):
 		Update itemStateChanged() --ok, add edit filters--
 
-	· UserTypeComboListener class (new UserUI inner class):
-		Update itemStateChanged() --do we need it?-- 
-
 	· NewAction class (new inner UserUI class):
 		Update actionPerformed() --ok--
 
@@ -1711,6 +1708,8 @@ ver 0.1.12 - EVENTTYPEUI
 		Add updateDataCache() --ok--
 		Update refreshList() --ok--
 		Update constructor --all graphical elements, initial data ok--
+		Rename attribute textFieldBackup to selectedEventTypeBackup
+		Rename getIndexOfNewElement() to getIndexOfElement()
 		Realign graphical elements
 
 	· RegisteredListener (new inner AreaUI class):
