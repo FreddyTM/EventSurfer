@@ -169,6 +169,36 @@ public class Event {
 	}
 	
 	/**
+	 * Obtiene el número de veces que un tipo de evento está registrado en algún evento en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param id id del tipo de evento
+	 * @return número de veces que el tipo de evento está registrado en un evento (-1 si la consulta falla)
+	 */
+	public int getEventTypesOnEventFromDB(Connection conn, int id) {
+		int eventTypes = 0;
+		PreparedStatement pstm = null;
+		ResultSet results = null;
+		String sql = "SELECT COUNT (event_type_id) "
+				+ "FROM \"event\" "
+				+ "WHERE event_type_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, id);
+			results = pstm.executeQuery();
+			while (results.next()) {
+				eventTypes = results.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closePrepStatement(pstm);
+		}
+		return eventTypes;
+	}
+	
+	/**
 	 * Obtiene la lista de eventos sucedidos en el area pasada por parámetro
 	 * @param conn conexión con la base de datos
 	 * @param area area del que queremos recuperar sus eventos
