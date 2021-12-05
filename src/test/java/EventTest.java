@@ -134,4 +134,13 @@ class EventTest {
 		assertTrue(new Event().getBunitsIdsWithEventTypes(conn, 2).size() > 0);
 		assertTrue(new Event().getBunitsIdsWithEventTypes(conn, 3).size() == 1);
 	}
+	
+	@Test
+	@Order(8)
+	void testGetEventTypesOnEventFromDB() {
+		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 1) == 0);
+		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 2) == 2);
+		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 3) == 1);
+		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 4) == 0);
+	}
 }
