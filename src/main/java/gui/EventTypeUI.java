@@ -501,9 +501,9 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Nueva. Se deshabilita el propio botón y el botón Editar. Vaciamos los campos de texto
-	 * y habilitamos su edición para añadir la información de un nuevo tipo de evento. Habilitamos el botón de
-	 * Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
+	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el botón Borrar. Se vacían
+	 * los campos de texto y se habilita su edición para añadir la información de un nuevo tipo de evento.
+	 * Se habilita el botón Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
 	 */
 	public class NewAction extends AbstractAction {
 		public NewAction() {
@@ -537,6 +537,11 @@ public class EventTypeUI extends JPanel {
 		}	
 	}
 	
+	/**
+	 * Acción del botón Editar. Se deshabilita el propio botón, el botón Nuevo y el botón Borrar. Permite
+	 * la edición de la información del formulario. Se habilita el botón de Cancelar para que los cambios
+	 * no se registren y el de Aceptar para que sí lo hagan.
+	 */
 	public class EditAction extends AbstractAction {
 		public EditAction() {
 			putValue(NAME, "Editar");
@@ -570,6 +575,12 @@ public class EventTypeUI extends JPanel {
 		
 	}
 	
+	/**
+	 * Acción del botón cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar,
+	 * el botón Borrar y el botón Nuevo. Descarta los cambios en los datos introducidos en el formulario. No se
+	 * graban en la base de datos ni en la lista de tipos de evento. Se recupera la información que figuraba
+	 * anteriormente en el formulario. Se borra cualquier mensaje de error mostrado anteriormente
+	 */
 	public class CancelAction extends AbstractAction {
 		public CancelAction() {
 			putValue(NAME, "Cancelar");
@@ -634,40 +645,58 @@ public class EventTypeUI extends JPanel {
 				ToolBox.showDialog(
 						"No se pueden borrar tipos de evento registrados en eventos", EventTypeUI.this,
 						DIALOG_INFO);
-			//Si no hay eventos, se comprueban las condiciones para el borrado del tipo de evento seleccionado
+			//Se advierte de que el borrado es irreversible, y se autoriza si se acepta
 			} else {
-				//Si el usuario de la sesión es de tipo manager
-				if (session.getUser().getUserType().equals("MANAGER")) {			
-					//Verificamos que el usuario está autorizado a borrar el tipo de evento seleccionado
-					if (verifyManagerEditConditions()) {
-						//Debug
-						System.out.println("Borrado autorizado (MANAGER)");
-						
-						int optionSelected = ToolBox.showDialog(
-								"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
-								DIALOG_YES_NO);
-						if (optionSelected != JOptionPane.YES_OPTION) {
-							//Debug
-							System.out.println("Borrado cancelado");
-							return;
-						} else {							
-							deleteOK = true;
-						}
-					//El usuario no está autorizado a borrar el area seleccionada		
-					} else {
-						//Debug
-						System.out.println("Borrado prohibido (MANAGER)");				
-					}
-				//Si el usuario de la sesión es de tipo admin
-				} else {
+				
+				//Debug
+				System.out.println("Borrado autorizado (MANAGER)");
+				
+				int optionSelected = ToolBox.showDialog(
+						"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+						DIALOG_YES_NO);
+				if (optionSelected != JOptionPane.YES_OPTION) {
 					//Debug
-					System.out.println("Borrado autorizado (ADMIN)");
-					
-					if (verifyAdminEditConditions()) {						
-						deleteOK = true;
-					}
-				}
+					System.out.println("Borrado cancelado");
+					return;
+				} else {							
+					deleteOK = true;
+				}			
 			}
+//			//Si no hay eventos, se comprueban las condiciones para el borrado del tipo de evento seleccionado
+//			} else {
+//				//Si el usuario de la sesión es de tipo manager
+//				if (session.getUser().getUserType().equals("MANAGER")) {			
+//					//Verificamos que el usuario está autorizado a borrar el tipo de evento seleccionado
+//					if (verifyManagerEditConditions()) {
+//						//Debug
+//						System.out.println("Borrado autorizado (MANAGER)");
+//						
+//						int optionSelected = ToolBox.showDialog(
+//								"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+//								DIALOG_YES_NO);
+//						if (optionSelected != JOptionPane.YES_OPTION) {
+//							//Debug
+//							System.out.println("Borrado cancelado");
+//							return;
+//						} else {							
+//							deleteOK = true;
+//						}
+//					//El usuario no está autorizado a borrar el area seleccionada		
+//					} else {
+//						//Debug
+//						System.out.println("Borrado prohibido (MANAGER)");				
+//					}
+//				//Si el usuario de la sesión es de tipo admin
+//				} else {
+//					//Debug
+//					System.out.println("Borrado autorizado (ADMIN)");
+//					
+//					if (verifyAdminEditConditions()) {						
+//						deleteOK = true;
+//					}
+//				}
+//			}
+			
 			//Si el borrado se autoriza, se borra el tipo de evento seleccionado de la base de datos
 			if (deleteOK) {
 				
