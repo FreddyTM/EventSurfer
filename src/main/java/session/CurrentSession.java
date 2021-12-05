@@ -269,16 +269,16 @@ public class CurrentSession {
 			String sql = "SELECT * "
 					+ "FROM last_modification";
 			try {
-				//Debug
-				System.out.println("Dentro del try");
+//				//Debug
+//				System.out.println("Dentro del try");
 				
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
 				//Para cada tabla, comprobamos su timestamp
 				while (results.next()) {
 					
-					//Debug
-					System.out.println("Dentro del while");
+//					//Debug
+//					System.out.println("Dentro del while");
 					
 					tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
@@ -287,7 +287,7 @@ public class CurrentSession {
 					if (sessionDateTime.before(dateTimeDb) ) {
 						
 						//Debug
-						System.out.println("Dentro del if");
+						System.out.println("CurrentSession. Dentro del if");
 						
 						//Actualizar objetos correspondientes a table_name
 						switch(tableName) {
@@ -298,6 +298,10 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event_type":
+								
+								//Debug
+								System.out.println("Dentro del case event_type");
+								
 								EventType eventTypeList = new EventType();
 								eventTypeList.loadData(conn);
 								TypesStatesContainer.setEvType(eventTypeList);
