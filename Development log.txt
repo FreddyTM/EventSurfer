@@ -1648,7 +1648,7 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Add testConnectToRemoteDatabase() --not working yet--
 
 	· UserTest class:
-		Delete useless comments
+		Delete & modify comments
 
 ver 0.1.12 - EVENTTYPEUI
 
@@ -1656,6 +1656,11 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· PersistenceManager class:
 		Update connectToDatabase() --add dynamic connection credentials to remote database--
+
+	* - Package main.java.session
+
+	· CurrentSession class:
+		Delete useless comments
 
 	* - Package main.java.company
 
@@ -1715,7 +1720,7 @@ ver 0.1.12 - EVENTTYPEUI
 	· RegisteredListener (new inner AreaUI class):
 		Add valueChanged()
 		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
-		Update valueChanged() --new okaction_edit behaviour, not tested yet--
+		Update valueChanged() --new okaction_edit behaviour, ok--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() 
@@ -1732,7 +1737,7 @@ ver 0.1.12 - EVENTTYPEUI
 		Add actionPerformed() --empty--
 
 	· OKAction class (new inner AreaUI class):
-		Add actionPerformed() --okaction_new ok, okaction_edit in progress--
+		Add actionPerformed() --okaction_new ok, okaction_edit ok--
 
 	· TimerJob class (new AreaUI class):
 		Add run() --empty--

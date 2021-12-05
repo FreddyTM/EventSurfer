@@ -695,7 +695,7 @@ public class EventTypeUI extends JPanel {
 			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 				
 				//Debug
-				System.out.println("Guardando los cambios del area " + eventTypeNameField.getText());
+				System.out.println("Guardando los cambios del tipo de evento " + eventTypeNameField.getText());
 				
 				//Validamos los datos del formulario
 				if (testData()) {
@@ -707,7 +707,7 @@ public class EventTypeUI extends JPanel {
 						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla area
 							tNow = ToolBox.getTimestampNow();
-							infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+							infoLabel.setText("DATOS DEL TIPO DE EVENTO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 							//Actualizamos los datos de la tabla last_modification
 							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 									EventType.TABLE_NAME, tNow);
@@ -729,14 +729,9 @@ public class EventTypeUI extends JPanel {
 							
 							//Refrescamos la lista de tipos de evento
 							refreshList();
-							
-//							//Reasignamos el tipo de evento seleccionado y su índice en la lista
-//							selectedEventType = selectedEventTypeBackup;
-//							itemSelectedIndex = itemSelectedBackupIndex;
+							//Reasignamos el tipo de evento seleccionado y su índice en la lista
 							eventTypeNameField.setText(selectedEventType);
 							registeredList.setSelectedIndex(itemSelectedIndex);
-//							int newElementIndex = getIndexOfElement(selectedEventType);
-//							registeredList.setSelectedIndex(newElementIndex);
 							//Reactivamos la lista de tipos de evento
 							registeredList.setEnabled(true);
 							//Devolvemos el formulario a su estado previo
