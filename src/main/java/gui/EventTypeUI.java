@@ -761,8 +761,8 @@ public class EventTypeUI extends JPanel {
 					//Intentamos grabar el nuevo tipo de evento en la base de datos, insertando una nueva entrada de tipos
 					//de eventos en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
 					if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
-						//Si el area se almacena correctamente en la base de datos
-						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						//Si el tipo de evento se almacena correctamente en la base de datos
+						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
 						tNow = ToolBox.getTimestampNow();
 						infoLabel.setText("NUEVO TIPO DE DATOS REGISTRADO: " + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
@@ -773,7 +773,7 @@ public class EventTypeUI extends JPanel {
 							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 						}
 
-						//Asignamos el tipo de datos guardado como tipo de datos seleccionado
+						//Asignamos el tipo de evento guardado como tipo de evento seleccionado
 						selectedEventType = eventTypeNameField.getText();
 						//Refrescamos la lista de tipos de evento
 						refreshList();
