@@ -1735,8 +1735,9 @@ ver 0.1.12 - EVENTTYPEUI
 		Update actionPerformed() --ok cancel new, ok cancel edit, use of listModified--
 
 	· DeleteAction class (new inner AreaUI class):
-		Add actionPerformed() --in progress, verifyManager&Admin deleted not tested yet--
-
+		Add actionPerformed() 
+		Update actionPerformed() --verifyManager&Admin deleted ok, delete action completed not tested yet--
+		
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() --okaction_new ok, okaction_edit ok--
 

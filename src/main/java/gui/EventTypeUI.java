@@ -445,7 +445,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Devuelve el formulario a su estado previo tras la creación o la edición de un area
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de un tipo de evento
 	 */
 	private void afterNewOrEditData() {
 		//Hacemos backup del tipo de evento y del índice que ocupa en la lista
@@ -637,6 +637,7 @@ public class EventTypeUI extends JPanel {
 			okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
 			boolean deleteOK = false;
 			//Comprobamos que el tipo de evento a borrar no está registrado en ningún evento
+			//Obtenemos el id del tipo de evento seleccionado
 			int id = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 			if (new Event().getEventTypesOnEventFromDB(session.getConnection(), id) != 0) {
 				//Debug
@@ -700,6 +701,35 @@ public class EventTypeUI extends JPanel {
 			//Si el borrado se autoriza, se borra el tipo de evento seleccionado de la base de datos
 			if (deleteOK) {
 				
+				//Debug
+				System.out.println("Borrando area de la base de datos...");
+				
+				//Si el tipo de evento se borra correctamente de la base de datos
+				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
+					//Registramos fecha y hora de la actualización de los datos de la tabla event_type
+					tNow = ToolBox.getTimestampNow();
+					infoLabel.setText("TIPO DE DATOS BORRADO: " + ToolBox.formatTimestamp(tNow, null));
+					//Actualizamos los datos de la tabla last_modification
+					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
+					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+					//no queda registrada
+					if(!changeRegister) {
+						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+					}
+				}
+				//Eliminamos el tipo de evento seleccionado de la lista de tipos de evento
+				TypesStatesContainer.getEvType().getEventTypes().remove(id);
+				selectedEventType = null;
+				//Refrescamos la lista de tipos de evento
+				refreshList();
+				//Designamos el primer elemento de la lista como tipo de evento seleccionado
+				itemSelectedIndex = 0;
+				registeredList.setSelectedIndex(itemSelectedIndex);
+				//Mostramos en pantalla y designamos como tipo de evento seleccionado el primer elemento de la lista
+				eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
+				selectedEventType = eventTypeNameField.getText();
+				//Devolvemos el formulario a su estado previo
+				afterNewOrEditData();
 			}
 		}
 		
