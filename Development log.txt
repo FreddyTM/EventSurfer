@@ -1655,6 +1655,7 @@ ver 0.1.12 - EVENTTYPEUI
 	* - Package main.java.persistence
 
 	· PersistenceManager class:
+		Add registerTableModification() --not tested yet--
 		Update connectToDatabase() --add dynamic connection credentials to remote database--
 
 	* - Package main.java.session
@@ -1702,8 +1703,8 @@ ver 0.1.12 - EVENTTYPEUI
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
 		Add getEventTypesFromSession() --ok--
-		Add verifyManagerEditConditions() --ok edit, delete not tested yet--
-		Add verifyAdminEditConditions() --ok edit, delete not tested yet--
+		Add verifyManagerEditConditions() --ok edit, no needed on delete--
+		Add verifyAdminEditConditions() --ok edit, no needed on delete--
 		Add testData() --ok--
 		Add editableDataOn() --ok--
 		Add editableDataOff() --ok--

@@ -10,7 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import javax.swing.JLabel;
+
 import main.java.exceptions.DatabaseError;
+import main.java.toolbox.ToolBox;
+import main.java.types_states.EventType;
 
 
 
@@ -282,6 +286,30 @@ public class PersistenceManager {
 			return false;
 		} finally {
 			PersistenceManager.closePrepStatement(pstm);
+		}
+		return true;
+	}
+	
+	/**
+	 * Registra la modificación de una tabla de la base de datos pasada por parámetro
+	 * @param infoLabel JLabel en la que aparecerá la información de la actualización de datos
+	 * @param conn conexión a la base de datos
+	 * @param tableName tabla en la que ha habido algún tipo de modificación o inserción
+	 * @return true si la actualización de la tabla last_modification se completa con éxito,
+	 * false si no se completa
+	 */
+	public static boolean registerTableModification(JLabel infoLabel, String text, Connection conn, 
+			Timestamp tNow, String tableName) {
+		//Registramos fecha y hora de la actualización de los datos de la tabla
+		tNow = ToolBox.getTimestampNow();
+		infoLabel.setText(text + " " + ToolBox.formatTimestamp(tNow, null));
+		//Actualizamos los datos de la tabla last_modification
+		boolean changeRegister = updateTimeStampToDB(conn, tableName, tNow);
+		//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+		//no queda registrada
+		if(!changeRegister) {
+			infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+			return false;
 		}
 		return true;
 	}
