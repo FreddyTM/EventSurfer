@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Map.Entry;
@@ -26,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.company.Area;
 import main.java.event.Event;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
@@ -861,8 +863,40 @@ public class EventTypeUI extends JPanel {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
-			
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
+			if (!EventTypeUI.this.isShowing()) {
+				EventTypeUI.this.panelVisible = false;
+				this.cancel();
+				EventTypeUI.this.timer.cancel();
+				 System.out.println("Se ha cerrado la ventana Tipo de Evento");
+			}
+			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
+			if (cancelButton.isEnabled() && oKButton.isEnabled() && EventTypeUI.this.isShowing()) {
+				//Do nothing
+			//Se comprueba la actualización de los datos si no los estamos modificando
+			} else if (EventTypeUI.this.panelVisible == true){
+				
+				//Debug
+				System.out.println("Comprobando actualización de datos de tipos de eventos");
+				System.out.println(session.getUpdatedTables().size());
+				
+				//Loop por el Map de CurrentSession, si aparece la tabla event_type, recargar datos
+				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					
+					//Debug
+					System.out.println(updatedTable.getKey());
+					System.out.println(updatedTable.getValue());
+					
+					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
+					if (updatedTable.getKey().equals(EventType.TABLE_NAME)) {
+						
+						//LÓGICA DE ACTUALIZACIÓN
+						
+						
+					}
+					
+				}
+			}
 		}
 		
 	}
