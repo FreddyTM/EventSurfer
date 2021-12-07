@@ -1722,7 +1722,7 @@ ver 0.1.12 - EVENTTYPEUI
 	· RegisteredListener (new inner AreaUI class):
 		Add valueChanged()
 		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
-		Update valueChanged() --new okaction_edit behaviour, ok--
+		Update valueChanged() --okaction_edit&delete ok, okaction_new ok, simplified code--
 
 	· NewAction class (new inner AreaUI class):
 		Add actionPerformed() 
@@ -1738,11 +1738,11 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· DeleteAction class (new inner AreaUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --verifyManager&Admin deleted ok, delete action completed not tested yet--
+		Update actionPerformed() --verifyManager&Admin deleted ok, delete action updated ok--
 		
 	· OKAction class (new inner AreaUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --okaction_new ok, okaction_edit ok--
+		Update actionPerformed() --okaction_new ok, okaction_edit updated ok--
 
 	· TimerJob class (new AreaUI class):
 		Add run()

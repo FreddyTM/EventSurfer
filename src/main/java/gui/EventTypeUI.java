@@ -27,7 +27,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import main.java.company.Area;
 import main.java.event.Event;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
@@ -479,15 +478,31 @@ public class EventTypeUI extends JPanel {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (e.getValueIsAdjusting() == false) {			
+				//Si existe un elemento seleccionado
 				if (selectedEventType != null) {
+					//Actualización de la lista tras la edición o el borrado de un elemento
 					if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-						selectedEventType = selectedEventTypeBackup;
-						itemSelectedIndex = itemSelectedBackupIndex;
-					} else {
+						//En caso de borrado de algún elemento, comprobamos que el backup del índice no está fuera del rango de la lista
+						if (itemSelectedBackupIndex >= registeredEventTypes.length) {
+							itemSelectedIndex = 0;
+							selectedEventType = registeredEventTypes[0];
+						//En caso de edición, recuperamos el valor del elemento seleccionado del backup
+						} else {
+							selectedEventType = selectedEventTypeBackup;
+						}
+					}
+					//Actualización de la lista tras la creación de un elemento nuevo
+					if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
+						eventTypeNameField.setText(selectedEventType);			
+					//Selección normal de elementos de la lista
+					}
+					if (okActionSelector == EventTypeUI.OK_ACTION_UNDEFINED){
 						selectedEventType = registeredList.getSelectedValue();
 						itemSelectedIndex = registeredList.getSelectedIndex();						
 					}
-				} else {
+				} 
+				//Si el evento seleccionado es null
+				if (selectedEventType == null) {
 					selectedEventType = selectedEventTypeBackup;
 					itemSelectedIndex = itemSelectedBackupIndex;
 				}
@@ -636,7 +651,8 @@ public class EventTypeUI extends JPanel {
 			//Debug
 			infoLabel.setText("Acción de borrar un tipo de evento");
 			
-			okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
+			//Usamos okActionSelector para filtrar el comportamiento del RegisteredListener
+			okActionSelector = EventTypeUI.OK_ACTION_EDIT;
 			boolean deleteOK = false;
 			//Comprobamos que el tipo de evento a borrar no está registrado en ningún evento
 			//Obtenemos el id del tipo de evento seleccionado
@@ -652,7 +668,7 @@ public class EventTypeUI extends JPanel {
 			} else {
 				
 				//Debug
-				System.out.println("Borrado autorizado (MANAGER)");
+				System.out.println("Borrado autorizado (ALL)");
 				
 				int optionSelected = ToolBox.showDialog(
 						"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
@@ -660,45 +676,12 @@ public class EventTypeUI extends JPanel {
 				if (optionSelected != JOptionPane.YES_OPTION) {
 					//Debug
 					System.out.println("Borrado cancelado");
+					okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
 					return;
 				} else {							
 					deleteOK = true;
 				}			
 			}
-//			//Si no hay eventos, se comprueban las condiciones para el borrado del tipo de evento seleccionado
-//			} else {
-//				//Si el usuario de la sesión es de tipo manager
-//				if (session.getUser().getUserType().equals("MANAGER")) {			
-//					//Verificamos que el usuario está autorizado a borrar el tipo de evento seleccionado
-//					if (verifyManagerEditConditions()) {
-//						//Debug
-//						System.out.println("Borrado autorizado (MANAGER)");
-//						
-//						int optionSelected = ToolBox.showDialog(
-//								"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
-//								DIALOG_YES_NO);
-//						if (optionSelected != JOptionPane.YES_OPTION) {
-//							//Debug
-//							System.out.println("Borrado cancelado");
-//							return;
-//						} else {							
-//							deleteOK = true;
-//						}
-//					//El usuario no está autorizado a borrar el area seleccionada		
-//					} else {
-//						//Debug
-//						System.out.println("Borrado prohibido (MANAGER)");				
-//					}
-//				//Si el usuario de la sesión es de tipo admin
-//				} else {
-//					//Debug
-//					System.out.println("Borrado autorizado (ADMIN)");
-//					
-//					if (verifyAdminEditConditions()) {						
-//						deleteOK = true;
-//					}
-//				}
-//			}
 			
 			//Si el borrado se autoriza, se borra el tipo de evento seleccionado de la base de datos
 			if (deleteOK) {
@@ -721,7 +704,6 @@ public class EventTypeUI extends JPanel {
 				}
 				//Eliminamos el tipo de evento seleccionado de la lista de tipos de evento
 				TypesStatesContainer.getEvType().getEventTypes().remove(id);
-				selectedEventType = null;
 				//Refrescamos la lista de tipos de evento
 				refreshList();
 				//Designamos el primer elemento de la lista como tipo de evento seleccionado
@@ -823,9 +805,8 @@ public class EventTypeUI extends JPanel {
 								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 							}
 							
-							//Actualizamos los datos de backup
+							//Hacemos backup del contenido del campo de texto
 							selectedEventTypeBackup = eventTypeNameField.getText();
-							itemSelectedBackupIndex = itemSelectedIndex;
 							//Actualizamos la lista de tipos de evento
 							TypesStatesContainer.getEvType().getEventTypes().replace(itemId, eventTypeNameField.getText());
 							
@@ -837,7 +818,9 @@ public class EventTypeUI extends JPanel {
 							refreshList();
 							//Reasignamos el tipo de evento seleccionado y su índice en la lista
 							eventTypeNameField.setText(selectedEventType);
-							registeredList.setSelectedIndex(itemSelectedIndex);
+							//Buscamos el índice del  tipo de evento editado y lo seleccionamos en la lista
+							int newElementIndex = getIndexOfElement(selectedEventType);
+							registeredList.setSelectedIndex(newElementIndex);
 							//Reactivamos la lista de tipos de evento
 							registeredList.setEnabled(true);
 							//Devolvemos el formulario a su estado previo
