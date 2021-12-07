@@ -347,7 +347,7 @@ public class EventTypeUI extends JPanel {
 		} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 			//Si cambiamos el nombre del tipo de evento editado
 			if (!selectedEventType.equals(eventTypeNameField.getText())) {
-				//Comprobamos que el nombre editado no pertenezca a otra area existente
+				//Comprobamos que el nombre editado no pertenezca a otro tipo de evento existente
 				for (String eType: itemList) {
 					if (eType.equals(eventTypeNameField.getText())) {
 						infoLabel.setText(errorNameText);
@@ -412,7 +412,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Refresca el contenido de las listas de asignación de areas
+	 * Refresca el contenido de la lista de tipos de evento
 	 */
 	private void refreshList() {
 		if (selectedEventType != null) {
@@ -518,7 +518,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el botón Borrar. Se vacían
+	 * Acción del botón Nuevo. Se deshabilita el propio botón, el botón Editar y el botón Borrar. Se vacían
 	 * los campos de texto y se habilita su edición para añadir la información de un nuevo tipo de evento.
 	 * Se habilita el botón Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
 	 */
@@ -546,7 +546,7 @@ public class EventTypeUI extends JPanel {
 			
 			//Formulario editable
 			editableDataOn();
-			//Vaciamos las listas de asignación de areas
+			//Vaciamos las lista de tipos de evento
 			emptyList();
 			//Vaciamos los campos de texto
 			eventTypeNameField.setText("");
@@ -625,7 +625,7 @@ public class EventTypeUI extends JPanel {
 
 			//Si la lista de tipos de evento ha cambiado
 			if (listModified) {
-				//Refrescamos listas
+				//Refrescamos lista de tipos de evento
 				refreshList();
 				listModified = false;
 			}
@@ -671,7 +671,7 @@ public class EventTypeUI extends JPanel {
 				System.out.println("Borrado autorizado (ALL)");
 				
 				int optionSelected = ToolBox.showDialog(
-						"El borrado de areas no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+						"El borrado de tipos de evento no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
 						DIALOG_YES_NO);
 				if (optionSelected != JOptionPane.YES_OPTION) {
 					//Debug
@@ -687,7 +687,7 @@ public class EventTypeUI extends JPanel {
 			if (deleteOK) {
 				
 				//Debug
-				System.out.println("Borrando area de la base de datos...");
+				System.out.println("Borrando tipo de evento de la base de datos...");
 				
 				//Si el tipo de evento se borra correctamente de la base de datos
 				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
@@ -696,12 +696,16 @@ public class EventTypeUI extends JPanel {
 					infoLabel.setText("TIPO DE DATOS BORRADO: " + ToolBox.formatTimestamp(tNow, null));
 					//Actualizamos los datos de la tabla last_modification
 					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
-					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
 					//no queda registrada
 					if(!changeRegister) {
 						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 					}
+				//Si el tipo de evento no se almacena correctamente en la base de datos	
+				} else {
+					infoLabel.setText("ERROR DE BORRADO DEL TIPO DE EVENTO EN LA BASE DE DATOS");
 				}
+				
 				//Eliminamos el tipo de evento seleccionado de la lista de tipos de evento
 				TypesStatesContainer.getEvType().getEventTypes().remove(id);
 				//Refrescamos la lista de tipos de evento
@@ -716,7 +720,6 @@ public class EventTypeUI extends JPanel {
 				afterNewOrEditData();
 			}
 		}
-		
 	}
 	
 	public class OKAction extends AbstractAction {
@@ -748,10 +751,10 @@ public class EventTypeUI extends JPanel {
 						//Si el tipo de evento se almacena correctamente en la base de datos
 						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
 						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVO TIPO DE DATOS REGISTRADO: " + ToolBox.formatTimestamp(tNow, null));
+						infoLabel.setText("NUEVO TIPO DE EVENTO REGISTRADO: " + ToolBox.formatTimestamp(tNow, null));
 						//Actualizamos los datos de la tabla last_modification
 						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
-						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
 						//no queda registrada
 						if(!changeRegister) {
 							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
@@ -767,12 +770,11 @@ public class EventTypeUI extends JPanel {
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditData();
 						
-					//Si el area no se almacena correctamente en la base de datos	
+					//Si el tipo de evento no se almacena correctamente en la base de datos	
 					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE DATOS EN LA BASE DE DATOS");
+						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE EVENTO EN LA BASE DE DATOS");
 					}
-					
-					
+								
 					//Debug
 					for (Entry<Integer, String> item : TypesStatesContainer.getEvType().getEventTypes().entrySet()) {
 						System.out.print(item);
@@ -793,13 +795,13 @@ public class EventTypeUI extends JPanel {
 					if (itemId != -1) {
 						//Si los datos actualizados se graban en la base de datos
 						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							//Registramos fecha y hora de la actualización de los datos de la tabla event_type
 							tNow = ToolBox.getTimestampNow();
 							infoLabel.setText("DATOS DEL TIPO DE EVENTO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 							//Actualizamos los datos de la tabla last_modification
 							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 									EventType.TABLE_NAME, tNow);
-							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
+							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
 							//no queda registrada
 							if(!changeRegister) {
 								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
@@ -828,13 +830,12 @@ public class EventTypeUI extends JPanel {
 						
 						//Si los datos actualizados no se graban en la base de datos
 						} else {
-							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");							
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DEL TIPO DE EVENTO EN LA BASE DE DATOS");							
 						}
 					}
 				}
 			}
 		}
-		
 	}
 	
 	/**
@@ -875,12 +876,22 @@ public class EventTypeUI extends JPanel {
 						
 						//LÓGICA DE ACTUALIZACIÓN
 						
+						//Refrescamos la lista de tipos de eventos
+						refreshList();
+						//Asignamos el tipo de evento seleccionado y su índice en la lista
+						eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
+						selectedEventType = eventTypeNameField.getText();
+						itemSelectedIndex = 0;
+						registeredList.setSelectedIndex(itemSelectedIndex);
+						selectedEventTypeBackup = selectedEventType;
+						updateDataCache();
 						
+						//Informamos por pantalla de la actualización
+						EventTypeUI.this.infoLabel.setText("DATOS DE TIPOS DE EVENTO ACTUALIZADOS: " +
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));					
 					}
-					
 				}
 			}
 		}
-		
 	}
 }

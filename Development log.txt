@@ -1650,7 +1650,7 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	· UserTest class:
 		Delete & modify comments
 
-ver 0.1.12 - EVENTTYPEUI
+ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 
 	* - Package main.java.persistence
 
@@ -1746,7 +1746,7 @@ ver 0.1.12 - EVENTTYPEUI
 
 	· TimerJob class (new AreaUI class):
 		Add run()
-		Update run() --in progress--
+		Update run() --ok--
 
 	* - Package main.java.test
 
