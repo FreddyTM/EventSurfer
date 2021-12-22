@@ -846,6 +846,8 @@ public class BusinessUnitUI extends JPanel {
 						if(!changeRegister) {
 							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 						}
+//						PersistenceManager.registerTableModification(infoLabel, "NUEVA UNIDAD DE NEGOCIO REGISTRADA: ", session.getConnection(), tNow,
+//								BusinessUnit.TABLE_NAME);
 						//Añadimos la nueva unidad de negocio a la lista de unidades de negocio de la compañía
 						session.getCompany().getBusinessUnits().add(storedBunit);
 						
