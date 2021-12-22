@@ -1655,7 +1655,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 	* - Package main.java.persistence
 
 	· PersistenceManager class:
-		Add registerTableModification() --not tested yet--
+		Add registerTableModification() --ok--
 		Update connectToDatabase() --add dynamic connection credentials to remote database--
 
 	* - Package main.java.session
@@ -1688,9 +1688,8 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 		Update attribute EventTypeAction
 		Update constructor
 
-	· EventTypeAction class (new inner Selector class):
+	· EventTypeAction class (inner Selector class):
 		Update actionPerformed()
-			
 
 	· EventTypeUI class:
 		Add attributes
@@ -1719,32 +1718,32 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 		Rename getIndexOfNewElement() to getIndexOfElement()
 		Realign graphical elements
 
-	· RegisteredListener (new inner AreaUI class):
+	· RegisteredListener (new inner EventTypeUI class):
 		Add valueChanged()
 		Update valueChanged() --selection updates selectedEventType & eventTypeNameField content--
 		Update valueChanged() --okaction_edit&delete ok, okaction_new ok, simplified code--
 
-	· NewAction class (new inner AreaUI class):
+	· NewAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
 		Update actionPerformed() --ok, add focus to field--
 
-	· EditAction class (new inner AreaUI class):
-		Add actionPerformed()
+	· EditAction class (new inner EventTypeUI class):
+		Add actionPerformed() 
 		Update actionPerformed() --ok, add focus to field--
 
-	· CancelAction class (new inner AreaUI class):
+	· CancelAction class (new inner EventTypeUI class):
 		Add actionPerformed()
 		Update actionPerformed() --ok cancel new, ok cancel edit, use of listModified--
 
-	· DeleteAction class (new inner AreaUI class):
+	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
 		Update actionPerformed() --verifyManager&Admin deleted ok, delete action updated ok--
 		
-	· OKAction class (new inner AreaUI class):
+	· OKAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
 		Update actionPerformed() --okaction_new ok, okaction_edit updated ok--
 
-	· TimerJob class (new AreaUI class):
+	· TimerJob class (new inner EventTypeUI class):
 		Add run()
 		Update run() --ok--
 
@@ -1759,3 +1758,30 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 	· EventTest class:
 		Add testGetBunitsIdsWithEventTypes() --ok--
 		Add testGetEventTypesOnEventFromDB() --ok--
+
+ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF PersistenceManager registerTableModification()
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.13--
+
+	· Combolistener class (inner BusinessUnitUI class):
+		Update itemStateChanged() --infoLabel content not deleted--
+			
+	· OKAction class (inner BusinessUnitUI class):
+		Update actionPerformed() --use registerTableModification() new--
+
+	· DeleteAction class (inner AreaUI class):
+		Update actionPerformed() --use registerTableModification()--
+
+	· OKAction class (inner AreaUI class):
+		Update actionPerformed() --use registerTableModification() new & edit--
+
+	· DeleteAction class (new inner EventTypeUI class):
+		Add actionPerformed() 
+		Update actionPerformed() --use registerTableModification()--
+		
+	· OKAction class (new inner EventTypeUI class):
+		Add actionPerformed() 
+		Update actionPerformed() --use registerTableModification() new & edit--
