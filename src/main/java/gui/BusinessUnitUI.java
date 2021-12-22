@@ -652,8 +652,8 @@ public class BusinessUnitUI extends JPanel {
 			populateTextFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
-			//Vaciamos label de información
-			infoLabel.setText("");
+//			//Vaciamos label de información
+//			infoLabel.setText("");
 		}
 		
 	}
@@ -837,17 +837,21 @@ public class BusinessUnitUI extends JPanel {
 					//Si la unidad de negocio se almacena correctamente en la base de datos
 					if (storedBunit != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVA UNIDAD DE NEGOCIO REGISTRADA: " + ToolBox.formatTimestamp(tNow, null));
-						//Actualizamos los datos de la tabla last_modification
-						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
-						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-						//no queda registrada
-						if(!changeRegister) {
-							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-						}
-//						PersistenceManager.registerTableModification(infoLabel, "NUEVA UNIDAD DE NEGOCIO REGISTRADA: ", session.getConnection(), tNow,
-//								BusinessUnit.TABLE_NAME);
+						
+//CÓDIGO REFACTORIZADO						
+//						tNow = ToolBox.getTimestampNow();
+//						infoLabel.setText("NUEVA UNIDAD DE NEGOCIO REGISTRADA: " + ToolBox.formatTimestamp(tNow, null));
+//						//Actualizamos los datos de la tabla last_modification
+//						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), BusinessUnit.TABLE_NAME, tNow);
+//						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+//						//no queda registrada
+//						if(!changeRegister) {
+//							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+//						}
+//CÓDIGO REFACTORIZADO		
+						
+						PersistenceManager.registerTableModification(infoLabel, "NUEVA UNIDAD DE NEGOCIO REGISTRADA: ", session.getConnection(), tNow,
+								BusinessUnit.TABLE_NAME);
 						//Añadimos la nueva unidad de negocio a la lista de unidades de negocio de la compañía
 						session.getCompany().getBusinessUnits().add(storedBunit);
 						
