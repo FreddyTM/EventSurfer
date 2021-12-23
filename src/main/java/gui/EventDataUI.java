@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -18,6 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
@@ -65,6 +70,22 @@ public class EventDataUI extends JPanel{
 		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		selectLabel.setBounds(50, 175, 200, 25);
 		add(selectLabel);
+		
+		JPanel eventsContainer = new JPanel();
+		eventsContainer.setLayout(null);
+		TitledBorder titledBorder = BorderFactory.createTitledBorder("Eventos");
+		eventsContainer.setBorder(titledBorder);
+		Border margin = new EmptyBorder(15, 15, 15, 15);
+		eventsContainer.setBorder(new CompoundBorder(eventsContainer.getBorder(), margin));
+		//Componente de prueba para añadir al panel
+		JLabel oneLabel = new JLabel("Texto de prueba");
+		oneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		oneLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		oneLabel.setBounds(50, 50, 200, 25);
+		eventsContainer.add(oneLabel);
+		eventsContainer.setBounds(50, 225, 900, 200);
+		add(eventsContainer);
+		
 		
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
