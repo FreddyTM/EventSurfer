@@ -1792,3 +1792,12 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 	· OKAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
 		Update actionPerformed() --use registerTableModification() new & edit, delete comments--
+
+ver 0.1.14 - EVENTDATAUI
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.14--
+
+
