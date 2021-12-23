@@ -1770,7 +1770,7 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 		Update itemStateChanged() --infoLabel content not deleted--
 			
 	· OKAction class (inner BusinessUnitUI class):
-		Update actionPerformed() --use registerTableModification() new--
+		Update actionPerformed() --use registerTableModification() new, delete comments--
 
 	· DeleteAction class (inner AreaUI class):
 		Update actionPerformed() --use registerTableModification(), delete comments--
