@@ -1800,4 +1800,10 @@ ver 0.1.14 - EVENTDATAUI
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.14--
 
-
+	· EventDataUI class:
+		Add attributes
+			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList, 
+			
+		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
+		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
+		Update constructor --add company field, bUnit combobox, checkbox (not ready yet)--
