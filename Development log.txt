@@ -1778,6 +1778,12 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 	· OKAction class (inner AreaUI class):
 		Update actionPerformed() --use registerTableModification() new & edit--
 
+	· AllocateAction class (AreaUI inner class):
+		Update actionPerformed() --use registerTableModification()--
+
+	· RevokeAllocationActionclass (AreaUI inner class):
+		Update actionPerformed() --use registerTableModification()--
+
 	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
 		Update actionPerformed() --use registerTableModification()--
