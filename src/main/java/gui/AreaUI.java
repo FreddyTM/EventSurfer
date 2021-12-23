@@ -1067,14 +1067,10 @@ public class AreaUI extends JPanel {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
 						PersistenceManager.registerTableModification(infoLabel, "DATOS DEL AREA ACTUALIZADOS: ", session.getConnection(), tNow,
 								Area.TABLE_NAME);
-						
-						//New code
 						//Renovamos los datos del area seleccionada
 						selectedArea = updatedArea;
 						//Renovamos la lista de areas del comboBox
 						refreshComboBox();
-						//New code
-						
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditArea();
 						

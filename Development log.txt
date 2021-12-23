@@ -1787,8 +1787,8 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 
 	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --use registerTableModification()--
+		Update actionPerformed() --use registerTableModification(), delete comments--
 		
 	· OKAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --use registerTableModification() new & edit--
+		Update actionPerformed() --use registerTableModification() new & edit, delete comments--

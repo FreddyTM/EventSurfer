@@ -692,22 +692,8 @@ public class EventTypeUI extends JPanel {
 				//Si el tipo de evento se borra correctamente de la base de datos
 				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
 					//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-					
-//CÓDIGO REFACTORIZADO
-//					tNow = ToolBox.getTimestampNow();
-//					infoLabel.setText("TIPO DE EVENTO BORRADO: " + ToolBox.formatTimestamp(tNow, null));
-//					//Actualizamos los datos de la tabla last_modification
-//					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
-//					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
-//					//no queda registrada
-//					if(!changeRegister) {
-//						infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//					}
-//CÓDIGO REFACTORIZADO
-					
 					PersistenceManager.registerTableModification(infoLabel, "TIPO DE EVENTO BORRADO:", session.getConnection(), tNow,
-							EventType.TABLE_NAME);
-					
+							EventType.TABLE_NAME);					
 				//Si el tipo de evento no se almacena correctamente en la base de datos	
 				} else {
 					infoLabel.setText("ERROR DE BORRADO DEL TIPO DE EVENTO EN LA BASE DE DATOS");
@@ -755,24 +741,10 @@ public class EventTypeUI extends JPanel {
 					//Intentamos grabar el nuevo tipo de evento en la base de datos, insertando una nueva entrada de tipos
 					//de eventos en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
 					if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
-
-//CÓDIGO REFACTORIZADO
-//						tNow = ToolBox.getTimestampNow();
-//						infoLabel.setText("NUEVO TIPO DE EVENTO REGISTRADO: " + ToolBox.formatTimestamp(tNow, null));
-//						//Actualizamos los datos de la tabla last_modification
-//						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), EventType.TABLE_NAME, tNow);
-//						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
-//						//no queda registrada
-//						if(!changeRegister) {
-//							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//						}
-//CÓDIGO REFACTORIZADO
-						
 						//Si el tipo de evento se almacena correctamente en la base de datos
 						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
 						PersistenceManager.registerTableModification(infoLabel, "NUEVO TIPO DE EVENTO REGISTRADO: ", session.getConnection(), tNow,
-								EventType.TABLE_NAME);
-						
+								EventType.TABLE_NAME);			
 						//Asignamos el tipo de evento guardado como tipo de evento seleccionado
 						selectedEventType = eventTypeNameField.getText();
 						//Refrescamos la lista de tipos de evento
@@ -809,23 +781,8 @@ public class EventTypeUI extends JPanel {
 						//Si los datos actualizados se graban en la base de datos
 						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-
-//CÓDIGO REFACTORIZADO
-//							tNow = ToolBox.getTimestampNow();
-//							infoLabel.setText("DATOS DEL TIPO DE EVENTO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-//							//Actualizamos los datos de la tabla last_modification
-//							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//									EventType.TABLE_NAME, tNow);
-//							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla event_type
-//							//no queda registrada
-//							if(!changeRegister) {
-//								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//							}
-//CÓDIGO REFACTORIZADO
-							
 							PersistenceManager.registerTableModification(infoLabel, "DATOS DEL TIPO DE EVENTO ACTUALIZADOS: ", session.getConnection(), tNow,
 									EventType.TABLE_NAME);
-							
 							//Hacemos backup del contenido del campo de texto
 							selectedEventTypeBackup = eventTypeNameField.getText();
 							//Actualizamos la lista de tipos de evento
