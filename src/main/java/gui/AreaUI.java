@@ -962,23 +962,8 @@ public class AreaUI extends JPanel {
 					//Si el area se borra correctamente de la base de datos
 					if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						
-//CÓDIGO REFACTORIZADO	
-//						tNow = ToolBox.getTimestampNow();
-//						infoLabel.setText("AREA BORRADA: " + ToolBox.formatTimestamp(tNow, null));
-//						//Actualizamos los datos de la tabla last_modification
-//						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
-//						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//						//no queda registrada
-//						if(!changeRegister) {
-//							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//						}
-//CÓDIGO REFACTORIZADO	
-						
 						PersistenceManager.registerTableModification(infoLabel, "AREA BORRADA: ", session.getConnection(), tNow,
 								Area.TABLE_NAME);
-						
-						
 						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
 						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
@@ -1006,7 +991,6 @@ public class AreaUI extends JPanel {
 				}
 			}
 		}
-		
 	}
 	
 	/**
@@ -1048,22 +1032,8 @@ public class AreaUI extends JPanel {
 					//Si el area se almacena correctamente en la base de datos
 					if (storedArea != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						
-//CÓDIGO REFACTORIZADO						
-//						tNow = ToolBox.getTimestampNow();
-//						infoLabel.setText("NUEVA AREA REGISTRADA: " + ToolBox.formatTimestamp(tNow, null));
-//						//Actualizamos los datos de la tabla last_modification
-//						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Area.TABLE_NAME, tNow);
-//						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//						//no queda registrada
-//						if(!changeRegister) {
-//							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//						}
-//CÓDIGO REFACTORIZADO
-						
 						PersistenceManager.registerTableModification(infoLabel, "NUEVA AREA REGISTRADA: ", session.getConnection(), tNow,
 								Area.TABLE_NAME);
-						
 						//Asignamos el area guardada como area seleccionada
 						selectedArea = storedArea;
 						//Renovamos la lista de areas del comboBox
@@ -1095,23 +1065,15 @@ public class AreaUI extends JPanel {
 					//Si los datos actualizados se graban en la base de datos
 					if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						
-//CÓDIGO REFACTORIZADO					
-//						tNow = ToolBox.getTimestampNow();
-//						infoLabel.setText("DATOS DEL AREA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-//						//Actualizamos los datos de la tabla last_modification
-//						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//								Area.TABLE_NAME, tNow);
-//						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//						//no queda registrada
-//						if(!changeRegister) {
-//							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//						}
-//CÓDIGO REFACTORIZADO
-						
 						PersistenceManager.registerTableModification(infoLabel, "DATOS DEL AREA ACTUALIZADOS: ", session.getConnection(), tNow,
 								Area.TABLE_NAME);
 						
+						//New code
+						//Renovamos los datos del area seleccionada
+						selectedArea = updatedArea;
+						//Renovamos la lista de areas del comboBox
+						refreshComboBox();
+						//New code
 						
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditArea();
@@ -1143,24 +1105,8 @@ public class AreaUI extends JPanel {
 			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
 			if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
 				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
-				
-//CÓDIGO REFACTORIZADO				
-//				tNow = ToolBox.getTimestampNow();
-//				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-//				//Actualizamos los datos de la tabla last_modification
-//				boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//						Area.B_UNIT_AREA_TABLE_NAME, tNow);
-//				//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//				//no queda registrada
-//				if(!changeRegister) {
-//					infoLabel2.setText(infoLabel2.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//				}
-//CÓDIGO REFACTORIZADO
-				
 				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
-						Area.B_UNIT_AREA_TABLE_NAME);
-				
-				
+						Area.B_UNIT_AREA_TABLE_NAME);			
 				//Añadir el area al objeto BusinessUnit
 				bUnit.getAreas().add(selectedArea);
 				//Refrescar listas
@@ -1193,24 +1139,8 @@ public class AreaUI extends JPanel {
 			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
 			if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
 				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
-				
-//CÓDIGO REFACTORIZADO					
-//				tNow = ToolBox.getTimestampNow();
-//				infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-//				//Actualizamos los datos de la tabla last_modification
-//				boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-//						Area.B_UNIT_AREA_TABLE_NAME, tNow);
-//				//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla area
-//				//no queda registrada
-//				if(!changeRegister) {
-//					infoLabel2.setText(infoLabel2.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-//				}
-//CÓDIGO REFACTORIZADO					
-				
 				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
-						Area.B_UNIT_AREA_TABLE_NAME);
-				
-				
+						Area.B_UNIT_AREA_TABLE_NAME);	
 				//Eliminar el area del objeto BusinessUnit
 				bUnit.getAreas().remove(selectedArea);
 				//Refrescar listas
@@ -1222,8 +1152,7 @@ public class AreaUI extends JPanel {
 			} else {
 				infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 			}
-		}
-		
+		}	
 	}
 	
 	/**

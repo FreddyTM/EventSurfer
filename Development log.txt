@@ -1773,16 +1773,17 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 		Update actionPerformed() --use registerTableModification() new--
 
 	· DeleteAction class (inner AreaUI class):
-		Update actionPerformed() --use registerTableModification()--
+		Update actionPerformed() --use registerTableModification(), delete comments--
 
 	· OKAction class (inner AreaUI class):
-		Update actionPerformed() --use registerTableModification() new & edit--
+		Update actionPerformed() --use registerTableModification() new & edit, delete comments--
+					 --fix update errors. combobox ok, data ok--
 
 	· AllocateAction class (AreaUI inner class):
-		Update actionPerformed() --use registerTableModification()--
+		Update actionPerformed() --use registerTableModification(), delete comments--
 
 	· RevokeAllocationActionclass (AreaUI inner class):
-		Update actionPerformed() --use registerTableModification()--
+		Update actionPerformed() --use registerTableModification(), delete comments--
 
 	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
