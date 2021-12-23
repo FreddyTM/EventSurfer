@@ -1806,4 +1806,11 @@ ver 0.1.14 - EVENTDATAUI
 			
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
+		Add refreshComboBox() --copied from BusinessUnitUI--
 		Update constructor --add company field, bUnit combobox, checkbox (not ready yet)--
+
+	· ComboListener class (new inner EventDataUI class):
+		Update itemStateChanged() --in progress--
+
+	· CheckBoxListener class (new inner EventDataUI class):
+		Update itemStateChanged() --in progress--
