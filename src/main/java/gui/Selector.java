@@ -26,7 +26,7 @@ public class Selector extends JPanel {
 	private final Action userAction = new UserAction();
 	private final Action areaAction = new AreaAction();
 	private final Action eventTypeAction = new EventTypeAction();
-	private final Action eventAction = null;
+	private final Action eventAction = new EventAction();
 	private JButton eventButton;
 	private JButton eventTypeButton;
 	private JButton areaButton;
@@ -46,6 +46,7 @@ public class Selector extends JPanel {
 		Dimension dim = new Dimension(100,80);
 		
 		eventButton = new JButton();
+		eventButton.setAction(eventAction);
 		eventButton.setMargin(new Insets(2,2,2,2));
 		eventButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		eventButton.setText("EVENTOS");
@@ -220,7 +221,7 @@ public class Selector extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de usuario
+			//Creamos panel de area
 			AreaUI areaUI = new AreaUI(session);
 			//Mostramos el panel
 			showPanel(frame, areaUI);		
@@ -239,25 +240,29 @@ public class Selector extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			//Vaciamos el panel base y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de usuario
+			//Creamos panel de tipo de evento
 			EventTypeUI eTypeUI = new EventTypeUI(session);
 			//Mostramos el panel
 			showPanel(frame, eTypeUI);
-		}
-		
+		}	
 	}
 	
 	/**
 	 * Acción del botón Eventos. Muestra los datos de los eventos
 	 */
 	private class EventAction extends AbstractAction {
-
+		public EventAction() {
+			putValue(NAME, "EventAction");
+			putValue(SHORT_DESCRIPTION, "Show event screen");
+		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			//Vaciamos el panel base y le quitamos visibilidad
+			hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de datos de evento
+			EventDataUI eDataUI = new EventDataUI(session);
+			//Mostramos el panel
+			showPanel(frame, eDataUI);	
 		}
-		
 	}
-
 }

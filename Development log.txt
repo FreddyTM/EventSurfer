@@ -1800,6 +1800,9 @@ ver 0.1.14 - EVENTDATAUI
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.14--
 
+	· EventAction class (inner Selector class):
+		Update actionPerformed() 
+
 	· EventDataUI class:
 		Add attributes
 			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList, 
