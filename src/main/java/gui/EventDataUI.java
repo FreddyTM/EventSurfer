@@ -6,8 +6,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -15,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
@@ -26,10 +29,14 @@ import javax.swing.border.TitledBorder;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
+import main.java.event.Event;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 
 public class EventDataUI extends JPanel{
+	
+	private static final String[] EVENTS_TABLE_HEADER = {"Fecha", "Area", "Tipo", "Título", "Descripción", "Estado"};
+	private static final String[] UPDATES_TABLE_HEADER = {"Fecha / Hora", "Actualización", "Autor", "Usuario"};
 	
 	private CurrentSession session;
 	private Timestamp tNow = ToolBox.getTimestampNow();
@@ -41,6 +48,8 @@ public class EventDataUI extends JPanel{
 	private JTextField companyField;
 	private JComboBox comboBox;
 	private JCheckBox activeFilterCheckBox;
+	private JTable eventsTable;
+	private JTable updatesTable;
 	
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
@@ -116,6 +125,9 @@ public class EventDataUI extends JPanel{
 		if (!session.getUser().getUserType().equals("ADMIN")) {
 			comboBox.setEnabled(false);
 		}
+		
+		//Por defecto se muestran los últimos 25 eventos registrados
+		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 	
 	}
 	
@@ -165,6 +177,47 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Devuelve los últimos elementos de una lista. Si la lista tiene menos elementos de los que buscamos, retornamos la lista
+	 * sin modificar
+	 * @param list lista de la que buscamos los últimos elementos
+	 * @param number número de elementos que obtendremos de la lista
+	 * @return lista filtrada con los últimos elementos
+	 */
+	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
+		if (list.size() > 25) {
+			return list.subList(list.size() - number, list.size() - 1);
+		}
+		return list;
+	}
+	
+	/**
+	 * 
+	 * @param list
+	 * @param header
+	 */
+	private void buildEventTable(List<Event> list, String[] header) {
+		//Encabezados de la tabla
+		Vector<String> headerVector = new Vector<String>(Arrays.asList(header));
+		//Datos de la tabla
+		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
+		for (Event event: session.getbUnit().getEvents()) {
+			Vector<Object> eventVector = new Vector<Object>();
+			eventVector.add((Integer) event.getId());
+			eventVector.add(event.getArea().getArea());
+			eventVector.add(event.getEventType());
+			eventVector.add(event.getTitulo());
+			eventVector.add(event.getDescripcion());
+			eventVector.add(event.getEventState());
+			dataVector.add(eventVector);
+		}
+		eventsTable = new JTable(dataVector, headerVector);
+		
+		//Debug
+		System.out.println("Cambiando el contenido de la tabla de eventos");
+		
+	}
+	
+	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
@@ -175,12 +228,20 @@ public class EventDataUI extends JPanel{
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
+			
+			//Debug
+			System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
+			
 			String item = (String) comboBox.getSelectedItem();
 			Company company = session.getCompany();
 			//Recuperamos la unidad de negocio seleccionada
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
+			//Renovamos la tabla de eventos
+			buildEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER);
+
+			
 //			//Mostramos sus datos
 //			populateTextFields();
 //			//Hacemos backup del contenido de los datos del formulario
@@ -214,6 +275,10 @@ public class EventDataUI extends JPanel{
 					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
+					
+					//Debug
+					System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
+					
 					//Mostramos sus datos
 //					populateTextFields();
 //					//Hacemos backup del contenido de los datos del formulario
@@ -221,6 +286,8 @@ public class EventDataUI extends JPanel{
 					
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
+					//Renovamos la tabla de eventos
+					buildEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER);
 					
 //					//Vaciamos label de información
 //					infoLabel.setText("");
