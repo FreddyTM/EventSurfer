@@ -58,10 +58,15 @@ public class EventDataUI extends JPanel{
 	private Timer timer;
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
+	//Tamaño del monitor que ejecuta la aplicación
+	String screenSize = getScreenSize();
 	
 	private JTextField companyField;
 	private JComboBox comboBox;
 	private JCheckBox activeFilterCheckBox;
+	private JPanel eventsContainer;
+	private JPanel updatesContainer;
+	private JPanel filtersContainer;
 	private JTable eventsTable;
 	private JTable updatesTable;
 	
@@ -94,7 +99,7 @@ public class EventDataUI extends JPanel{
 		selectLabel.setBounds(50, 175, 200, 25);
 		add(selectLabel);
 		
-		JPanel eventsContainer = new JPanel();
+		eventsContainer = new JPanel();
 		eventsContainer.setLayout(null);
 		TitledBorder titledBorder = BorderFactory.createTitledBorder("Eventos");
 		eventsContainer.setBorder(titledBorder);
@@ -120,36 +125,38 @@ public class EventDataUI extends JPanel{
 		
 //		eventsContainer.setBounds(50, 225, 1100, 400);
 		
-		
-//		//Componente de prueba para añadir al panel
-//		JLabel oneLabel = new JLabel("Texto de prueba");
-//		oneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-//		oneLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-//		oneLabel.setBounds(50, 50, 200, 25);
-//		eventsContainer.add(oneLabel);
-		
-		JPanel updatesContainer = new JPanel();
+	
+		updatesContainer = new JPanel();
 		updatesContainer.setLayout(null);
 		TitledBorder titledBorder2 = BorderFactory.createTitledBorder("Actualizaciones");
 		updatesContainer.setBorder(titledBorder2);
 		Border margin2 = new EmptyBorder(15, 15, 15, 15);
 		updatesContainer.setBorder(new CompoundBorder(updatesContainer.getBorder(), margin2));
-		updatesContainer.setBounds(50, 650, 1100, 350);
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println(screenSize.height + " " + screenSize.width);
-		if (screenSize.width <= 1024) {
-			eventsContainer.setBounds(50, 225, 1100, 400);
-			updatesContainer.setBounds(50, 650, 1100, 350);
-		} else if (screenSize.width > 1024 && screenSize.width < 1400 ) {
-			eventsContainer.setBounds(50, 225, 1200, 400);
-			updatesContainer.setBounds(50, 650, 1200, 350);
-		} else {
-			eventsContainer.setBounds(50, 225, 1700, 400);
-			updatesContainer.setBounds(50, 650, 1700, 350);
-		}
+//		updatesContainer.setBounds(50, 650, 1100, 350);
 		
 		
+		
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		System.out.println(screenSize.height + " " + screenSize.width);
+//		if (screenSize.width <= 1280) {
+//			eventsContainer.setBounds(50, 225, 1100, 400);
+//			updatesContainer.setBounds(50, 650, 1100, 350);
+//		} else if (screenSize.width > 1280 && screenSize.width < 1450 ) {
+//			eventsContainer.setBounds(50, 225, 1200, 400);
+//			updatesContainer.setBounds(50, 650, 1200, 350);
+//		} else {
+//			eventsContainer.setBounds(50, 225, 1700, 400);
+//			updatesContainer.setBounds(50, 650, 1700, 350);
+//		}
+		
+		filtersContainer = new JPanel();
+		filtersContainer.setLayout(null);
+		filtersContainer.setBackground(Color.BLUE);
+		
+		setPanelsDimensions(screenSize);
+//		setTablePanelDimensions(updatesContainer, screenSize);
+		
+		eventsContainer.add(filtersContainer);
 		add(eventsContainer);
 		add(updatesContainer);
 		
@@ -257,6 +264,44 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Busca la anchura de la pantalla en la que se ejecuta la aplicación. En base a esa anchura se dimensionarán los elementos de la pantalla
+	 * @return small para pantallas inferiores a 1280px, medium para pantallas entre 1281 y 1450px, big para pantallas de más de 1450px
+	 */
+	private String getScreenSize() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		if (screenSize.width <= 1280) {
+			return "small";
+		} else if (screenSize.width > 1280 && screenSize.width <= 1450 ) {
+			return "medium";
+		} else {
+			return "big";
+		}
+	}
+	
+	/**
+	 * Dimensiona los paneles que contendrán las tablas de eventos y actualizaciones en función del tamaño de la pantalla
+	 * @param panel panel a dimensionar
+	 * @param screenSize tamaño de pantalla
+	 */
+	private void setPanelsDimensions(String screenSize) {
+		switch (screenSize) {
+			case "small":
+				eventsContainer.setBounds(50, 225, 1100, 400);
+				updatesContainer.setBounds(50, 650, 1100, 350);
+				
+				break;
+			case "medium":
+				eventsContainer.setBounds(50, 225, 1200, 400);
+				updatesContainer.setBounds(50, 650, 1200, 350);
+				break;
+			case "big":
+				eventsContainer.setBounds(50, 225, 1700, 400);
+				updatesContainer.setBounds(50, 650, 1700, 350);
+				filtersContainer.setBounds(1450, 25, 225, 300);
+		}
+	}
+	
+	/**
 	 * Construye la tabla de eventos con los datos y el formato deseados
 	 * @param list lista de eventos de la unidad de negocio de la sesión
 	 * @param header encabezados de las columnas de la tabla
@@ -323,7 +368,7 @@ public class EventDataUI extends JPanel{
 	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
 	 * @return Timestamp con la fecha y la hora pasadas por parámetro
 	 */
-	public Timestamp stringToTimestamp(String stringToParse) {
+	private Timestamp stringToTimestamp(String stringToParse) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
 		return Timestamp.valueOf(ldt);
