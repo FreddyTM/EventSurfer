@@ -11,6 +11,8 @@ import java.awt.event.ItemListener;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +50,7 @@ public class EventDataUI extends JPanel{
 	
 	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha / Hora", "Area", "Tipo", "Título", "Descripción", "Estado"};
 	private static final String[] UPDATES_TABLE_HEADER = {"Fecha / Hora", "Actualización", "Autor", "Usuario"};
-	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm";
+	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
 	
 	private CurrentSession session;
 	private Timestamp tNow = ToolBox.getTimestampNow();
@@ -268,7 +270,7 @@ public class EventDataUI extends JPanel{
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
 			String niceTime = ToolBox.formatTimestamp(event.getUpdates().get(0).getFechaHora(), DATE_TIME_PATTERN);
-			eventVector.add(niceTime.toString());
+			eventVector.add(niceTime);
 			eventVector.add(event.getArea().getArea());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
@@ -277,7 +279,8 @@ public class EventDataUI extends JPanel{
 			dataVector.add(eventVector);
 		}
 		eventsTable = new JTable(dataVector, headerVector) {
-			 public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
+			//Table tooltips 
+			public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
 				 Component comp = super.prepareRenderer(renderer, row, col);
 				 JComponent jcomp = (JComponent)comp;
 				 if (comp == jcomp) {
@@ -287,10 +290,11 @@ public class EventDataUI extends JPanel{
 			}
 		};
 		eventsTable.setFillsViewportHeight(true);
+		eventsTable.setAutoCreateRowSorter(true);
 		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
 		//Ancho columna Fecha
-		eventsTable.getColumnModel().getColumn(0).setMinWidth(115);
-		eventsTable.getColumnModel().getColumn(0).setMaxWidth(115);
+		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
+		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
 		//Ancho columna Area
 		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
 		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);
@@ -310,8 +314,19 @@ public class EventDataUI extends JPanel{
 //			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
 		//Debug
-		System.out.println("Cambiando el contenido de la tabla de eventos");
+		System.out.println("Creando el contenido de la tabla de eventos");
 		
+	}
+	
+	/**
+	 * Retorna un timestamp a partir de un string que sigue el formato de DATE_TIME_PATTERN
+	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
+	 * @return Timestamp con la fecha y la hora pasadas por parámetro
+	 */
+	public Timestamp stringToTimestamp(String stringToParse) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
+		return Timestamp.valueOf(ldt);
 	}
 	
 	/**
