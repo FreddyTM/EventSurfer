@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +36,7 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.TableCellRenderer;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
@@ -44,7 +46,7 @@ import main.java.toolbox.ToolBox;
 
 public class EventDataUI extends JPanel{
 	
-	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha", "Area", "Tipo", "Título", "Descripción", "Estado"};
+	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha / Hora", "Area", "Tipo", "Título", "Descripción", "Estado"};
 	private static final String[] UPDATES_TABLE_HEADER = {"Fecha / Hora", "Actualización", "Autor", "Usuario"};
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm";
 	
@@ -166,6 +168,9 @@ public class EventDataUI extends JPanel{
 		activeFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
 		activeFilterCheckBox.addItemListener(new CheckBoxListener());
 		add(activeFilterCheckBox);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			activeFilterCheckBox.setEnabled(false);
+		}
 		
 		comboList = getComboBoxItemsFromSession(activeFilterCheckBox.isSelected());
 		comboBox = new JComboBox(comboList);
@@ -185,7 +190,7 @@ public class EventDataUI extends JPanel{
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 //		eventsPane.setPreferredSize(new Dimension(1650, 250));
-		eventsPane.setBounds(25, 25, 1650, 300);
+		eventsPane.setBounds(25, 25, 1400, 300);
 		eventsContainer.add(eventsPane);
 	
 	}
@@ -271,9 +276,33 @@ public class EventDataUI extends JPanel{
 			eventVector.add(event.getEventState());
 			dataVector.add(eventVector);
 		}
-		eventsTable = new JTable(dataVector, headerVector);
+		eventsTable = new JTable(dataVector, headerVector) {
+			 public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
+				 Component comp = super.prepareRenderer(renderer, row, col);
+				 JComponent jcomp = (JComponent)comp;
+				 if (comp == jcomp) {
+					 jcomp.setToolTipText((String)getValueAt(row, col));
+				 }
+				 return comp;
+			}
+		};
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
+		//Ancho columna Fecha
+		eventsTable.getColumnModel().getColumn(0).setMinWidth(115);
+		eventsTable.getColumnModel().getColumn(0).setMaxWidth(115);
+		//Ancho columna Area
+		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
+		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);
+		//Ancho columna Tipo
+		eventsTable.getColumnModel().getColumn(2).setMinWidth(175);
+		eventsTable.getColumnModel().getColumn(2).setMaxWidth(175);
+		//Ancho columna Título
+		eventsTable.getColumnModel().getColumn(3).setMinWidth(225);
+		eventsTable.getColumnModel().getColumn(3).setMaxWidth(225);
+		//Ancho columna Estado
+		eventsTable.getColumnModel().getColumn(5).setMinWidth(75);
+		eventsTable.getColumnModel().getColumn(5).setMaxWidth(75);
 		
 //		First remove the column from the view
 //			table.removeColumn(table.getColumnModel().getColumn(4));
