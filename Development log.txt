@@ -1812,10 +1812,12 @@ ver 0.1.14 - EVENTDATAUI
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
 		Add refreshComboBox() --copied from BusinessUnitUI--
 		Add getLastEventsByNumber() --not tested yet--
-		Add buildEventTable() --in progress--
+		Add buildEventTable() 
+		Update buildEventTable() --data ok, ID column removed, date format ok, still in progress--
 		Update constructor --add company field, bUnit combobox (not ready yet), checkbox (not ready yet)--
-				   --add Events titled panel (in progress)--
-				   --add events table (in progress)--
+				   --add Events titled panel ok--
+				   --add scrollpane ok--
+				   --add events table ok--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --in progress, add buildEventTable()--

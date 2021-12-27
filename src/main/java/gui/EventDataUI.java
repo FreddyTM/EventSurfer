@@ -1,9 +1,15 @@
 package main.java.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +21,15 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -35,8 +44,9 @@ import main.java.toolbox.ToolBox;
 
 public class EventDataUI extends JPanel{
 	
-	private static final String[] EVENTS_TABLE_HEADER = {"Fecha", "Area", "Tipo", "Título", "Descripción", "Estado"};
+	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha", "Area", "Tipo", "Título", "Descripción", "Estado"};
 	private static final String[] UPDATES_TABLE_HEADER = {"Fecha / Hora", "Actualización", "Autor", "Usuario"};
+	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm";
 	
 	private CurrentSession session;
 	private Timestamp tNow = ToolBox.getTimestampNow();
@@ -86,14 +96,58 @@ public class EventDataUI extends JPanel{
 		eventsContainer.setBorder(titledBorder);
 		Border margin = new EmptyBorder(15, 15, 15, 15);
 		eventsContainer.setBorder(new CompoundBorder(eventsContainer.getBorder(), margin));
-		//Componente de prueba para añadir al panel
-		JLabel oneLabel = new JLabel("Texto de prueba");
-		oneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		oneLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		oneLabel.setBounds(50, 50, 200, 25);
-		eventsContainer.add(oneLabel);
-		eventsContainer.setBounds(50, 225, 900, 200);
+		
+		//This code to windowlistener
+		
+//		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) EventDataUI.this);
+//		System.out.println(parentFrame == null);
+//		
+//		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+//		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
+//		System.out.println(currentDisplay.getDefaultConfiguration().getBounds().x);
+		
+//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		System.out.println(screenSize.height + " " + screenSize.width);
+//		if (screenSize.width > 1024) {
+//			eventsContainer.setBounds(50, 225, 1400, 400);
+//		} else {
+//			eventsContainer.setBounds(50, 225, 1100, 400);
+//		}
+		
+//		eventsContainer.setBounds(50, 225, 1100, 400);
+		
+		
+//		//Componente de prueba para añadir al panel
+//		JLabel oneLabel = new JLabel("Texto de prueba");
+//		oneLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+//		oneLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+//		oneLabel.setBounds(50, 50, 200, 25);
+//		eventsContainer.add(oneLabel);
+		
+		JPanel updatesContainer = new JPanel();
+		updatesContainer.setLayout(null);
+		TitledBorder titledBorder2 = BorderFactory.createTitledBorder("Actualizaciones");
+		updatesContainer.setBorder(titledBorder2);
+		Border margin2 = new EmptyBorder(15, 15, 15, 15);
+		updatesContainer.setBorder(new CompoundBorder(updatesContainer.getBorder(), margin2));
+		updatesContainer.setBounds(50, 650, 1100, 350);
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		System.out.println(screenSize.height + " " + screenSize.width);
+		if (screenSize.width <= 1024) {
+			eventsContainer.setBounds(50, 225, 1100, 400);
+			updatesContainer.setBounds(50, 650, 1100, 350);
+		} else if (screenSize.width > 1024 && screenSize.width < 1400 ) {
+			eventsContainer.setBounds(50, 225, 1200, 400);
+			updatesContainer.setBounds(50, 650, 1200, 350);
+		} else {
+			eventsContainer.setBounds(50, 225, 1700, 400);
+			updatesContainer.setBounds(50, 650, 1700, 350);
+		}
+		
+		
 		add(eventsContainer);
+		add(updatesContainer);
 		
 		
 		companyField = new JTextField();
@@ -128,6 +182,11 @@ public class EventDataUI extends JPanel{
 		
 		//Por defecto se muestran los últimos 25 eventos registrados
 		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+//		eventsPane.setPreferredSize(new Dimension(1650, 250));
+		eventsPane.setBounds(25, 25, 1650, 300);
+		eventsContainer.add(eventsPane);
 	
 	}
 	
@@ -191,9 +250,9 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * 
-	 * @param list
-	 * @param header
+	 * Construye la tabla de eventos con los datos y el formato deseados
+	 * @param list lista de eventos de la unidad de negocio de la sesión
+	 * @param header encabezados de las columnas de la tabla
 	 */
 	private void buildEventTable(List<Event> list, String[] header) {
 		//Encabezados de la tabla
@@ -203,6 +262,8 @@ public class EventDataUI extends JPanel{
 		for (Event event: session.getbUnit().getEvents()) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
+			String niceTime = ToolBox.formatTimestamp(event.getUpdates().get(0).getFechaHora(), DATE_TIME_PATTERN);
+			eventVector.add(niceTime.toString());
 			eventVector.add(event.getArea().getArea());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
@@ -211,6 +272,13 @@ public class EventDataUI extends JPanel{
 			dataVector.add(eventVector);
 		}
 		eventsTable = new JTable(dataVector, headerVector);
+		eventsTable.setFillsViewportHeight(true);
+		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
+		
+//		First remove the column from the view
+//			table.removeColumn(table.getColumnModel().getColumn(4));
+//		Then retrieve the data from the model.
+//			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
 		//Debug
 		System.out.println("Cambiando el contenido de la tabla de eventos");
