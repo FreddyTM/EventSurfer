@@ -1807,7 +1807,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add attributes
 			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList,
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
-			eventsContainer, updatesContainer, filtersContainer, 
+			eventsContainer, updatesContainer, filtersContainer, screenSize
 			
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1822,9 +1822,11 @@ ver 0.1.14 - EVENTDATAUI
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
 				   --add events table ok--
-		Update setPanelsDimensions() --add dimensions to filtersContainer (only to big screen)--
+				   --add eventsPane, width computed ok--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
-
+		Update setPanelsDimensions() --add dimensions to filtersContainer--
+					     --filtersContainer x position computed--
+		
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --in progress, add buildEventTable()--
 

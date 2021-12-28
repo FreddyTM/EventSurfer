@@ -49,7 +49,7 @@ import main.java.toolbox.ToolBox;
 public class EventDataUI extends JPanel{
 	
 	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha / Hora", "Area", "Tipo", "Título", "Descripción", "Estado"};
-	private static final String[] UPDATES_TABLE_HEADER = {"Fecha / Hora", "Actualización", "Autor", "Usuario"};
+	private static final String[] UPDATES_TABLE_HEADER = {"ID", "Event_ID", "Fecha / Hora", "Actualización", "Autor", "Usuario"};
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
 	
 	private CurrentSession session;
@@ -132,43 +132,23 @@ public class EventDataUI extends JPanel{
 		updatesContainer.setBorder(titledBorder2);
 		Border margin2 = new EmptyBorder(15, 15, 15, 15);
 		updatesContainer.setBorder(new CompoundBorder(updatesContainer.getBorder(), margin2));
-//		updatesContainer.setBounds(50, 650, 1100, 350);
-		
-		
-		
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		System.out.println(screenSize.height + " " + screenSize.width);
-//		if (screenSize.width <= 1280) {
-//			eventsContainer.setBounds(50, 225, 1100, 400);
-//			updatesContainer.setBounds(50, 650, 1100, 350);
-//		} else if (screenSize.width > 1280 && screenSize.width < 1450 ) {
-//			eventsContainer.setBounds(50, 225, 1200, 400);
-//			updatesContainer.setBounds(50, 650, 1200, 350);
-//		} else {
-//			eventsContainer.setBounds(50, 225, 1700, 400);
-//			updatesContainer.setBounds(50, 650, 1700, 350);
-//		}
 		
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
-		filtersContainer.setBackground(Color.BLUE);
+		filtersContainer.setBackground(Color.CYAN);
 		
 		setPanelsDimensions(screenSize);
-//		setTablePanelDimensions(updatesContainer, screenSize);
 		
 		eventsContainer.add(filtersContainer);
 		add(eventsContainer);
 		add(updatesContainer);
-		
-		
+				
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		companyField.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		companyField.setBounds(260, 125, 400, 25);
 		companyField.setText(session.getbUnit().getCompany().getNombre());
 		companyField.setEditable(false);
-//		textFieldList.add(companyField);
-//		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
 		activeFilterCheckBox = new JCheckBox(" solo activas");
@@ -196,10 +176,8 @@ public class EventDataUI extends JPanel{
 		
 		//Por defecto se muestran los últimos 25 eventos registrados
 		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-//		eventsPane.setPreferredSize(new Dimension(1650, 250));
-		eventsPane.setBounds(25, 25, 1400, 300);
+		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
+		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 300, 300);
 		eventsContainer.add(eventsPane);
 	
 	}
@@ -288,7 +266,6 @@ public class EventDataUI extends JPanel{
 			case "small":
 				eventsContainer.setBounds(50, 225, 1100, 400);
 				updatesContainer.setBounds(50, 650, 1100, 350);
-				
 				break;
 			case "medium":
 				eventsContainer.setBounds(50, 225, 1200, 400);
@@ -297,8 +274,8 @@ public class EventDataUI extends JPanel{
 			case "big":
 				eventsContainer.setBounds(50, 225, 1700, 400);
 				updatesContainer.setBounds(50, 650, 1700, 350);
-				filtersContainer.setBounds(1450, 25, 225, 300);
 		}
+		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
 	}
 	
 	/**
