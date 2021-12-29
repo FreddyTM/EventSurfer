@@ -285,14 +285,14 @@ public class EventDataUI extends JPanel{
 	 */
 	private void buildEventTable(List<Event> list, String[] header) {
 		//Encabezados de la tabla
-		Vector<String> headerVector = new Vector<String>(Arrays.asList(header));
+		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
 		for (Event event: session.getbUnit().getEvents()) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
-			String niceTime = ToolBox.formatTimestamp(event.getUpdates().get(0).getFechaHora(), DATE_TIME_PATTERN);
-			eventVector.add(niceTime);
+//			String niceTime = ToolBox.formatTimestamp(event.getUpdates().get(0).getFechaHora(), DATE_TIME_PATTERN);
+			eventVector.add(event.getUpdates().get(0).getFechaHora());
 			eventVector.add(event.getArea().getArea());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
@@ -306,7 +306,11 @@ public class EventDataUI extends JPanel{
 				 Component comp = super.prepareRenderer(renderer, row, col);
 				 JComponent jcomp = (JComponent)comp;
 				 if (comp == jcomp) {
-					 jcomp.setToolTipText((String)getValueAt(row, col));
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {
+						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
+					 } else {						 
+						 jcomp.setToolTipText((String)getValueAt(row, col));
+					 }
 				 }
 				 return comp;
 			}
@@ -315,8 +319,8 @@ public class EventDataUI extends JPanel{
 		eventsTable.setAutoCreateRowSorter(true);
 		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
 		//Ancho columna Fecha
-		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
-		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
+		eventsTable.getColumnModel().getColumn(0).setMinWidth(140);
+		eventsTable.getColumnModel().getColumn(0).setMaxWidth(140);
 		//Ancho columna Area
 		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
 		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);

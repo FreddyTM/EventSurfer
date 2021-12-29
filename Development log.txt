@@ -1817,7 +1817,8 @@ ver 0.1.14 - EVENTDATAUI
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
-					 --columns size ok, tooltips ok, still in progress--
+					 --columns size ok, tooltips ok--
+					 --vectors only use objects, date will need a cell renderer, still in progress--
 		Update constructor --add company field, bUnit combobox (not ready yet), checkbox (not ready yet)--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
