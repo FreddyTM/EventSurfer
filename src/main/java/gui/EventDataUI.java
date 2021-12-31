@@ -38,13 +38,16 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.event.Event;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
+import main.java.types_states.TypesStatesContainer;
 
 public class EventDataUI extends JPanel{
 	
@@ -291,7 +294,6 @@ public class EventDataUI extends JPanel{
 		for (Event event: session.getbUnit().getEvents()) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
-//			String niceTime = ToolBox.formatTimestamp(event.getUpdates().get(0).getFechaHora(), DATE_TIME_PATTERN);
 			eventVector.add(event.getUpdates().get(0).getFechaHora());
 			eventVector.add(event.getArea().getArea());
 			eventVector.add(event.getEventType());
@@ -318,9 +320,15 @@ public class EventDataUI extends JPanel{
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
 		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
+		//Cell renderer para la columna Fecha / Hora
+		TableColumn tableCol = eventsTable.getColumnModel().getColumn(0);
+		tableCol.setCellRenderer(new EventTableCellRenderer());
+		//Cell renderer para la columna Estado
+		tableCol = eventsTable.getColumnModel().getColumn(5);
+		tableCol.setCellRenderer(new EventTableCellRenderer());
 		//Ancho columna Fecha
-		eventsTable.getColumnModel().getColumn(0).setMinWidth(140);
-		eventsTable.getColumnModel().getColumn(0).setMaxWidth(140);
+		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
+		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
 		//Ancho columna Area
 		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
 		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);
@@ -438,6 +446,29 @@ public class EventDataUI extends JPanel{
 				//Renovamos la lista de las unidades de negocio del comboBox
 				refreshComboBox();
 			}
+		}
+	}
+	
+	/**
+	 * Cell Renderer que da formato a la tabla de eventos. En concreto da formato a la columna Fecha / Hora y a la columna Estado
+	 * La columna Fecha / Hora muestra la fecha y la hora en el formato DATE_TIME_PATTERN
+	 * Las celdas de la columna Estado tendrán fondo rojo si la incidencia está abierta, amarillo si está en curso, y verde si está cerrada
+	 */
+	private class EventTableCellRenderer extends DefaultTableCellRenderer {
+		public Component getTableCellRendererComponent (JTable table, 
+				Object obj, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component cell = super.getTableCellRendererComponent(
+					   table, obj, isSelected, hasFocus, row, column);
+			if (eventsTable.getValueAt(row, column).getClass() == Timestamp.class) {
+				setText(ToolBox.formatTimestamp((Timestamp)eventsTable.getValueAt(row, column), DATE_TIME_PATTERN));
+			} else if (eventsTable.getValueAt(row, column).equals(TypesStatesContainer.getEvState().getEventState(1))) {
+				cell.setBackground(Color.RED);
+			} else if (eventsTable.getValueAt(row, column).equals(TypesStatesContainer.getEvState().getEventState(2))) {
+				cell.setBackground(Color.YELLOW);
+			} else if (eventsTable.getValueAt(row, column).equals(TypesStatesContainer.getEvState().getEventState(3))) {
+				cell.setBackground(Color.GREEN);	
+			}
+			return cell;
 		}
 	}
 
