@@ -320,28 +320,7 @@ public class EventDataUI extends JPanel{
 		};
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
-		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
-		//Cell renderer para la columna Fecha / Hora
-		TableColumn tableCol = eventsTable.getColumnModel().getColumn(0);
-		tableCol.setCellRenderer(new EventTableCellRenderer());
-		//Cell renderer para la columna Estado
-		tableCol = eventsTable.getColumnModel().getColumn(5);
-		tableCol.setCellRenderer(new EventTableCellRenderer());
-		//Ancho columna Fecha
-		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
-		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
-		//Ancho columna Area
-		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
-		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);
-		//Ancho columna Tipo
-		eventsTable.getColumnModel().getColumn(2).setMinWidth(175);
-		eventsTable.getColumnModel().getColumn(2).setMaxWidth(175);
-		//Ancho columna Título
-		eventsTable.getColumnModel().getColumn(3).setMinWidth(225);
-		eventsTable.getColumnModel().getColumn(3).setMaxWidth(225);
-		//Ancho columna Estado
-		eventsTable.getColumnModel().getColumn(5).setMinWidth(75);
-		eventsTable.getColumnModel().getColumn(5).setMaxWidth(75);
+		formatEventTable();
 		
 //		First remove the column from the view
 //			table.removeColumn(table.getColumnModel().getColumn(4));
@@ -377,7 +356,33 @@ public class EventDataUI extends JPanel{
 		}
 		DefaultTableModel model = new DefaultTableModel(dataVector, headerVector);
 		eventsTable.setModel(model);
+		formatEventTable();
 		eventsTable.repaint();
+	}
+	
+	private void formatEventTable() {
+		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
+		//Cell renderer para la columna Fecha / Hora
+		TableColumn tableCol = eventsTable.getColumnModel().getColumn(0);
+		tableCol.setCellRenderer(new EventTableCellRenderer());
+		//Cell renderer para la columna Estado
+		tableCol = eventsTable.getColumnModel().getColumn(5);
+		tableCol.setCellRenderer(new EventTableCellRenderer());
+		//Ancho columna Fecha
+		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
+		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
+		//Ancho columna Area
+		eventsTable.getColumnModel().getColumn(1).setMinWidth(175);
+		eventsTable.getColumnModel().getColumn(1).setMaxWidth(175);
+		//Ancho columna Tipo
+		eventsTable.getColumnModel().getColumn(2).setMinWidth(175);
+		eventsTable.getColumnModel().getColumn(2).setMaxWidth(175);
+		//Ancho columna Título
+		eventsTable.getColumnModel().getColumn(3).setMinWidth(225);
+		eventsTable.getColumnModel().getColumn(3).setMaxWidth(225);
+		//Ancho columna Estado
+		eventsTable.getColumnModel().getColumn(5).setMinWidth(75);
+		eventsTable.getColumnModel().getColumn(5).setMaxWidth(75);
 	}
 	
 	/**

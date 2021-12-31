@@ -1816,7 +1816,8 @@ ver 0.1.14 - EVENTDATAUI
 		Add buildEventTable()
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
-		Add updateEventTable() --updated table format not ready yet--
+		Add updateEventTable() --ok, use formatEventTable()--
+		Add formatEventTable() --ok--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok--
 					 --vectors only use objects, cell renderer ok--
