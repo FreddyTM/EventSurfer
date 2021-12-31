@@ -309,8 +309,13 @@ public class EventDataUI extends JPanel{
 				 Component comp = super.prepareRenderer(renderer, row, col);
 				 JComponent jcomp = (JComponent)comp;
 				 if (comp == jcomp) {
-					 if (getValueAt(row, col).getClass() == Timestamp.class) {
-						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {						 
+//						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
+						 
+						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");
+						 //Multi-line tooltips
+						 jcomp.setToolTipText("<html><p width=\"500\">" +
+								 ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN) + "</p></html>");
 					 } else {						 
 						 jcomp.setToolTipText(getValueAt(row, col).toString());
 					 }
@@ -360,6 +365,10 @@ public class EventDataUI extends JPanel{
 		eventsTable.repaint();
 	}
 	
+	/**
+	 * Dimensiona el ancho de las columnas de la tabla de eventos y aplica el formato establecido por la clase
+	 * EventTableCellRenderer para las columnas Fecha / Hora y Estado
+	 */
 	private void formatEventTable() {
 		eventsTable.removeColumn(eventsTable.getColumnModel().getColumn(0));
 		//Cell renderer para la columna Fecha / Hora

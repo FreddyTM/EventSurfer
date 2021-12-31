@@ -1819,7 +1819,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add updateEventTable() --ok, use formatEventTable()--
 		Add formatEventTable() --ok--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
-					 --columns size ok, tooltips ok--
+					 --columns size ok, tooltips ok, multiline tooltips not tested yet--
 					 --vectors only use objects, cell renderer ok--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
