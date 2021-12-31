@@ -1807,7 +1807,8 @@ ver 0.1.14 - EVENTDATAUI
 		Add attributes
 			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList,
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
-			eventsContainer, updatesContainer, filtersContainer, screenSize
+			eventsContainer, updatesContainer, filtersContainer, screenSize, allEvents, last25, last50,
+			lastMonth, last3Months, last6Months, lastYear
 			
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1826,6 +1827,8 @@ ver 0.1.14 - EVENTDATAUI
 				   --add scrollpane ok--
 				   --add events table ok--
 				   --add eventsPane, width computed ok--
+				   --add filtersContainer--
+				   --add filterGroup & radio buttons, not yet to filtersContainer--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer--
 					     --filtersContainer x position computed--
@@ -1838,3 +1841,6 @@ ver 0.1.14 - EVENTDATAUI
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
+
+	· EventFilterAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--

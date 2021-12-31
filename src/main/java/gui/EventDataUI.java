@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.Dimension;
@@ -19,7 +20,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -27,6 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -73,6 +77,15 @@ public class EventDataUI extends JPanel{
 	private JPanel filtersContainer;
 	private JTable eventsTable;
 	private JTable updatesTable;
+	
+	//Radio buttons
+	private JRadioButton allEvents = new JRadioButton("Todos");
+	private JRadioButton last25 = new JRadioButton("Últimos 25");
+	private JRadioButton last50 = new JRadioButton("Últimos 50");
+	private JRadioButton lastMonth = new JRadioButton("Último mes");
+	private JRadioButton last3Months = new JRadioButton("Último trimestre");
+	private JRadioButton last6Months = new JRadioButton("Último semestre");
+	private JRadioButton lastYear = new JRadioButton("Último año");
 	
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
@@ -140,6 +153,23 @@ public class EventDataUI extends JPanel{
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
 		filtersContainer.setBackground(Color.CYAN);
+		ButtonGroup filterGroup = new ButtonGroup();
+		filterGroup.add(allEvents);
+		filterGroup.add(last25);
+		last25.setSelected(true);
+		filterGroup.add(last50);
+		filterGroup.add(lastMonth);
+		filterGroup.add(last3Months);
+		filterGroup.add(last6Months);
+		filterGroup.add(lastYear);
+		allEvents.setAction(new EventFilterAction());
+		last25.setAction(new EventFilterAction());
+		last50.setAction(new EventFilterAction());
+		lastMonth.setAction(new EventFilterAction());
+		last3Months.setAction(new EventFilterAction());
+		last6Months.setAction(new EventFilterAction());
+		lastYear.setAction(new EventFilterAction());
+
 		
 		setPanelsDimensions(screenSize);
 		
@@ -512,6 +542,22 @@ public class EventDataUI extends JPanel{
 			}
 			return cell;
 		}
+	}
+	
+	private class EventFilterAction extends AbstractAction {
+		public EventFilterAction() {
+			putValue(NAME, "Filtrar eventos");
+			putValue(SHORT_DESCRIPTION, "Filter event table elements");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+//			if (e.getSource() == radioButtonName) {
+//				
+//			}
+			
+		}
+		
 	}
 
 }
