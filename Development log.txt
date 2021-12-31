@@ -1816,9 +1816,10 @@ ver 0.1.14 - EVENTDATAUI
 		Add buildEventTable()
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
+		Add updateEventTable() --updated table format not ready yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok--
-					 --vectors only use objects, date will need a cell renderer, still in progress--
+					 --vectors only use objects, cell renderer ok--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1829,10 +1830,10 @@ ver 0.1.14 - EVENTDATAUI
 					     --filtersContainer x position computed--
 		
 	· ComboListener class (new inner EventDataUI class):
-		Update itemStateChanged() --in progress, add buildEventTable()--
+		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 
 	· CheckBoxListener class (new inner EventDataUI class):
-		Update itemStateChanged() --in progress, add buildEventTable()--
+		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--

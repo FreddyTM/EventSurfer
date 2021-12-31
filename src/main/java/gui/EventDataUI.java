@@ -39,6 +39,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -311,7 +312,7 @@ public class EventDataUI extends JPanel{
 					 if (getValueAt(row, col).getClass() == Timestamp.class) {
 						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
 					 } else {						 
-						 jcomp.setToolTipText((String)getValueAt(row, col));
+						 jcomp.setToolTipText(getValueAt(row, col).toString());
 					 }
 				 }
 				 return comp;
@@ -353,6 +354,33 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Actualiza la tabla de eventos con los datos y el formato deseados
+	 * @param list lista de eventos de la unidad de negocio de la sesión
+	 * @param header encabezados de las columnas de la tabla
+	 * @param mode --opción de incorporar la ordenación / filtrado de la lista dentro del método, reevaluar--
+	 */
+	private void updateEventTable(List<Event> list, String[] header, String mode) {
+		//Encabezados de la tabla
+		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
+		//Datos de la tabla
+		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
+		for (Event event: session.getbUnit().getEvents()) {
+			Vector<Object> eventVector = new Vector<Object>();
+			eventVector.add((Integer) event.getId());
+			eventVector.add(event.getUpdates().get(0).getFechaHora());
+			eventVector.add(event.getArea().getArea());
+			eventVector.add(event.getEventType());
+			eventVector.add(event.getTitulo());
+			eventVector.add(event.getDescripcion());
+			eventVector.add(event.getEventState());
+			dataVector.add(eventVector);
+		}
+		DefaultTableModel model = new DefaultTableModel(dataVector, headerVector);
+		eventsTable.setModel(model);
+		eventsTable.repaint();
+	}
+	
+	/**
 	 * Retorna un timestamp a partir de un string que sigue el formato de DATE_TIME_PATTERN
 	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
 	 * @return Timestamp con la fecha y la hora pasadas por parámetro
@@ -385,7 +413,7 @@ public class EventDataUI extends JPanel{
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
 			//Renovamos la tabla de eventos
-			buildEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER);
+			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
 
 			
 //			//Mostramos sus datos
@@ -433,7 +461,7 @@ public class EventDataUI extends JPanel{
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 					//Renovamos la tabla de eventos
-					buildEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER);
+					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
 					
 //					//Vaciamos label de información
 //					infoLabel.setText("");
