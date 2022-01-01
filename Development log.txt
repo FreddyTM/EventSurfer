@@ -1828,7 +1828,8 @@ ver 0.1.14 - EVENTDATAUI
 				   --add events table ok--
 				   --add eventsPane, width computed ok--
 				   --add filtersContainer--
-				   --add filterGroup & radio buttons, not yet to filtersContainer--
+				   --add filterGroup & radio buttons with action set--
+				   --font & bounds of radio buttons & add to filtersContainer--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer--
 					     --filtersContainer x position computed--
@@ -1843,4 +1844,4 @@ ver 0.1.14 - EVENTDATAUI
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
 
 	· EventFilterAction (new inner EventDataUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() --different code will be executed depending on the source, not ready yet--

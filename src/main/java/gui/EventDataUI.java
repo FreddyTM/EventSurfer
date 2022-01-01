@@ -154,14 +154,43 @@ public class EventDataUI extends JPanel{
 		filtersContainer.setLayout(null);
 		filtersContainer.setBackground(Color.CYAN);
 		ButtonGroup filterGroup = new ButtonGroup();
+		
+		allEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		allEvents.setBounds(25, 25, 200, 25);
 		filterGroup.add(allEvents);
+		filtersContainer.add(allEvents);
+		
+		last25.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		last25.setBounds(25, 75, 200, 25);
 		filterGroup.add(last25);
 		last25.setSelected(true);
+		filtersContainer.add(last25);
+		
+		last50.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		last50.setBounds(25, 125, 200, 25);
 		filterGroup.add(last50);
+		filtersContainer.add(last50);
+		
+		lastMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lastMonth.setBounds(25, 175, 200, 25);
 		filterGroup.add(lastMonth);
+		filtersContainer.add(lastMonth);
+		
+		last3Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		last3Months.setBounds(25, 225, 200, 25);
 		filterGroup.add(last3Months);
+		filtersContainer.add(last3Months);
+		
+		last6Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		last6Months.setBounds(25, 275, 200, 25);
 		filterGroup.add(last6Months);
+		filtersContainer.add(last6Months);
+		
+		lastYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lastYear.setBounds(25, 325, 200, 25);
 		filterGroup.add(lastYear);
+		filtersContainer.add(lastYear);
+		
 		allEvents.setAction(new EventFilterAction());
 		last25.setAction(new EventFilterAction());
 		last50.setAction(new EventFilterAction());
@@ -544,6 +573,9 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción que ejecuta el filtrado de eventos en función de la selección del grupo de radio buttons
+	 */
 	private class EventFilterAction extends AbstractAction {
 		public EventFilterAction() {
 			putValue(NAME, "Filtrar eventos");
@@ -552,9 +584,31 @@ public class EventDataUI extends JPanel{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			if (e.getSource() == radioButtonName) {
-//				
-//			}
+			//Debug
+			System.out.println("Filtro seleccionado: " + e.getSource().toString());
+			
+			if (e.getSource() == allEvents) {
+				//Todos los eventos de la unidad de negocio de la sesión
+
+			} else if (e.getSource() == last25) {
+				//Últimos 25 eventos
+				
+			} else if (e.getSource() == last50) {
+				//Últimos 50 eventos
+				
+			} else if (e.getSource() == lastMonth) {
+				//Eventos de un mes atrás desde el presente día
+				
+			} else if (e.getSource() == last3Months) {
+				//Eventos de 3 meses atrás desde el presente día
+				
+			} else if (e.getSource() == last6Months) {
+				//Eventos de 6 meses atrás desde el presente día
+				
+			} else if (e.getSource() == lastYear) {
+				//Eventos de un año atrás desde el presente día
+				
+			}
 			
 		}
 		
