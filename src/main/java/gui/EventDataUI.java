@@ -7,6 +7,7 @@ import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.Dimension;
@@ -152,52 +153,53 @@ public class EventDataUI extends JPanel{
 		
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
-		filtersContainer.setBackground(Color.CYAN);
+//		filtersContainer.setBackground(Color.CYAN);
 		ButtonGroup filterGroup = new ButtonGroup();
 		
 		allEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		allEvents.setBounds(25, 25, 200, 25);
+		allEvents.setBounds(0, 0, 200, 25);
+		allEvents.setText("Todos");
 		filterGroup.add(allEvents);
 		filtersContainer.add(allEvents);
 		
 		last25.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		last25.setBounds(25, 75, 200, 25);
+		last25.setBounds(0, 40, 200, 25);
 		filterGroup.add(last25);
 		last25.setSelected(true);
 		filtersContainer.add(last25);
 		
 		last50.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		last50.setBounds(25, 125, 200, 25);
+		last50.setBounds(0, 80, 200, 25);
 		filterGroup.add(last50);
 		filtersContainer.add(last50);
 		
 		lastMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lastMonth.setBounds(25, 175, 200, 25);
+		lastMonth.setBounds(0, 120, 200, 25);
 		filterGroup.add(lastMonth);
 		filtersContainer.add(lastMonth);
 		
 		last3Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		last3Months.setBounds(25, 225, 200, 25);
+		last3Months.setBounds(0, 160, 200, 25);
 		filterGroup.add(last3Months);
 		filtersContainer.add(last3Months);
 		
 		last6Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		last6Months.setBounds(25, 275, 200, 25);
+		last6Months.setBounds(0, 200, 200, 25);
 		filterGroup.add(last6Months);
 		filtersContainer.add(last6Months);
 		
 		lastYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lastYear.setBounds(25, 325, 200, 25);
+		lastYear.setBounds(0, 240, 200, 25);
 		filterGroup.add(lastYear);
 		filtersContainer.add(lastYear);
 		
-		allEvents.setAction(new EventFilterAction());
-		last25.setAction(new EventFilterAction());
-		last50.setAction(new EventFilterAction());
-		lastMonth.setAction(new EventFilterAction());
-		last3Months.setAction(new EventFilterAction());
-		last6Months.setAction(new EventFilterAction());
-		lastYear.setAction(new EventFilterAction());
+		allEvents.addActionListener(new EventFilterListener());
+		last25.addActionListener(new EventFilterListener());
+		last50.addActionListener(new EventFilterListener());
+		lastMonth.addActionListener(new EventFilterListener());
+		last3Months.addActionListener(new EventFilterListener());
+		last6Months.addActionListener(new EventFilterListener());
+		lastYear.addActionListener(new EventFilterListener());
 
 		
 		setPanelsDimensions(screenSize);
@@ -240,7 +242,8 @@ public class EventDataUI extends JPanel{
 		//Por defecto se muestran los últimos 25 eventos registrados
 		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
-		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 300, 300);
+//		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 300, 300);
+		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 250, 300);
 		eventsContainer.add(eventsPane);
 	
 	}
@@ -338,7 +341,8 @@ public class EventDataUI extends JPanel{
 				eventsContainer.setBounds(50, 225, 1700, 400);
 				updatesContainer.setBounds(50, 650, 1700, 350);
 		}
-		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
+//		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
+		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 300);
 	}
 	
 	/**
@@ -449,8 +453,8 @@ public class EventDataUI extends JPanel{
 		eventsTable.getColumnModel().getColumn(3).setMinWidth(225);
 		eventsTable.getColumnModel().getColumn(3).setMaxWidth(225);
 		//Ancho columna Estado
-		eventsTable.getColumnModel().getColumn(5).setMinWidth(75);
-		eventsTable.getColumnModel().getColumn(5).setMaxWidth(75);
+		eventsTable.getColumnModel().getColumn(5).setMinWidth(100);
+		eventsTable.getColumnModel().getColumn(5).setMaxWidth(100);
 	}
 	
 	/**
@@ -574,39 +578,61 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Acción que ejecuta el filtrado de eventos en función de la selección del grupo de radio buttons
+	 * Listener que dispara el filtrado de eventos
 	 */
-	private class EventFilterAction extends AbstractAction {
-		public EventFilterAction() {
-			putValue(NAME, "Filtrar eventos");
-			putValue(SHORT_DESCRIPTION, "Filter event table elements");
-		}
-		
+	private class EventFilterListener implements ActionListener {
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Debug
-			System.out.println("Filtro seleccionado: " + e.getSource().toString());
 			
 			if (e.getSource() == allEvents) {
 				//Todos los eventos de la unidad de negocio de la sesión
+				updateEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER, null);
+				
+				//Debug
+				System.out.println("Listener All");
 
 			} else if (e.getSource() == last25) {
 				//Últimos 25 eventos
+				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
+				
+				//Debug
+				System.out.println("Listener 25");
 				
 			} else if (e.getSource() == last50) {
 				//Últimos 50 eventos
+				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 50), EVENTS_TABLE_HEADER, null);
+				
+				//Debug
+				System.out.println("Listener 50");
 				
 			} else if (e.getSource() == lastMonth) {
 				//Eventos de un mes atrás desde el presente día
 				
+				
+				//Debug
+				System.out.println("Listener lastMonth");
+				
 			} else if (e.getSource() == last3Months) {
 				//Eventos de 3 meses atrás desde el presente día
+				
+				
+				//Debug
+				System.out.println("Listener last3Months");
 				
 			} else if (e.getSource() == last6Months) {
 				//Eventos de 6 meses atrás desde el presente día
 				
+				
+				//Debug
+				System.out.println("Listener last6Months");
+				
 			} else if (e.getSource() == lastYear) {
 				//Eventos de un año atrás desde el presente día
+				
+				
+				//Debug
+				System.out.println("Listener lastYear");
 				
 			}
 			
