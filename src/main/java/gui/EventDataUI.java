@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.Vector;
@@ -83,7 +84,7 @@ public class EventDataUI extends JPanel{
 	private JRadioButton allEvents = new JRadioButton("Todos");
 	private JRadioButton last25 = new JRadioButton("Últimos 25");
 	private JRadioButton last50 = new JRadioButton("Últimos 50");
-	private JRadioButton lastMonth = new JRadioButton("Último mes");
+	private JRadioButton lastMonth = new JRadioButton("Presente mes");
 	private JRadioButton last3Months = new JRadioButton("Último trimestre");
 	private JRadioButton last6Months = new JRadioButton("Último semestre");
 	private JRadioButton lastYear = new JRadioButton("Último año");
@@ -294,7 +295,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Devuelve los últimos elementos de una lista. Si la lista tiene menos elementos de los que buscamos, retornamos la lista
+	 * Devuelve los últimos eventos de la lista. Si la lista tiene menos eventos de los que buscamos, retornamos la lista
 	 * sin modificar
 	 * @param list lista de la que buscamos los últimos elementos
 	 * @param number número de elementos que obtendremos de la lista
@@ -304,6 +305,46 @@ public class EventDataUI extends JPanel{
 		if (list.size() > 25) {
 			return list.subList(list.size() - number, list.size() - 1);
 		}
+		return list;
+	}
+	
+	/**
+	 * Devuelve los eventos de la lista que están en el rango de fechas delimitado por el parámetro months
+	 * @param list lista de la que buscamos los eventos que están dentro del rango de fechas
+	 * @param months número de meses hacia atrás desde el presente mes en el que los eventos se tienen que haber registrado
+	 * para ser incluidos en la lista
+	 * @return lista filtrada con los eventos que están dentro del rango de fechas
+	 */
+	private List<Event> getLastEventsByDate(List<Event> list, int months) {
+		Timestamp reference = ToolBox.getTimestampNow();
+		Calendar calendar = Calendar.getInstance();
+	    calendar.setTimeInMillis(reference.getTime());
+	    if (months == 0 || months > 0) {
+	    	switch (months) {
+	    		case 0:
+	    			for (Event event : list) {
+	    				Calendar eventReference = Calendar.getInstance();
+	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				if (calendar.get(Calendar.MONTH) != eventReference.get(Calendar.MONTH)) {
+	    					list.remove(event);
+	    				}
+	    			}
+	    			break;
+	    		case 3:
+	    			
+	    			break;
+	    		case 6:
+	    			
+	    			break;
+	    		case 12:
+	    			
+	    			break;
+	    		default:
+	    			System.out.println("Error de filtrado, criterio no previsto");
+	    	}
+	    }
+	    calendar.add(Calendar.MONTH, Math.negateExact(months));
+		
 		return list;
 	}
 	
@@ -491,7 +532,8 @@ public class EventDataUI extends JPanel{
 			session.setbUnit(selectedBunit);
 			//Renovamos la tabla de eventos
 			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
-
+			//Seleccionamos el filtro
+			last25.setSelected(true);
 			
 //			//Mostramos sus datos
 //			populateTextFields();
@@ -539,6 +581,8 @@ public class EventDataUI extends JPanel{
 					refreshComboBox();
 					//Renovamos la tabla de eventos
 					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
+					//Seleccionamos el filtro
+					last25.setSelected(true);
 					
 //					//Vaciamos label de información
 //					infoLabel.setText("");

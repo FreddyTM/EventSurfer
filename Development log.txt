@@ -1819,6 +1819,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok, use formatEventTable()--
 		Add formatEventTable() --ok, state column redimension--
+		Add getLastEventsByDate() --in progress--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips not tested yet--
 					 --vectors only use objects, cell renderer ok--
@@ -1836,9 +1837,11 @@ ver 0.1.14 - EVENTDATAUI
 		
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
+					  --add filter selection--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
+					  --add filter selection--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
