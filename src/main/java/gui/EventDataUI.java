@@ -87,7 +87,8 @@ public class EventDataUI extends JPanel{
 	private JRadioButton lastMonth = new JRadioButton("Presente mes");
 	private JRadioButton last3Months = new JRadioButton("Último trimestre");
 	private JRadioButton last6Months = new JRadioButton("Último semestre");
-	private JRadioButton lastYear = new JRadioButton("Último año");
+	private JRadioButton lastYear = new JRadioButton("Presente año");
+	//private JradioButton previousYear = new JRadioButton("Año anterior");
 	
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
@@ -311,41 +312,85 @@ public class EventDataUI extends JPanel{
 	/**
 	 * Devuelve los eventos de la lista que están en el rango de fechas delimitado por el parámetro months
 	 * @param list lista de la que buscamos los eventos que están dentro del rango de fechas
-	 * @param months número de meses hacia atrás desde el presente mes en el que los eventos se tienen que haber registrado
-	 * para ser incluidos en la lista
+	 * @param months número de meses que se incluyen en la lista de eventos, desde el presente mes (incluido)
+	 * hacia atrás. Los eventos se tienen que haber registrado en alguno de esos meses para formar parte de la lista
 	 * @return lista filtrada con los eventos que están dentro del rango de fechas
 	 */
 	private List<Event> getLastEventsByDate(List<Event> list, int months) {
-		Timestamp reference = ToolBox.getTimestampNow();
-		Calendar calendar = Calendar.getInstance();
-	    calendar.setTimeInMillis(reference.getTime());
-	    if (months == 0 || months > 0) {
+		List<Event> filteredList = new ArrayList<Event>();
+		Timestamp timestamp = ToolBox.getTimestampNow();
+		Calendar calendarReference = Calendar.getInstance();
+	    calendarReference.setTimeInMillis(timestamp.getTime());
+	    Calendar eventReference = Calendar.getInstance();
+	    if (months >= 0) {
 	    	switch (months) {
 	    		case 0:
 	    			for (Event event : list) {
-	    				Calendar eventReference = Calendar.getInstance();
 	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
-	    				if (calendar.get(Calendar.MONTH) != eventReference.get(Calendar.MONTH)) {
-	    					list.remove(event);
+	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
+	    					filteredList.add(event);
 	    				}
 	    			}
 	    			break;
 	    		case 3:
-	    			
+	    			Calendar calendar3Reference1 = Calendar.getInstance();
+	    			calendar3Reference1.setTimeInMillis(timestamp.getTime());
+	    			calendar3Reference1.add(Calendar.MONTH, -1);
+	    			Calendar calendar3Reference2 = Calendar.getInstance();
+	    			calendar3Reference2.setTimeInMillis(timestamp.getTime());
+	    			calendar3Reference2.add(Calendar.MONTH, -2);
+	    			for (Event event : list) {
+	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar3Reference1.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar3Reference2.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
+	    					filteredList.add(event);
+	    				}
+	    			}
 	    			break;
 	    		case 6:
-	    			
+	    			Calendar calendar6Reference1 = Calendar.getInstance();
+	    			calendar6Reference1.setTimeInMillis(timestamp.getTime());
+	    			calendar6Reference1.add(Calendar.MONTH, -1);
+	    			Calendar calendar6Reference2 = Calendar.getInstance();
+	    			calendar6Reference2.setTimeInMillis(timestamp.getTime());
+	    			calendar6Reference2.add(Calendar.MONTH, -2);
+	    			Calendar calendar6Reference3 = Calendar.getInstance();
+	    			calendar6Reference3.setTimeInMillis(timestamp.getTime());
+	    			calendar6Reference3.add(Calendar.MONTH, -3);
+	    			Calendar calendar6Reference4 = Calendar.getInstance();
+	    			calendar6Reference4.setTimeInMillis(timestamp.getTime());
+	    			calendar6Reference4.add(Calendar.MONTH, -4);
+	    			Calendar calendar6Reference5 = Calendar.getInstance();
+	    			calendar6Reference5.setTimeInMillis(timestamp.getTime());
+	    			calendar6Reference5.add(Calendar.MONTH, -5);
+	    			for (Event event : list) {
+	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar6Reference1.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar6Reference2.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar6Reference3.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar6Reference4.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						|| calendar6Reference5.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
+	    					filteredList.add(event);
+	    				}
+	    			}
 	    			break;
 	    		case 12:
-	    			
+	    			for (Event event : list) {
+	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				if (calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
+	    					filteredList.add(event);
+	    				}
+	    			}
 	    			break;
 	    		default:
 	    			System.out.println("Error de filtrado, criterio no previsto");
 	    	}
 	    }
-	    calendar.add(Calendar.MONTH, Math.negateExact(months));
+//	    calendarReference.add(Calendar.MONTH, Math.negateExact(months));
 		
-		return list;
+		return filteredList;
 	}
 	
 	/**
