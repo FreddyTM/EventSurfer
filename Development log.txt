@@ -1808,7 +1808,7 @@ ver 0.1.14 - EVENTDATAUI
 			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList,
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
 			eventsContainer, updatesContainer, filtersContainer, screenSize, allEvents, last25, last50,
-			lastMonth, last3Months, last6Months, lastYear
+			lastMonth, last3Months, last6Months, lastYear, newEventButton, editEventButton, deleteEventButton
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--

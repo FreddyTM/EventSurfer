@@ -26,6 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -80,6 +81,10 @@ public class EventDataUI extends JPanel{
 	private JTable eventsTable;
 	private JTable updatesTable;
 	
+	private JButton newEventButton;
+	private JButton editEventButton;
+	private JButton deleteEventButton;
+	
 	//Radio buttons
 	private JRadioButton allEvents = new JRadioButton("Todos");
 	private JRadioButton last25 = new JRadioButton("Últimos 25");
@@ -125,6 +130,21 @@ public class EventDataUI extends JPanel{
 		eventsContainer.setBorder(titledBorder);
 		Border margin = new EmptyBorder(15, 15, 15, 15);
 		eventsContainer.setBorder(new CompoundBorder(eventsContainer.getBorder(), margin));
+		
+		newEventButton = new JButton("Nueva");
+//		newEventButton.setAction(newEventAction);
+		newEventButton.setBounds(25, 365, 89, 23);
+		eventsContainer.add(newEventButton);
+		
+		editEventButton = new JButton("Editar");
+//		newEventButton.setAction(newEventAction);
+		editEventButton.setBounds(125, 365, 89, 23);
+		eventsContainer.add(editEventButton);
+		
+		deleteEventButton = new JButton("Borrar");
+//		newEventButton.setAction(newEventAction);
+		deleteEventButton.setBounds(225, 365, 89, 23);
+		eventsContainer.add(deleteEventButton);
 		
 		//This code to windowlistener
 		
