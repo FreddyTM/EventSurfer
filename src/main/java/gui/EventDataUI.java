@@ -84,10 +84,10 @@ public class EventDataUI extends JPanel{
 	private JRadioButton allEvents = new JRadioButton("Todos");
 	private JRadioButton last25 = new JRadioButton("Últimos 25");
 	private JRadioButton last50 = new JRadioButton("Últimos 50");
-	private JRadioButton lastMonth = new JRadioButton("Presente mes");
+	private JRadioButton thisMonth = new JRadioButton("Presente mes");
 	private JRadioButton last3Months = new JRadioButton("Último trimestre");
 	private JRadioButton last6Months = new JRadioButton("Último semestre");
-	private JRadioButton lastYear = new JRadioButton("Presente año");
+	private JRadioButton thisYear = new JRadioButton("Presente año");
 	//private JradioButton previousYear = new JRadioButton("Año anterior");
 	
 	//Lista de elementos que aparecen en comboBox
@@ -175,10 +175,10 @@ public class EventDataUI extends JPanel{
 		filterGroup.add(last50);
 		filtersContainer.add(last50);
 		
-		lastMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lastMonth.setBounds(0, 120, 200, 25);
-		filterGroup.add(lastMonth);
-		filtersContainer.add(lastMonth);
+		thisMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		thisMonth.setBounds(0, 120, 200, 25);
+		filterGroup.add(thisMonth);
+		filtersContainer.add(thisMonth);
 		
 		last3Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		last3Months.setBounds(0, 160, 200, 25);
@@ -190,18 +190,18 @@ public class EventDataUI extends JPanel{
 		filterGroup.add(last6Months);
 		filtersContainer.add(last6Months);
 		
-		lastYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lastYear.setBounds(0, 240, 200, 25);
-		filterGroup.add(lastYear);
-		filtersContainer.add(lastYear);
+		thisYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		thisYear.setBounds(0, 240, 200, 25);
+		filterGroup.add(thisYear);
+		filtersContainer.add(thisYear);
 		
 		allEvents.addActionListener(new EventFilterListener());
 		last25.addActionListener(new EventFilterListener());
 		last50.addActionListener(new EventFilterListener());
-		lastMonth.addActionListener(new EventFilterListener());
+		thisMonth.addActionListener(new EventFilterListener());
 		last3Months.addActionListener(new EventFilterListener());
 		last6Months.addActionListener(new EventFilterListener());
-		lastYear.addActionListener(new EventFilterListener());
+		thisYear.addActionListener(new EventFilterListener());
 
 		
 		setPanelsDimensions(screenSize);
@@ -312,8 +312,9 @@ public class EventDataUI extends JPanel{
 	/**
 	 * Devuelve los eventos de la lista que están en el rango de fechas delimitado por el parámetro months
 	 * @param list lista de la que buscamos los eventos que están dentro del rango de fechas
-	 * @param months número de meses que se incluyen en la lista de eventos, desde el presente mes (incluido)
-	 * hacia atrás. Los eventos se tienen que haber registrado en alguno de esos meses para formar parte de la lista
+	 * @param months número de meses que se incluyen en la lista de eventos desde el presente mes (incluido)
+	 * hacia atrás. Los eventos se tienen que haber registrado en alguno de esos meses para formar parte de la lista.
+	 * Si months = 12 se devuelven los eventos del año en curso
 	 * @return lista filtrada con los eventos que están dentro del rango de fechas
 	 */
 	private List<Event> getLastEventsByDate(List<Event> list, int months) {
@@ -327,12 +328,26 @@ public class EventDataUI extends JPanel{
 	    		case 0:
 	    			for (Event event : list) {
 	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
-	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
+	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+	    						&& calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
 	    					filteredList.add(event);
 	    				}
 	    			}
 	    			break;
 	    		case 3:
+	    			//Alternative code
+	    			for (int i = 0; i < months; i++) {
+	    				calendarReference.add(Calendar.MONTH, -i);
+	    				for (Event event : list) {
+		    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+		    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
+		    						&& calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
+		    					filteredList.add(event);
+		    				}
+		    			}
+	    			}
+	    			
+	    			
 	    			Calendar calendar3Reference1 = Calendar.getInstance();
 	    			calendar3Reference1.setTimeInMillis(timestamp.getTime());
 	    			calendar3Reference1.add(Calendar.MONTH, -1);
@@ -695,30 +710,30 @@ public class EventDataUI extends JPanel{
 				//Debug
 				System.out.println("Listener 50");
 				
-			} else if (e.getSource() == lastMonth) {
+			} else if (e.getSource() == thisMonth) {
 				//Eventos de un mes atrás desde el presente día
-				
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener lastMonth");
 				
 			} else if (e.getSource() == last3Months) {
 				//Eventos de 3 meses atrás desde el presente día
-				
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener last3Months");
 				
 			} else if (e.getSource() == last6Months) {
 				//Eventos de 6 meses atrás desde el presente día
-				
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener last6Months");
 				
-			} else if (e.getSource() == lastYear) {
+			} else if (e.getSource() == thisYear) {
 				//Eventos de un año atrás desde el presente día
-				
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener lastYear");

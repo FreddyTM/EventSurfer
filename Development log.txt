@@ -1809,7 +1809,7 @@ ver 0.1.14 - EVENTDATAUI
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
 			eventsContainer, updatesContainer, filtersContainer, screenSize, allEvents, last25, last50,
 			lastMonth, last3Months, last6Months, lastYear
-			
+		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
 		Add refreshComboBox() --copied from BusinessUnitUI--
@@ -1834,7 +1834,8 @@ ver 0.1.14 - EVENTDATAUI
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
-		
+		Update getLastEventsByDate() --rethink logic for thisMonth, last3Months, last6Months--		
+
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
