@@ -245,7 +245,7 @@ public class EventDataUI extends JPanel{
 		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 //		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 300, 300);
-		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 250, 300);
+		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 250, 325);
 		eventsContainer.add(eventsPane);
 	
 	}
@@ -443,7 +443,7 @@ public class EventDataUI extends JPanel{
 				updatesContainer.setBounds(50, 650, 1700, 350);
 		}
 //		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
-		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 300);
+		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 325);
 	}
 	
 	/**
