@@ -1823,6 +1823,8 @@ ver 0.1.14 - EVENTDATAUI
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips not tested yet--
 					 --vectors only use objects, cell renderer ok--
+					 --fix not using list parameter, ok, not tested with enough data yet--
+		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1834,7 +1836,7 @@ ver 0.1.14 - EVENTDATAUI
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
-		Update getLastEventsByDate() --rethink logic for thisMonth, last3Months, last6Months--		
+		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months, not tested yet--		
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1851,4 +1853,4 @@ ver 0.1.14 - EVENTDATAUI
 
 	· EventFilterListener (new inner EventDataUI class) 
 		Add actionPerformed() --different code will be executed depending on the source--
-				      --all, 25, 50 ready, the rest not ready yet--
+				      --all, 25, 50 ready not tested yet, the rest ready not tested yet--
