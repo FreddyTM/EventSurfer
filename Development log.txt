@@ -1846,11 +1846,20 @@ ver 0.1.14 - EVENTDATAUI
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
 
-	· EventTableCellRenderer class (new inner EventDataUI class):
-		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
-
 	· EventFilterAction (new inner EventDataUI class) --DELETED, now use EventFilterListener --
 
 	· EventFilterListener (new inner EventDataUI class) 
 		Add actionPerformed() --different code will be executed depending on the source--
 				      --all, 25, 50 ready not tested yet, the rest ready not tested yet--
+
+	· EventTableCellRenderer class (new inner EventDataUI class):
+		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
+
+	· NewEventAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--
+
+	· EditEventAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--
+
+	· DeleteEventAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--

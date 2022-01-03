@@ -23,6 +23,7 @@ import java.util.Timer;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -53,6 +54,10 @@ import javax.swing.table.TableColumn;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.event.Event;
+import main.java.gui.AreaUI.CancelAction;
+import main.java.gui.AreaUI.EditAction;
+import main.java.gui.AreaUI.NewAction;
+import main.java.gui.AreaUI.OKAction;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
@@ -97,6 +102,11 @@ public class EventDataUI extends JPanel{
 	
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
+	
+	private final Action newEventAction = new NewEventAction();
+	private final Action editEventAction = new EditEventAction();
+	private final Action deleteEventAction = new DeleteEventAction();
+
 
 	public EventDataUI(CurrentSession session) {
 		this.session = session;
@@ -131,18 +141,18 @@ public class EventDataUI extends JPanel{
 		Border margin = new EmptyBorder(15, 15, 15, 15);
 		eventsContainer.setBorder(new CompoundBorder(eventsContainer.getBorder(), margin));
 		
-		newEventButton = new JButton("Nueva");
-//		newEventButton.setAction(newEventAction);
+		newEventButton = new JButton();
+		newEventButton.setAction(newEventAction);
 		newEventButton.setBounds(25, 365, 89, 23);
 		eventsContainer.add(newEventButton);
 		
-		editEventButton = new JButton("Editar");
-//		newEventButton.setAction(newEventAction);
+		editEventButton = new JButton();
+		newEventButton.setAction(editEventAction);
 		editEventButton.setBounds(125, 365, 89, 23);
 		eventsContainer.add(editEventButton);
 		
-		deleteEventButton = new JButton("Borrar");
-//		newEventButton.setAction(newEventAction);
+		deleteEventButton = new JButton();
+		newEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
 		eventsContainer.add(deleteEventButton);
 		
@@ -764,6 +774,42 @@ public class EventDataUI extends JPanel{
 			
 		}
 		
+	}
+	
+	private class NewEventAction extends AbstractAction {
+		public NewEventAction() {
+			putValue(NAME, "Nueva");
+			putValue(SHORT_DESCRIPTION, "Add new event");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class EditEventAction extends AbstractAction {
+		public EditEventAction() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Enable event edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class DeleteEventAction extends AbstractAction {
+		public DeleteEventAction() {
+			putValue(NAME, "Borrar");
+			putValue(SHORT_DESCRIPTION, "Delete event");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 }
