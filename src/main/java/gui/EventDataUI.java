@@ -3,9 +3,6 @@ package main.java.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -32,7 +29,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -41,7 +37,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -55,10 +50,6 @@ import javax.swing.table.TableColumn;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.event.Event;
-import main.java.gui.AreaUI.CancelAction;
-import main.java.gui.AreaUI.EditAction;
-import main.java.gui.AreaUI.NewAction;
-import main.java.gui.AreaUI.OKAction;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
@@ -355,15 +346,15 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Devuelve los últimos eventos de la lista. Si la lista tiene menos eventos de los que buscamos, retornamos la lista
-	 * sin modificar
+	 * Devuelve los últimos elementos de la lista. Si la lista tiene menos elementos de los que buscamos, retornamos
+	 * la lista sin modificar.
 	 * @param list lista de la que buscamos los últimos elementos
 	 * @param number número de elementos que obtendremos de la lista
-	 * @return lista filtrada con los últimos elementos
+	 * @return lista filtrada con los últimos elementos (en orden inverso)
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
 		if ((list.size() > 25 && number == 25) || (list.size() > 50 && number == 50)) {
-			Collections.reverse(list.subList(list.size() - number - 1, list.size() - 1));
+			Collections.reverse(list.subList(list.size() - number, list.size()));
 			return list;
 		}
 		Collections.reverse(list);

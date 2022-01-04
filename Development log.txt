@@ -1836,12 +1836,12 @@ ver 0.1.14 - EVENTDATAUI
 				   --font & bounds of radio buttons & add to filtersContainer--
 				   --add new event button, edit event button, delete event button--
 				   --fix event buttons not showing the right text--
-				   --add total events, events shown--
+				   --add total events, events shown, ok--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
 		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months, not tested yet--
-		Update getLastEventsByNumber() --in progress, still doesn't work, reversed order not working--		
+		Update getLastEventsByNumber() --new calculation not tested yet, reversed order not tested yet--		
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
