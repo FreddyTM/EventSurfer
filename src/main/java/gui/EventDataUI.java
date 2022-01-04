@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.Vector;
@@ -89,6 +90,8 @@ public class EventDataUI extends JPanel{
 	private JButton newEventButton;
 	private JButton editEventButton;
 	private JButton deleteEventButton;
+	private JLabel totalEvents;
+	private JLabel eventsShown;
 	
 	//Radio buttons
 	private JRadioButton allEvents = new JRadioButton("Todos");
@@ -155,6 +158,32 @@ public class EventDataUI extends JPanel{
 		deleteEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
 		eventsContainer.add(deleteEventButton);
+		
+		JLabel totalEventsLabel = new JLabel("Eventos totales: ");
+		totalEventsLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		totalEventsLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		totalEventsLabel.setBounds(400, 365, 150, 25);
+		eventsContainer.add(totalEventsLabel);
+		
+		JLabel eventsShownLabel = new JLabel("Eventos mostrados: ");
+		eventsShownLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		eventsShownLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		eventsShownLabel.setBounds(650, 365, 200, 25);
+		eventsContainer.add(eventsShownLabel);
+		
+		totalEvents = new JLabel();
+		totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
+		totalEvents.setHorizontalAlignment(SwingConstants.LEFT);
+		totalEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		totalEvents.setBounds(550, 365, 50, 25);
+		eventsContainer.add(totalEvents);
+		
+		eventsShown = new JLabel();
+		eventsShown.setText(((Integer)getLastEventsByNumber(session.getbUnit().getEvents(), 25).size()).toString());
+		eventsShown.setHorizontalAlignment(SwingConstants.LEFT);
+		eventsShown.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		eventsShown.setBounds(830, 365, 50, 25);
+		eventsContainer.add(eventsShown);
 		
 		//This code to windowlistener
 		
@@ -333,9 +362,11 @@ public class EventDataUI extends JPanel{
 	 * @return lista filtrada con los últimos elementos
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
-		if (list.size() > 25) {
-			return list.subList(list.size() - number, list.size() - 1);
+		if ((list.size() > 25 && number == 25) || (list.size() > 50 && number == 50)) {
+			Collections.reverse(list.subList(list.size() - number - 1, list.size() - 1));
+			return list;
 		}
+		Collections.reverse(list);
 		return list;
 	}
 	
