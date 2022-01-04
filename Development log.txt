@@ -1814,16 +1814,16 @@ ver 0.1.14 - EVENTDATAUI
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
 		Add refreshComboBox() --copied from BusinessUnitUI--
 		Add getLastEventsByNumber() --not tested yet--
-		Add buildEventTable()
+		Add buildEventTable() --ok, add tooltips--
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok, use formatEventTable()--
 		Add formatEventTable() --ok, state column redimension--
 		Add getLastEventsByDate() --not tested yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
-					 --columns size ok, tooltips ok, multiline tooltips not tested yet--
+					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
-					 --fix not using list parameter, ok, not tested with enough data yet--
+					 --fix not using list parameter, ok--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
@@ -1833,6 +1833,8 @@ ver 0.1.14 - EVENTDATAUI
 				   --add filtersContainer--
 				   --add filterGroup & radio buttons with action set--
 				   --font & bounds of radio buttons & add to filtersContainer--
+				   --add new event button, edit event button, delete event button--
+				   --fix event buttons not showing the right text--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--

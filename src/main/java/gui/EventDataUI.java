@@ -147,12 +147,12 @@ public class EventDataUI extends JPanel{
 		eventsContainer.add(newEventButton);
 		
 		editEventButton = new JButton();
-		newEventButton.setAction(editEventAction);
+		editEventButton.setAction(editEventAction);
 		editEventButton.setBounds(125, 365, 89, 23);
 		eventsContainer.add(editEventButton);
 		
 		deleteEventButton = new JButton();
-		newEventButton.setAction(deleteEventAction);
+		deleteEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
 		eventsContainer.add(deleteEventButton);
 		
@@ -503,16 +503,25 @@ public class EventDataUI extends JPanel{
 			public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
 				 Component comp = super.prepareRenderer(renderer, row, col);
 				 JComponent jcomp = (JComponent)comp;
+				 int dataLength = 0;
 				 if (comp == jcomp) {
-					 if (getValueAt(row, col).getClass() == Timestamp.class) {						 
-//						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
-						 
+					 
+//					 //Debug
+//					 System.out.println("row " + row + ", column " + col);
+
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {
 						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");
-						 //Multi-line tooltips
-						 jcomp.setToolTipText("<html><p width=\"500\">" +
-								 ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN) + "</p></html>");
-					 } else {						 
-						 jcomp.setToolTipText(getValueAt(row, col).toString());
+						 
+						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
+					 } else {
+//						 //Debug
+//						 System.out.println(getValueAt(row, col).toString() + " - " + dataLength);
+						 						 
+						 //Multi-line tooltips if needed
+						 dataLength = getValueAt(row, col).toString().length(); 
+//						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
+						 jcomp.setToolTipText(dataLength < 500 ? getValueAt(row, col).toString()
+								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
 				 }
 				 return comp;
