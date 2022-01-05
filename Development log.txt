@@ -1841,7 +1841,7 @@ ver 0.1.14 - EVENTDATAUI
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
 		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months--
-					     --thisMonth, thisYear ok, last3Months, last6Months still with errors--
+					     --thisMonth, thisYear ok, last3Months, last6Months ok--
 					     --eventsShown updates ok--
 		Update getLastEventsByNumber() --new calculation ok, reversed order not tested yet--
 					       --eventsShown updates ok--	
@@ -1854,7 +1854,7 @@ ver 0.1.14 - EVENTDATAUI
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
 
-	· EventFilterAction (new inner EventDataUI class) --DELETED, now use EventFilterListener --
+	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
 	· EventFilterListener (new inner EventDataUI class) 
 		Add actionPerformed() --different code will be executed depending on the source--

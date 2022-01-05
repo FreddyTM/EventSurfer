@@ -353,15 +353,6 @@ public class EventDataUI extends JPanel{
 	 * @return lista filtrada con los últimos elementos (en orden inverso)
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
-//		if ((list.size() > 25 && number == 25) || (list.size() > 50 && number == 50)) {
-//			List<Event> sublist = new ArrayList<Event>();
-//			sublist = list.subList(list.size() - number, list.size());
-////			Collections.reverse(sublist);
-//			return sublist;
-//		}
-////		Collections.reverse(list);
-//		return list;
-		
 		if(list.size() <= number) {
 			eventsShown.setText(((Integer)list.size()).toString());
 			return list;
@@ -384,9 +375,7 @@ public class EventDataUI extends JPanel{
 	 */
 	private List<Event> getLastEventsByDate(List<Event> list, int months) {
 		List<Event> filteredList = new ArrayList<Event>();
-//		Timestamp timestamp = ToolBox.getTimestampNow();
 		Calendar calendarReference = Calendar.getInstance();
-//	    calendarReference.setTimeInMillis(timestamp.getTime());
 //	    calendarReference.add(Calendar.MONTH, Math.negateExact(months));
 	    Calendar eventReference = Calendar.getInstance();
 	    if (months >= 0) {
@@ -402,9 +391,22 @@ public class EventDataUI extends JPanel{
 	    			break;
 	    		case 3:
 	    		case 6:
-	    			//Alternative code
-	    			for (int i = 0; i < months; i++) {
-	    				calendarReference.add(Calendar.MONTH, -i);
+	    			//orden descendente
+//	    			for (int i = 0; i < months; i++) {
+	    			//Orden ascendente
+	    			months = - months + 1;
+	    			
+	    			//Debug
+	    			System.out.println("months " + months);
+	    			
+	    			for (int i = months; i <= 0; i++) { //orden ascendente
+	    				calendarReference = Calendar.getInstance();
+	    				calendarReference.add(Calendar.MONTH, i);
+	    				
+	    				//Debug
+	    				System.out.println("i " + i);
+	    				System.out.println("calendarReference " + calendarReference.get(Calendar.MONTH));
+	    				
 	    				for (Event event : list) {
 		    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
 		    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
