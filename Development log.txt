@@ -1820,7 +1820,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok, use formatEventTable()--
 		Add formatEventTable() --ok, state column redimension--
-		Add getLastEventsByDate() --not tested yet--
+		Add getLastEventsByDate() --not all cases working yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
@@ -1840,8 +1840,11 @@ ver 0.1.14 - EVENTDATAUI
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
-		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months, not tested yet--
-		Update getLastEventsByNumber() --new calculation not tested yet, reversed order not tested yet--		
+		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months--
+					     --thisMonth, thisYear ok, last3Months, last6Months still with errors--
+					     --eventsShown updates ok--
+		Update getLastEventsByNumber() --new calculation ok, reversed order not tested yet--
+					       --eventsShown updates ok--	
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1855,7 +1858,8 @@ ver 0.1.14 - EVENTDATAUI
 
 	· EventFilterListener (new inner EventDataUI class) 
 		Add actionPerformed() --different code will be executed depending on the source--
-				      --all, 25, 50 ready not tested yet, the rest ready not tested yet--
+				      --all cases ok--
+				      --allEvents eventsShown updates ok--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--

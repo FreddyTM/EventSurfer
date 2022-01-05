@@ -353,12 +353,25 @@ public class EventDataUI extends JPanel{
 	 * @return lista filtrada con los últimos elementos (en orden inverso)
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
-		if ((list.size() > 25 && number == 25) || (list.size() > 50 && number == 50)) {
-			Collections.reverse(list.subList(list.size() - number, list.size()));
+//		if ((list.size() > 25 && number == 25) || (list.size() > 50 && number == 50)) {
+//			List<Event> sublist = new ArrayList<Event>();
+//			sublist = list.subList(list.size() - number, list.size());
+////			Collections.reverse(sublist);
+//			return sublist;
+//		}
+////		Collections.reverse(list);
+//		return list;
+		
+		if(list.size() <= number) {
+			eventsShown.setText(((Integer)list.size()).toString());
 			return list;
+		} else {
+			System.out.println("Filtering...");
+			List<Event> sublist = new ArrayList<Event>();
+			sublist = list.subList(list.size() - number, list.size());
+			eventsShown.setText(((Integer)sublist.size()).toString());
+			return sublist;
 		}
-		Collections.reverse(list);
-		return list;
 	}
 	
 	/**
@@ -401,49 +414,6 @@ public class EventDataUI extends JPanel{
 		    			}
 	    			}
 	    			break;
-//	    			
-//	    			
-//	    			Calendar calendar3Reference1 = Calendar.getInstance();
-//	    			calendar3Reference1.setTimeInMillis(timestamp.getTime());
-//	    			calendar3Reference1.add(Calendar.MONTH, -1);
-//	    			Calendar calendar3Reference2 = Calendar.getInstance();
-//	    			calendar3Reference2.setTimeInMillis(timestamp.getTime());
-//	    			calendar3Reference2.add(Calendar.MONTH, -2);
-//	    			for (Event event : list) {
-//	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
-//	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar3Reference1.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar3Reference2.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
-//	    					filteredList.add(event);
-//	    				}
-//	    			}
-//	    			break;
-//	    			Calendar calendar6Reference1 = Calendar.getInstance();
-//	    			calendar6Reference1.setTimeInMillis(timestamp.getTime());
-//	    			calendar6Reference1.add(Calendar.MONTH, -1);
-//	    			Calendar calendar6Reference2 = Calendar.getInstance();
-//	    			calendar6Reference2.setTimeInMillis(timestamp.getTime());
-//	    			calendar6Reference2.add(Calendar.MONTH, -2);
-//	    			Calendar calendar6Reference3 = Calendar.getInstance();
-//	    			calendar6Reference3.setTimeInMillis(timestamp.getTime());
-//	    			calendar6Reference3.add(Calendar.MONTH, -3);
-//	    			Calendar calendar6Reference4 = Calendar.getInstance();
-//	    			calendar6Reference4.setTimeInMillis(timestamp.getTime());
-//	    			calendar6Reference4.add(Calendar.MONTH, -4);
-//	    			Calendar calendar6Reference5 = Calendar.getInstance();
-//	    			calendar6Reference5.setTimeInMillis(timestamp.getTime());
-//	    			calendar6Reference5.add(Calendar.MONTH, -5);
-//	    			for (Event event : list) {
-//	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
-//	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar6Reference1.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar6Reference2.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar6Reference3.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar6Reference4.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
-//	    						|| calendar6Reference5.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)) {
-//	    					filteredList.add(event);
-//	    				}
-//	    			}
 	    		case 12:
 	    			for (Event event : list) {
 	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
@@ -456,7 +426,7 @@ public class EventDataUI extends JPanel{
 	    			System.out.println("Error de filtrado, criterio no previsto");
 	    	}
 	    }
-		
+	    eventsShown.setText(((Integer)filteredList.size()).toString());
 		return filteredList;
 	}
 	
@@ -755,6 +725,7 @@ public class EventDataUI extends JPanel{
 			if (e.getSource() == allEvents) {
 				//Todos los eventos de la unidad de negocio de la sesión
 				updateEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER, null);
+				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 				
 				//Debug
 				System.out.println("Listener All");
@@ -778,7 +749,7 @@ public class EventDataUI extends JPanel{
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
-				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
+				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
 				
 			} else if (e.getSource() == last3Months) {
 				//Eventos de 3 meses atrás desde el presente día
@@ -792,14 +763,14 @@ public class EventDataUI extends JPanel{
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
-				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
+				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
 				
 			} else if (e.getSource() == thisYear) {
 				//Eventos de un año atrás desde el presente día
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
-				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
+				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
 				
 			}
 			
