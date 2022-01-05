@@ -1837,6 +1837,7 @@ ver 0.1.14 - EVENTDATAUI
 				   --add new event button, edit event button, delete event button--
 				   --fix event buttons not showing the right text--
 				   --add total events, events shown, ok--
+				   --add scroll to the bottom of event table--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
@@ -1844,7 +1845,8 @@ ver 0.1.14 - EVENTDATAUI
 					     --thisMonth, thisYear ok, last3Months, last6Months ok--
 					     --eventsShown updates ok--
 		Update getLastEventsByNumber() --new calculation ok, reversed order not tested yet--
-					       --eventsShown updates ok--	
+					       --eventsShown updates ok--
+		Update formatEventTable() --add scroll to the bottom of event table--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
