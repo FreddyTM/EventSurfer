@@ -311,6 +311,12 @@ public class EventDataUI extends JPanel{
 		eventsPane.setBounds(25, 25, eventsContainer.getBounds().width - 250, 325);
 		eventsContainer.add(eventsPane);
 	
+		//Por defecto la tabla de actualizaciones aparecerá vacía. Solo se llena cuando se selecciona un evento
+		buildUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+		JScrollPane updatesPane = new JScrollPane(updatesTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
+		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 25, 225);
+		updatesContainer.add(updatesPane);
 	}
 	
 	/**
@@ -562,9 +568,8 @@ public class EventDataUI extends JPanel{
 	 * Actualiza la tabla de eventos con los datos y el formato deseados
 	 * @param list lista de eventos de la unidad de negocio de la sesión
 	 * @param header encabezados de las columnas de la tabla
-	 * @param mode --opción de incorporar la ordenación / filtrado de la lista dentro del método, reevaluar--
 	 */
-	private void updateEventTable(List<Event> list, String[] header, String mode) {
+	private void updateEventTable(List<Event> list, String[] header) {
 		//Encabezados de la tabla
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
@@ -682,6 +687,32 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Actualiza la tabla de eventos con los datos y el formato deseados
+	 * @param list lista de eventos de la unidad de negocio de la sesión
+	 * @param header encabezados de las columnas de la tabla
+	 */
+	private void updateUpdatesTable(List<EventUpdate> list, String[] header) {
+		//Encabezados de la tabla
+		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
+		//Datos de la tabla
+		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
+		for (EventUpdate update: list) {
+			Vector<Object> updateVector = new Vector<Object>();
+			updateVector.add((Integer) update.getId());
+			updateVector.add((Integer) update.getEvent().getId());
+			updateVector.add(update.getFechaHora());
+			updateVector.add(update.getDescripcion());
+			updateVector.add(update.getAutor());
+			updateVector.add(update.getUser().getUserAlias());
+			dataVector.add(updateVector);
+		}
+		DefaultTableModel model = new DefaultTableModel(dataVector, headerVector);
+		updatesTable.setModel(model);
+		formatEventTable();
+		updatesTable.repaint();
+	}
+	
+	/**
 	 * Dimensiona el ancho de las columnas de la tabla de actualizaciones y aplica el formato establecido por la clase
 	 * EventTableCellRenderer para la columna Fecha / Hora
 	 */
@@ -739,7 +770,7 @@ public class EventDataUI extends JPanel{
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
 			//Renovamos la tabla de eventos
-			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
+			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 			//Seleccionamos el filtro
 			last25.setSelected(true);
 			
@@ -751,8 +782,7 @@ public class EventDataUI extends JPanel{
 			//EN PRINCIPIO NO REACTIVAR
 //			//Vaciamos label de información
 //			infoLabel.setText("");
-		}
-		
+		}		
 	}
 	
 	/**
@@ -788,7 +818,7 @@ public class EventDataUI extends JPanel{
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 					//Renovamos la tabla de eventos
-					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
+					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 					//Seleccionamos el filtro
 					last25.setSelected(true);
 					
@@ -805,6 +835,70 @@ public class EventDataUI extends JPanel{
 			}
 		}
 	}
+		
+	/**
+	 * Listener que dispara el filtrado de eventos
+	 */
+	private class EventFilterListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (e.getSource() == allEvents) {
+				//Todos los eventos de la unidad de negocio de la sesión
+				updateEventTable(sortEventsByDate(session.getbUnit().getEvents()), EVENTS_TABLE_HEADER);
+				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
+				
+				//Debug
+				System.out.println("Listener All");
+
+			} else if (e.getSource() == last25) {
+				//Últimos 25 eventos
+				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener 25");
+				
+			} else if (e.getSource() == last50) {
+				//Últimos 50 eventos
+				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener 50");
+				
+			} else if (e.getSource() == thisMonth) {
+				//Eventos de un mes atrás desde el presente día
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
+				
+			} else if (e.getSource() == last3Months) {
+				//Eventos de 3 meses atrás desde el presente día
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener last3Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
+				
+			} else if (e.getSource() == last6Months) {
+				//Eventos de 6 meses atrás desde el presente día
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
+				
+			} else if (e.getSource() == thisYear) {
+				//Eventos de un año atrás desde el presente día
+				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER);
+				
+				//Debug
+				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
+				
+			}
+			
+		}
+		
+	}
 	
 	/**
 	 * Cell Renderer que da formato a la tabla de eventos. En concreto da formato a la columna Fecha / Hora y a la columna Estado
@@ -815,7 +909,7 @@ public class EventDataUI extends JPanel{
 		public Component getTableCellRendererComponent (JTable table, 
 				Object obj, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component cell = super.getTableCellRendererComponent(
-					   table, obj, isSelected, hasFocus, row, column);
+					table, obj, isSelected, hasFocus, row, column);
 			if (eventsTable.getValueAt(row, column).getClass() == Timestamp.class) {
 				setText(ToolBox.formatTimestamp((Timestamp)eventsTable.getValueAt(row, column), DATE_TIME_PATTERN));
 			} else if (eventsTable.getValueAt(row, column).equals(TypesStatesContainer.getEvState().getEventState(1))) {
@@ -837,77 +931,12 @@ public class EventDataUI extends JPanel{
 		public Component getTableCellRendererComponent (JTable table, 
 				Object obj, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component cell = super.getTableCellRendererComponent(
-					   table, obj, isSelected, hasFocus, row, column);
+					table, obj, isSelected, hasFocus, row, column);
 			if (updatesTable.getValueAt(row, column).getClass() == Timestamp.class) {
 				setText(ToolBox.formatTimestamp((Timestamp)updatesTable.getValueAt(row, column), DATE_TIME_PATTERN));
 			}
 			return cell;
 		}
-	}
-	
-	
-	/**
-	 * Listener que dispara el filtrado de eventos
-	 */
-	private class EventFilterListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			if (e.getSource() == allEvents) {
-				//Todos los eventos de la unidad de negocio de la sesión
-				updateEventTable(sortEventsByDate(session.getbUnit().getEvents()), EVENTS_TABLE_HEADER, null);
-				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
-				
-				//Debug
-				System.out.println("Listener All");
-
-			} else if (e.getSource() == last25) {
-				//Últimos 25 eventos
-				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener 25");
-				
-			} else if (e.getSource() == last50) {
-				//Últimos 50 eventos
-				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener 50");
-				
-			} else if (e.getSource() == thisMonth) {
-				//Eventos de un mes atrás desde el presente día
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
-				
-			} else if (e.getSource() == last3Months) {
-				//Eventos de 3 meses atrás desde el presente día
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener last3Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
-				
-			} else if (e.getSource() == last6Months) {
-				//Eventos de 6 meses atrás desde el presente día
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
-				
-			} else if (e.getSource() == thisYear) {
-				//Eventos de un año atrás desde el presente día
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER, null);
-				
-				//Debug
-				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
-				
-			}
-			
-		}
-		
 	}
 	
 	/**

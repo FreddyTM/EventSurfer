@@ -1824,6 +1824,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add sortEventsByDate() --initial & number sorting by event creation date, not by database order--
 		Add buildUpdatesTable() --not tested yet--
 		Add formatUpdatesTable() --not tested yet--
+		Add updateUpdatesTable() --not tested yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
@@ -1843,6 +1844,7 @@ ver 0.1.14 - EVENTDATAUI
 				   --add scroll to the bottom of event table--
 				   --use of sortEventsByDate()--
 				   --add Selector attribute to have access to its methods & parent frame--
+				   --add updatesPane, not tested yet--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
@@ -1852,6 +1854,7 @@ ver 0.1.14 - EVENTDATAUI
 		Update getLastEventsByNumber() --new calculation ok, reversed order not tested yet--
 					       --eventsShown updates ok--
 		Update formatEventTable() --add scroll to the bottom of event table--
+		Update updateEventTable() --get rid of parameter mode, useless--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1868,6 +1871,7 @@ ver 0.1.14 - EVENTDATAUI
 				      --all cases ok--
 				      --allEvents eventsShown updates ok--
 				      --use of sortEventsByDate()--
+				      --get rid of parameter mode, useless--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
