@@ -1822,6 +1822,8 @@ ver 0.1.14 - EVENTDATAUI
 		Add formatEventTable() --ok, state column redimension--
 		Add getLastEventsByDate() --not all cases working yet--
 		Add sortEventsByDate() --initial & number sorting by event creation date, not by database order--
+		Add buildUpdatesTable() --not tested yet--
+		Add formatUpdatesTable() --not tested yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
@@ -1869,6 +1871,9 @@ ver 0.1.14 - EVENTDATAUI
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
+
+	· UpdatesTableCellRenderer class (new inner EventDataUI class):
+		Add getTableCellRendererComponent() --not tested yet--
 
 	· NewEventAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--

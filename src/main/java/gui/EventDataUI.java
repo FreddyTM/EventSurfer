@@ -845,6 +845,7 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	
 	/**
 	 * Listener que dispara el filtrado de eventos
 	 */
