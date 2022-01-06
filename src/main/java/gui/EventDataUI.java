@@ -682,8 +682,8 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Dimensiona el ancho de las columnas de la tabla de eventos y aplica el formato establecido por la clase
-	 * EventTableCellRenderer para las columnas Fecha / Hora y Estado
+	 * Dimensiona el ancho de las columnas de la tabla de actualizaciones y aplica el formato establecido por la clase
+	 * EventTableCellRenderer para la columna Fecha / Hora
 	 */
 	private void formatUpdatesTable() {
 		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(0));
