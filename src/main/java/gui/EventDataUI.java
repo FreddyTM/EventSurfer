@@ -52,6 +52,7 @@ import javax.swing.table.TableColumn;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.event.Event;
+import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
@@ -503,7 +504,6 @@ public class EventDataUI extends JPanel{
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
-//		for (Event event: session.getbUnit().getEvents()) {
 		for (Event event: list) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
@@ -569,7 +569,6 @@ public class EventDataUI extends JPanel{
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
-//		for (Event event: session.getbUnit().getEvents()) {
 		for (Event event: list) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
@@ -599,7 +598,7 @@ public class EventDataUI extends JPanel{
 		//Cell renderer para la columna Estado
 		tableCol = eventsTable.getColumnModel().getColumn(5);
 		tableCol.setCellRenderer(new EventTableCellRenderer());
-		//Ancho columna Fecha
+		//Ancho columna Fecha / Hora
 		eventsTable.getColumnModel().getColumn(0).setMinWidth(125);
 		eventsTable.getColumnModel().getColumn(0).setMaxWidth(125);
 		//Ancho columna Area
@@ -618,6 +617,94 @@ public class EventDataUI extends JPanel{
 		//Scroll al final de la tabla
 		eventsTable.scrollRectToVisible(eventsTable.getCellRect(eventsTable.getRowCount()-1, 0, true));
 	}
+	
+	/**
+	 * Construye la tabla de actualizaciones con los datos y el formato deseados
+	 * @param list lista de actualizaciones (las de la incidencia seleccionada)
+	 * @param header encabezados de las columnas de la tabla
+	 */
+	private void buildUpdatesTable(List<EventUpdate> list, String[] header) {
+		//Encabezados de la tabla
+		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
+		//Datos de la tabla
+		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
+		for (EventUpdate update: list) {
+			Vector<Object> updateVector = new Vector<Object>();
+			updateVector.add((Integer) update.getId());
+			updateVector.add((Integer) update.getEvent().getId());
+			updateVector.add(update.getFechaHora());
+			updateVector.add(update.getDescripcion());
+			updateVector.add(update.getAutor());
+			updateVector.add(update.getUser().getUserAlias());
+			dataVector.add(updateVector);
+		}
+		updatesTable = new JTable(dataVector, headerVector) {
+			//Table tooltips 
+			public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
+				 Component comp = super.prepareRenderer(renderer, row, col);
+				 JComponent jcomp = (JComponent)comp;
+				 int dataLength = 0;
+				 if (comp == jcomp) {
+					 
+//					 //Debug
+//					 System.out.println("row " + row + ", column " + col);
+
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {
+						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");
+						 
+						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
+					 } else {
+//						 //Debug
+//						 System.out.println(getValueAt(row, col).toString() + " - " + dataLength);
+						 						 
+						 //Multi-line tooltips if needed
+						 dataLength = getValueAt(row, col).toString().length(); 
+//						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
+						 jcomp.setToolTipText(dataLength < 600 ? getValueAt(row, col).toString()
+								 : "<html><p width=\"600\">" + getValueAt(row, col).toString() + "</p></html>");
+					 }
+				 }
+				 return comp;
+			}
+		};
+		updatesTable.setFillsViewportHeight(true);
+		updatesTable.setAutoCreateRowSorter(true);
+		formatUpdatesTable();
+		
+//		First remove the column from the view
+//			table.removeColumn(table.getColumnModel().getColumn(4));
+//		Then retrieve the data from the model.
+//			table.getModel().getValueAt(table.getSelectedRow(),4);
+		
+		//Debug
+		System.out.println("Creando el contenido de la tabla de eventos");
+		
+	}
+	
+	/**
+	 * Dimensiona el ancho de las columnas de la tabla de eventos y aplica el formato establecido por la clase
+	 * EventTableCellRenderer para las columnas Fecha / Hora y Estado
+	 */
+	private void formatUpdatesTable() {
+		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(0));
+		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(1));
+		//Cell renderer para la columna Fecha / Hora
+		TableColumn tableCol = updatesTable.getColumnModel().getColumn(0);
+		tableCol.setCellRenderer(new UpdatesTableCellRenderer());
+		//Ancho columna Fecha / Hora
+		updatesTable.getColumnModel().getColumn(0).setMinWidth(125);
+		updatesTable.getColumnModel().getColumn(0).setMaxWidth(125);
+		//Ancho columna Autor
+		updatesTable.getColumnModel().getColumn(2).setMinWidth(200);
+		updatesTable.getColumnModel().getColumn(2).setMaxWidth(200);
+		//Ancho columna Usuario
+		updatesTable.getColumnModel().getColumn(3).setMinWidth(200);
+		updatesTable.getColumnModel().getColumn(3).setMaxWidth(200);
+		
+		//Scroll al final de la tabla
+		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
+	}
+	
 	
 	/**
 	 * Retorna un timestamp a partir de un string que sigue el formato de DATE_TIME_PATTERN
@@ -737,6 +824,22 @@ public class EventDataUI extends JPanel{
 				cell.setBackground(Color.YELLOW);
 			} else if (eventsTable.getValueAt(row, column).equals(TypesStatesContainer.getEvState().getEventState(3))) {
 				cell.setBackground(Color.GREEN);	
+			}
+			return cell;
+		}
+	}
+	
+	/**
+	 * Cell Renderer que da formato a la tabla de actualizaciones. En concreto da formato a la columna Fecha / Hora 
+	 * La columna Fecha / Hora muestra la fecha y la hora en el formato DATE_TIME_PATTERN
+	 */
+	private class UpdatesTableCellRenderer extends DefaultTableCellRenderer {
+		public Component getTableCellRendererComponent (JTable table, 
+				Object obj, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component cell = super.getTableCellRendererComponent(
+					   table, obj, isSelected, hasFocus, row, column);
+			if (updatesTable.getValueAt(row, column).getClass() == Timestamp.class) {
+				setText(ToolBox.formatTimestamp((Timestamp)updatesTable.getValueAt(row, column), DATE_TIME_PATTERN));
 			}
 			return cell;
 		}
