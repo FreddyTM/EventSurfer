@@ -16,9 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -83,6 +85,7 @@ public class EventDataUI extends JPanel{
 	private JButton deleteEventButton;
 	private JLabel totalEvents;
 	private JLabel eventsShown;
+	private JLabel infoLabel;
 	
 	//Radio buttons
 	private JRadioButton allEvents = new JRadioButton("Todos");
@@ -291,8 +294,14 @@ public class EventDataUI extends JPanel{
 			comboBox.setEnabled(false);
 		}
 		
+		infoLabel = new JLabel("Texto de prueba");
+		infoLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		infoLabel.setBounds(50, 965, 900, 25);
+		add(infoLabel);
+		
 		//Por defecto se muestran los últimos 25 eventos registrados
-		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+//		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+		buildEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 //		//Scroll al final de la tabla
 		eventsTable.scrollRectToVisible(eventsTable.getCellRect(eventsTable.getRowCount()-1, 0, true));
@@ -434,6 +443,17 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Ordena una lista de eventos pasada por parámetro en orden ascendente según el criterio de EventComparator (fecha de creación del evento) 
+	 * @param list lista a ordenar
+	 * @return lista ordenada
+	 */
+	private List<Event> sortEventsByDate (List<Event> list) {
+		List<Event> sortedList = list;
+		sortedList.sort(new EventComparator());
+		return list;
+	}
+	
+	/**
 	 * Busca la anchura de la pantalla en la que se ejecuta la aplicación. En base a esa anchura se dimensionarán los elementos de la pantalla
 	 * @return small para pantallas inferiores a 1280px, medium para pantallas entre 1281 y 1450px, big para pantallas de más de 1450px
 	 */
@@ -457,15 +477,15 @@ public class EventDataUI extends JPanel{
 		switch (screenSize) {
 			case "small":
 				eventsContainer.setBounds(50, 225, 1100, 400);
-				updatesContainer.setBounds(50, 650, 1100, 350);
+				updatesContainer.setBounds(50, 650, 1100, 300);
 				break;
 			case "medium":
 				eventsContainer.setBounds(50, 225, 1200, 400);
-				updatesContainer.setBounds(50, 650, 1200, 350);
+				updatesContainer.setBounds(50, 650, 1200, 300);
 				break;
 			case "big":
 				eventsContainer.setBounds(50, 225, 1700, 400);
-				updatesContainer.setBounds(50, 650, 1700, 350);
+				updatesContainer.setBounds(50, 650, 1700, 300);
 		}
 //		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
 		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 325);
@@ -730,7 +750,7 @@ public class EventDataUI extends JPanel{
 			
 			if (e.getSource() == allEvents) {
 				//Todos los eventos de la unidad de negocio de la sesión
-				updateEventTable(session.getbUnit().getEvents(), EVENTS_TABLE_HEADER, null);
+				updateEventTable(sortEventsByDate(session.getbUnit().getEvents()), EVENTS_TABLE_HEADER, null);
 				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 				
 				//Debug
@@ -738,14 +758,14 @@ public class EventDataUI extends JPanel{
 
 			} else if (e.getSource() == last25) {
 				//Últimos 25 eventos
-				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER, null);
+				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener 25");
 				
 			} else if (e.getSource() == last50) {
 				//Últimos 50 eventos
-				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 50), EVENTS_TABLE_HEADER, null);
+				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER, null);
 				
 				//Debug
 				System.out.println("Listener 50");
@@ -782,6 +802,16 @@ public class EventDataUI extends JPanel{
 			
 		}
 		
+	}
+	
+	/**
+	 * Comparator para ordenar los eventos por su fecha de creación en orden ascendente
+	 */
+	private class EventComparator implements Comparator<Event> {
+		@Override
+		public int compare(Event o1, Event o2) {
+			return o1.getUpdates().get(0).getFechaHora().compareTo(o2.getUpdates().get(0).getFechaHora());
+		}	
 	}
 	
 	private class NewEventAction extends AbstractAction {
