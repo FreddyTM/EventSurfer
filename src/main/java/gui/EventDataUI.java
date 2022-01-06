@@ -63,6 +63,7 @@ public class EventDataUI extends JPanel{
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
 	
 	private CurrentSession session;
+	private Selector selector;
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
@@ -105,8 +106,9 @@ public class EventDataUI extends JPanel{
 	private final Action deleteEventAction = new DeleteEventAction();
 
 
-	public EventDataUI(CurrentSession session) {
+	public EventDataUI(CurrentSession session, Selector selector) {
 		this.session = session;
+		this.selector = selector;
 		setLayout(null);
 		panelVisible = true;
 		
