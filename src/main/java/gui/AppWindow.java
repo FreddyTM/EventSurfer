@@ -17,6 +17,7 @@ import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import main.java.persistence.PersistenceManager;
@@ -68,7 +69,7 @@ public class AppWindow extends JFrame {
 
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
-		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));	
 		getContentPane().add(basePanel);
 
 		addWindowListener(new WindowAdapter() {
@@ -133,7 +134,14 @@ public class AppWindow extends JFrame {
 
 		@Override
 		public void componentResized(ComponentEvent e) {
-			
+			Dimension frameDimension = getSize();
+			System.out.println(frameDimension);
+			if (frameDimension.getWidth() < 1920) {
+				System.out.println("Anchura insuficiente");
+			}
+			if (frameDimension.getHeight() < 1024) {
+				System.out.println("Altura insuficiente");
+			}
 		}
 
 		@Override

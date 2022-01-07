@@ -114,7 +114,7 @@ public class EventDataUI extends JPanel{
 		panelVisible = true;
 		
 		JTextPane eventDataTxt = new JTextPane();
-		eventDataTxt.setText("GESTIÓN DE EVENTOS");
+		eventDataTxt.setText("GESTIÓN DE INCIDENCIAS");
 		eventDataTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		eventDataTxt.setFocusable(false);
 		eventDataTxt.setEditable(false);
@@ -485,16 +485,16 @@ public class EventDataUI extends JPanel{
 	private void setPanelsDimensions(String screenSize) {
 		switch (screenSize) {
 			case "small":
-				eventsContainer.setBounds(50, 225, 1100, 400);
-				updatesContainer.setBounds(50, 650, 1100, 300);
+				eventsContainer.setBounds(50, 225, 1075, 400);
+				updatesContainer.setBounds(50, 650, 1075, 300);
 				break;
 			case "medium":
-				eventsContainer.setBounds(50, 225, 1200, 400);
-				updatesContainer.setBounds(50, 650, 1200, 300);
+				eventsContainer.setBounds(50, 225, 1175, 400);
+				updatesContainer.setBounds(50, 650, 1175, 300);
 				break;
 			case "big":
-				eventsContainer.setBounds(50, 225, 1700, 400);
-				updatesContainer.setBounds(50, 650, 1700, 300);
+				eventsContainer.setBounds(50, 225, 1675, 400);
+				updatesContainer.setBounds(50, 650, 1675, 300);
 		}
 //		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
 		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 325);
