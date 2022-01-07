@@ -773,6 +773,8 @@ public class EventDataUI extends JPanel{
 			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 			//Seleccionamos el filtro
 			last25.setSelected(true);
+			//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+			totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 			
 //			//Mostramos sus datos
 //			populateTextFields();
@@ -821,6 +823,8 @@ public class EventDataUI extends JPanel{
 					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 					//Seleccionamos el filtro
 					last25.setSelected(true);
+					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 					
 //					//Vaciamos label de información
 //					infoLabel.setText("");

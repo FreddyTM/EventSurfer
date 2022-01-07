@@ -1859,10 +1859,12 @@ ver 0.1.14 - EVENTDATAUI
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
+					  --total events label updates when session.bunit is changed--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
+					  --total events label updates when session.bunit is changed--
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
