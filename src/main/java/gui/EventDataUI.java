@@ -522,6 +522,13 @@ public class EventDataUI extends JPanel{
 			dataVector.add(eventVector);
 		}
 		eventsTable = new JTable(dataVector, headerVector) {
+					
+			//Celdas no editables
+			@Override
+		    public boolean isCellEditable(int row, int col) {
+		        return false; 
+		    }
+				
 			//Table tooltips 
 			public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
 				 Component comp = super.prepareRenderer(renderer, row, col);
@@ -644,6 +651,13 @@ public class EventDataUI extends JPanel{
 			dataVector.add(updateVector);
 		}
 		updatesTable = new JTable(dataVector, headerVector) {
+			
+			//Celdas no editables
+			@Override
+		    public boolean isCellEditable(int row, int col) {
+		        return false; 
+		    }
+			
 			//Table tooltips 
 			public Component prepareRenderer(TableCellRenderer renderer,int row, int col) {
 				 Component comp = super.prepareRenderer(renderer, row, col);

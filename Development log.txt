@@ -1822,7 +1822,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
 		Add refreshComboBox() --copied from BusinessUnitUI--
 		Add getLastEventsByNumber() --not ok, in progress--
-		Add buildEventTable() --ok, add tooltips--
+		Add buildEventTable() --ok--
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok, use formatEventTable()--
@@ -1862,6 +1862,8 @@ ver 0.1.14 - EVENTDATAUI
 					       --eventsShown updates ok--
 		Update formatEventTable() --add scroll to the bottom of event table--
 		Update updateEventTable() --get rid of parameter mode, useless--
+		Update buildEventTable() --add tooltips, non editable cells--
+		Update buildUpdatesTable() --add tooltips, non editable cells--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
