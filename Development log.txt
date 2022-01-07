@@ -1822,8 +1822,8 @@ ver 0.1.14 - EVENTDATAUI
 		Add formatEventTable() --ok, state column redimension--
 		Add getLastEventsByDate() --not all cases working yet--
 		Add sortEventsByDate() --initial & number sorting by event creation date, not by database order--
-		Add buildUpdatesTable() --not tested yet--
-		Add formatUpdatesTable() --not tested yet--
+		Add buildUpdatesTable() --ok--
+		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --not tested yet--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
@@ -1844,14 +1844,14 @@ ver 0.1.14 - EVENTDATAUI
 				   --add scroll to the bottom of event table--
 				   --use of sortEventsByDate()--
 				   --add Selector attribute to have access to its methods & parent frame--
-				   --add updatesPane, not tested yet--
+				   --add updatesPane, pane visible, table visible, table redimension--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
 		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months--
 					     --thisMonth, thisYear ok, last3Months, last6Months ok--
 					     --eventsShown updates ok--
-		Update getLastEventsByNumber() --new calculation ok, reversed order not tested yet--
+		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
 		Update formatEventTable() --add scroll to the bottom of event table--
 		Update updateEventTable() --get rid of parameter mode, useless--

@@ -315,7 +315,7 @@ public class EventDataUI extends JPanel{
 		buildUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 		JScrollPane updatesPane = new JScrollPane(updatesTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
-		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 25, 225);
+		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
 		updatesContainer.add(updatesPane);
 	}
 	
