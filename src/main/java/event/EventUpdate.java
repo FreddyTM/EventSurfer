@@ -210,6 +210,52 @@ public class EventUpdate {
 		}
 		return null;
 	}
+	
+	/**
+	 * Borra una actualización de evento de la base de datos 
+	 * @param conn conexión a la base de datos
+	 * @param eUpdate EventUpdate a borrar de la base de datos
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteEventUpdateFromDb(Connection conn, EventUpdate eUpdate) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM event_update "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, eUpdate.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Borra de la base de datos todos las actualizaciones de un evento pasado por parámetro 
+	 * @param conn conexión a la base de datos
+	 * @param event evento del que se borrarán todas las actualizaciones
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteAllEventUpdatesFromDb(Connection conn, Event event) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM event_update "
+				+ "WHERE event_id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, event.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
 
 	public int getId() {
 		return id;

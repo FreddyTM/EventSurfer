@@ -1793,7 +1793,13 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 		Add actionPerformed() 
 		Update actionPerformed() --use registerTableModification() new & edit, delete comments--
 
-ver 0.1.14 - EVENTDATAUI
+ver 0.1.14 - EVENTDATAUI	
+
+	* - Package main.java.event
+
+	· EventUpdate class:
+		add deleteEventUpdateFromDb() --not tested yet--
+		add deleteAllEventUpdatesFromDb --not tested yet--
 
 	* - Package main.java.gui
 
