@@ -43,13 +43,13 @@ public class Selector extends JPanel {
 		
 		setLayout(new GridLayout(8, 0, 10, 10));
 		setAlignmentX(Component.CENTER_ALIGNMENT);
-		Dimension dim = new Dimension(100,80);
+		Dimension dim = new Dimension(100,100);
 		
 		eventButton = new JButton();
 		eventButton.setAction(eventAction);
 		eventButton.setMargin(new Insets(2,2,2,2));
 		eventButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		eventButton.setText("EVENTOS");
+		eventButton.setText("INCIDENCIAS");
 		eventButton.setMinimumSize(dim);
 		eventButton.setPreferredSize(dim);
 		add(eventButton);
@@ -68,6 +68,7 @@ public class Selector extends JPanel {
 		areaButton.setMargin(new Insets(2,2,2,2));
 		areaButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		areaButton.setText("AREAS");
+		areaButton.setMinimumSize(dim);
 		areaButton.setPreferredSize(dim);
 		add(areaButton);
 		
@@ -76,6 +77,7 @@ public class Selector extends JPanel {
 		userButton.setMargin(new Insets(2,2,2,2));
 		userButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		userButton.setText("USUARIOS");
+		userButton.setMinimumSize(dim);
 		userButton.setPreferredSize(dim);
 		add(userButton);
 		
@@ -84,6 +86,7 @@ public class Selector extends JPanel {
 		bUnitButton.setMargin(new Insets(2,2,2,2));
 		bUnitButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		bUnitButton.setText("<html><center>"+"UNIDADES" + "<br>" + "DE" + "<br>" + "NEGOCIO" + "</center></html>");
+		bUnitButton.setMinimumSize(dim);
 		bUnitButton.setPreferredSize(dim);
 		add(bUnitButton);
 		
@@ -92,6 +95,7 @@ public class Selector extends JPanel {
 		companyButton.setMargin(new Insets(2,2,2,2));
 		companyButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		companyButton.setText("EMPRESA");
+		companyButton.setMinimumSize(dim);
 		companyButton.setPreferredSize(dim);
 		add(companyButton);
 		
@@ -107,6 +111,7 @@ public class Selector extends JPanel {
 		logOutButton.setMargin(new Insets(2,2,2,2));
 		logOutButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		logOutButton.setText("LOG OUT");
+		logOutButton.setMinimumSize(dim);
 		logOutButton.setPreferredSize(dim);
 		add(logOutButton);
 	}

@@ -1799,6 +1799,11 @@ ver 0.1.14 - EVENTDATAUI
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.14--
+		Resize leftPanel --wider buttons--
+
+	· Selector class:
+		Update eventButton text to "INCIDENCIAS"
+		Update buttons dimensions
 
 	· EventAction class (inner Selector class):
 		Update actionPerformed() 

@@ -102,9 +102,11 @@ public class AppWindow extends JFrame {
 		leftPanel = new Selector(this, session);
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		leftPanel.setMinimumSize(new Dimension(140, MAXIMIZED_VERT));
+		leftPanel.setPreferredSize(new Dimension(140, MAXIMIZED_VERT));
 		
-		basePanel.add(centerPanel, BorderLayout.CENTER);
 		basePanel.add(leftPanel, BorderLayout.WEST);
+		basePanel.add(centerPanel, BorderLayout.CENTER);
 		
 		this.revalidate();
 		this.repaint();
