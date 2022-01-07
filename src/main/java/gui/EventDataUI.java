@@ -44,6 +44,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -73,15 +75,17 @@ public class EventDataUI extends JPanel{
 	//Tamaño del monitor que ejecuta la aplicación
 	String screenSize = getScreenSize();
 	
-	private JTextField companyField;
-	private JComboBox comboBox;
-	private JCheckBox activeFilterCheckBox;
 	private JPanel eventsContainer;
 	private JPanel updatesContainer;
 	private JPanel filtersContainer;
 	private JTable eventsTable;
 	private JTable updatesTable;
+	private Event eventSelected;
+	private EventUpdate updateSelected;
 	
+	private JTextField companyField;
+	private JComboBox comboBox;
+	private JCheckBox activeFilterCheckBox;
 	private JButton newEventButton;
 	private JButton editEventButton;
 	private JButton deleteEventButton;
@@ -557,6 +561,17 @@ public class EventDataUI extends JPanel{
 				 return comp;
 			}
 		};
+		
+		//Obtenemos el evento que corresponde a la fila de la tabla seleccionada
+		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent e) {
+	            //Debug
+	            System.out.println((String) eventsTable.getValueAt(eventsTable.getSelectedRow(), 0));
+	            
+	            int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
+	            eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+	        }
+	    });
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
 		formatEventTable();
@@ -686,6 +701,17 @@ public class EventDataUI extends JPanel{
 				 return comp;
 			}
 		};
+		
+		//Obtenemos el evento que corresponde a la fila de la tabla seleccionada
+		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+			        public void valueChanged(ListSelectionEvent e) {
+			            //Debug
+			            System.out.println((String) updatesTable.getValueAt(updatesTable.getSelectedRow(), 0));
+			            
+			            int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
+			            updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
+			        }
+			    });
 		updatesTable.setFillsViewportHeight(true);
 		updatesTable.setAutoCreateRowSorter(true);
 		formatUpdatesTable();

@@ -1816,7 +1816,7 @@ ver 0.1.14 - EVENTDATAUI
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
 			eventsContainer, updatesContainer, filtersContainer, screenSize, allEvents, last25, last50,
 			lastMonth, last3Months, last6Months, lastYear, newEventButton, editEventButton, deleteEventButton,
-			totalEvents, eventsShown, infoLabel, selector
+			totalEvents, eventsShown, infoLabel, selector, eventSelected, updateSelected
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1832,11 +1832,6 @@ ver 0.1.14 - EVENTDATAUI
 		Add buildUpdatesTable() --ok--
 		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --not tested yet--
-		Update buildEventTable() --data ok, ID column removed, date format ok--
-					 --columns size ok, tooltips ok, multiline tooltips fixed--
-					 --vectors only use objects, cell renderer ok--
-					 --fix not using list parameter, ok--
-		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1852,6 +1847,17 @@ ver 0.1.14 - EVENTDATAUI
 				   --use of sortEventsByDate()--
 				   --add Selector attribute to have access to its methods & parent frame--
 				   --add updatesPane, pane visible, table visible, table redimension--
+		Update buildEventTable() --data ok, ID column removed, date format ok--
+					 --columns size ok, tooltips ok, multiline tooltips fixed--
+					 --vectors only use objects, cell renderer ok--
+					 --fix not using list parameter, ok--
+					 --add tooltips, non editable cells--
+					 --get Event from selected row, not tested yet--
+		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
+					  --get rid of parameter mode, useless--
+		Update formatEventTable() --add scroll to the bottom of event table--
+		Update buildUpdatesTable() --add tooltips, non editable cells--
+					   --get EventUpdate from selected row, not tested yet--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
@@ -1860,10 +1866,6 @@ ver 0.1.14 - EVENTDATAUI
 					     --eventsShown updates ok--
 		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
-		Update formatEventTable() --add scroll to the bottom of event table--
-		Update updateEventTable() --get rid of parameter mode, useless--
-		Update buildEventTable() --add tooltips, non editable cells--
-		Update buildUpdatesTable() --add tooltips, non editable cells--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
