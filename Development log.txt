@@ -1816,7 +1816,9 @@ ver 0.1.14 - EVENTDATAUI
 			EVENTS_TABLE_HEADER, UPDATES_TABLE_HEADER, eventsTable, updatesTable, DATE_TIME_PATTERN, 
 			eventsContainer, updatesContainer, filtersContainer, screenSize, allEvents, last25, last50,
 			lastMonth, last3Months, last6Months, lastYear, newEventButton, editEventButton, deleteEventButton,
-			totalEvents, eventsShown, infoLabel, selector, eventSelected, updateSelected
+			newEventAction, editEventAction, deleteEventAction, totalEvents, eventsShown, infoLabel, selector,
+			eventSelected, updateSelected, newUpdateButton, editUpdateButton, deleteUpdateButton, newUpdateAction,
+			editUpdateAction, deleteUpdateAction
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1847,6 +1849,7 @@ ver 0.1.14 - EVENTDATAUI
 				   --use of sortEventsByDate()--
 				   --add Selector attribute to have access to its methods & parent frame--
 				   --add updatesPane, pane visible, table visible, table redimension--
+				   --add new update button, edit update button, delete update button--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
@@ -1899,4 +1902,13 @@ ver 0.1.14 - EVENTDATAUI
 		Add actionPerformed() --empty--
 
 	· DeleteEventAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--
+
+	· NewUpdateAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--
+
+	· EditUpdateAction (new inner EventDataUI class):
+		Add actionPerformed() --empty--
+
+	· DeleteUpdateAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--

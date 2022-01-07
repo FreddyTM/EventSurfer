@@ -15,12 +15,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -89,6 +87,11 @@ public class EventDataUI extends JPanel{
 	private JButton newEventButton;
 	private JButton editEventButton;
 	private JButton deleteEventButton;
+	private JButton newUpdateButton;
+	private JButton editUpdateButton;
+	private JButton deleteUpdateButton;
+	
+	
 	private JLabel totalEvents;
 	private JLabel eventsShown;
 	private JLabel infoLabel;
@@ -109,6 +112,9 @@ public class EventDataUI extends JPanel{
 	private final Action newEventAction = new NewEventAction();
 	private final Action editEventAction = new EditEventAction();
 	private final Action deleteEventAction = new DeleteEventAction();
+	private final Action newUpdateAction = new NewUpdateAction();
+	private final Action editUpdateAction = new EditUpdateAction();
+	private final Action deleteUpdateAction = new DeleteUpdateAction();
 
 
 	public EventDataUI(CurrentSession session, Selector selector) {
@@ -212,6 +218,21 @@ public class EventDataUI extends JPanel{
 		updatesContainer.setBorder(titledBorder2);
 		Border margin2 = new EmptyBorder(15, 15, 15, 15);
 		updatesContainer.setBorder(new CompoundBorder(updatesContainer.getBorder(), margin2));
+		
+		newUpdateButton = new JButton();
+		newUpdateButton.setAction(newUpdateAction);
+		newUpdateButton.setBounds(25, 265, 89, 23);
+		updatesContainer.add(newUpdateButton);
+		
+		editUpdateButton = new JButton();
+		editUpdateButton.setAction(editUpdateAction);
+		editUpdateButton.setBounds(125, 265, 89, 23);
+		updatesContainer.add(editUpdateButton);
+		
+		deleteUpdateButton = new JButton();
+		deleteUpdateButton.setAction(deleteUpdateAction);
+		deleteUpdateButton.setBounds(225, 265, 89, 23);
+		updatesContainer.add(deleteUpdateButton);
 		
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
@@ -1021,6 +1042,42 @@ public class EventDataUI extends JPanel{
 		public DeleteEventAction() {
 			putValue(NAME, "Borrar");
 			putValue(SHORT_DESCRIPTION, "Delete event");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class NewUpdateAction extends AbstractAction {
+		public NewUpdateAction() {
+			putValue(NAME, "Nueva");
+			putValue(SHORT_DESCRIPTION, "Add new update");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class EditUpdateAction extends AbstractAction {
+		public EditUpdateAction() {
+			putValue(NAME, "Editar");
+			putValue(SHORT_DESCRIPTION, "Enable update edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class DeleteUpdateAction extends AbstractAction {
+		public DeleteUpdateAction() {
+			putValue(NAME, "Borrar");
+			putValue(SHORT_DESCRIPTION, "Delete update");
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
