@@ -484,13 +484,26 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Ordena una lista de incidencias pasada por parámetro en orden ascendente según el criterio de EventComparator (fecha de creación del evento) 
+	 * Ordena una lista de incidencias pasada por parámetro en orden ascendente según el criterio de EventComparator
+	 * (fecha de creación la incidencia) 
 	 * @param list lista a ordenar
 	 * @return lista ordenada
 	 */
 	private List<Event> sortEventsByDate (List<Event> list) {
 		List<Event> sortedList = list;
 		sortedList.sort(new EventComparator());
+		return list;
+	}
+	
+	/**
+	 * Ordena una lista de actualizaciones pasada por parámetro en orden ascendente según el criterio de EventUpdateComparator
+	 * (fecha de creación la actualización) 
+	 * @param list lista a ordenar
+	 * @return lista ordenada
+	 */
+	private List<EventUpdate> sortEventUpdatesByDate (List<EventUpdate> list) {
+		List<EventUpdate> sortedList = list;
+		sortedList.sort(new EventUpdateComparator());
 		return list;
 	}
 	
@@ -1054,6 +1067,16 @@ public class EventDataUI extends JPanel{
 		@Override
 		public int compare(Event o1, Event o2) {
 			return o1.getUpdates().get(0).getFechaHora().compareTo(o2.getUpdates().get(0).getFechaHora());
+		}	
+	}
+	
+	/**
+	 * Comparator para ordenar las actualizaciones por su fecha de creación en orden ascendente
+	 */
+	private class EventUpdateComparator implements Comparator<EventUpdate> {
+		@Override
+		public int compare(EventUpdate o1, EventUpdate o2) {
+			return o1.getFechaHora().compareTo(o2.getFechaHora());
 		}	
 	}
 	

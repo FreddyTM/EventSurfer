@@ -1846,6 +1846,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --not tested yet--
 		Add enableOrDisableEditDeleteEventButtons() --ok--
+		Add sortEventUpdatesByDate() --not tested yet--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1908,6 +1909,12 @@ ver 0.1.14 - EVENTDATAUI
 
 	· UpdatesTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --not tested yet--
+
+	· EventComparator class (new inner EventDataUI class):
+		Add compare() --ok--
+
+	· EventUpdateComparator class (new inner EventDataUI class):
+		Add compare() --not tested yet--
 
 	· NewEventAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--
