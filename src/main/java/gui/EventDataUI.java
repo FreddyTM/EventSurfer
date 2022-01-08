@@ -621,6 +621,10 @@ public class EventDataUI extends JPanel{
 	            updatesTable.clearSelection();
 	            //Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
 	            updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+	            //Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+	            newUpdateButton.setEnabled(true);
+	            editUpdateButton.setEnabled(false);
+	            deleteUpdateButton.setEnabled(false);
 	        }
 	    });
 		eventsTable.setFillsViewportHeight(true);
@@ -662,6 +666,9 @@ public class EventDataUI extends JPanel{
 		eventsTable.setModel(model);
 		formatEventTable();
 		eventsTable.repaint();
+		newUpdateButton.setEnabled(false);
+		editUpdateButton.setEnabled(false);
+		deleteUpdateButton.setEnabled(false);
 	}
 	
 	/**
@@ -766,6 +773,8 @@ public class EventDataUI extends JPanel{
 					
 					//Debug
 					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
+					
+					enableOrDisableEditDeleteEventUpdateButtons(updatesTable.getSelectedRow());
 				}       
 	        }
 		});
@@ -847,9 +856,9 @@ public class EventDataUI extends JPanel{
 	
 	/**
 	 * Habilita los botones de editar y borrar incidencias en caso de que el usuario de la sesión sea de tipo ADMIN
-	 * o MANAGER. Habilita o deshabilita los botones de editar y borrar incidencias en caso de que el usuario de la
-	 * sesión sea de tipo USER. Si la incidencia seleccionada fue creada por el usuario de la sesión (de tipo USER),
-	 * se habilitan los botones. Si no, los botones se deshabilitan.
+	 * o MANAGER. Si el usuario de la sesión es de tipo USER, habilita los botones de editar y borrar incidencias
+	 * en caso de que la incidencia haya sido creada por él. En caso contrario, los botones editar y borrar se 
+	 * deshabilitan.
 	 */
 	private void enableOrDisableEditDeleteEventButtons() {
 		//Usuario de sesión de tipo USER
@@ -866,6 +875,93 @@ public class EventDataUI extends JPanel{
 			editEventButton.setEnabled(true);
 			deleteEventButton.setEnabled(true);
 		}
+	}
+	
+	/**
+	 * Deshabilita el botón de borrar actualizaciones con cualquier tipo de usuario si la actualización
+	 * seleccionada es la actualización inicial (la que se crea siempre con la creación de una nueva incidencia).
+	 * Habilita el botón de borrar con cualquier actualización que no sea la actualización inicial en caso de que
+	 * el usuario de la sesión sea de tipo ADMIN o MANAGER. Habilita el botón de editar con cualquier actualización
+	 * en caso de que el usuario de la sesión sea de tipo ADMIN o MANAGER. Si el usuario de la sesión es de tipo USER,
+	 * habilita los botones de editar y borrar actualizaciones en caso de que la actualización haya sido creada por él
+	 * (exceptuando la actualización inicial). En caso contrario, los botones editar y borrar se deshabilitan.
+	 * @param selectedRow fila de la tabla de actualizaciones seleccionada
+	 */
+	private void enableOrDisableEditDeleteEventUpdateButtons(int selectedRow) {
+		if (selectedRow == 0 && !session.getUser().getUserType().equals("USER")) {
+			//Debug
+			System.out.println("La actualización inicial no se puede borrar");
+			editUpdateButton.setEnabled(true);
+			deleteUpdateButton.setEnabled(false);
+//			return;
+		}
+		
+		if (selectedRow != 0 && !session.getUser().getUserType().equals("USER")) {
+			editUpdateButton.setEnabled(true);
+			deleteUpdateButton.setEnabled(true);
+		}
+		
+		if (selectedRow != 0 && session.getUser().getUserType().equals("USER")) {
+			//Debug
+			System.out.println("Usuario user");
+			
+			if (updateSelected.getUser().getId() == session.getUser().getId()) {
+				
+				//Debug
+				System.out.println("El usuario user ha creado la actualización");
+				
+				//Debug
+				System.out.println("id del usuario de la actualización: " + eventSelected.getUpdates().get(0).getUser().getId());
+				System.out.println("id del usuario de la sesión: " + session.getUser().getId());
+				
+				
+				editUpdateButton.setEnabled(true);
+				deleteUpdateButton.setEnabled(true);
+			} else {
+				
+				//Debug
+				System.out.println("El usuario user no ha creado la actualización");
+				
+				editUpdateButton.setEnabled(false);
+				deleteUpdateButton.setEnabled(false);
+			}
+		}
+
+//		//Usuario de sesión de tipo USER
+//		if (session.getUser().getUserType().equals("USER")) {
+//			
+//			//Debug
+//			System.out.println("Usuario user");
+//			
+//			if (updateSelected.getUser().getId() == session.getUser().getId()) {
+//				
+//				//Debug
+//				System.out.println("El usuario user ha creado la actualización");
+//				
+//				//Debug
+//				System.out.println("id del usuario de la actualización: " + eventSelected.getUpdates().get(0).getUser().getId());
+//				System.out.println("id del usuario de la sesión: " + session.getUser().getId());
+//				
+//				
+//				editUpdateButton.setEnabled(true);
+//				deleteUpdateButton.setEnabled(true);
+//			} else {
+//				
+//				//Debug
+//				System.out.println("El usuario user no ha creado la actualización");
+//				
+//				editUpdateButton.setEnabled(false);
+//				deleteUpdateButton.setEnabled(false);
+//			}
+//			//Usuarios ADMIN y MANAGER
+//		} else {
+//			
+//			//Debug
+//			System.out.println("No es un usuario user");
+//			
+//			editUpdateButton.setEnabled(true);
+//			deleteUpdateButton.setEnabled(true);
+//		} 
 	}
 	
 	/**
@@ -895,6 +991,8 @@ public class EventDataUI extends JPanel{
 			last25.setSelected(true);
 			//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
 			totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
+			//Vaciamos la tabla de actualizaciones
+			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 			
 //			//Mostramos sus datos
 //			populateTextFields();
@@ -945,6 +1043,8 @@ public class EventDataUI extends JPanel{
 					last25.setSelected(true);
 					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
 					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
+					//Vaciamos la tabla de actualizaciones
+					updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 					
 //					//Vaciamos label de información
 //					infoLabel.setText("");
@@ -1023,7 +1123,8 @@ public class EventDataUI extends JPanel{
 				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
 				
 			}
-			
+			//Vaciamos la tabla de actualizaciones
+			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 		}
 		
 	}

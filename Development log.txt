@@ -1506,7 +1506,7 @@ ver 0.1.10 - AREAUI AREA ASSIGN MANAGEMENT LAYOUT
 	· AreaTest class:
 		Add testDeleteOneBUnitAreaFromDB() --ok--
 
-ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTION MANAGEMENT CLASS
+ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING uses DatabaseError EXCEPTION MANAGEMENT CLASS
 
 	* - Package main.java.app
 	
@@ -1524,13 +1524,13 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	* - Package main.java.persistence:
 
 	· PersistenceManager class:
-		Update connectToDatabase(), getConnection() --add use of DatabaseError exception--
+		Update connectToDatabase(), getConnection() --add uses DatabaseError exception--
 
 	* - Package main.java.gui
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.11--
-		Update intialize() --make use of Toolbox.centerFrame()--
+		Update intialize() --make uses Toolbox.centerFrame()--
 		Delete useless comments
 
 	· Login class:
@@ -1545,10 +1545,10 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 		Delete useless comments
 
 	· EventTypeAction class (new inner Selector class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() 
 
 	· EventAction class (new inner Selector class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() 
 
 	· CompanyUI class:
 		Change attribute visibility to private
@@ -1607,7 +1607,7 @@ ver 0.1.11 - CLEAN CODE, REFACTORING & INTRODUCING USE OF DatabaseError EXCEPTIO
 	* - Package main.java.session
 
 	· CurrentSession class:
-		Update backToLogin() --make use of Toolbox.centerFrame()--
+		Update backToLogin() --make uses Toolbox.centerFrame()--
 		Delete useless comments
 		
 	* - Package main.java.company
@@ -1707,7 +1707,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 		Add testData() --ok--
 		Add editableDataOn() --ok--
 		Add editableDataOff() --ok--
-		Add emptyList() --ok, use of listModified--
+		Add emptyList() --ok, uses listModified--
 		Add refreshList() --ok--
 		Add afterNewOrEditData() --ok--
 		Add getIndexOfNewElement() --ok--
@@ -1733,7 +1733,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 
 	· CancelAction class (new inner EventTypeUI class):
 		Add actionPerformed()
-		Update actionPerformed() --ok cancel new, ok cancel edit, use of listModified--
+		Update actionPerformed() --ok cancel new, ok cancel edit, uses listModified--
 
 	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
@@ -1759,7 +1759,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 		Add testGetBunitsIdsWithEventTypes() --ok--
 		Add testGetEventTypesOnEventFromDB() --ok--
 
-ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF PersistenceManager registerTableModification()
+ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING uses PersistenceManager registerTableModification()
 
 	* - Package main.java.gui
 
@@ -1770,28 +1770,28 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING USE OF Persistenc
 		Update itemStateChanged() --infoLabel content not deleted--
 			
 	· OKAction class (inner BusinessUnitUI class):
-		Update actionPerformed() --use registerTableModification() new, delete comments--
+		Update actionPerformed() --uses registerTableModification() new, delete comments--
 
 	· DeleteAction class (inner AreaUI class):
-		Update actionPerformed() --use registerTableModification(), delete comments--
+		Update actionPerformed() --uses registerTableModification(), delete comments--
 
 	· OKAction class (inner AreaUI class):
-		Update actionPerformed() --use registerTableModification() new & edit, delete comments--
+		Update actionPerformed() --uses registerTableModification() new & edit, delete comments--
 					 --fix update errors. combobox ok, data ok--
 
 	· AllocateAction class (AreaUI inner class):
-		Update actionPerformed() --use registerTableModification(), delete comments--
+		Update actionPerformed() --uses registerTableModification(), delete comments--
 
 	· RevokeAllocationActionclass (AreaUI inner class):
-		Update actionPerformed() --use registerTableModification(), delete comments--
+		Update actionPerformed() --uses registerTableModification(), delete comments--
 
 	· DeleteAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --use registerTableModification(), delete comments--
+		Update actionPerformed() --uses registerTableModification(), delete comments--
 		
 	· OKAction class (new inner EventTypeUI class):
 		Add actionPerformed() 
-		Update actionPerformed() --use registerTableModification() new & edit, delete comments--
+		Update actionPerformed() --uses registerTableModification() new & edit, delete comments--
 
 ver 0.1.14 - EVENTDATAUI	
 
@@ -1838,15 +1838,16 @@ ver 0.1.14 - EVENTDATAUI
 		Add buildEventTable() --ok--
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
-		Add updateEventTable() --ok, use formatEventTable()--
+		Add updateEventTable() --ok--
 		Add formatEventTable() --ok, state column redimension--
-		Add getLastEventsByDate() --not all cases working yet--
+		Add getLastEventsByDate() --ok--
 		Add sortEventsByDate() --initial & number sorting by event creation date, not by database order--
 		Add buildUpdatesTable() --ok--
 		Add formatUpdatesTable() --ok--
-		Add updateUpdatesTable() --not tested yet--
+		Add updateUpdatesTable() --so far ok--
 		Add enableOrDisableEditDeleteEventButtons() --ok--
 		Add sortEventUpdatesByDate() --not tested yet--
+		Add enableOrDisableEditDeleteEventUpdateButtons() --not fully tested yet, so far ok--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1859,7 +1860,7 @@ ver 0.1.14 - EVENTDATAUI
 				   --fix event buttons not showing the right text--
 				   --add total events, events shown, ok--
 				   --add scroll to the bottom of event table--
-				   --use of sortEventsByDate()--
+				   --uses sortEventsByDate()--
 				   --add Selector attribute to have access to its methods & parent frame--
 				   --add updatesPane, pane visible, table visible, table redimension--
 				   --add new update button, edit update button, delete update button--
@@ -1870,16 +1871,19 @@ ver 0.1.14 - EVENTDATAUI
 					 --fix not using list parameter, ok--
 					 --add tooltips, non editable cells--
 					 --get Event from selected row, not tested yet--
-					 --use of enableOrDisableEditDeleteEventButtons()--
-					 --use of updateUpdatesTable() ok--
+					 --uses enableOrDisableEditDeleteEventButtons()--
+					 --uses updateUpdatesTable() ok--
 					 --clear selection of any selected row in updatesTable--
 					 --fix selectedRow error in ListSelectionListener--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
+					  --uses formatEventTable()--
+					  --disable new, edit & delete update buttons--
 		Update formatEventTable() --add scroll to the bottom of event table--
 		Update buildUpdatesTable() --add tooltips, non editable cells--
 					   --get EventUpdate from selected row, ok--
 					   --fix selectedRow error in ListSelectionListener--
+					   --uses enableOrDisableEditDeleteEventUpdateButtons()--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
@@ -1888,16 +1892,19 @@ ver 0.1.14 - EVENTDATAUI
 					     --eventsShown updates ok--
 		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
+		Update enableOrDisableEditDeleteEventUpdateButtons() --new logic, not fully tested--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
 					  --total events label updates when session.bunit is changed--
+					  --updates table deleted when session.bunit is changed--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
 					  --add filter selection--
 					  --total events label updates when session.bunit is changed--
+					  --updates table deleted when session.bunit is changed--
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
@@ -1905,8 +1912,9 @@ ver 0.1.14 - EVENTDATAUI
 		Add actionPerformed() --different code will be executed depending on the source--
 				      --all cases ok--
 				      --allEvents eventsShown updates ok--
-				      --use of sortEventsByDate()--
+				      --uses sortEventsByDate()--
 				      --get rid of parameter mode, useless--
+				      --each filter deletes updates table--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
