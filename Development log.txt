@@ -1861,6 +1861,7 @@ ver 0.1.14 - EVENTDATAUI
 				   --add Selector attribute to have access to its methods & parent frame--
 				   --add updatesPane, pane visible, table visible, table redimension--
 				   --add new update button, edit update button, delete update button--
+				   --only new event button enabled--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--

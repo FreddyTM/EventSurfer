@@ -146,7 +146,7 @@ public class EventDataUI extends JPanel{
 		
 		eventsContainer = new JPanel();
 		eventsContainer.setLayout(null);
-		TitledBorder titledBorder = BorderFactory.createTitledBorder("Eventos");
+		TitledBorder titledBorder = BorderFactory.createTitledBorder("Incidencias");
 		eventsContainer.setBorder(titledBorder);
 		Border margin = new EmptyBorder(15, 15, 15, 15);
 		eventsContainer.setBorder(new CompoundBorder(eventsContainer.getBorder(), margin));
@@ -159,11 +159,13 @@ public class EventDataUI extends JPanel{
 		editEventButton = new JButton();
 		editEventButton.setAction(editEventAction);
 		editEventButton.setBounds(125, 365, 89, 23);
+		editEventButton.setEnabled(false);
 		eventsContainer.add(editEventButton);
 		
 		deleteEventButton = new JButton();
 		deleteEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
+		deleteEventButton.setEnabled(false);
 		eventsContainer.add(deleteEventButton);
 		
 		JLabel totalEventsLabel = new JLabel("Eventos totales: ");
@@ -222,16 +224,19 @@ public class EventDataUI extends JPanel{
 		newUpdateButton = new JButton();
 		newUpdateButton.setAction(newUpdateAction);
 		newUpdateButton.setBounds(25, 265, 89, 23);
+		newUpdateButton.setEnabled(false);
 		updatesContainer.add(newUpdateButton);
 		
 		editUpdateButton = new JButton();
 		editUpdateButton.setAction(editUpdateAction);
 		editUpdateButton.setBounds(125, 265, 89, 23);
+		editUpdateButton.setEnabled(false);
 		updatesContainer.add(editUpdateButton);
 		
 		deleteUpdateButton = new JButton();
 		deleteUpdateButton.setAction(deleteUpdateAction);
 		deleteUpdateButton.setBounds(225, 265, 89, 23);
+		deleteUpdateButton.setEnabled(false);
 		updatesContainer.add(deleteUpdateButton);
 		
 		filtersContainer = new JPanel();
@@ -779,7 +784,7 @@ public class EventDataUI extends JPanel{
 	 */
 	private void formatUpdatesTable() {
 		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(0));
-		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(1));
+		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(0));
 		//Cell renderer para la columna Fecha / Hora
 		TableColumn tableCol = updatesTable.getColumnModel().getColumn(0);
 		tableCol.setCellRenderer(new UpdatesTableCellRenderer());
