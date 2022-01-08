@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import main.java.company.Area;
@@ -286,6 +287,58 @@ public class Event {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	/**
+	 * Borra una incidencia de la base de datos 
+	 * @param conn conexión a la base de datos
+	 * @param event incidencia a borrar de la base de datos
+	 * @return true si el borrado se hizo con éxito, false si no
+	 */
+	public boolean deleteEventFromDb(Connection conn, Event event) {
+		PreparedStatement pstm = null;
+		String sql = "DELETE FROM \"event\" "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, event.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
+	 * Borra de la lista de incidencias de la unidad de negocio pasada por parámetro
+	 * la incidencia pasada por parámetro, si es que está en la lista
+	 * @param bUnit unidad de negocio de la que borramos la incidencia
+	 * @param event incidencia a borrar
+	 * @return true si se ha borrado alguna incidencia, false si no
+	 */
+	public boolean deleteEvent(BusinessUnit bUnit, Event event) {
+		boolean eventDeleted = false;
+//		for (int i = 0; i < bUnit.getEvents().size(); i++) {
+//			if (bUnit.getEvents().get(i).getId() == event.getId()) {
+//				bUnit.getEvents().remove(i);
+//				eventDeleted = true;
+//				break;
+//			}
+//		}
+		//Using Iterator for safe remove
+		Iterator<Event> iterator = bUnit.getEvents().iterator();
+		while(iterator.hasNext()) {
+			Event ev = (Event) iterator.next();
+			if (ev.getId() == event.getId()) {
+				iterator.remove();
+				eventDeleted = true;
+				break;
+			}
+		}
+		return eventDeleted;
 	}
 	
 	public int getId() {

@@ -1798,8 +1798,13 @@ ver 0.1.14 - EVENTDATAUI
 	* - Package main.java.event
 
 	· EventUpdate class:
-		add deleteEventUpdateFromDb() --not tested yet--
-		add deleteAllEventUpdatesFromDb --not tested yet--
+		Add deleteEventUpdateFromDb() --not tested yet--
+		Add deleteAllEventUpdatesFromDb --not tested yet--
+		Add deleteEventUpdate() --not tested yet--
+
+	· Event class:
+		Add deleteEventFromDb() --not tested yet--
+		Add deleteEvent() --not tested yet--
 
 	* - Package main.java.gui
 
