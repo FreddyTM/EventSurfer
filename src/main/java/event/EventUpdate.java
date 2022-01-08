@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import main.java.company.BusinessUnit;
@@ -232,6 +233,28 @@ public class EventUpdate {
 		} finally {
 			PersistenceManager.closePrepStatement(pstm);
 		}
+	}
+	
+	/**
+	 * Borra de la lista de actualizaciones de la incidencia pasada por parámetro
+	 * la actualización pasada por parámetro, si es que está en la lista
+	 * @param bUnit unidad de negocio de la que borramos la incidencia
+	 * @param event incidencia a borrar
+	 * @return true si se ha borrado alguna incidencia, false si no
+	 */
+	public boolean deleteEventUpdate(Event event, EventUpdate eUpdate) {
+		boolean updateDeleted = false;
+		//Using Iterator for safe remove
+		Iterator<EventUpdate> iterator = event.getUpdates().iterator();
+		while(iterator.hasNext()) {
+			EventUpdate eu = (EventUpdate) iterator.next();
+			if (eu.getId() == eUpdate.getId()) {
+				iterator.remove();
+				updateDeleted = true;
+				break;
+			}
+		}
+		return updateDeleted;
 	}
 	
 	/**
