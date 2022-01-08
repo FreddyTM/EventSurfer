@@ -332,7 +332,7 @@ public class EventDataUI extends JPanel{
 		infoLabel.setBounds(50, 965, 900, 25);
 		add(infoLabel);
 		
-		//Por defecto se muestran los últimos 25 eventos registrados
+		//Por defecto se muestran las últimas 25 incidencias registradas
 //		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 		buildEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
@@ -395,18 +395,20 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Devuelve los últimos elementos de la lista. Si la lista tiene menos elementos de los que buscamos, retornamos
-	 * la lista sin modificar.
-	 * @param list lista de la que buscamos los últimos elementos
-	 * @param number número de elementos que obtendremos de la lista
-	 * @return lista filtrada con los últimos elementos (en orden inverso)
+	 * Devuelve las últimas incidencias de la lista. Si la lista tiene menos incidencias de las que buscamos,
+	 * retornamos la lista sin modificar.
+	 * @param list lista de la que buscamos las últimas incidencias
+	 * @param number número de incidencias que obtendremos de la lista
+	 * @return lista filtrada con las últimas incidencias
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
 		if(list.size() <= number) {
 			eventsShown.setText(((Integer)list.size()).toString());
 			return list;
 		} else {
+			//Debug
 			System.out.println("Filtering...");
+			
 			List<Event> sublist = new ArrayList<Event>();
 			sublist = list.subList(list.size() - number, list.size());
 			eventsShown.setText(((Integer)sublist.size()).toString());
@@ -415,12 +417,12 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Devuelve los eventos de la lista que están en el rango de fechas delimitado por el parámetro months
-	 * @param list lista de la que buscamos los eventos que están dentro del rango de fechas
-	 * @param months número de meses que se incluyen en la lista de eventos desde el presente mes (incluido)
-	 * hacia atrás. Los eventos se tienen que haber registrado en alguno de esos meses para formar parte de la lista.
-	 * Si months = 12 se devuelven los eventos del año en curso
-	 * @return lista filtrada con los eventos que están dentro del rango de fechas
+	 * Devuelve las incidencias de la lista que están en el rango de fechas delimitado por el parámetro months
+	 * @param list lista de la que buscamos las incidencias que están dentro del rango de fechas
+	 * @param months número de meses que se incluyen en la lista de incidencias desde el presente mes (incluido)
+	 * hacia atrás. Las incidencias se tienen que haber registrado en alguno de esos meses para formar parte de la lista.
+	 * Si months = 12 se devuelven las incidencias del año en curso
+	 * @return lista filtrada con las incidencias que están dentro del rango de fechas
 	 */
 	private List<Event> getLastEventsByDate(List<Event> list, int months) {
 		List<Event> filteredList = new ArrayList<Event>();
@@ -482,7 +484,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Ordena una lista de eventos pasada por parámetro en orden ascendente según el criterio de EventComparator (fecha de creación del evento) 
+	 * Ordena una lista de incidencias pasada por parámetro en orden ascendente según el criterio de EventComparator (fecha de creación del evento) 
 	 * @param list lista a ordenar
 	 * @return lista ordenada
 	 */
@@ -508,7 +510,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Dimensiona los paneles que contendrán las tablas de eventos y actualizaciones en función del tamaño de la pantalla
+	 * Dimensiona los paneles que contendrán las tablas de incidencias y actualizaciones en función del tamaño de la pantalla
 	 * @param panel panel a dimensionar
 	 * @param screenSize tamaño de pantalla
 	 */
@@ -531,8 +533,8 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Construye la tabla de eventos con los datos y el formato deseados
-	 * @param list lista de eventos (normalmente los de la unidad de negocio de la sesión)
+	 * Construye la tabla de incidencias con los datos y el formato deseados
+	 * @param list lista de incidencias 
 	 * @param header encabezados de las columnas de la tabla
 	 */
 	private void buildEventTable(List<Event> list, String[] header) {
@@ -588,14 +590,20 @@ public class EventDataUI extends JPanel{
 			}
 		};
 		
-		//Obtenemos el evento que corresponde a la fila de la tabla seleccionada
+		//Obtenemos la incidencia que corresponde a la fila de la tabla seleccionada
 		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent e) {
 	            //Debug
-	            System.out.println((String) eventsTable.getValueAt(eventsTable.getSelectedRow(), 0));
+//	            System.out.println((String) eventsTable.getValueAt(eventsTable.getSelectedRow(), 0));
+	            System.out.println(eventsTable.getSelectedRow());
 	            
 	            int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
 	            eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+	            
+	            //Debug
+	            System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+	            
+	            enableOrDisableEditDeleteEventButtons();
 	        }
 	    });
 		eventsTable.setFillsViewportHeight(true);
@@ -613,8 +621,8 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Actualiza la tabla de eventos con los datos y el formato deseados
-	 * @param list lista de eventos de la unidad de negocio de la sesión
+	 * Actualiza la tabla de incidencias con los datos y el formato deseados
+	 * @param list lista de incidencias de la unidad de negocio de la sesión
 	 * @param header encabezados de las columnas de la tabla
 	 */
 	private void updateEventTable(List<Event> list, String[] header) {
@@ -640,7 +648,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Dimensiona el ancho de las columnas de la tabla de eventos y aplica el formato establecido por la clase
+	 * Dimensiona el ancho de las columnas de la tabla de incidencias y aplica el formato establecido por la clase
 	 * EventTableCellRenderer para las columnas Fecha / Hora y Estado
 	 */
 	private void formatEventTable() {
@@ -728,14 +736,17 @@ public class EventDataUI extends JPanel{
 			}
 		};
 		
-		//Obtenemos el evento que corresponde a la fila de la tabla seleccionada
+		//Obtenemos la actualización que corresponde a la fila de la tabla seleccionada
 		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			        public void valueChanged(ListSelectionEvent e) {
 			            //Debug
-			            System.out.println((String) updatesTable.getValueAt(updatesTable.getSelectedRow(), 0));
+			        	System.out.println(updatesTable.getSelectedRow());
 			            
 			            int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
 			            updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
+			            
+			          //Debug
+			            System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 			        }
 			    });
 		updatesTable.setFillsViewportHeight(true);
@@ -753,8 +764,8 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Actualiza la tabla de eventos con los datos y el formato deseados
-	 * @param list lista de eventos de la unidad de negocio de la sesión
+	 * Actualiza la tabla de actualizaciones con los datos y el formato deseados
+	 * @param list lista de actualizaciones del evento seleccionado
 	 * @param header encabezados de las columnas de la tabla
 	 */
 	private void updateUpdatesTable(List<EventUpdate> list, String[] header) {
@@ -774,13 +785,13 @@ public class EventDataUI extends JPanel{
 		}
 		DefaultTableModel model = new DefaultTableModel(dataVector, headerVector);
 		updatesTable.setModel(model);
-		formatEventTable();
+		formatUpdatesTable();
 		updatesTable.repaint();
 	}
 	
 	/**
 	 * Dimensiona el ancho de las columnas de la tabla de actualizaciones y aplica el formato establecido por la clase
-	 * EventTableCellRenderer para la columna Fecha / Hora
+	 * UpdatesTableCellRenderer para la columna Fecha / Hora
 	 */
 	private void formatUpdatesTable() {
 		updatesTable.removeColumn(updatesTable.getColumnModel().getColumn(0));
@@ -812,6 +823,29 @@ public class EventDataUI extends JPanel{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
 		return Timestamp.valueOf(ldt);
+	}
+	
+	/**
+	 * Habilita los botones de editar y borrar incidencias en caso de que el usuario de la sesión sea de tipo ADMIN
+	 * o MANAGER. Habilita o deshabilita los botones de editar y borrar incidencias en caso de que el usuario de la
+	 * sesión sea de tipo USER. Si la incidencia seleccionada fue creada por el usuario de la sesión (de tipo USER),
+	 * se habilitan los botones. Si no, los botones se deshabilitan.
+	 */
+	private void enableOrDisableEditDeleteEventButtons() {
+		//Usuario de sesión de tipo USER
+		if (session.getUser().getUserType().equals("USER")) {
+			if(eventSelected.getUpdates().get(0).getUser().getId() == session.getUser().getId()) {
+				editEventButton.setEnabled(true);
+				deleteEventButton.setEnabled(true);
+			} else {
+				editEventButton.setEnabled(false);
+				deleteEventButton.setEnabled(false);
+			}
+		//Usuarios ADMIN y MANAGER
+		} else {
+			editEventButton.setEnabled(true);
+			deleteEventButton.setEnabled(true);
+		}
 	}
 	
 	/**
@@ -907,7 +941,7 @@ public class EventDataUI extends JPanel{
 	}
 		
 	/**
-	 * Listener que dispara el filtrado de eventos
+	 * Listener que dispara el filtrado de incidencias
 	 */
 	private class EventFilterListener implements ActionListener {
 
@@ -915,7 +949,7 @@ public class EventDataUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			
 			if (e.getSource() == allEvents) {
-				//Todos los eventos de la unidad de negocio de la sesión
+				//Todas las incidencias de la unidad de negocio de la sesión
 				updateEventTable(sortEventsByDate(session.getbUnit().getEvents()), EVENTS_TABLE_HEADER);
 				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 				
@@ -923,42 +957,46 @@ public class EventDataUI extends JPanel{
 				System.out.println("Listener All");
 
 			} else if (e.getSource() == last25) {
-				//Últimos 25 eventos
+				//Últimas 25 incidencias
+				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
+				//pueden crear incidencias de fechas anteriores a la fecha actual
 				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener 25");
 				
 			} else if (e.getSource() == last50) {
-				//Últimos 50 eventos
+				//Últimas 50 incidencias
+				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
+				//pueden crear incidencias de fechas anteriores a la fecha actual
 				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener 50");
 				
 			} else if (e.getSource() == thisMonth) {
-				//Eventos de un mes atrás desde el presente día
+				//Incidencias del mes actual
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
 				
 			} else if (e.getSource() == last3Months) {
-				//Eventos de 3 meses atrás desde el presente día
+				//Incidencias del mes actual y 2 meses más hacia atrás
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener last3Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
 				
 			} else if (e.getSource() == last6Months) {
-				//Eventos de 6 meses atrás desde el presente día
+				//Incidencias del mes actual y 5 meses más hacia atrás
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
 				
 			} else if (e.getSource() == thisYear) {
-				//Eventos de un año atrás desde el presente día
+				//Incidencias del año actual
 				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER);
 				
 				//Debug
@@ -971,7 +1009,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Cell Renderer que da formato a la tabla de eventos. En concreto da formato a la columna Fecha / Hora y a la columna Estado
+	 * Cell Renderer que da formato a la tabla de incidencias. En concreto da formato a la columna Fecha / Hora y a la columna Estado
 	 * La columna Fecha / Hora muestra la fecha y la hora en el formato DATE_TIME_PATTERN
 	 * Las celdas de la columna Estado tendrán fondo rojo si la incidencia está abierta, amarillo si está en curso, y verde si está cerrada
 	 */
@@ -1010,7 +1048,7 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Comparator para ordenar los eventos por su fecha de creación en orden ascendente
+	 * Comparator para ordenar las incidencias por su fecha de creación en orden ascendente
 	 */
 	private class EventComparator implements Comparator<Event> {
 		@Override

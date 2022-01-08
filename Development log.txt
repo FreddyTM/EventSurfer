@@ -1845,6 +1845,7 @@ ver 0.1.14 - EVENTDATAUI
 		Add buildUpdatesTable() --ok--
 		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --not tested yet--
+		Add enableOrDisableEditDeleteEventButtons() --ok--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1868,6 +1869,7 @@ ver 0.1.14 - EVENTDATAUI
 					 --fix not using list parameter, ok--
 					 --add tooltips, non editable cells--
 					 --get Event from selected row, not tested yet--
+					 --use of enableOrDisableEditDeleteEventButtons()--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 		Update formatEventTable() --add scroll to the bottom of event table--
