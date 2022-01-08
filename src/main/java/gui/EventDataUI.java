@@ -617,6 +617,9 @@ public class EventDataUI extends JPanel{
 	            System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 	            
 	            enableOrDisableEditDeleteEventButtons();
+	            
+	            //Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
+	            updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 	        }
 	    });
 		eventsTable.setFillsViewportHeight(true);

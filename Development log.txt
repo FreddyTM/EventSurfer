@@ -1871,6 +1871,7 @@ ver 0.1.14 - EVENTDATAUI
 					 --add tooltips, non editable cells--
 					 --get Event from selected row, not tested yet--
 					 --use of enableOrDisableEditDeleteEventButtons()--
+					 --use of updateUpdatesTable() (not tested yet)--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 		Update formatEventTable() --add scroll to the bottom of event table--
