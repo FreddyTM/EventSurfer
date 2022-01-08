@@ -1871,12 +1871,15 @@ ver 0.1.14 - EVENTDATAUI
 					 --add tooltips, non editable cells--
 					 --get Event from selected row, not tested yet--
 					 --use of enableOrDisableEditDeleteEventButtons()--
-					 --use of updateUpdatesTable() (not tested yet)--
+					 --use of updateUpdatesTable() ok--
+					 --clear selection of any selected row in updatesTable--
+					 --fix selectedRow error in ListSelectionListener--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 		Update formatEventTable() --add scroll to the bottom of event table--
 		Update buildUpdatesTable() --add tooltips, non editable cells--
-					   --get EventUpdate from selected row, not tested yet--
+					   --get EventUpdate from selected row, ok--
+					   --fix selectedRow error in ListSelectionListener--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--

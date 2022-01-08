@@ -606,18 +606,19 @@ public class EventDataUI extends JPanel{
 		//Obtenemos la incidencia que corresponde a la fila de la tabla seleccionada
 		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent e) {
-	            //Debug
-//	            System.out.println((String) eventsTable.getValueAt(eventsTable.getSelectedRow(), 0));
-	            System.out.println(eventsTable.getSelectedRow());
 	            
-	            int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-	            eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+	        	//Debug
+	            System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
 	            
-	            //Debug
-	            System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-	            
-	            enableOrDisableEditDeleteEventButtons();
-	            
+	            if (eventsTable.getSelectedRow() > -1) {
+					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
+					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+					//Debug
+					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+					enableOrDisableEditDeleteEventButtons();
+				}
+				//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
+	            updatesTable.clearSelection();
 	            //Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
 	            updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 	        }
@@ -754,17 +755,20 @@ public class EventDataUI extends JPanel{
 		
 		//Obtenemos la actualización que corresponde a la fila de la tabla seleccionada
 		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-			        public void valueChanged(ListSelectionEvent e) {
-			            //Debug
-			        	System.out.println(updatesTable.getSelectedRow());
-			            
-			            int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
-			            updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
-			            
-			          //Debug
-			            System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-			        }
-			    });
+	        public void valueChanged(ListSelectionEvent e) {
+	            
+	        	//Debug
+	        	System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
+	            
+	            if (updatesTable.getSelectedRow() > -1) {
+					int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
+					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
+					
+					//Debug
+					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
+				}       
+	        }
+		});
 		updatesTable.setFillsViewportHeight(true);
 		updatesTable.setAutoCreateRowSorter(true);
 		formatUpdatesTable();
