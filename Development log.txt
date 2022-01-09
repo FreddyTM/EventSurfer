@@ -1799,7 +1799,18 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· Company class:
 		Add attribute allCompanyUsers
+
+	· User class:
 		Add getAllCompanyUsers()
+
+	* - Package main.java.session
+
+	· CurrentSession class:
+		Update loadAllData() --uses getAllCompanyUsers() to load all the users of the company--
+		Update loadCurrentSessionData() --uses getAllCompanyUsers() to load all the users of the company--
+
+	· TimerJob class (inner CurrentSession class):
+		Update run() --uses getAllCompanyUsers() in case business_unit & user--
 
 	* - Package main.java.event
 

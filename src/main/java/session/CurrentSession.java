@@ -97,6 +97,8 @@ public class CurrentSession {
 		loadTypesStates(conn);
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
+		//Cargamos la lista de todos los usuarios de la compañía
+		company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));
 		//Cargamos las unidades de negocio de la compañía
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		company.setBusinessUnits(bUnitList);
@@ -145,6 +147,8 @@ public class CurrentSession {
 		loadTypesStates(conn);
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
+		//Cargamos la lista de todos los usuarios de la compañía
+		company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));
 		//Cargamos la unidad de negocio que tiene el id bUnitId
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		for (BusinessUnit unit: bUnitList) {
@@ -398,6 +402,8 @@ public class CurrentSession {
 											}
 										}
 									}
+									//Cargamos la lista de todos los usuarios de la compañía
+									company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));
 									//Recargamos los datos de la lista de unidades de negocio actualizadas							
 									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
@@ -442,8 +448,9 @@ public class CurrentSession {
 								
 								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
 								//correspondiente recarga de los usuarios actualizados, para no repetirla.
-								if (!usersUpdated) {
-									
+								if (!usersUpdated) {					
+									//Cargamos la lista de todos los usuarios de la compañía
+									company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));								
 									//Recargamos los datos de los usuarios de todas las unidades de negocio
 									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
