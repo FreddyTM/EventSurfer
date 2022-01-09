@@ -1819,7 +1819,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add deleteEventUpdateFromDb() --not tested yet--
 		Add deleteAllEventUpdatesFromDb --not tested yet--
 		Add deleteEventUpdate() --not tested yet--
-		Update getEventUpdatesFromDB() --get user from  , not from user.getUserById()--
+		Update getEventUpdatesFromDB() --get user from getUserById(userList, id), not from user.getUserById(bUnit, id)--
 
 	· Event class:
 		Add deleteEventFromDb() --not tested yet--

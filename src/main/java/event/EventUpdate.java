@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import main.java.company.BusinessUnit;
+import main.java.company.Company;
 import main.java.company.User;
 import main.java.persistence.PersistenceManager;
 import main.java.toolbox.ToolBox;
@@ -146,7 +147,9 @@ public class EventUpdate {
 				eUpdate.setDescripcion(results.getString(3));
 				eUpdate.setAutor(results.getString(4));
 				BusinessUnit bUnit = event.getbUnit();
-				User user = new User().getUserById(bUnit, results.getInt(5));
+				Company company = bUnit.getCompany();
+//				User user = new User().getUserById(bUnit, results.getInt(5));
+				User user = new User().getUserById(company.getAllCompanyUsers(), results.getInt(5));
 				eUpdate.setUser(user);
 				updatesList.add(eUpdate);
 			}
