@@ -24,7 +24,7 @@ public class Company {
 	private String mail;
 	private String web;
 	private List<BusinessUnit> businessUnits = new ArrayList<BusinessUnit>();
-	
+	private List<User> allCompanyUsers;
 	
 	public Company(int id, String nombre, String direccion, String provincia,
 			String estado, String cpostal, String telefono, String mail, String web) {
@@ -184,6 +184,13 @@ public class Company {
 		}
 	}
 	
+	public List<User> getAllCompanyUsers() {
+		return allCompanyUsers;
+	}
+	
+	public void setAllCompanyUsers(List<User> allCompanyUsers) {
+		this.allCompanyUsers = allCompanyUsers;
+	}
 	
 	public int getId() {
 		return id;

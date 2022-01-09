@@ -25,6 +25,7 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -36,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -51,6 +53,7 @@ import javax.swing.table.TableColumn;
 
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
+import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
@@ -603,25 +606,41 @@ public class EventDataUI extends JPanel{
 			}
 		};
 		
+		//Restringimos la selección de la tabla a una única fila
+		eventsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//Obtenemos la incidencia que corresponde a la fila de la tabla seleccionada
 		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent e) {
 	            
-	        	//Debug
-	            System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
-	            
-	            if (eventsTable.getSelectedRow() > -1) {
-					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+//	        	DefaultListSelectionModel sourceTable = (DefaultListSelectionModel) e.getSource();
+	        	
+	        	if (!e.getValueIsAdjusting()) {
 					//Debug
-					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-					enableOrDisableEditDeleteEventButtons();
+					System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
+					if (eventsTable.getSelectedRow() > -1) {
+						int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
+						eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+						//Debug
+						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+						enableOrDisableEditDeleteEventButtons();
+						//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
+						//					updatesTable.clearSelection();
+
+						//Debug
+						System.out.println(eventSelected.getUpdates().get(0).getId());
+						System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
+						System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+						System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
+						System.out.println(eventSelected.getUpdates().get(0).getAutor());
+						if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
+							System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
+						}
+
+					} 
+					//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
+					updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 				}
-				//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
-	            updatesTable.clearSelection();
-	            //Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
-	            updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
-	            //Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+				//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
 	            newUpdateButton.setEnabled(true);
 	            editUpdateButton.setEnabled(false);
 	            deleteUpdateButton.setEnabled(false);
@@ -760,6 +779,8 @@ public class EventDataUI extends JPanel{
 			}
 		};
 		
+		//Restringimos la selección de la tabla a una única fila
+		updatesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//Obtenemos la actualización que corresponde a la fila de la tabla seleccionada
 		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent e) {
@@ -803,6 +824,11 @@ public class EventDataUI extends JPanel{
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
 		for (EventUpdate update: list) {
+			
+			//Debug
+			System.out.println("La lista contiene " + list.size() + " elementos");
+			
+						
 			Vector<Object> updateVector = new Vector<Object>();
 			updateVector.add((Integer) update.getId());
 			updateVector.add((Integer) update.getEvent().getId());
@@ -976,32 +1002,37 @@ public class EventDataUI extends JPanel{
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			
-			//Debug
-			System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
+			if (e.getStateChange()== ItemEvent.SELECTED) {
+				//Debug
+				System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
+				String item = (String) comboBox.getSelectedItem();
+				Company company = session.getCompany();
+				//Recuperamos la unidad de negocio seleccionada
+				BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
+				//La asignamos a la sesión
+				session.setbUnit(selectedBunit);
+				//Debug
+				for (User user : session.getbUnit().getUsers()) {
+					System.out.println(user.getUserAlias());
+				}
+				//Renovamos la tabla de eventos
+				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+				//Seleccionamos el filtro
+				last25.setSelected(true);
+				//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+				totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+				//Vaciamos la tabla de actualizaciones
+				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 			
-			String item = (String) comboBox.getSelectedItem();
-			Company company = session.getCompany();
-			//Recuperamos la unidad de negocio seleccionada
-			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
-			//La asignamos a la sesión
-			session.setbUnit(selectedBunit);
-			//Renovamos la tabla de eventos
-			updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-			//Seleccionamos el filtro
-			last25.setSelected(true);
-			//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-			totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
-			//Vaciamos la tabla de actualizaciones
-			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+//				//Mostramos sus datos
+//				populateTextFields();
+//				//Hacemos backup del contenido de los datos del formulario
+//				updateDataCache();
 			
-//			//Mostramos sus datos
-//			populateTextFields();
-//			//Hacemos backup del contenido de los datos del formulario
-//			updateDataCache();
-			
-			//EN PRINCIPIO NO REACTIVAR
-//			//Vaciamos label de información
-//			infoLabel.setText("");
+				//EN PRINCIPIO NO REACTIVAR
+//				//Vaciamos label de información
+//				infoLabel.setText("");
+			}
 		}		
 	}
 	

@@ -1793,7 +1793,13 @@ ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING uses PersistenceM
 		Add actionPerformed() 
 		Update actionPerformed() --uses registerTableModification() new & edit, delete comments--
 
-ver 0.1.14 - EVENTDATAUI	
+ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK & BUTTONS ENABLE/DISABLE AS THEY SHOULD
+
+	* - Package main.java.company
+
+	· Company class:
+		Add attribute allCompanyUsers
+		Add getAllCompanyUsers()
 
 	* - Package main.java.event
 
@@ -1875,6 +1881,7 @@ ver 0.1.14 - EVENTDATAUI
 					 --uses updateUpdatesTable() ok--
 					 --clear selection of any selected row in updatesTable--
 					 --fix selectedRow error in ListSelectionListener--
+					 --table selection fixed to only one row--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
@@ -1884,6 +1891,7 @@ ver 0.1.14 - EVENTDATAUI
 					   --get EventUpdate from selected row, ok--
 					   --fix selectedRow error in ListSelectionListener--
 					   --uses enableOrDisableEditDeleteEventUpdateButtons()--
+					   --table selection fixed to only one row--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--

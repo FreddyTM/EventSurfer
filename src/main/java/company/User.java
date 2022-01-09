@@ -158,6 +158,9 @@ public class User {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
 		}
 	}
 	
@@ -189,6 +192,8 @@ public class User {
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			PersistenceManager.closePrepStatement(pstm);
 		}
 		return false;
 	}
@@ -230,6 +235,44 @@ public class User {
 		} finally {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closePrepStatement(pstm);
+		}
+		return userList;
+	}
+	
+	/**
+	 * Obtiene la lista de todos los usuarios de la empresa
+	 * @param conn conexión con la base de datos
+	 * @return lista de todos los usuarios de la empresa almacenados en la base de datos
+	 */
+	public List<User> getAllCompanyUsers(Connection conn, Company company) {
+		List<User> userList = new ArrayList<User>();
+		User user = null;
+		Statement stm = null;
+		ResultSet results = null;
+		String sql = "SELECT id, b_unit_id, user_type_id, user_alias, nombre, "
+				+ "apellido, user_password, activo "
+				+ "FROM \"user\";";
+		try {
+			stm = conn.createStatement();
+			results = PersistenceManager.getResultSet(stm, sql);
+			while (results.next()) {
+				user = new User();
+				user.setId(results.getInt(1));
+				user.setbUnit(new BusinessUnit().getBusinessUnitById(company, results.getInt(2)));
+				user.setUserType(TypesStatesContainer.getuType().getUserType(results.getInt(3)));
+				user.setUserAlias(results.getString(4));
+				user.setNombre(results.getString(5));
+				user.setApellido(results.getString(6));
+				user.setPassword(results.getString(7));
+				user.setActivo(results.getBoolean(8));
+				userList.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			PersistenceManager.closeResultSet(results);
+			PersistenceManager.closeStatement(stm);
 		}
 		return userList;
 	}
