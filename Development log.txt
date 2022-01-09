@@ -1802,6 +1802,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· User class:
 		Add getAllCompanyUsers()
+		Add getUserById(userList, id) --overloaded from getUserById(bUnit, id)--
 
 	* - Package main.java.session
 
@@ -1818,6 +1819,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add deleteEventUpdateFromDb() --not tested yet--
 		Add deleteAllEventUpdatesFromDb --not tested yet--
 		Add deleteEventUpdate() --not tested yet--
+		Update getEventUpdatesFromDB() --get user from  , not from user.getUserById()--
 
 	· Event class:
 		Add deleteEventFromDb() --not tested yet--

@@ -450,6 +450,22 @@ public class User {
 	}
 	
 	/**
+	 * Devuelve el usuario al que pertenece el id entrado por parámetro
+	 * @param userList lista en la que queremos encontrar al usuario con el id pasado por parámetro
+	 * @param id id del usuario buscado
+	 * @return usuario con el id entrado por parámetro (null si no existe)
+	 */
+	public User getUserById (List<User> userList, int id) {
+//		List<User> userList = bUnit.getUsers();
+		for (User user: userList) {
+			if (user.getId() == id) {
+				return user;
+			}
+		}	
+		return null;
+	}
+	
+	/**
 	 * Comprueba que el password introducido por parámetro es igual al del usuario user
 	 * @param user Usuario
 	 * @param input password a comprobar
