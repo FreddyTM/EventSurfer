@@ -27,7 +27,6 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -67,9 +66,20 @@ import main.java.types_states.TypesStatesContainer;
 
 public class EventDataUI extends JPanel{
 	
+	//Encabezados de las tablas
 	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha / Hora", "Area", "Tipo", "Título", "Descripción", "Estado"};
 	private static final String[] UPDATES_TABLE_HEADER = {"ID", "Event_ID", "Fecha / Hora", "Actualización", "Autor", "Usuario"};
+	
+	//Formato de presentación de fecha/hora
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
+	
+	//Control de estado de botones
+	private static final String EVENT_BUTTON_SET = "eventSet";
+	private static final String UPDATE_BUTTON_SET = "updateSet";
+	private static final String ALL_DISABLED = "000";
+	private static final String NEW_ENABLED = "100";
+	private static final String NEW_EDIT_ENABLED = "110";
+	private static final String ALL_ENABLED = "111";
 	
 	private CurrentSession session;
 	private Selector selector;
@@ -167,14 +177,17 @@ public class EventDataUI extends JPanel{
 		editEventButton = new JButton();
 		editEventButton.setAction(editEventAction);
 		editEventButton.setBounds(125, 365, 89, 23);
-		editEventButton.setEnabled(false);
+//		editEventButton.setEnabled(false);
 		eventsContainer.add(editEventButton);
 		
 		deleteEventButton = new JButton();
 		deleteEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
-		deleteEventButton.setEnabled(false);
+//		deleteEventButton.setEnabled(false);
 		eventsContainer.add(deleteEventButton);
+		
+		//Estado inicial de los botones de la tabla de incidencias
+		buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 		
 		JLabel totalEventsLabel = new JLabel("Eventos totales: ");
 		totalEventsLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -212,20 +225,23 @@ public class EventDataUI extends JPanel{
 		newUpdateButton = new JButton();
 		newUpdateButton.setAction(newUpdateAction);
 		newUpdateButton.setBounds(25, 265, 89, 23);
-		newUpdateButton.setEnabled(false);
+//		newUpdateButton.setEnabled(false);
 		updatesContainer.add(newUpdateButton);
 		
 		editUpdateButton = new JButton();
 		editUpdateButton.setAction(editUpdateAction);
 		editUpdateButton.setBounds(125, 265, 89, 23);
-		editUpdateButton.setEnabled(false);
+//		editUpdateButton.setEnabled(false);
 		updatesContainer.add(editUpdateButton);
 		
 		deleteUpdateButton = new JButton();
 		deleteUpdateButton.setAction(deleteUpdateAction);
 		deleteUpdateButton.setBounds(225, 265, 89, 23);
-		deleteUpdateButton.setEnabled(false);
+//		deleteUpdateButton.setEnabled(false);
 		updatesContainer.add(deleteUpdateButton);
+		
+		//Estado inicial de los botones de la tabla de actualizaciones
+		buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 		
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
@@ -880,12 +896,75 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Habilita o deshabilita los botones de nuevo, editar y borrar de las tablas de incidencias y actualizaciones
+	 * @param buttonSet determina el grupo de botones afectado (tablas incidencias o actualizaciones)
+	 * @param buttonState determina el estado de los botones
+	 */
+	private void buttonSwitcher (String buttonSet, String buttonState) {
+		switch (buttonState) {
+			case ALL_DISABLED:
+				if (buttonSet.equals(EVENT_BUTTON_SET)) {
+					newEventButton.setEnabled(false);
+					editEventButton.setEnabled(false);
+					deleteEventButton.setEnabled(false);
+					break;
+				}
+				newUpdateButton.setEnabled(false);
+				editUpdateButton.setEnabled(false);
+				deleteUpdateButton.setEnabled(false);
+				break;
+			case NEW_ENABLED:
+				if (buttonSet.equals(EVENT_BUTTON_SET)) {
+					newEventButton.setEnabled(true);
+					editEventButton.setEnabled(false);
+					deleteEventButton.setEnabled(false);
+					break;
+				}
+				newUpdateButton.setEnabled(true);
+				editUpdateButton.setEnabled(false);
+				deleteUpdateButton.setEnabled(false);
+				break;
+			case NEW_EDIT_ENABLED:
+				if (buttonSet.equals(EVENT_BUTTON_SET)) {
+					newEventButton.setEnabled(true);
+					editEventButton.setEnabled(true);
+					deleteEventButton.setEnabled(false);
+					break;
+				}
+				newUpdateButton.setEnabled(true);
+				editUpdateButton.setEnabled(true);
+				deleteUpdateButton.setEnabled(false);
+				break;
+			case ALL_ENABLED:
+				if (buttonSet.equals(EVENT_BUTTON_SET)) {
+					newEventButton.setEnabled(true);
+					editEventButton.setEnabled(true);
+					deleteEventButton.setEnabled(true);
+					break;
+				}
+				newUpdateButton.setEnabled(true);
+				editUpdateButton.setEnabled(true);
+				deleteUpdateButton.setEnabled(true);
+				break;
+			default:
+				System.out.println("Button switch no contemplado");
+		}
+	}
+	
+	/**
 	 * Habilita los botones de editar y borrar incidencias en caso de que el usuario de la sesión sea de tipo ADMIN
 	 * o MANAGER. Si el usuario de la sesión es de tipo USER, habilita los botones de editar y borrar incidencias
 	 * en caso de que la incidencia haya sido creada por él. En caso contrario, los botones editar y borrar se 
 	 * deshabilitan.
 	 */
 	private void enableOrDisableEditDeleteEventButtons() {
+		//Si no hay incidencias, solo habilitamos el botón de nueva
+		if (Integer.parseInt(eventsShown.getText()) == 0) {
+			editEventButton.setEnabled(false);
+			deleteEventButton.setEnabled(false);
+			return;
+		}
+		//Si hay incidencias
 		//Usuario de sesión de tipo USER
 		if (session.getUser().getUserType().equals("USER")) {
 			if(eventSelected.getUpdates().get(0).getUser().getId() == session.getUser().getId()) {
@@ -1121,6 +1200,49 @@ public class EventDataUI extends JPanel{
 			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 		}
 		
+	}
+	
+	/**
+	 * Listener que registra la fila seleccionada en la tabla de incidencias. En función de la selección, muestra las actualizaciones
+	 * vinculadas a la incidencia en la tabla de incidencias, y habilita o deshabilita los botones de nueva, editar y borrar de la
+	 * tabla de incidencias según los criterios de enableOrDisableEditDeleteEventButtons()
+	 */
+	private class EventTableSelectionListener implements ListSelectionListener {
+		public void valueChanged(ListSelectionEvent e) {
+        	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
+        	if (!e.getValueIsAdjusting()) {
+        		
+				//Debug
+				System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
+				
+				if (eventsTable.getSelectedRow() > -1) {
+					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
+					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+					//Debug
+					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+					enableOrDisableEditDeleteEventButtons();
+//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
+//					updatesTable.clearSelection();
+
+					//Debug
+					System.out.println(eventSelected.getUpdates().get(0).getId());
+					System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
+					System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+					System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
+					System.out.println(eventSelected.getUpdates().get(0).getAutor());
+					if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
+						System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
+					}
+
+				} 
+				//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
+				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+			}
+			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+            newUpdateButton.setEnabled(true);
+            editUpdateButton.setEnabled(false);
+            deleteUpdateButton.setEnabled(false);
+        }
 	}
 	
 	/**

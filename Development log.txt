@@ -1848,7 +1848,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 			lastMonth, last3Months, last6Months, lastYear, newEventButton, editEventButton, deleteEventButton,
 			newEventAction, editEventAction, deleteEventAction, totalEvents, eventsShown, infoLabel, selector,
 			eventSelected, updateSelected, newUpdateButton, editUpdateButton, deleteUpdateButton, newUpdateAction,
-			editUpdateAction, deleteUpdateAction
+			editUpdateAction, deleteUpdateAction, EVENT_BUTTON_SET, UPDATE_BUTTON_SET, ALL_DISABLED, NEW_ENABLED,
+			NEW_EDIT_ENABLED, ALL_ENABLED
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1868,6 +1869,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add sortEventUpdatesByDate() --not tested yet--
 		Add enableOrDisableEditDeleteEventUpdateButtons() --not fully tested yet, so far ok--
 		Add setPanelsDimensions() --overloaded from setPanelsDimensions(screenSize), work in progress...--
+		Add buttonSwitcher()
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
