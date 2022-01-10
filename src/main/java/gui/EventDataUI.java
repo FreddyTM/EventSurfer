@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -39,6 +42,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -197,26 +201,6 @@ public class EventDataUI extends JPanel{
 		eventsShown.setBounds(830, 365, 50, 25);
 		eventsContainer.add(eventsShown);
 		
-		//This code to windowlistener
-		
-//		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) EventDataUI.this);
-//		System.out.println(parentFrame == null);
-//		
-//		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-//		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
-//		System.out.println(currentDisplay.getDefaultConfiguration().getBounds().x);
-		
-//		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		System.out.println(screenSize.height + " " + screenSize.width);
-//		if (screenSize.width > 1024) {
-//			eventsContainer.setBounds(50, 225, 1400, 400);
-//		} else {
-//			eventsContainer.setBounds(50, 225, 1100, 400);
-//		}
-		
-//		eventsContainer.setBounds(50, 225, 1100, 400);
-		
-	
 		updatesContainer = new JPanel();
 		updatesContainer.setLayout(null);
 		TitledBorder titledBorder2 = BorderFactory.createTitledBorder("Actualizaciones");
@@ -336,7 +320,6 @@ public class EventDataUI extends JPanel{
 		add(infoLabel);
 		
 		//Por defecto se muestran las últimas 25 incidencias registradas
-//		buildEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 		buildEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
 		JScrollPane eventsPane = new JScrollPane(eventsTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
 //		//Scroll al final de la tabla
@@ -546,6 +529,27 @@ public class EventDataUI extends JPanel{
 		}
 //		filtersContainer.setBounds(eventsContainer.getBounds().width - 250, 25, 225, 300);
 		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 325);
+	}
+	
+	/**
+	 * Dimensiona los paneles que contendrán las tablas de incidencias y actualizaciones en función del tamaño de la pantalla
+	 * Método que dimensiona automáticamente los paneles en función del tamaño de la pantalla (work in progress...)
+	 */
+	private void setPanelsDimensions() {
+		//This code to windowlistener
+		JPanel parentPanel = (JPanel) SwingUtilities.getRoot((Component) EventDataUI.this);
+		JFrame parentFrame = (JFrame) SwingUtilities.getRoot((Component) parentPanel);
+		System.out.println(parentFrame == null);
+		
+		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
+		System.out.println(currentDisplay.getDefaultConfiguration().getBounds().x);
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		System.out.println(screenSize.height + " " + screenSize.width);
+		
+		//work in progress...
+		
 	}
 	
 	/**
@@ -870,12 +874,13 @@ public class EventDataUI extends JPanel{
 	
 	
 	/**
-	 * Retorna un timestamp a partir de un string que sigue el formato de DATE_TIME_PATTERN
+	 * Retorna un timestamp a partir de un string que sigue el formato de pattern
 	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
+	 * @param pattern patrón para dar el formato
 	 * @return Timestamp con la fecha y la hora pasadas por parámetro
 	 */
-	private Timestamp stringToTimestamp(String stringToParse) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+	private Timestamp stringToTimestamp(String stringToParse, String pattern) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
 		return Timestamp.valueOf(ldt);
 	}

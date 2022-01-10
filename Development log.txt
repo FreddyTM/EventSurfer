@@ -1867,6 +1867,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add enableOrDisableEditDeleteEventButtons() --ok--
 		Add sortEventUpdatesByDate() --not tested yet--
 		Add enableOrDisableEditDeleteEventUpdateButtons() --not fully tested yet, so far ok--
+		Add setPanelsDimensions() --overloaded from setPanelsDimensions(screenSize), work in progress...--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1914,6 +1915,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
 		Update enableOrDisableEditDeleteEventUpdateButtons() --new logic, not fully tested--
+		Update stringToTimestamp() --add pattern parameter--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
