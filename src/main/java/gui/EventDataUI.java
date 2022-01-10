@@ -43,6 +43,7 @@ import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -587,20 +588,17 @@ public class EventDataUI extends JPanel{
 				 JComponent jcomp = (JComponent)comp;
 				 int dataLength = 0;
 				 if (comp == jcomp) {
-					 
-//					 //Debug
-//					 System.out.println("row " + row + ", column " + col);
-
+					 //Formato para Timestamp
+					 int initialDelay = ToolTipManager.sharedInstance().getInitialDelay();
+					 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
 					 if (getValueAt(row, col).getClass() == Timestamp.class) {
-						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");
-						 
+						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");						 
 						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
-					 } else {
-//						 //Debug
-//						 System.out.println(getValueAt(row, col).toString() + " - " + dataLength);
-						 						 
-						 //Multi-line tooltips if needed
+					 } else {			 
+						 //Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
+						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
+						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 500 ? 15000 : initialDelay);
 //						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
 						 jcomp.setToolTipText(dataLength < 500 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
@@ -615,20 +613,20 @@ public class EventDataUI extends JPanel{
 		//Obtenemos la incidencia que corresponde a la fila de la tabla seleccionada
 		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent e) {
-	            
-//	        	DefaultListSelectionModel sourceTable = (DefaultListSelectionModel) e.getSource();
-	        	
+	        	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
 	        	if (!e.getValueIsAdjusting()) {
+	        		
 					//Debug
 					System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
+					
 					if (eventsTable.getSelectedRow() > -1) {
 						int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
 						eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
 						//Debug
 						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 						enableOrDisableEditDeleteEventButtons();
-						//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
-						//					updatesTable.clearSelection();
+	//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
+	//					updatesTable.clearSelection();
 
 						//Debug
 						System.out.println(eventSelected.getUpdates().get(0).getId());
@@ -760,22 +758,19 @@ public class EventDataUI extends JPanel{
 				 JComponent jcomp = (JComponent)comp;
 				 int dataLength = 0;
 				 if (comp == jcomp) {
-					 
-//					 //Debug
-//					 System.out.println("row " + row + ", column " + col);
-
+					//Formato para Timestamp
+					 int initialDelay = ToolTipManager.sharedInstance().getInitialDelay();
+					 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
 					 if (getValueAt(row, col).getClass() == Timestamp.class) {
-						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");
-						 
+						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");					 
 						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
-					 } else {
-//						 //Debug
-//						 System.out.println(getValueAt(row, col).toString() + " - " + dataLength);
-						 						 
-						 //Multi-line tooltips if needed
+					 } else {				 
+						//Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
+						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
+						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 500 ? 15000 : initialDelay);
 //						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
-						 jcomp.setToolTipText(dataLength < 600 ? getValueAt(row, col).toString()
+						 jcomp.setToolTipText(dataLength < 500 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"600\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
 				 }
@@ -831,8 +826,7 @@ public class EventDataUI extends JPanel{
 			
 			//Debug
 			System.out.println("La lista contiene " + list.size() + " elementos");
-			
-						
+							
 			Vector<Object> updateVector = new Vector<Object>();
 			updateVector.add((Integer) update.getId());
 			updateVector.add((Integer) update.getEvent().getId());
@@ -957,42 +951,6 @@ public class EventDataUI extends JPanel{
 				deleteUpdateButton.setEnabled(false);
 			}
 		}
-
-//		//Usuario de sesión de tipo USER
-//		if (session.getUser().getUserType().equals("USER")) {
-//			
-//			//Debug
-//			System.out.println("Usuario user");
-//			
-//			if (updateSelected.getUser().getId() == session.getUser().getId()) {
-//				
-//				//Debug
-//				System.out.println("El usuario user ha creado la actualización");
-//				
-//				//Debug
-//				System.out.println("id del usuario de la actualización: " + eventSelected.getUpdates().get(0).getUser().getId());
-//				System.out.println("id del usuario de la sesión: " + session.getUser().getId());
-//				
-//				
-//				editUpdateButton.setEnabled(true);
-//				deleteUpdateButton.setEnabled(true);
-//			} else {
-//				
-//				//Debug
-//				System.out.println("El usuario user no ha creado la actualización");
-//				
-//				editUpdateButton.setEnabled(false);
-//				deleteUpdateButton.setEnabled(false);
-//			}
-//			//Usuarios ADMIN y MANAGER
-//		} else {
-//			
-//			//Debug
-//			System.out.println("No es un usuario user");
-//			
-//			editUpdateButton.setEnabled(true);
-//			deleteUpdateButton.setEnabled(true);
-//		} 
 	}
 	
 	/**

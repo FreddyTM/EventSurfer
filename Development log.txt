@@ -1896,6 +1896,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --clear selection of any selected row in updatesTable--
 					 --fix selectedRow error in ListSelectionListener--
 					 --table selection fixed to only one row--
+					 --big tooltip, long display time, small tooltip, default display time--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
@@ -1906,6 +1907,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					   --fix selectedRow error in ListSelectionListener--
 					   --uses enableOrDisableEditDeleteEventUpdateButtons()--
 					   --table selection fixed to only one row--
+					   --big tooltip, long display time, small tooltip, default display time--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
