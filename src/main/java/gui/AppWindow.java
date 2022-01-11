@@ -34,6 +34,7 @@ public class AppWindow extends JFrame {
 	private JPanel basePanel;
 	private JLabel infoLabel;
 	private String versionNumber = "0.1.14";
+	private String fullTitle = getTitle() + "           Versión " + versionNumber + "  Usuario: ";
 	private CurrentSession session;
 	private Connection conn;
 
@@ -164,6 +165,11 @@ public class AppWindow extends JFrame {
 		public void componentHidden(ComponentEvent e) {
 			
 		}
+	}
+	
+	public void setFullTitle(String userName) {
+		fullTitle += userName;
+		setTitle(fullTitle);
 	}
 
 	public JPanel getUpPanel() {

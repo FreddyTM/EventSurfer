@@ -1828,6 +1828,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 	* - Package main.java.gui
 
 	· AppWindow class:
+		Add attribute
+			fullTitle
+		Add setFullTitle()
 		Update attribute versionNumber --ver 0.1.14--
 		Update componentResized() --scrollbar when needed in progress--
 		Resize leftPanel --wider buttons--
