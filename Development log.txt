@@ -1928,6 +1928,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --update return--
 		Rename enableOrDisableEditDeleteEventButtons() to updateEventButtonsState()
 		Update updateEventButtonsState() --uses buttonSwitcher, not tested yet--
+						 --only needed into EventTableSelectionListener, no event option deleted--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1954,6 +1955,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				         --get rid of parameter mode, useless--
 				         --each filter deletes updates table--
 					 --eventsShown updates in all cases--
+					 --only new event button enabled--
 	· EventTableSelectionListener (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
