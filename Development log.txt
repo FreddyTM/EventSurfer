@@ -1697,7 +1697,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 			tNow, timer, panelVisible, eventTypeNameField, allEventTypes, selectedEventType, maxLengthLabel,
 			textFieldBackup, registeredEventTypes, registeredModel, registeredList, registeredScrollPane, 
 			okActionSelector, infoLabel, editButton, cancelButton, oKButton, newButton, deleteButton, editAction, 
-			cancelAction, oKAction, newAction, deleteAction, itemSelectedIndex, itemSelectedBackupIndex, listModified
+			cancelAction, oKAction, newAction, deleteAction, itemSelectedIndex, itemSelectedBackupIndex, listModified,
 		Delete attribute allEventTypes --useless--
 		Rename attribute maxLengthLabel to maxCharsLabel
 		Add constructor
@@ -1859,7 +1859,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 			newEventAction, editEventAction, deleteEventAction, totalEvents, eventsShown, infoLabel, selector,
 			eventSelected, updateSelected, newUpdateButton, editUpdateButton, deleteUpdateButton, newUpdateAction,
 			editUpdateAction, deleteUpdateAction, EVENT_BUTTON_SET, UPDATE_BUTTON_SET, ALL_DISABLED, NEW_ENABLED,
-			NEW_EDIT_ENABLED, ALL_ENABLED
+			NEW_EDIT_ENABLED, ALL_ENABLED, EVENTDATA_ACTION_UNDEFINED, EVENTDATA_ACTION_NEW_EVENT,
+			EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_DELETE_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
+			EVENTDATA_ACTION_EDIT_UPDATE, EVENTDATA_ACTION_DELETE_UPDATE, DIALOG_YES_NO
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1880,6 +1882,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add enableOrDisableEditDeleteEventUpdateButtons() --ok--
 		Add setPanelsDimensions() --overloaded from setPanelsDimensions(screenSize), work in progress...--
 		Add buttonSwitcher()
+		Add delete()
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -1942,7 +1945,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --update return--
 		Rename enableOrDisableEditDeleteEventButtons() to updateEventButtonsStateOnSelection()
 		Update updateEventButtonsStateOnSelection() --uses buttonSwitcher, ok--
-						 --only needed into EventTableSelectionListener, no event option deleted--
+							    --only needed into EventTableSelectionListener,
+							      no event option deleted--
+		Update delete() --basic logic--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -2003,8 +2008,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 	· EditEventAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--
 
-	· DeleteEventAction (new inner EventDataUI class):
-		Add actionPerformed() --empty--
+	· DeleteAction (new inner EventDataUI class): --DeleteEventAction renamed to DeleteAction--
+		Add actionPerformed()
+		Update actionPerformed() --uses delete()--
 
 	· NewUpdateAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--
@@ -2012,5 +2018,5 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 	· EditUpdateAction (new inner EventDataUI class):
 		Add actionPerformed() --empty--
 
-	· DeleteUpdateAction (new inner EventDataUI class):
+	· DeleteUpdateAction (new inner EventDataUI class): --DELETED--
 		Add actionPerformed() --empty--

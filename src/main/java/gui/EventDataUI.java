@@ -33,6 +33,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -80,6 +81,19 @@ public class EventDataUI extends JPanel{
 	private static final String NEW_ENABLED = "100";
 	private static final String NEW_EDIT_ENABLED = "110";
 	private static final String ALL_ENABLED = "111";
+	
+	//Se asignan a la variable actionSelector para determinar la acción a ejecutar
+	private static final int EVENTDATA_ACTION_UNDEFINED = 0; //Default
+	private static final int EVENTDATA_ACTION_NEW_EVENT = 1;
+	private static final int EVENTDATA_ACTION_EDIT_EVENT = 2;
+	private static final int EVENTDATA_ACTION_DELETE_EVENT = 3;
+	private static final int EVENTDATA_ACTION_NEW_UPDATE = 4;
+	private static final int EVENTDATA_ACTION_EDIT_UPDATE = 5;
+	private static final int EVENTDATA_ACTION_DELETE_UPDATE = 6;
+	//Tipo de cuadro de diálogo
+	private static final String DIALOG_YES_NO = "yes_no";
+	//Registra la acción a realizar según el botón activado
+	private int ActionSelector = EVENTDATA_ACTION_UNDEFINED;
 	
 	private CurrentSession session;
 	private Selector selector;
@@ -129,10 +143,10 @@ public class EventDataUI extends JPanel{
 	
 	private final Action newEventAction = new NewEventAction();
 	private final Action editEventAction = new EditEventAction();
-	private final Action deleteEventAction = new DeleteEventAction();
+	private final Action deleteEventAction = new DeleteAction();
 	private final Action newUpdateAction = new NewUpdateAction();
 	private final Action editUpdateAction = new EditUpdateAction();
-	private final Action deleteUpdateAction = new DeleteUpdateAction();
+	private final Action deleteUpdateAction = new DeleteAction();
 
 
 	public EventDataUI(CurrentSession session, Selector selector) {
@@ -1050,6 +1064,32 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Borra una incidencia o una actualización en función de la acción pasada por parámetro
+	 * @param action determina si se borra una incidencia o una actualización
+	 */
+	private void delete(int action) {
+		String text = "";
+		if (action == EVENTDATA_ACTION_DELETE_EVENT) {
+			text = "El borrado de incidencias no se puede deshacer. ¿Desea continuar?";
+		}
+		if (action == EVENTDATA_ACTION_DELETE_UPDATE) {
+			text = "El borrado de actualizaciones no se puede deshacer. ¿Desea continuar?";
+		}
+		int optionSelected = ToolBox.showDialog(text, EventDataUI.this,	DIALOG_YES_NO);
+		if (optionSelected != JOptionPane.YES_OPTION) {
+			//Debug
+			System.out.println("Borrado cancelado");
+			return;
+		} else {
+			//Debug
+			System.out.println("Borrado autorizado");
+			
+			
+//			deleteOK = true;
+		}
+	}
+	
+	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
@@ -1414,14 +1454,22 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
-	private class DeleteEventAction extends AbstractAction {
-		public DeleteEventAction() {
+	private class DeleteAction extends AbstractAction {
+		public DeleteAction() {
 			putValue(NAME, "Borrar");
 			putValue(SHORT_DESCRIPTION, "Delete event");
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			//borrado de eventos
+			if (e.getSource() == deleteEventButton) {
+				delete(EVENTDATA_ACTION_DELETE_EVENT);
+			}
+			
+			//borrado de actualizaciones
+			if (e.getSource() == deleteUpdateButton) {
+				delete(EVENTDATA_ACTION_DELETE_UPDATE);
+			}
 			
 		}
 	}
@@ -1450,16 +1498,16 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
-	private class DeleteUpdateAction extends AbstractAction {
-		public DeleteUpdateAction() {
-			putValue(NAME, "Borrar");
-			putValue(SHORT_DESCRIPTION, "Delete update");
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
+//	private class DeleteUpdateAction extends AbstractAction {
+//		public DeleteUpdateAction() {
+//			putValue(NAME, "Borrar");
+//			putValue(SHORT_DESCRIPTION, "Delete update");
+//		}
+//		@Override
+//		public void actionPerformed(ActionEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//	}
 
 }
