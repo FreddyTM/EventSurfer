@@ -1917,6 +1917,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Update getLastEventsByDate() --new logic for thisMonth, last3Months, last6Months--
 					     --thisMonth, thisYear ok, last3Months, last6Months ok--
 					     --eventsShown updates ok--
+					     --eventsShown updates in EventFilterListener, no longer here--
 		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
 					       --eventsShown updates in Combolistener, no longer here--
@@ -1932,6 +1933,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --add filter selection--
 					  --total events label updates when session.bunit is changed--
 					  --updates table deleted when session.bunit is changed--
+					  --eventsShown updates here--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1950,6 +1952,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				         --uses sortEventsByDate()--
 				         --get rid of parameter mode, useless--
 				         --each filter deletes updates table--
+					 --eventsShown updates in all cases--
 	· EventTableSelectionListener (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--

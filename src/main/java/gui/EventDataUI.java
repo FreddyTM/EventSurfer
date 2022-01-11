@@ -482,7 +482,7 @@ public class EventDataUI extends JPanel{
 	    			System.out.println("Error de filtrado, criterio no previsto");
 	    	}
 	    }
-	    eventsShown.setText(((Integer)filteredList.size()).toString());
+//	    eventsShown.setText(((Integer)filteredList.size()).toString());
 		return filteredList;
 	}
 	
@@ -1163,7 +1163,12 @@ public class EventDataUI extends JPanel{
 				//Últimas 25 incidencias
 				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
 				//pueden crear incidencias de fechas anteriores a la fecha actual
-				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener 25");
@@ -1172,35 +1177,60 @@ public class EventDataUI extends JPanel{
 				//Últimas 50 incidencias
 				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
 				//pueden crear incidencias de fechas anteriores a la fecha actual
-				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener 50");
 				
 			} else if (e.getSource() == thisMonth) {
 				//Incidencias del mes actual
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 0);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 0), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
 				
 			} else if (e.getSource() == last3Months) {
 				//Incidencias del mes actual y 2 meses más hacia atrás
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 3);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 3), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener last3Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
 				
 			} else if (e.getSource() == last6Months) {
 				//Incidencias del mes actual y 5 meses más hacia atrás
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 6);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 6), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
 				
 			} else if (e.getSource() == thisYear) {
 				//Incidencias del año actual
-				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER);
+				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 12);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
+				
+//				updateEventTable(getLastEventsByDate(session.getbUnit().getEvents(), 12), EVENTS_TABLE_HEADER);
 				
 				//Debug
 				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
