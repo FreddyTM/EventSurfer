@@ -706,9 +706,6 @@ public class EventDataUI extends JPanel{
 		eventsTable.setModel(model);
 		formatEventTable();
 		eventsTable.repaint();
-//		newUpdateButton.setEnabled(false);
-//		editUpdateButton.setEnabled(false);
-//		deleteUpdateButton.setEnabled(false);
 	}
 	
 	/**
@@ -800,23 +797,25 @@ public class EventDataUI extends JPanel{
 		//Restringimos la selección de la tabla a una única fila
 		updatesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//Obtenemos la actualización que corresponde a la fila de la tabla seleccionada
-		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent e) {
-	            
-	        	//Debug
-	        	System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
-	            
-	            if (updatesTable.getSelectedRow() > -1) {
-					int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
-					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
-					
-					//Debug
-					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
-					
-					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
-				}       
-	        }
-		});
+		updatesTable.getSelectionModel().addListSelectionListener(new EventUpdateTableSelectionListener());
+		
+//		updatesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+//	        public void valueChanged(ListSelectionEvent e) {
+//	            
+//	        	//Debug
+//	        	System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
+//	            
+//	            if (updatesTable.getSelectedRow() > -1) {
+//					int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
+//					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
+//					
+//					//Debug
+//					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
+//					
+//					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
+//				}       
+//	        }
+//		});
 		updatesTable.setFillsViewportHeight(true);
 		updatesTable.setAutoCreateRowSorter(true);
 		formatUpdatesTable();
@@ -827,7 +826,7 @@ public class EventDataUI extends JPanel{
 //			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
 		//Debug
-		System.out.println("Creando el contenido de la tabla de eventos");
+		System.out.println("Creando el contenido de la tabla de actualizaciones");
 		
 	}
 	
@@ -1263,7 +1262,8 @@ public class EventDataUI extends JPanel{
 	/**
 	 * Listener que registra la fila seleccionada en la tabla de incidencias. En función de la selección, muestra las actualizaciones
 	 * vinculadas a la incidencia en la tabla de incidencias, y habilita o deshabilita los botones de nueva, editar y borrar de la
-	 * tabla de incidencias según los criterios de enableOrDisableEditDeleteEventButtons()
+	 * tabla de incidencias según los criterios de updateEventButtonsStateOnSelection(). Se registra el correspondiente evento
+	 * seleccionado
 	 */
 	private class EventTableSelectionListener implements ListSelectionListener {
 		public void valueChanged(ListSelectionEvent e) {
@@ -1286,15 +1286,15 @@ public class EventDataUI extends JPanel{
 //					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
 //					updatesTable.clearSelection();
 
-					//Debug
-					System.out.println(eventSelected.getUpdates().get(0).getId());
-					System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
-					System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
-					System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
-					System.out.println(eventSelected.getUpdates().get(0).getAutor());
-					if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
-						System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
-					}
+//					//Debug
+//					System.out.println(eventSelected.getUpdates().get(0).getId());
+//					System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
+//					System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+//					System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
+//					System.out.println(eventSelected.getUpdates().get(0).getAutor());
+//					if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
+//						System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
+//					}
 
 				} 
 				//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
@@ -1302,10 +1302,33 @@ public class EventDataUI extends JPanel{
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
         	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
-//            newUpdateButton.setEnabled(true);
-//            editUpdateButton.setEnabled(false);
-//            deleteUpdateButton.setEnabled(false);
         }
+	}
+	
+	/**
+	 * Listener que registra la fila seleccionada en la tabla de actualizaciones. En función de la selección, habilita
+	 * o deshabilita los botones de nueva, editar y borrar de la tabla de actualizaciones según los criterios de
+	 * updateEventUpdateButtonsStateOnSelection(). Se registra la correspondiente actualización seleccionada
+	 */
+	private class EventUpdateTableSelectionListener implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
+        	if (!e.getValueIsAdjusting()) {
+				//Debug
+				System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
+				if (updatesTable.getSelectedRow() > -1) {
+					int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
+					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
+
+					//Debug
+					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
+
+					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
+				} 
+			} 
+		}
 	}
 	
 	/**

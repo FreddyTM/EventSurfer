@@ -4,6 +4,7 @@ package main.java.gui;
 import javax.swing.JPanel;
 import main.java.session.CurrentSession;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -269,5 +270,9 @@ public class Selector extends JPanel {
 			//Mostramos el panel
 			showPanel(frame, eDataUI);	
 		}
+	}
+	
+	public JFrame getFrame() {
+		return frame;
 	}
 }
