@@ -640,7 +640,7 @@ public class EventDataUI extends JPanel{
 						eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
 						//Debug
 						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-						enableOrDisableEditDeleteEventButtons();
+						updateEventButtonsState();
 	//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
 	//					updatesTable.clearSelection();
 
@@ -957,27 +957,33 @@ public class EventDataUI extends JPanel{
 	 * en caso de que la incidencia haya sido creada por él. En caso contrario, los botones editar y borrar se 
 	 * deshabilitan.
 	 */
-	private void enableOrDisableEditDeleteEventButtons() {
+	private void updateEventButtonsState() {
 		//Si no hay incidencias, solo habilitamos el botón de nueva
 		if (Integer.parseInt(eventsShown.getText()) == 0) {
-			editEventButton.setEnabled(false);
-			deleteEventButton.setEnabled(false);
+//			editEventButton.setEnabled(false);
+//			deleteEventButton.setEnabled(false);
+			buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 			return;
 		}
 		//Si hay incidencias
 		//Usuario de sesión de tipo USER
 		if (session.getUser().getUserType().equals("USER")) {
+			//El usuario de tipo USER ha creado la incidencia
 			if(eventSelected.getUpdates().get(0).getUser().getId() == session.getUser().getId()) {
-				editEventButton.setEnabled(true);
-				deleteEventButton.setEnabled(true);
+//				editEventButton.setEnabled(true);
+//				deleteEventButton.setEnabled(true);
+				buttonSwitcher(EVENT_BUTTON_SET, ALL_ENABLED);
+			//El usuario de tipo USER no ha creado la incidencia
 			} else {
-				editEventButton.setEnabled(false);
-				deleteEventButton.setEnabled(false);
+//				editEventButton.setEnabled(false);
+//				deleteEventButton.setEnabled(false);
+				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 			}
 		//Usuarios ADMIN y MANAGER
 		} else {
-			editEventButton.setEnabled(true);
-			deleteEventButton.setEnabled(true);
+//			editEventButton.setEnabled(true);
+//			deleteEventButton.setEnabled(true);
+			buttonSwitcher(EVENT_BUTTON_SET, ALL_ENABLED);
 		}
 	}
 	
@@ -1220,7 +1226,7 @@ public class EventDataUI extends JPanel{
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
 					//Debug
 					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-					enableOrDisableEditDeleteEventButtons();
+					updateEventButtonsState();
 //					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
 //					updatesTable.clearSelection();
 
