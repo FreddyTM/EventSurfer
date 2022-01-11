@@ -813,7 +813,7 @@ public class EventDataUI extends JPanel{
 					//Debug
 					System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
 					
-					enableOrDisableEditDeleteEventUpdateButtons(updatesTable.getSelectedRow());
+					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
 				}       
 	        }
 		});
@@ -986,50 +986,66 @@ public class EventDataUI extends JPanel{
 	/**
 	 * Deshabilita el botón de borrar actualizaciones con cualquier tipo de usuario si la actualización
 	 * seleccionada es la actualización inicial (la que se crea siempre con la creación de una nueva incidencia).
-	 * Habilita el botón de borrar con cualquier actualización que no sea la actualización inicial en caso de que
-	 * el usuario de la sesión sea de tipo ADMIN o MANAGER. Habilita el botón de editar con cualquier actualización
+	 * Habilita el botón de editar con cualquier actualización en caso de que el usuario de la sesión sea de tipo
+	 * ADMIN o MANAGER. Habilita el botón de borrar con cualquier actualización que no sea la actualización inicial
 	 * en caso de que el usuario de la sesión sea de tipo ADMIN o MANAGER. Si el usuario de la sesión es de tipo USER,
 	 * habilita los botones de editar y borrar actualizaciones en caso de que la actualización haya sido creada por él
-	 * (exceptuando la actualización inicial). En caso contrario, los botones editar y borrar se deshabilitan.
+	 * (exceptuando la actualización inicial que nunca tendrá el botón borrar habilitado). Si la actualización no ha
+	 * sido creada por el usuario de tipo USER, los botones editar y borrar se deshabilitan.
 	 * @param selectedRow fila de la tabla de actualizaciones seleccionada
 	 */
-	private void enableOrDisableEditDeleteEventUpdateButtons(int selectedRow) {
+	private void updateEventUpdateButtonsStateOnSelection(int selectedRow) {
+		//Actualización inicial, usuarios ADMIN y MANAGER
 		if (selectedRow == 0 && !session.getUser().getUserType().equals("USER")) {
 			//Debug
 			System.out.println("La actualización inicial no se puede borrar");
-			editUpdateButton.setEnabled(true);
-			deleteUpdateButton.setEnabled(false);
+			buttonSwitcher(UPDATE_BUTTON_SET, NEW_EDIT_ENABLED);
+//			editUpdateButton.setEnabled(true);
+//			deleteUpdateButton.setEnabled(false);
 //			return;
 		}
 		
+		//Resto de actualizaciones, usuarios ADMIN y MANAGER
 		if (selectedRow != 0 && !session.getUser().getUserType().equals("USER")) {
-			editUpdateButton.setEnabled(true);
-			deleteUpdateButton.setEnabled(true);
+			buttonSwitcher(UPDATE_BUTTON_SET, ALL_ENABLED);
+//			editUpdateButton.setEnabled(true);
+//			deleteUpdateButton.setEnabled(true);
 		}
 		
-		if (selectedRow != 0 && session.getUser().getUserType().equals("USER")) {
-			//Debug
-			System.out.println("Usuario user");
-			
+		//Actualización inicial, usuarios USER
+		if (selectedRow == 0 && session.getUser().getUserType().equals("USER")) {
+			//El usuario de tipo USER ha creado la incidencia
 			if (updateSelected.getUser().getId() == session.getUser().getId()) {
-				
-				//Debug
-				System.out.println("El usuario user ha creado la actualización");
-				
-				//Debug
-				System.out.println("id del usuario de la actualización: " + eventSelected.getUpdates().get(0).getUser().getId());
-				System.out.println("id del usuario de la sesión: " + session.getUser().getId());
-				
-				
-				editUpdateButton.setEnabled(true);
-				deleteUpdateButton.setEnabled(true);
+				buttonSwitcher(UPDATE_BUTTON_SET, NEW_EDIT_ENABLED);
+			//El usuario de tipo USER no ha creado la incidencia
 			} else {
+				buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+			}
+		}
+		
+		//Resto de actualizaciones, usuarios USER
+		if (selectedRow != 0 && session.getUser().getUserType().equals("USER")) {
+			//El usuario de tipo USER ha creado la incidencia
+			if (updateSelected.getUser().getId() == session.getUser().getId()) {
+				buttonSwitcher(UPDATE_BUTTON_SET, ALL_ENABLED);
 				
-				//Debug
-				System.out.println("El usuario user no ha creado la actualización");
+//				//Debug
+//				System.out.println("El usuario user ha creado la actualización");
+//				System.out.println("id del usuario de la actualización: " + eventSelected.getUpdates().get(0).getUser().getId());
+//				System.out.println("id del usuario de la sesión: " + session.getUser().getId());
+//					
+//				editUpdateButton.setEnabled(true);
+//				deleteUpdateButton.setEnabled(true);
 				
-				editUpdateButton.setEnabled(false);
-				deleteUpdateButton.setEnabled(false);
+			//El usuario de tipo USER no ha creado la incidencia
+			} else {
+				buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+				
+//				//Debug
+//				System.out.println("El usuario user no ha creado la actualización");
+//				
+//				editUpdateButton.setEnabled(false);
+//				deleteUpdateButton.setEnabled(false);
 			}
 		}
 	}
@@ -1071,25 +1087,9 @@ public class EventDataUI extends JPanel{
 				last25.setSelected(true);
 				//Vaciamos la tabla de actualizaciones
 				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
-				
-				//Update eventButtons & eventUpdateButtons
 				//Solo el botón nueva incidencia queda habilitado
 				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
-				
-//				//Si no hay incidencias, solo habilitamos el botón de nueva
-//				if (Integer.parseInt(eventsShown.getText()) == 0) {
-////					editEventButton.setEnabled(false);
-////					deleteEventButton.setEnabled(false);
-//					
-//					return;
-//				}
-//				//Si hay incidencias
-			
-//				//Mostramos sus datos
-//				populateTextFields();
-//				//Hacemos backup del contenido de los datos del formulario
-//				updateDataCache();
 			
 				//EN PRINCIPIO NO REACTIVAR
 //				//Vaciamos label de información
@@ -1123,24 +1123,30 @@ public class EventDataUI extends JPanel{
 					//Debug
 					System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
 					
-					//Mostramos sus datos
-//					populateTextFields();
-//					//Hacemos backup del contenido de los datos del formulario
-//					updateDataCache();
-					
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 					//Renovamos la tabla de eventos
-					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+					List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
+					updateEventTable(eventList, EVENTS_TABLE_HEADER);
+					//Actualizamos el número de incidencias mostradas
+					eventsShown.setText(((Integer)eventList.size()).toString());
+					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+					totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+//					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
 					//Seleccionamos el filtro
 					last25.setSelected(true);
 					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
 					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 					//Vaciamos la tabla de actualizaciones
 					updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+					//Solo el botón nueva incidencia queda habilitado
+					buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+					buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 					
+					//EN PRINCIPIO NO REACTIVAR
 //					//Vaciamos label de información
 //					infoLabel.setText("");
+					
 				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
 				} else {
 					//Renovamos la lista de las unidades de negocio del comboBox

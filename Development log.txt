@@ -1923,7 +1923,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Update getLastEventsByNumber() --new calculation ok, order ok--
 					       --eventsShown updates ok--
 					       --eventsShown updates in Combolistener, no longer here--
-		Update enableOrDisableEditDeleteEventUpdateButtons() --new logic, not fully tested--
+		Rename enableOrDisableEditDeleteEventUpdateButtons() to updateEventUpdateButtonsStateOnSelection()
+		Update updateEventUpdateButtonsStateOnSelection() --new logic, not fully tested--
+								  --uses buttonSwitcher--
 		Update stringToTimestamp() --add pattern parameter--
 		Update sortEventsByDate() --initial & number sorting by event creation date, not by database order--
 					  --update return--
@@ -1945,6 +1947,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --total events label updates when session.bunit is changed--
 					  --updates table deleted when session.bunit is changed--
 					  --code reordening & include eventsShown update--
+					  --totalEvents update--
+					  --only new event button enabled, all other buttons disabled--
+					  --events on disabled bunits needed to fully test, so far ok--
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
