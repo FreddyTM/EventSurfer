@@ -495,7 +495,7 @@ public class EventDataUI extends JPanel{
 	private List<Event> sortEventsByDate (List<Event> list) {
 		List<Event> sortedList = list;
 		sortedList.sort(new EventComparator());
-		return list;
+		return sortedList;
 	}
 	
 	/**

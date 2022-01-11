@@ -1854,14 +1854,14 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
 		Add refreshComboBox() --copied from BusinessUnitUI--
-		Add getLastEventsByNumber() --not ok, in progress--
+		Add getLastEventsByNumber() --ok--
 		Add buildEventTable() --ok--
 		Add stringToTimestamp() --not tested yet--
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok--
-		Add formatEventTable() --ok, state column redimension--
+		Add formatEventTable() --ok--
 		Add getLastEventsByDate() --ok--
-		Add sortEventsByDate() --initial & number sorting by event creation date, not by database order--
+		Add sortEventsByDate() --ok--
 		Add buildUpdatesTable() --ok--
 		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --so far ok--
@@ -1904,6 +1904,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --uses formatEventTable()--
 					  --disable new, edit & delete update buttons--
 		Update formatEventTable() --add scroll to the bottom of event table--
+					  --state column redimension--
 		Update buildUpdatesTable() --add tooltips, non editable cells--
 					   --get EventUpdate from selected row, ok--
 					   --fix selectedRow error in ListSelectionListener--
@@ -1920,6 +1921,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					       --eventsShown updates ok--
 		Update enableOrDisableEditDeleteEventUpdateButtons() --new logic, not fully tested--
 		Update stringToTimestamp() --add pattern parameter--
+		Update sortEventsByDate() --initial & number sorting by event creation date, not by database order--
+					  --update return--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1935,19 +1938,23 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
-	· EventFilterListener (new inner EventDataUI class) 
-		Add actionPerformed() --different code will be executed depending on the source--
-				      --all cases ok--
-				      --allEvents eventsShown updates ok--
-				      --uses sortEventsByDate()--
-				      --get rid of parameter mode, useless--
-				      --each filter deletes updates table--
+	· EventFilterListener (new inner EventDataUI class):
+		Add actionPerformed()
+		Update actionPerformed() --different code will be executed depending on the source--
+				         --all cases ok--
+				         --allEvents eventsShown updates ok--
+				         --uses sortEventsByDate()--
+				         --get rid of parameter mode, useless--
+				         --each filter deletes updates table--
+	· EventTableSelectionListener (new inner EventDataUI class):
+		Add actionPerformed()
+		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
 
 	· UpdatesTableCellRenderer class (new inner EventDataUI class):
-		Add getTableCellRendererComponent() --not tested yet--
+		Add getTableCellRendererComponent() --date/hour column ok--
 
 	· EventComparator class (new inner EventDataUI class):
 		Add compare() --ok--
