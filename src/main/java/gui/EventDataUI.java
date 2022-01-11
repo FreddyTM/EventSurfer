@@ -406,7 +406,7 @@ public class EventDataUI extends JPanel{
 	 */
 	private List<Event> getLastEventsByNumber(List<Event> list, int number) {
 		if(list.size() <= number) {
-			eventsShown.setText(((Integer)list.size()).toString());
+//			eventsShown.setText(((Integer)list.size()).toString());
 			return list;
 		} else {
 			//Debug
@@ -414,7 +414,7 @@ public class EventDataUI extends JPanel{
 			
 			List<Event> sublist = new ArrayList<Event>();
 			sublist = list.subList(list.size() - number, list.size());
-			eventsShown.setText(((Integer)sublist.size()).toString());
+//			eventsShown.setText(((Integer)sublist.size()).toString());
 			return sublist;
 		}
 	}
@@ -1064,11 +1064,15 @@ public class EventDataUI extends JPanel{
 					System.out.println(user.getUserAlias());
 				}
 				//Renovamos la tabla de eventos
-				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-				//Seleccionamos el filtro
-				last25.setSelected(true);
+				List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
+//				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				//Actualizamos el número de incidencias mostradas
+				eventsShown.setText(((Integer)eventList.size()).toString());
 				//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
 				totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+				//Seleccionamos el filtro
+				last25.setSelected(true);
 				//Vaciamos la tabla de actualizaciones
 				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 			
