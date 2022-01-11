@@ -1899,6 +1899,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --fix selectedRow error in ListSelectionListener--
 					 --table selection fixed to only one row--
 					 --big tooltip, long display time, small tooltip, default display time--
+					 --uses EventTableSelectionListener, no longer inner ListSelectionListener--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
@@ -1956,6 +1957,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 	· EventTableSelectionListener (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
+					 --uses buttonSwitcher()--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--

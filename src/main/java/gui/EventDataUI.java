@@ -627,43 +627,46 @@ public class EventDataUI extends JPanel{
 		//Restringimos la selección de la tabla a una única fila
 		eventsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		//Obtenemos la incidencia que corresponde a la fila de la tabla seleccionada
-		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent e) {
-	        	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
-	        	if (!e.getValueIsAdjusting()) {
-	        		
-					//Debug
-					System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
-					
-					if (eventsTable.getSelectedRow() > -1) {
-						int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
-						eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
-						//Debug
-						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
-						updateEventButtonsState();
-	//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
-	//					updatesTable.clearSelection();
-
-						//Debug
-						System.out.println(eventSelected.getUpdates().get(0).getId());
-						System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
-						System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
-						System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
-						System.out.println(eventSelected.getUpdates().get(0).getAutor());
-						if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
-							System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
-						}
-
-					} 
-					//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
-					updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
-				}
-				//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
-	            newUpdateButton.setEnabled(true);
-	            editUpdateButton.setEnabled(false);
-	            deleteUpdateButton.setEnabled(false);
-	        }
-	    });
+		eventsTable.getSelectionModel().addListSelectionListener(new EventTableSelectionListener());
+//		eventsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+//	        public void valueChanged(ListSelectionEvent e) {
+//	        	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
+//	        	if (!e.getValueIsAdjusting()) {
+//	        		
+//					//Debug
+//					System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
+//					
+//					if (eventsTable.getSelectedRow() > -1) {
+//						int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
+//						eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+//						//Debug
+//						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+//						updateEventButtonsState();
+//	//					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
+//	//					updatesTable.clearSelection();
+//
+//						//Debug
+//						System.out.println(eventSelected.getUpdates().get(0).getId());
+//						System.out.println(eventSelected.getUpdates().get(0).getEvent().getId());
+//						System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+//						System.out.println(eventSelected.getUpdates().get(0).getDescripcion());
+//						System.out.println(eventSelected.getUpdates().get(0).getAutor());
+//						if (eventSelected.getUpdates().get(0).getUser().getUserAlias() != null) {
+//							System.out.println(eventSelected.getUpdates().get(0).getUser().getUserAlias());
+//						}
+//
+//					} 
+//					//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
+//					updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+//				}
+//				//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+//	            newUpdateButton.setEnabled(true);
+//	            editUpdateButton.setEnabled(false);
+//	            deleteUpdateButton.setEnabled(false);
+//	        }
+//	    });
+//		//Botón nueva incidencia activado, editar y borrar desactivado
+//		buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
 		formatEventTable();
@@ -1258,9 +1261,13 @@ public class EventDataUI extends JPanel{
 				if (eventsTable.getSelectedRow() > -1) {
 					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
+					
 					//Debug
 					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+					
+					//Actualizamos el estado de los botones de la tabla de incidencias
 					updateEventButtonsState();
+					
 //					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
 //					updatesTable.clearSelection();
 
@@ -1279,9 +1286,10 @@ public class EventDataUI extends JPanel{
 				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
-            newUpdateButton.setEnabled(true);
-            editUpdateButton.setEnabled(false);
-            deleteUpdateButton.setEnabled(false);
+        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+//            newUpdateButton.setEnabled(true);
+//            editUpdateButton.setEnabled(false);
+//            deleteUpdateButton.setEnabled(false);
         }
 	}
 	
