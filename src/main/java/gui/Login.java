@@ -190,8 +190,9 @@ public class Login extends JPanel {
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
 		}
-		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + alias;
-		frame.setTitle(title);	
+//		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + alias;
+//		frame.setTitle(title);	
+		frame.setFullTitle(alias);
 		return true;
 	}
 

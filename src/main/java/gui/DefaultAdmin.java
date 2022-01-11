@@ -304,8 +304,9 @@ public class DefaultAdmin extends JPanel {
 		session.loadCurrentSessionData(conn, 1, 1);
 		//Pasar userTypeId por parámetro al panel (admin = 1)
 		//Cargar paneles
-		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + user.getUserAlias();
-		frame.setTitle(title);
+//		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + user.getUserAlias();
+//		frame.setTitle(title);
+		frame.setFullTitle(user.getUserAlias());
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		frame.setUpWindow();
 	}
