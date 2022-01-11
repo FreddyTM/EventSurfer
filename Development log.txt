@@ -1936,6 +1936,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --total events label updates when session.bunit is changed--
 					  --updates table deleted when session.bunit is changed--
 					  --eventsShown updates here--
+					  --only new event button enabled, all other buttons disabled--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--

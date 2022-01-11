@@ -961,14 +961,7 @@ public class EventDataUI extends JPanel{
 	 * deshabilitan.
 	 */
 	private void updateEventButtonsState() {
-//		//Si no hay incidencias, solo habilitamos el botón de nueva
-//		if (Integer.parseInt(eventsShown.getText()) == 0) {
-////			editEventButton.setEnabled(false);
-////			deleteEventButton.setEnabled(false);
-//			buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
-//			return;
-//		}
-//		//Si hay incidencias
+
 		//Usuario de sesión de tipo USER
 		if (session.getUser().getUserType().equals("USER")) {
 			//El usuario de tipo USER ha creado la incidencia
@@ -1080,7 +1073,17 @@ public class EventDataUI extends JPanel{
 				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 				
 				//Update eventButtons & eventUpdateButtons
+				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 				
+//				//Si no hay incidencias, solo habilitamos el botón de nueva
+//				if (Integer.parseInt(eventsShown.getText()) == 0) {
+////					editEventButton.setEnabled(false);
+////					deleteEventButton.setEnabled(false);
+//					
+//					return;
+//				}
+//				//Si hay incidencias
 			
 //				//Mostramos sus datos
 //				populateTextFields();
