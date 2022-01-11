@@ -1876,8 +1876,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add formatUpdatesTable() --ok--
 		Add updateUpdatesTable() --so far ok--
 		Add enableOrDisableEditDeleteEventButtons() --ok--
-		Add sortEventUpdatesByDate() --not tested yet--
-		Add enableOrDisableEditDeleteEventUpdateButtons() --not fully tested yet, so far ok--
+		Add sortEventUpdatesByDate() --ok--
+		Add enableOrDisableEditDeleteEventUpdateButtons() --ok--
 		Add setPanelsDimensions() --overloaded from setPanelsDimensions(screenSize), work in progress...--
 		Add buttonSwitcher()
 		Update constructor --add company field, bUnit combobox, checkbox--
@@ -1935,7 +1935,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					       --eventsShown updates ok--
 					       --eventsShown updates in Combolistener, no longer here--
 		Rename enableOrDisableEditDeleteEventUpdateButtons() to updateEventUpdateButtonsStateOnSelection()
-		Update updateEventUpdateButtonsStateOnSelection() --new logic, not fully tested--
+		Update updateEventUpdateButtonsStateOnSelection() --new logic, ok--
 								  --uses buttonSwitcher--
 		Update stringToTimestamp() --add pattern parameter--
 		Update sortEventsByDate() --initial & number sorting by event creation date, not by database order--
@@ -1960,7 +1960,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --code reordening & include eventsShown update--
 					  --totalEvents update--
 					  --only new event button enabled, all other buttons disabled--
-					  --events on disabled bunits needed to fully test, so far ok--
+					  --events on disabled bunits needed to fully test, ok--
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
