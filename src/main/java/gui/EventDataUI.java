@@ -1083,9 +1083,20 @@ public class EventDataUI extends JPanel{
 		} else {
 			//Debug
 			System.out.println("Borrado autorizado");
+			switch (action) {
+				case EVENTDATA_ACTION_DELETE_EVENT:
+					//Debug
+					System.out.println("Borrando evento... ID " + eventSelected.getId());
+					
+					break;
+				case EVENTDATA_ACTION_DELETE_UPDATE:
+					//Debug
+					System.out.println("Borrando actualización... ID " + updateSelected.getId());
+					
+					break;
+			}
 			
-			
-//			deleteOK = true;
+
 		}
 	}
 	
