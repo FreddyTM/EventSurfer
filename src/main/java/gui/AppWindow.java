@@ -168,8 +168,7 @@ public class AppWindow extends JFrame {
 	}
 	
 	public void setFullTitle(String userName) {
-		fullTitle += userName;
-		setTitle(fullTitle);
+		setTitle(fullTitle + userName);
 	}
 
 	public JPanel getUpPanel() {

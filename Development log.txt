@@ -1831,6 +1831,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add attribute
 			fullTitle
 		Add setFullTitle()
+		Update setFullTitle() --title displays ok--
 		Update attribute versionNumber --ver 0.1.14--
 		Update componentResized() --scrollbar when needed in progress--
 		Resize leftPanel --wider buttons--
