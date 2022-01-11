@@ -706,9 +706,9 @@ public class EventDataUI extends JPanel{
 		eventsTable.setModel(model);
 		formatEventTable();
 		eventsTable.repaint();
-		newUpdateButton.setEnabled(false);
-		editUpdateButton.setEnabled(false);
-		deleteUpdateButton.setEnabled(false);
+//		newUpdateButton.setEnabled(false);
+//		editUpdateButton.setEnabled(false);
+//		deleteUpdateButton.setEnabled(false);
 	}
 	
 	/**
@@ -1073,6 +1073,7 @@ public class EventDataUI extends JPanel{
 				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 				
 				//Update eventButtons & eventUpdateButtons
+				//Solo el botón nueva incidencia queda habilitado
 				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 				
@@ -1249,6 +1250,7 @@ public class EventDataUI extends JPanel{
 			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 			//Solo el botón nueva incidencia queda habilitado
 			buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+			buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 		}
 	}
 	

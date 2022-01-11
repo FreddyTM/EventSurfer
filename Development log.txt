@@ -1904,6 +1904,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
 					  --disable new, edit & delete update buttons--
+					  --update buttons no longer disabled here, but in 
 		Update formatEventTable() --add scroll to the bottom of event table--
 					  --state column redimension--
 		Update buildUpdatesTable() --add tooltips, non editable cells--
@@ -1956,7 +1957,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				         --get rid of parameter mode, useless--
 				         --each filter deletes updates table--
 					 --eventsShown updates in all cases--
-					 --only new event button enabled--
+					 --only new event button enabled, all other buttons disabled--
+
 	· EventTableSelectionListener (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
