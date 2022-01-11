@@ -960,7 +960,7 @@ public class EventDataUI extends JPanel{
 	 * en caso de que la incidencia haya sido creada por él. En caso contrario, los botones editar y borrar se 
 	 * deshabilitan.
 	 */
-	private void updateEventButtonsState() {
+	private void updateEventButtonsStateOnSelection() {
 
 		//Usuario de sesión de tipo USER
 		if (session.getUser().getUserType().equals("USER")) {
@@ -1273,7 +1273,7 @@ public class EventDataUI extends JPanel{
 					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 					
 					//Actualizamos el estado de los botones de la tabla de incidencias
-					updateEventButtonsState();
+					updateEventButtonsStateOnSelection();
 					
 //					//Deseleccionamos cualquier actualización que pudiera estar seleccionada en la tabla de actualizaciones
 //					updatesTable.clearSelection();

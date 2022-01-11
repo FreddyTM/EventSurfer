@@ -1926,8 +1926,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Update stringToTimestamp() --add pattern parameter--
 		Update sortEventsByDate() --initial & number sorting by event creation date, not by database order--
 					  --update return--
-		Rename enableOrDisableEditDeleteEventButtons() to updateEventButtonsState()
-		Update updateEventButtonsState() --uses buttonSwitcher, not tested yet--
+		Rename enableOrDisableEditDeleteEventButtons() to updateEventButtonsStateOnSelection()
+		Update updateEventButtonsStateOnSelection() --uses buttonSwitcher, ok--
 						 --only needed into EventTableSelectionListener, no event option deleted--
 
 	· ComboListener class (new inner EventDataUI class):
