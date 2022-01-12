@@ -1913,6 +1913,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --table selection fixed to only one row--
 					 --big tooltip, long display time, small tooltip, default display time--
 					 --uses EventTableSelectionListener, no longer inner ListSelectionListener--
+					 --uses DoubleClickOnRowListener--
 		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
@@ -1927,6 +1928,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					   --table selection fixed to only one row--
 					   --big tooltip, long display time, small tooltip, default display time--
 					   --uses EventUpdateTableSelectionListener, no longer inner ListSelectionListener--
+					   --uses DoubleClickOnRowListener--
 		Rename setTablePanelDimensions() to setPanelsDimensions()
 		Update setPanelsDimensions() --add dimensions to filtersContainer, redimension & reposition--
 					     --filtersContainer x position computed--
@@ -1980,15 +1982,19 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --eventsShown updates in all cases--
 					 --only new event button enabled, all other buttons disabled--
 
-	· EventTableSelectionListener (new inner EventDataUI class):
+	· EventTableSelectionListener class (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
 					 --uses buttonSwitcher()--
 
-	· EventUpdateTableSelectionListener (new inner EventDataUI class):
+	· EventUpdateTableSelectionListener class (new inner EventDataUI class):
 		Add actionPerformed()
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
 					 --uses buttonSwitcher()--
+
+	· DoubleClickListener class (new inner EventDataUI class):
+		Add mouseClicked()
+		Update mouseClicked() --detects event source, fires mouse click--
 
 	· EventTableCellRenderer class (new inner EventDataUI class):
 		Add getTableCellRendererComponent() --date/hour column ok, state column ok--
