@@ -58,11 +58,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.TypesStatesContainer;
@@ -1011,6 +1013,22 @@ public class EventDataUI extends JPanel{
 				case EVENTDATA_ACTION_DELETE_EVENT:
 					//Debug
 					System.out.println("Borrando evento... ID " + eventSelected.getId());
+					
+					//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
+					if (new EventUpdate().deleteAllEventUpdatesFromDb(session.getConnection(), eventSelected)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
+								EventUpdate.TABLE_NAME);
+						//Si la incidencia seleccionada se borra correctamente de la base de datos
+						if (new Event().deleteEventFromDb(session.getConnection(), eventSelected)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA BORRADA: ", session.getConnection(), tNow,
+									Event.TABLE_NAME);
+						}
+						//Eliminamos la incidencia de la lista de incidencias de la unidad de negocio de la sesión
+						session.getbUnit().getEvents().remove(eventSelected);
+						//Refrescar tabla de incidencias
+					}
 					
 					break;
 				case EVENTDATA_ACTION_DELETE_UPDATE:
