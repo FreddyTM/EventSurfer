@@ -993,7 +993,8 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
-	 * Borra una incidencia o una actualización en función de la acción pasada por parámetro
+	 * Borra una incidencia o una actualización en función de la acción pasada por parámetro. El borrado de una incidencia
+	 * implica el borrado de todas sus actualizaciones.
 	 * @param action determina si se borra una incidencia o una actualización
 	 */
 	private void delete(int action) {
@@ -1019,23 +1020,26 @@ public class EventDataUI extends JPanel{
 					
 					//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
 					if (new EventUpdate().deleteAllEventUpdatesFromDb(session.getConnection(), eventSelected)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla area
+						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
 						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
 								EventUpdate.TABLE_NAME);
 						//Si la incidencia seleccionada se borra correctamente de la base de datos
 						if (new Event().deleteEventFromDb(session.getConnection(), eventSelected)) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
 							PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA BORRADA: ", session.getConnection(), tNow,
 									Event.TABLE_NAME);
 						}
 						//Eliminamos la incidencia de la lista de incidencias de la unidad de negocio de la sesión
 						session.getbUnit().getEvents().remove(eventSelected);
-						//Refrescar tabla de incidencias
-						
-						//Borrar tabla actualizaciones
-						
-						//Actualizar botones
-						buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+						//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
+						//y el número de incidencias mostradas y totales
+						filterSelected.doClick();
+//						//Refrescar tabla de incidencias
+//						
+//						//Borrar tabla actualizaciones
+//						
+//						//Actualizar botones
+//						buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 					}
 					
 					break;
@@ -1043,13 +1047,25 @@ public class EventDataUI extends JPanel{
 					//Debug
 					System.out.println("Borrando actualización... ID " + updateSelected.getId());
 					
+					//Si la actualización seleccionada se borra correctamente de la base de datos
+					if (new EventUpdate().deleteEventUpdateFromDb(session.getConnection(), updateSelected)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
+						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
+								EventUpdate.TABLE_NAME);
+						//Eliminamos la actualización de la lista de actualizaciones de la incidencia seleccionada
+						eventSelected.getUpdates().remove(updateSelected);
+//						new EventUpdate().deleteEventUpdate(eventSelected, updateSelected);
+						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+					}
+					
 					break;
 				default:
 					//Debug
 					System.out.println("Error de borrado");
 			}
-			
-
 		}
 	}
 	
@@ -1078,8 +1094,8 @@ public class EventDataUI extends JPanel{
 				for (User user : session.getbUnit().getUsers()) {
 					System.out.println(user.getUserAlias());
 				}
-				//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de actualizaciones
-				//y el número de actualizaciones mostradas y totales
+				//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
+				//y el número de incidencias mostradas y totales
 				filterSelected.doClick();
 //				//Renovamos la tabla de eventos
 //				List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
@@ -1131,8 +1147,8 @@ public class EventDataUI extends JPanel{
 					
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
-					//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de actualizaciones
-					//y el número de actualizaciones mostradas y totales
+					//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
+					//y el número de incidencias mostradas y totales
 					filterSelected.doClick();
 //					//Renovamos la tabla de eventos
 //					List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
@@ -1169,7 +1185,9 @@ public class EventDataUI extends JPanel{
 	}
 		
 	/**
-	 * Listener que dispara el filtrado de incidencias
+	 * Listener que dispara el filtrado de incidencias. La tabla de incidencias se actualiza en función del filtro seleccionado,
+	 * la tabla de actualizaciones se borra (ninguna incidencia queda seleccionada tras la actualización), solo el botón de nueva
+	 * incidencia queda seleccionado
 	 */
 	private class EventFilterListener implements ActionListener {
 
@@ -1287,7 +1305,7 @@ public class EventDataUI extends JPanel{
 					updateEventButtonsStateOnSelection();
 
 				} 
-				//Obtenemos las actualizaciones del evento seleccionado y las mostramos en la tabla de actualizaciones
+				//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
 				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado

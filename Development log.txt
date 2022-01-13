@@ -1950,8 +1950,12 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 							    --only needed into EventTableSelectionListener,
 							      no event option deleted--
 		Update delete() --basic logic--
-				--delete event: remove selectedEvent + eventUpdates from DB--
+				--delete event: remove selectedEvent + selectedEvent's eventUpdates from DB--
 				--delete event: remove selectedEvent from session bunit events list--
+				--delete update: remove update from DB--
+				--update events & updates tables, buttons state by filterSelected.doClick()--
+				--not tested yet--
+				--TODO tests for deleteEventFromDb() deleteEventUpdateFromDb() deleteAllEventUpdatesFromDb()--
 
 	· ComboListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
