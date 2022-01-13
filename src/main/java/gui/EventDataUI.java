@@ -127,7 +127,6 @@ public class EventDataUI extends JPanel{
 	private JButton editUpdateButton;
 	private JButton deleteUpdateButton;
 	
-	
 	private JLabel totalEvents;
 	private JLabel eventsShown;
 	private JLabel infoLabel;
@@ -141,9 +140,12 @@ public class EventDataUI extends JPanel{
 	private JRadioButton last6Months = new JRadioButton("Último semestre");
 	private JRadioButton thisYear = new JRadioButton("Presente año");
 	//private JradioButton previousYear = new JRadioButton("Año anterior");
+	private JRadioButton filterSelected;
 	
 	//Lista de elementos que aparecen en comboBox
 	private String[] comboList;
+	//Lista de elementos que aparecen en la tabla de incidencias
+	private List<Event> currentEventList;
 	
 	private final Action newEventAction = new NewEventAction();
 	private final Action editEventAction = new EditEventAction();
@@ -276,6 +278,7 @@ public class EventDataUI extends JPanel{
 		last25.setBounds(0, 40, 200, 25);
 		filterGroup.add(last25);
 		last25.setSelected(true);
+		filterSelected = last25;
 		filtersContainer.add(last25);
 		
 		last50.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -1028,6 +1031,11 @@ public class EventDataUI extends JPanel{
 						//Eliminamos la incidencia de la lista de incidencias de la unidad de negocio de la sesión
 						session.getbUnit().getEvents().remove(eventSelected);
 						//Refrescar tabla de incidencias
+						
+						//Borrar tabla actualizaciones
+						
+						//Actualizar botones
+						buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 					}
 					
 					break;
@@ -1070,21 +1078,24 @@ public class EventDataUI extends JPanel{
 				for (User user : session.getbUnit().getUsers()) {
 					System.out.println(user.getUserAlias());
 				}
-				//Renovamos la tabla de eventos
-				List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
-//				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
-				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
-				//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-				totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
-				//Seleccionamos el filtro
-				last25.setSelected(true);
-				//Vaciamos la tabla de actualizaciones
-				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
-				//Solo el botón nueva incidencia queda habilitado
-				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
-				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
+				//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de actualizaciones
+				//y el número de actualizaciones mostradas y totales
+				filterSelected.doClick();
+//				//Renovamos la tabla de eventos
+//				List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
+////				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+//				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+//				//Actualizamos el número de incidencias mostradas
+//				eventsShown.setText(((Integer)eventList.size()).toString());
+//				//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+//				totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+//				//Seleccionamos el filtro
+//				last25.setSelected(true);
+//				//Vaciamos la tabla de actualizaciones
+//				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+//				//Solo el botón nueva incidencia queda habilitado
+//				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+//				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 			
 				//EN PRINCIPIO NO REACTIVAR
 //				//Vaciamos label de información
@@ -1120,23 +1131,26 @@ public class EventDataUI extends JPanel{
 					
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
-					//Renovamos la tabla de eventos
-					List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
-					updateEventTable(eventList, EVENTS_TABLE_HEADER);
-					//Actualizamos el número de incidencias mostradas
-					eventsShown.setText(((Integer)eventList.size()).toString());
-					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-					totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
-//					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-					//Seleccionamos el filtro
-					last25.setSelected(true);
-					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
-					//Vaciamos la tabla de actualizaciones
-					updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
-					//Solo el botón nueva incidencia queda habilitado
-					buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
-					buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
+					//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de actualizaciones
+					//y el número de actualizaciones mostradas y totales
+					filterSelected.doClick();
+//					//Renovamos la tabla de eventos
+//					List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
+//					updateEventTable(eventList, EVENTS_TABLE_HEADER);
+//					//Actualizamos el número de incidencias mostradas
+//					eventsShown.setText(((Integer)eventList.size()).toString());
+//					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+//					totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+////					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
+//					//Seleccionamos el filtro
+//					last25.setSelected(true);
+//					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+//					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
+//					//Vaciamos la tabla de actualizaciones
+//					updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+//					//Solo el botón nueva incidencia queda habilitado
+//					buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+//					buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 					
 					//EN PRINCIPIO NO REACTIVAR
 //					//Vaciamos label de información
@@ -1161,10 +1175,11 @@ public class EventDataUI extends JPanel{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			filterSelected = (JRadioButton) e.getSource();
 			if (e.getSource() == allEvents) {
 				//Todas las incidencias de la unidad de negocio de la sesión
-				updateEventTable(sortEventsByDate(session.getbUnit().getEvents()), EVENTS_TABLE_HEADER);
+				currentEventList = session.getbUnit().getEvents();
+				updateEventTable(sortEventsByDate(currentEventList), EVENTS_TABLE_HEADER);
 				eventsShown.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 				
 				//Debug
@@ -1174,10 +1189,10 @@ public class EventDataUI extends JPanel{
 				//Últimas 25 incidencias
 				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
 				//pueden crear incidencias de fechas anteriores a la fecha actual
-				List<Event> eventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 25);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 
 				//Debug
 				System.out.println("Listener 25");
@@ -1186,55 +1201,59 @@ public class EventDataUI extends JPanel{
 				//Últimas 50 incidencias
 				//Son las últimas por fecha de creación de la incidencia, no necesariamente las últimas 25 registradas, ya que se
 				//pueden crear incidencias de fechas anteriores a la fecha actual
-				List<Event> eventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByNumber(sortEventsByDate(session.getbUnit().getEvents()), 50);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 
 				//Debug
 				System.out.println("Listener 50");
 				
 			} else if (e.getSource() == thisMonth) {
 				//Incidencias del mes actual
-				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 0);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByDate(session.getbUnit().getEvents(), 0);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 
 				//Debug
 				System.out.println("Listener thisMonth. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 0).size());
 				
 			} else if (e.getSource() == last3Months) {
 				//Incidencias del mes actual y 2 meses más hacia atrás
-				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 3);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByDate(session.getbUnit().getEvents(), 3);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 
 				//Debug
 				System.out.println("Listener last3Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 3).size());
 				
 			} else if (e.getSource() == last6Months) {
 				//Incidencias del mes actual y 5 meses más hacia atrás
-				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 6);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByDate(session.getbUnit().getEvents(), 6);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 
 				//Debug
 				System.out.println("Listener last6Months. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 6).size());
 				
 			} else if (e.getSource() == thisYear) {
 				//Incidencias del año actual
-				List<Event> eventList = getLastEventsByDate(session.getbUnit().getEvents(), 12);
-				updateEventTable(eventList, EVENTS_TABLE_HEADER);
+				currentEventList = getLastEventsByDate(session.getbUnit().getEvents(), 12);
+				updateEventTable(currentEventList, EVENTS_TABLE_HEADER);
 				//Actualizamos el número de incidencias mostradas
-				eventsShown.setText(((Integer)eventList.size()).toString());
+				eventsShown.setText(((Integer)currentEventList.size()).toString());
 				
 				//Debug
 				System.out.println("Listener thisYear. List size: " + getLastEventsByDate(session.getbUnit().getEvents(), 12).size());
 				
 			}
+			//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
+			totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
+			//Seleccionamos el filtro
+			filterSelected.setSelected(true);
 			//Vaciamos la tabla de actualizaciones
 			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
 			//Solo el botón nueva incidencia queda habilitado

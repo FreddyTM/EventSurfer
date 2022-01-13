@@ -1861,7 +1861,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 			editUpdateAction, deleteUpdateAction, EVENT_BUTTON_SET, UPDATE_BUTTON_SET, ALL_DISABLED, NEW_ENABLED,
 			NEW_EDIT_ENABLED, ALL_ENABLED, EVENTDATA_ACTION_UNDEFINED, EVENTDATA_ACTION_NEW_EVENT,
 			EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_DELETE_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
-			EVENTDATA_ACTION_EDIT_UPDATE, EVENTDATA_ACTION_DELETE_UPDATE, DIALOG_YES_NO
+			EVENTDATA_ACTION_EDIT_UPDATE, EVENTDATA_ACTION_DELETE_UPDATE, DIALOG_YES_NO, filterSelected
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -1960,6 +1960,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --updates table deleted when session.bunit is changed--
 					  --eventsShown updates here--
 					  --only new event button enabled, all other buttons disabled--
+					  --new logic to keep filter selected on bUnit change, just fires doClick()
+					    on filterSelected & delegates eventsTable & events number update on
+					    EventFilterListener--
 
 	· CheckBoxListener class (new inner EventDataUI class):
 		Update itemStateChanged() --add buildEventTable(), changed by updateEventTable()--
@@ -1970,6 +1973,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					  --totalEvents update--
 					  --only new event button enabled, all other buttons disabled--
 					  --events on disabled bunits needed to fully test, ok--
+					  --new logic to keep filter selected on bUnit change, just fires doClick()
+					    on filterSelected & delegates eventsTable & events number update on
+					    EventFilterListener--
 
 	· EventFilterAction (new inner EventDataUI class) --DELETED--
 
@@ -1983,6 +1989,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				         --each filter deletes updates table--
 					 --eventsShown updates in all cases--
 					 --only new event button enabled, all other buttons disabled--
+					 --register filterSelected--
 
 	· EventTableSelectionListener class (new inner EventDataUI class):
 		Add actionPerformed()
