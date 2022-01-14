@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -371,6 +372,22 @@ public class EventDataUI extends JPanel{
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
 		updatesContainer.add(updatesPane);
+		
+		/*Iniciamos la comprobación periódica de actualizaciones
+		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
+		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
+		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
+		* por error que no había cambios.
+		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
+		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
+		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
+		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
+		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
+		* o más lenta que la comprobación de los datos que hace el objeto session.
+		*/
+		timer = new Timer();
+		TimerTask task = new TimerJob();
+		timer.scheduleAtFixedRate(task, 1000, 30000);
 	}
 	
 	/**
@@ -1504,6 +1521,29 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Editar actualización");
 			
+		}
+	}
+	
+	/**
+	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
+	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel no está visible, no se
+	 * produce la comprobación porque no es necesaria.
+	 */
+	private class TimerJob extends TimerTask {
+
+		@Override
+		public void run() {
+			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
+			if (!EventDataUI.this.isShowing()) {
+				EventDataUI.this.panelVisible = false;
+				this.cancel();
+				EventDataUI.this.timer.cancel();
+				 System.out.println("Se ha cerrado la ventana gestión de eventos");
+			}
+			//Se comprueba la actualización de los datos si el panel es visible
+			if (EventDataUI.this.panelVisible == true) {
+				
+			}
 		}
 	}
 

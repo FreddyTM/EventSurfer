@@ -1900,6 +1900,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				   --add updatesPane, pane visible, table visible, table redimension--
 				   --add new update button, edit update button, delete update button--
 				   --only new event button enabled--
+				   --timerjob start--
 		Update buildEventTable() --data ok, ID column removed, date format ok--
 					 --columns size ok, tooltips ok, multiline tooltips fixed--
 					 --vectors only use objects, cell renderer ok--
@@ -2039,3 +2040,6 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· DeleteUpdateAction (new inner EventDataUI class): --DELETED--
 		Add actionPerformed() --empty--
+
+	· TimerJob (new inner EventDataUI class):
+		Add run() --empty--
