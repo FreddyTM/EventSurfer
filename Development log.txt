@@ -1812,6 +1812,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· TimerJob class (inner CurrentSession class):
 		Update run() --uses getAllCompanyUsers() in case business_unit & user--
+			     --all bunits' events are updated in case event (before, only session.bunit's events were updated)--
+			     --all bunits' events' updates are updated in case event_update (before, only session.bunit's events'
+			       updates were updated)--
 
 	* - Package main.java.event
 

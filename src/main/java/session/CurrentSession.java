@@ -492,25 +492,52 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event":
-								List<Event> eventList = new Event().getBunitEventsFromDB(conn, session.getbUnit());
-								//Asignamos la lista de eventos actualizada a la unidad de negocio de la sesión
-								session.getbUnit().setEvents(eventList);
-								//Asignamos a cada evento de la unidad de negocio sus actualizaciones
-								for (Event event: session.getbUnit().getEvents()) {
-									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-									event.setUpdates(eUpdate);
+								
+								//Recargamos los datos de las incidencias de todas las unidades de negocio
+								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+									List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
+									oneUnit.setEvents(eventList);
+									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
+									for (Event event: eventList) {
+										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+										event.setUpdates(eUpdate);
+									}
 								}
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
+								
+								//Old code --only session.bunit get its events updated--
+//								List<Event> eventList = new Event().getBunitEventsFromDB(conn, session.getbUnit());
+//								//Asignamos la lista de eventos actualizada a la unidad de negocio de la sesión
+//								session.getbUnit().setEvents(eventList);
+//								//Asignamos a cada evento de la unidad de negocio sus actualizaciones
+//								for (Event event: session.getbUnit().getEvents()) {
+//									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+//									event.setUpdates(eUpdate);
+//								}
+//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+//								break;
 							case "event_update":
-								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 
-								//la unidad de negocio de la sesión
-								for (Event event: session.getbUnit().getEvents()) {
-									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-									event.setUpdates(eUpdate);
+								//Recargamos los datos de las incidencias de todas las unidades de negocio
+								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
+									for (Event event: oneUnit.getEvents()) {
+										List<EventUpdate> eUpdates = new EventUpdate().getEventUpdatesFromDB(conn, event);
+										event.setUpdates(eUpdates);
+									}
 								}
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
+								
+								//Old code --only session.bunit get its events updates updated--
+//								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 
+//								//la unidad de negocio de la sesión
+//								for (Event event: session.getbUnit().getEvents()) {
+//									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+//									event.setUpdates(eUpdate);
+//								}
+//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+//								break;
 							default:
 								//Error. Tabla desconocida
 						}				
