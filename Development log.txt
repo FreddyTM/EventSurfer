@@ -1850,6 +1850,9 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 	· EventAction class (inner Selector class):
 		Update actionPerformed() 
 
+	· OKAction class (inner BusinessUnitUI class):
+		Update actionPerformed() --fix combobox not updating in some edit cases--
+
 	· EventDataUI class:
 		Add attributes
 			session, tNow, timer, panelVisible, companyField, comboBox, activeFilterCheckBox, comboList,

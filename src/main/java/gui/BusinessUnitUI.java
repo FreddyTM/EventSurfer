@@ -935,6 +935,8 @@ public class BusinessUnitUI extends JPanel {
 							if (!lastActive) {
 								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 							}
+							//Renovamos la lista de las unidades de negocio del comboBox
+							refreshComboBox();	
 							
 						//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
 						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
@@ -998,7 +1000,9 @@ public class BusinessUnitUI extends JPanel {
 								//o de la tabla user no queda registrada
 								if (!bUnitChangeRegister || !UserChangeRegister) {
 									infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
-								}		
+								}
+								//Renovamos la lista de las unidades de negocio del comboBox
+								refreshComboBox();
 
 							//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
 							//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
