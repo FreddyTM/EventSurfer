@@ -1543,9 +1543,11 @@ public class EventDataUI extends JPanel{
 			//Se comprueba la actualización de los datos si el panel es visible
 			if (EventDataUI.this.panelVisible == true) {
 				
-//				PREVIAMENTE EN CURRENTSESSION HEMOS CREADO DOS ATRIBUTOS
-//				sessionCicle = 0; --se actualiza con cada ejecución del timerjob de currentsession: sessionCicle += 1;
-//				timerJobUIReference = sessionCicle; --se actualiza con los timerjobs de las UI
+//				PREVIAMENTE EN CURRENTSESSION HEMOS CREADO UN ATRIBUTO Y SU GETTER
+//				private boolean selfUpdate = false;
+//				public boolean getSelfUpdate() {return selfUpdate;}
+//				PREVIAMENTE EN LAS UIs HEMOS CREADO UN ATRIBUTO
+//				private int timerCycle = 0;
 				
 //				//Debug
 //				System.out.println(updatedTable.getKey());
@@ -1598,8 +1600,18 @@ public class EventDataUI extends JPanel{
 //					}
 //					
 //					*** - COMPROBAMOS SELF UPDATE
+//					//Si es true, no hay que actualizar, pero hay que renovar el ciclo del timerjob local				
 //					if (selfUpdate == true) {
-					
+//						
+//						//Primer ciclo
+//						if (timerCycle == 0) {
+//							timerCycle += 1;
+//						}
+//						//Segundo ciclo
+//						if (timerCycle == 1) {
+//						timercycle = 0;
+//						session.getSelfUpdate() = false;				
+//					}
 					
 //				}
 				
