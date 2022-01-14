@@ -2049,3 +2049,4 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 
 	· TimerJob (new inner EventDataUI class):
 		Add run() --empty--
+		Update run()	  --preventing selfupdates to notify UIs, in progress (commented code)--
