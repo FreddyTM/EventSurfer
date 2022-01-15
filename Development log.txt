@@ -2083,4 +2083,5 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			EVENTEDIT_ACTION_NEW_UPDATE, EVENTEDIT_ACTION_EDIT_UPDATE, actionSelector, session, selector, tNow, 
 			panelVisible, eventSelected, updateSelected
 		Add setup() --switch structure--
-		Update constructor --uses setup()--
+		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE, 				EVENTEDIT_ACTION_EDIT_UPDATE
+		Update constructor --uses setup(), add screen label--

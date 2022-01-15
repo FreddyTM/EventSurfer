@@ -1,8 +1,11 @@
 package main.java.gui;
 
+import java.awt.Font;
 import java.sql.Timestamp;
 
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.UIManager;
 
 import main.java.event.Event;
 import main.java.event.EventUpdate;
@@ -40,8 +43,18 @@ public class EventEditUI extends JPanel{
 		this.session = session;
 		this.selector = selector;
 		this.actionSelector = actionSelector;
+		setLayout(null);
+		panelVisible = true;
 		
 		//Swing Components
+		JTextPane eventDataTxt = new JTextPane();
+		eventDataTxt.setText("CREACIÓN / EDICIÓN DE INCIDENCIAS Y ACTUALIZACIONES");
+		eventDataTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
+		eventDataTxt.setFocusable(false);
+		eventDataTxt.setEditable(false);
+		eventDataTxt.setBackground(UIManager.getColor(this.getBackground()));
+		eventDataTxt.setBounds(50, 50, 380, 30);
+		add(eventDataTxt);
 		
 		
 		//Initial setup
@@ -87,6 +100,22 @@ public class EventEditUI extends JPanel{
 			default:
 				//Undefined option
 		}
+	}
+
+	public static int getEventeditActionNewEvent() {
+		return EVENTEDIT_ACTION_NEW_EVENT;
+	}
+
+	public static int getEventeditActionEditEvent() {
+		return EVENTEDIT_ACTION_EDIT_EVENT;
+	}
+
+	public static int getEventeditActionNewUpdate() {
+		return EVENTEDIT_ACTION_NEW_UPDATE;
+	}
+
+	public static int getEventeditActionEditUpdate() {
+		return EVENTEDIT_ACTION_EDIT_UPDATE;
 	}
 
 }
