@@ -1569,7 +1569,15 @@ public class EventDataUI extends JPanel{
 					
 					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
 					if (updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
-
+						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+						//Informamos por pantalla de la actualización
+						//Si las actualizaciones de la incidencia seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
+						//información mostrada, pero seguirá interesando saber que alguna actualización ha sido modificada, añadida o borrada
+						EventDataUI.this.infoLabel.setText("DATOS DE LAS ACTUALIZACIONES ACTUALIZADOS: " +
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
 			}
