@@ -66,6 +66,8 @@ import main.java.company.Company;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.gui.AppWindow;
+import main.java.gui.EventEditUI;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
@@ -1462,6 +1464,14 @@ public class EventDataUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			//Debug
 			System.out.println("Crear nueva incidencia");
+			
+			//Vaciamos el panel base y le quitamos visibilidad
+			AppWindow frame = selector.getFrame();
+			selector.hidePanel(frame, frame.getCenterPanel());
+			//Creamos panel de datos de evento
+			EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector, EventEditUI.getEventeditActionNewEvent());
+			//Mostramos el panel
+			selector.showPanel(frame, eEditUI);
 			
 		}
 	}

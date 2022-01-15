@@ -2012,7 +2012,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Update actionPerformed() --uses getValueIsAdjusting() to prevent listener firing twice--
 					 --uses buttonSwitcher()--
 
-	· DoubleClickListener class (new inner EventDataUI class):
+	· DoubleClickOnRowListener class (new inner EventDataUI class):
 		Add mouseClicked()
 		Update mouseClicked() --detects event source, fires mouse click--
 
@@ -2032,7 +2032,8 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add actionPerformed() --empty--
 
 	· EditEventAction (new inner EventDataUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed()
+		Update actionPerformed --switch to EventEditUI in new event mode, not tested yet--
 
 	· DeleteAction (new inner EventDataUI class): --DeleteEventAction renamed to DeleteAction--
 		Add actionPerformed()
@@ -2062,6 +2063,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.15--
+
+
 
 	· EventDataUI class:
 		Delete attributes
