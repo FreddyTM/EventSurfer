@@ -356,8 +356,8 @@ public class EventDataUI extends JPanel{
 			comboBox.setEnabled(false);
 		}
 		
-		infoLabel = new JLabel("Texto de prueba");
-		infoLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoLabel.setBounds(50, 965, 900, 25);
 		add(infoLabel);
 		
