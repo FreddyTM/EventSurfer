@@ -170,7 +170,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show Company screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de empresa			
 			CompanyUI companyUI = new CompanyUI(session);
@@ -188,7 +188,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show BusinessUnit screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de unidad de negocio	
 			BusinessUnitUI bUnitUI = new BusinessUnitUI(session);
@@ -206,7 +206,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show user screen");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de usuario
 			UserUI userUI = new UserUI(session);
@@ -225,7 +225,7 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de area
 			AreaUI areaUI = new AreaUI(session);
@@ -244,7 +244,7 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de tipo de evento
 			EventTypeUI eTypeUI = new EventTypeUI(session);
@@ -263,7 +263,7 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Vaciamos el panel base y le quitamos visibilidad
+			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de datos de evento
 			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
@@ -272,7 +272,7 @@ public class Selector extends JPanel {
 		}
 	}
 	
-	public JFrame getFrame() {
+	public AppWindow getFrame() {
 		return frame;
 	}
 }

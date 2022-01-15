@@ -2032,8 +2032,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add actionPerformed() --empty--
 
 	· EditEventAction (new inner EventDataUI class):
-		Add actionPerformed()
-		Update actionPerformed --switch to EventEditUI in new event mode, not tested yet--
+		Add actionPerformed() --empty--
 
 	· DeleteAction (new inner EventDataUI class): --DeleteEventAction renamed to DeleteAction--
 		Add actionPerformed()
@@ -2064,12 +2063,16 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.15--
 
-
+	· Selector class:
+		Update getFrame() --returns AppWindow object, not JFrame object--
 
 	· EventDataUI class:
 		Delete attributes
 			EVENTDATA_ACTION_NEW_EVENT, EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
 			EVENTDATA_ACTION_EDIT_UPDATE
+
+	· EditEventAction (new inner EventDataUI class):
+		Update actionPerformed --switch to EventEditUI in new event mode, not tested yet--
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
