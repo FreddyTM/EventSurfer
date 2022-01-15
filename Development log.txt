@@ -2070,3 +2070,11 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
+
+	· EventEditUI class:
+		Add attributes
+			DATE_TIME_PATTERN, EVENTEDIT_ACTION_UNDEFINED, EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT,
+			EVENTEDIT_ACTION_NEW_UPDATE, EVENTEDIT_ACTION_EDIT_UPDATE, actionSelector, session, selector, tNow, 
+			panelVisible, eventSelected, updateSelected
+		Add setup() --switch structure--
+		Update constructor --uses setup()--
