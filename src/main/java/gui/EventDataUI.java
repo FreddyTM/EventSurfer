@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -1542,8 +1543,35 @@ public class EventDataUI extends JPanel{
 			}
 			//Se comprueba la actualización de los datos si el panel es visible
 			if (EventDataUI.this.panelVisible == true) {
-		
 				
+				//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
+				//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
+				if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
+					//Buscamos la bUnit del usuario que abrió sesión
+					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+					//La asignamos como bUnit de la sesión
+					session.setbUnit(userBunit);
+					//Renovamos la lista de las unidades de negocio del comboBox
+					refreshComboBox();
+				}
+				//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
+				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					//Si en la tabla de actualizaciones aparece la clave Event.TABLE_NAME
+					if (updatedTable.getKey().equals(Event.TABLE_NAME)) {
+						//Actualizamos la tabla de incidencias de la unidad de negocio de la sesión
+						filterSelected.doClick();
+						//Informamos por pantalla de la actualización
+						//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
+						//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
+						EventDataUI.this.infoLabel.setText("DATOS DE LAS INCIDENCIAS ACTUALIZADOS: " +
+						ToolBox.formatTimestamp(updatedTable.getValue(), null));
+					}
+					
+					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
+					if (updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
+
+					}
+				}
 			}
 		}
 	}
@@ -1622,7 +1650,7 @@ public class EventDataUI extends JPanel{
 //				//Segundo ciclo
 //				if (timerCycle == 1) {
 //					timercycle = 0;
-//					session.getSelfUpdate() = false;				
+//					session.setSelfUpdate() = false;				
 //				}
 		
 //			}
