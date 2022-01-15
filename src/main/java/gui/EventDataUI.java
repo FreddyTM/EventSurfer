@@ -90,16 +90,16 @@ public class EventDataUI extends JPanel{
 	
 	//Se asignan a la variable actionSelector para determinar la acción a ejecutar
 	private static final int EVENTDATA_ACTION_UNDEFINED = 0; //Default
-	private static final int EVENTDATA_ACTION_NEW_EVENT = 1;
-	private static final int EVENTDATA_ACTION_EDIT_EVENT = 2;
-	private static final int EVENTDATA_ACTION_DELETE_EVENT = 3;
-	private static final int EVENTDATA_ACTION_NEW_UPDATE = 4;
-	private static final int EVENTDATA_ACTION_EDIT_UPDATE = 5;
-	private static final int EVENTDATA_ACTION_DELETE_UPDATE = 6;
+//	private static final int EVENTDATA_ACTION_NEW_EVENT = 1;
+//	private static final int EVENTDATA_ACTION_EDIT_EVENT = 2;
+	private static final int EVENTDATA_ACTION_DELETE_EVENT = 1;
+//	private static final int EVENTDATA_ACTION_NEW_UPDATE = 4;
+//	private static final int EVENTDATA_ACTION_EDIT_UPDATE = 5;
+	private static final int EVENTDATA_ACTION_DELETE_UPDATE = 2;
 	//Tipo de cuadro de diálogo
 	private static final String DIALOG_YES_NO = "yes_no";
 	//Registra la acción a realizar según el botón activado
-	private int ActionSelector = EVENTDATA_ACTION_UNDEFINED;
+	private int actionSelector = EVENTDATA_ACTION_UNDEFINED;
 	
 	private CurrentSession session;
 	private Selector selector;
@@ -1488,14 +1488,15 @@ public class EventDataUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			//borrado de eventos
 			if (e.getSource() == deleteEventButton) {
-				delete(EVENTDATA_ACTION_DELETE_EVENT);
+				actionSelector = EVENTDATA_ACTION_DELETE_EVENT;
 			}
 			
 			//borrado de actualizaciones
 			if (e.getSource() == deleteUpdateButton) {
-				delete(EVENTDATA_ACTION_DELETE_UPDATE);
+				actionSelector = EVENTDATA_ACTION_DELETE_UPDATE;
 			}
-			
+			delete(actionSelector);
+			actionSelector = EVENTDATA_ACTION_UNDEFINED;
 		}
 	}
 	

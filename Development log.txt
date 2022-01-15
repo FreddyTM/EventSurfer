@@ -1867,7 +1867,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 			editUpdateAction, deleteUpdateAction, EVENT_BUTTON_SET, UPDATE_BUTTON_SET, ALL_DISABLED, NEW_ENABLED,
 			NEW_EDIT_ENABLED, ALL_ENABLED, EVENTDATA_ACTION_UNDEFINED, EVENTDATA_ACTION_NEW_EVENT,
 			EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_DELETE_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
-			EVENTDATA_ACTION_EDIT_UPDATE, EVENTDATA_ACTION_DELETE_UPDATE, DIALOG_YES_NO, filterSelected
+			EVENTDATA_ACTION_EDIT_UPDATE, EVENTDATA_ACTION_DELETE_UPDATE, DIALOG_YES_NO, actionSelector, filterSelected
 		Rename attributes lastMonth, lastYear to thisMonth, thisYear
 		Add getComboBoxItemsFromSession() --copied from BusinessUnitUI--
 		Add getSelectedIndexFromArray() --copied from BusinessUnitUI--
@@ -2055,3 +2055,18 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				  --session.bunit is session.user.bunit if session.bunit disabled & activecheckbox enabled--
 				  --update events table, not tested yet--
 				  --update updates table, not tested yet--
+
+ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDITUI
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.15--
+
+	· EventDataUI class:
+		Delete attributes
+			EVENTDATA_ACTION_NEW_EVENT, EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
+			EVENTDATA_ACTION_EDIT_UPDATE
+
+	· DeleteAction (inner EventDataUI class):
+		Update actionPerformed() --uses actionSelector--
