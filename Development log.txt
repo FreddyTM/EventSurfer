@@ -2051,3 +2051,4 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add run() --empty--
 		Update run()	  --preventing selfupdates to notify UIs, in progress (commented code)--
 				  --preventing selfupdates to notify UIs, basic logic not tested (commented code)--
+				  --preventing selfupdates to notify UIs, logic ok not tested (commented code)--

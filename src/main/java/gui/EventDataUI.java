@@ -1542,81 +1542,89 @@ public class EventDataUI extends JPanel{
 			}
 			//Se comprueba la actualización de los datos si el panel es visible
 			if (EventDataUI.this.panelVisible == true) {
-				
-//				PREVIAMENTE EN CURRENTSESSION HEMOS CREADO UN ATRIBUTO Y SU GETTER
-//				private boolean selfUpdate = false;
-//				public boolean getSelfUpdate() {return selfUpdate;}
-//				PREVIAMENTE EN LAS UIs HEMOS CREADO UN ATRIBUTO
-//				private int timerCycle = 0;
-				
-//				//Debug
-//				System.out.println(updatedTable.getKey());
-//				System.out.println(updatedTable.getValue());
-//						
-//				//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
-//				if (updatedTable.getKey().equals(User.TABLE_NAME)) {
-				
-//					*** - COMPROBAMOS SELF UPDATE
-//					if (selfUpdate == false) >>> ACTUALIZACIÓN NORMAL {
-//					
-//						//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
-//						//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
-//						if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-//							//Buscamos la bUnit del usuario que abrió sesión
-//							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-//							//La asignamos como bUnit de la sesión
-//							session.setbUnit(userBunit);
-//							//Renovamos la lista de las unidades de negocio del comboBox
-//							refreshBunitComboBox();
-//						}
-//						
-//						//Debug
-//						System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
-//						System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
-//						
-//						//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
-//						//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
-//						//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
-//						//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
-//						//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
-//						//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
-//						
-//						//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
-//						refreshUserComboBox();
-//						//Mostramos los datos del usuario seleccionado
-//						populateUserFields();
-//						//Hacemos backup del contenido de los datos del formulario
-//						updateDataCache();
-//						
-//						//Debug
-//						String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
-//						System.out.println("El nuevo usuario seleccionado es " + string );
-//						
-//						//Informamos por pantalla de la actualización
-//						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
-//						//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
-//						UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
-//						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-//					}
-//					
-//					*** - COMPROBAMOS SELF UPDATE
-//					//Si es true, no hay que actualizar, pero hay que renovar el ciclo del timerjob local				
-//					if (selfUpdate == true) {
-//						
-//						//Primer ciclo
-//						if (timerCycle == 0) {
-//							timerCycle += 1;
-//						}
-//						//Segundo ciclo
-//						if (timerCycle == 1) {
-//						timercycle = 0;
-//						session.getSelfUpdate() = false;				
-//					}
-					
-//				}
+		
 				
 			}
 		}
 	}
 
 }
+
+//SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE
+
+//	PREVIAMENTE EN CURRENTSESSION HEMOS CREADO UN ATRIBUTO Y SU GETTER
+//	private boolean selfUpdate = false;
+//	public boolean isSelfUpdate() {return selfUpdate;}
+//	PREVIAMENTE EN LAS UIs HEMOS CREADO UN ATRIBUTO
+//	private int timerCycle = 0;
+
+////Se comprueba la actualización de los datos si el panel es visible
+//	if (EventDataUI.this.panelVisible == true) {
+	
+//		//Debug
+//		System.out.println(updatedTable.getKey());
+//		System.out.println(updatedTable.getValue());
+//			
+//		//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
+//		if (updatedTable.getKey().equals(User.TABLE_NAME)) {
+	
+//			*** - COMPROBAMOS SELF UPDATE
+//			if (selfUpdate == false) >>> ACTUALIZACIÓN NORMAL {
+//		
+//				//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
+//				//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
+//				if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
+//					//Buscamos la bUnit del usuario que abrió sesión
+//					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+//					//La asignamos como bUnit de la sesión
+//					session.setbUnit(userBunit);
+//					//Renovamos la lista de las unidades de negocio del comboBox
+//					refreshBunitComboBox();
+//				}
+//			
+//				//Debug
+//				System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
+//				System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
+//			
+//				//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
+//				//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
+//				//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
+//				//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
+//				//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
+//				//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
+//			
+//				//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
+//				refreshUserComboBox();
+//				//Mostramos los datos del usuario seleccionado
+//				populateUserFields();
+//				//Hacemos backup del contenido de los datos del formulario
+//				updateDataCache();
+//			
+//				//Debug
+//				String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
+//				System.out.println("El nuevo usuario seleccionado es " + string );
+//			
+//				//Informamos por pantalla de la actualización
+//				//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
+//				//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
+//				UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
+//				ToolBox.formatTimestamp(updatedTable.getValue(), null));
+//			}
+//		
+//			*** - COMPROBAMOS SELF UPDATE
+//			//Si selfUpdate es true, no hay que actualizar, pero hay que renovar el ciclo del timerjob local				
+//			if (selfUpdate == true) {
+//			
+//				//Primer ciclo
+//				if (timerCycle == 0) {
+//					timerCycle += 1;
+//				}
+//				//Segundo ciclo
+//				if (timerCycle == 1) {
+//					timercycle = 0;
+//					session.getSelfUpdate() = false;				
+//				}
+		
+//			}
+//		}
+// }
