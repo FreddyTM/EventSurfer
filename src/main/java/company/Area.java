@@ -17,14 +17,14 @@ public class Area {
 	public static final String TABLE_NAME = "area";
 	public static final String B_UNIT_AREA_TABLE_NAME = "b_unit_area";
 	private int id;
-	private String area;
+	private String areaNombre;
 	private String descripcion;
 	
 	
 	public Area(int id, String area, String descripcion) {
 		//this.connection = connection;
 		this.id = id;
-		this.area = area;
+		this.areaNombre = area;
 		this.descripcion = descripcion;
 	}
 	
@@ -44,7 +44,7 @@ public class Area {
 				+ "VALUES (?, ?);";
 		try {
 			pstm = conn.prepareStatement(sql);		
-			pstm.setString(1, area.getArea());
+			pstm.setString(1, area.getAreaNombre());
 			pstm.setString(2, area.getDescripcion());
 			pstm.executeUpdate();
 			return true;
@@ -228,7 +228,7 @@ public class Area {
 				+ "WHERE id = ?;";
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setString(1, area.getArea());
+			pstm.setString(1, area.getAreaNombre());
 			pstm.setString(2, area.getDescripcion());
 			pstm.setInt(3, area.getId());
 			pstm.executeUpdate();
@@ -346,7 +346,7 @@ public class Area {
 	public Area getAreaByName (BusinessUnit bUnit, String name) {
 		List<Area> areaList = bUnit.getAreas();
 		for (Area area: areaList) {
-			if (area.getArea() == name) {
+			if (area.getAreaNombre() == name) {
 				return area;
 			}
 		}	
@@ -361,7 +361,7 @@ public class Area {
 	 */
 	public Area getAreaByName (List<Area> areaList, String name) {
 		for (Area area: areaList) {
-			if (area.getArea() == name) {
+			if (area.getAreaNombre() == name) {
 				return area;
 			}
 		}	
@@ -392,12 +392,12 @@ public class Area {
 		this.id = id;
 	}
 
-	public String getArea() {
-		return area;
+	public String getAreaNombre() {
+		return areaNombre;
 	}
 
 	public void setArea(String area) {
-		this.area = area;
+		this.areaNombre = area;
 	}
 
 	public String getDescripcion() {

@@ -623,7 +623,7 @@ public class EventDataUI extends JPanel{
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
 			eventVector.add(event.getUpdates().get(0).getFechaHora());
-			eventVector.add(event.getArea().getArea());
+			eventVector.add(event.getArea().getAreaNombre());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
 			eventVector.add(event.getDescripcion());
@@ -699,7 +699,7 @@ public class EventDataUI extends JPanel{
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
 			eventVector.add(event.getUpdates().get(0).getFechaHora());
-			eventVector.add(event.getArea().getArea());
+			eventVector.add(event.getArea().getAreaNombre());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
 			eventVector.add(event.getDescripcion());

@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
+import main.java.company.Area;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
@@ -255,7 +257,7 @@ public class EventEditUI extends JPanel{
 		updateAuthorField.setBounds(510, 475, 250, 25);
 		add(updateAuthorField);
 		
-		areaComboList = getAreaComboBoxItems();
+		areaComboList = getAreaComboBoxItemsFromSession();
 		//Si intentamos crear una nueva incidencia, la lista de areas no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio que no tiene ningún area asignada.		
@@ -356,7 +358,10 @@ public class EventEditUI extends JPanel{
 			
 				
 				//Información inicial de los componentes
-				
+				tNow = ToolBox.getTimestampNow();
+				eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
+				fillAreaComboBox(0);
 				
 				break;
 			//Edit event
@@ -454,11 +459,43 @@ public class EventEditUI extends JPanel{
 		}
 	}
 	
-	private String[] getAreaComboBoxItems() {
+	/**
+	 * Devuelve la lista de nombres de areas asignadas a la unidad de negocio de la sesión
+	 * en orden alfabético
+	 * @return array de nombres
+	 */
+	private String[] getAreaComboBoxItemsFromSession() {
 		List<String> tempList = new ArrayList<String>();
-		
-		
+		for (Area area: session.getbUnit().getAreas()) {
+			tempList.add(area.getAreaNombre());
+		}
 		return ToolBox.toSortedArray(tempList);
+	}
+	
+	/**
+	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
+	 * del array pasado por parámetro
+	 * @param array array con la lista de areas
+	 * @return índice del elemento a seleccionar por defecto
+	 */
+	private int getSelectedAreaIndexFromArray(String[] array) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(session.getbUnit().getEvents().get(i).getArea().getAreaNombre())) {
+				return i;
+			}
+		}
+
+		return 0;
+	}
+	
+	/**
+	 * Rellena el contenido del areaComboBox y selecciona el elemento de la lista pasado por parámetro
+	 * @param index índice del elemento que se seleccionará por defecto
+	 */
+	private void fillAreaComboBox(int index) {
+		areaComboList = getAreaComboBoxItemsFromSession();
+		areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+		areaComboBox.setSelectedIndex(index);
 	}
 	
 	private String[] getEventTypeComboBoxItems() {

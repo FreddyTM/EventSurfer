@@ -350,7 +350,7 @@ public class AreaUI extends JPanel {
 		List<String> tempList = new ArrayList<String>();
 		allAreas = new Area().getAllAreasFromDB(this.session.getConnection());
 		for (Area area: allAreas) {
-			tempList.add(area.getArea());
+			tempList.add(area.getAreaNombre());
 		}
 		//Si la lista está vacía
 		if (tempList.size() == 0) {
@@ -371,7 +371,7 @@ public class AreaUI extends JPanel {
 	private int getSelectedIndexFromArray(String[] array) {
 		if (!array[0].equals(NO_AREA)) {		
 			for (int i = 0; i < array.length; i++) {
-				if (array[i].equals(selectedArea.getArea())) {
+				if (array[i].equals(selectedArea.getAreaNombre())) {
 					return i;
 				}
 			}
@@ -392,7 +392,7 @@ public class AreaUI extends JPanel {
 	 * Refresca los datos del area seleccionada para que se visualicen en pantalla
 	 */
 	private void populateAreaFields() {
-		areaNameField.setText(selectedArea.getArea());
+		areaNameField.setText(selectedArea.getAreaNombre());
 		areaDescription.setText(selectedArea.getDescripcion());
 	}
 	
@@ -591,7 +591,7 @@ public class AreaUI extends JPanel {
 		if (okActionSelector == AreaUI.OK_ACTION_NEW) {
 			//Si el nombre del area creada ya existe no se permite su creación
 			for (Area area: areaList) {
-				if (areaToCheck.getArea().equals(area.getArea())) {
+				if (areaToCheck.getAreaNombre().equals(area.getAreaNombre())) {
 					infoLabel.setText(errorNameText);
 					areaNameField.setBackground(Color.YELLOW);
 					return false;
@@ -600,10 +600,10 @@ public class AreaUI extends JPanel {
 		//Si estamos editando una area existente
 		} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
 			//Si cambiamos el nombre del area editada
-			if (!selectedArea.getArea().equals(areaToCheck.getArea())) {
+			if (!selectedArea.getAreaNombre().equals(areaToCheck.getAreaNombre())) {
 				//Comprobamos que el nombre editado no pertenezca a otra area existente
 				for (Area area: areaList) {
-					if (areaToCheck.getArea().equals(area.getArea())) {
+					if (areaToCheck.getAreaNombre().equals(area.getAreaNombre())) {
 						infoLabel.setText(errorNameText);
 						areaNameField.setBackground(Color.YELLOW);
 						return false;
@@ -612,7 +612,7 @@ public class AreaUI extends JPanel {
 			}
 		}
 
-		if (areaToCheck.getArea().length() > 100 || areaToCheck.getArea().length() == 0) {
+		if (areaToCheck.getAreaNombre().length() > 100 || areaToCheck.getAreaNombre().length() == 0) {
 			areaNameField.setBackground(Color.YELLOW);
 			error = true;
 		}
@@ -969,7 +969,7 @@ public class AreaUI extends JPanel {
 							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
 							//Debug
 							if (areaDeleted) {	
-								System.out.println("Borrando area " + selectedArea.getArea()
+								System.out.println("Borrando area " + selectedArea.getAreaNombre()
 								+ " de la unidad de negocio " + bUnit.getNombre());
 							}
 						}
@@ -1193,7 +1193,7 @@ public class AreaUI extends JPanel {
 						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
 						boolean areaDeleted = true;
 						for (Area area: updatedAreaList) {
-							if (area.getArea().equals(selectedArea.getArea()) ) {
+							if (area.getAreaNombre().equals(selectedArea.getAreaNombre()) ) {
 								areaDeleted = false;
 							}
 						}
