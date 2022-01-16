@@ -59,7 +59,7 @@ public class Selector extends JPanel {
 		eventTypeButton.setAction(eventTypeAction);
 		eventTypeButton.setMargin(new Insets(2,2,2,2));
 		eventTypeButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		eventTypeButton.setText("<html><center>"+"TIPOS" + "<br>" + "DE" + "<br>" + "EVENTO" + "</center></html>");
+		eventTypeButton.setText("<html><center>"+"TIPOS" + "<br>" + "DE" + "<br>" + "INCIDENCIA" + "</center></html>");
 		eventTypeButton.setMinimumSize(dim);
 		eventTypeButton.setPreferredSize(dim);
 		add(eventTypeButton);

@@ -2065,8 +2065,11 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 	· Selector class:
 		Update getFrame() --returns AppWindow object, not JFrame object--
+		Update eventTypeButton text to "TIPOS DE INCIDENCIA"
 
 	· EventDataUI class:
+		Add attributes
+			DIALOG_INFO
 		Delete attributes
 			EVENTDATA_ACTION_NEW_EVENT, EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
 			EVENTDATA_ACTION_EDIT_UPDATE
