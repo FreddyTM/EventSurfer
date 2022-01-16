@@ -2110,3 +2110,4 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				   --update components initial state--
 		Update setup() --new event initial state ok--
 			       --edit event initial state, not tested yet--
+			       --new update initial state, not tested yet--
