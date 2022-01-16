@@ -18,10 +18,14 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.company.Area;
+import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
+import main.java.types_states.EventState;
+import main.java.types_states.EventType;
+import main.java.types_states.TypesStatesContainer;
 
 public class EventEditUI extends JPanel{
 	
@@ -473,15 +477,42 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
-	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
-	 * del array pasado por parámetro
-	 * @param array array con la lista de areas
+	 * Obiene el índice del elemento del comboBox que será seleccionado por defecto a partir
+	 * del array y el objeto pasados por parámetro
+	 * @param array array con la lista de elementos que aparecerán en el combobox
+	 * @param object objeto que filtrará el tipo de búsqueda de índice en función de su clase
 	 * @return índice del elemento a seleccionar por defecto
 	 */
-	private int getSelectedAreaIndexFromArray(String[] array) {
+	private int getSelectedIndexFromArray(String[] array, Object object) {
 		for (int i = 0; i < array.length; i++) {
-			if (array[i].equals(session.getbUnit().getEvents().get(i).getArea().getAreaNombre())) {
-				return i;
+			//Si buscamos el índice de una lista de areas 
+			if (object.getClass() == Area.class) {
+				if (array[i].equals(eventSelected.getArea().getAreaNombre())) {
+					return i;
+				}
+				continue;
+			}
+			//Si buscamos el índice de una lista de tipos de incidencia
+			if (object.getClass() == EventType.class) {
+				if (array[i].equals(TypesStatesContainer.getEvType().getEventTypes().get(i + 1))) {
+					return i;
+				}
+				continue;
+			}
+			//Si buscamos el índice de una lista de usuarios
+			if (object.getClass() == User.class) {
+//				Event event = session.getbUnit().getEvents().get(i);
+//				for (int j = 0; j < eventSelected.getUpdates().size(); j++) {
+//					if (array[i].equals(eventSelected.getUpdates().get(j).getUser().getNombre())) {
+//						return i;
+//					}
+//				}
+				continue;
+			}
+			
+			//Si buscamos el índice de una lista de estados de incidencia
+			if (object.getClass() == EventState.class) {
+				
 			}
 		}
 
