@@ -99,6 +99,7 @@ public class EventDataUI extends JPanel{
 //	private static final int EVENTDATA_ACTION_EDIT_UPDATE = 5;
 	private static final int EVENTDATA_ACTION_DELETE_UPDATE = 2;
 	//Tipo de cuadro de diálogo
+	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
 	//Registra la acción a realizar según el botón activado
 	private int actionSelector = EVENTDATA_ACTION_UNDEFINED;
@@ -1090,6 +1091,21 @@ public class EventDataUI extends JPanel{
 	}
 	
 	/**
+	 * Muestra la pantalla de creación / edición de incidencias y actualizaciones
+	 * @param mode modo de creación / edición de incidencias y actualizaciones
+	 */
+	private void goToNewEdit(int mode) {
+		AppWindow frame = selector.getFrame();
+		selector.hidePanel(frame, frame.getCenterPanel());
+		//Creamos panel de creación / edición de incidencias y actualizaciones
+		//Modo creación de nueva incidencia
+		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
+				mode);
+		//Mostramos el panel
+		selector.showPanel(frame, eEditUI);
+	}
+	
+	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
 	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
@@ -1455,6 +1471,12 @@ public class EventDataUI extends JPanel{
 		}	
 	}
 	
+	/**
+	 * Acción del botón nueva incidencia. Se comprueba la existencia de areas asignadas a la unidad de negocio de la sesión. Si no las hay,
+	 * se avisa y se impide la acción. Si las hay, se comprueba la existencia de tipos de eventos registrados. Si no los hay, se avisa y se
+	 * impide la acción. Si los hay, se pasa a la pantalla de creación / edición de incidencias y actualizaciones en modo de creación de nueva
+	 * incidencia.
+	 */
 	private class NewEventAction extends AbstractAction {
 		public NewEventAction() {
 			putValue(NAME, "Nueva");
@@ -1464,15 +1486,29 @@ public class EventDataUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			//Debug
 			System.out.println("Crear nueva incidencia");
+			boolean okNew = true;
 			
-			//Vaciamos el panel base y le quitamos visibilidad
-			AppWindow frame = selector.getFrame();
-			selector.hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de datos de evento
-			EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector, EventEditUI.getEventeditActionNewEvent());
-			//Mostramos el panel
-			selector.showPanel(frame, eEditUI);
-			
+			//Si no hay areas asignadas a la unidad de negocio de la sesión, se avisa y se bloquea la creación de una nueva incidencia
+			if (session.getbUnit().getAreas().size() == 0) {
+				ToolBox.showDialog(
+						"<html><body><div align='center'>No existen areas asignadas la unidad de negocio seleccionada<br>"
+						+ "No se pueden abrir incidencias</div></body></html>",
+						EventDataUI.this, DIALOG_INFO);
+				okNew = false;
+			} 
+			//Si no hay tipos de eventos registrados, se avisa y se bloquea la creación de una nueva incidencia
+			if (TypesStatesContainer.getEvType().getEventTypes().size() == 0) {
+				if (session.getbUnit().getAreas().size() == 0) {
+					ToolBox.showDialog(
+							"No existen tipos de incidencias registrados.\nNo se pueden abrir incidencias", EventDataUI.this,
+							DIALOG_INFO);
+					okNew = false;
+				} 
+			} 
+			//Si no hay errores, procedemos a crear la nueva incidencia
+			if (okNew) {
+				goToNewEdit(EventEditUI.getEventEditActionNewEvent());
+			}	
 		}
 	}
 	

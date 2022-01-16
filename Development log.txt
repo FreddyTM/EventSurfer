@@ -2067,16 +2067,21 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update getFrame() --returns AppWindow object, not JFrame object--
 		Update eventTypeButton text to "TIPOS DE INCIDENCIA"
 
+	· AreaUI class:
+		Update areaDescription border color
+
 	· EventDataUI class:
 		Add attributes
 			DIALOG_INFO
 		Delete attributes
 			EVENTDATA_ACTION_NEW_EVENT, EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
 			EVENTDATA_ACTION_EDIT_UPDATE
+		Add goToNewEvent() --ok, not tested with no event types--
 		Update infoLabel alignment to CENTER
 
-	· EditEventAction (new inner EventDataUI class):
-		Update actionPerformed --switch to EventEditUI in new event mode, not tested yet--
+	· New EventAction (new inner EventDataUI class):
+		Update actionPerformed --switch to EventEditUI in new event mode, ok--
+				       --uses goToNewEvent()--
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
@@ -2097,5 +2102,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add getEventStateComboBoxItems() --empty--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
 				EVENTEDIT_ACTION_EDIT_UPDATE
+		Update eventDescriptionArea border color
+		Update updateDescriptionArea border color
 		Update constructor --uses setup(), add screen label--
 				   --all visual components in layout--
