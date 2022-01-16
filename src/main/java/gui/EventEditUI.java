@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -16,8 +15,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 import main.java.event.Event;
 import main.java.event.EventUpdate;
@@ -270,9 +267,6 @@ public class EventEditUI extends JPanel{
 		ToolBox.setBlackForeground(areaComboBox);
 		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
-//		if (session.getUser().getUserType().equals("USER")) {
-//			userComboBox.setEnabled(false);
-//		}
 		
 		eventTypeComboList = getEventTypeComboBoxItems();
 		//Si intentamos crear una nueva incidencia, la lista de tipos de incidencia no puede estar vacía
@@ -286,16 +280,9 @@ public class EventEditUI extends JPanel{
 		ToolBox.setBlackForeground(eventTypeComboBox);
 		eventTypeComboBox.setBackground(Color.WHITE);
 		add(eventTypeComboBox);
-//		if (session.getUser().getUserType().equals("USER")) {
-//			userComboBox.setEnabled(false);
-//		}
 		
 		userComboList = getUserComboBoxItemsFromSession();
-		//La lista nunca estará vacía, porque siempre habrá al menos un usuario creado
-//		if (userComboList.length == 0) {
-//			userComboList = new String[1];
-//			userComboList[0] = "<Ningún usuario seleccionable>";
-//		}		
+		//La lista nunca estará vacía, porque siempre habrá al menos un usuario creado de inicio
 		userComboBox = new JComboBox(userComboList);
 //		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		userComboBox.setBounds(510, 525, 250, 25);
@@ -304,15 +291,9 @@ public class EventEditUI extends JPanel{
 		ToolBox.setBlackForeground(userComboBox);
 		userComboBox.setBackground(Color.WHITE);
 		add(userComboBox);
-//		if (session.getUser().getUserType().equals("USER")) {
-//			userComboBox.setEnabled(false);
-//		}
 		
 		eventStateComboList = getEventStateComboBoxItems();
-		//La lista nunca estará vacía, porque siempre habrá al menos tres estados creados de inicio
-//		if (userComboList.length == 0) {
-//			userComboList = new String[1];
-//			userComboList[0] = "<Ningún usuario seleccionable>";
+		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
 //		}		
 		eventStateComboBox = new JComboBox(eventStateComboList);
 //		eventStateComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
@@ -322,9 +303,6 @@ public class EventEditUI extends JPanel{
 		ToolBox.setBlackForeground(eventStateComboBox);
 		eventStateComboBox.setBackground(Color.WHITE);
 		add(eventStateComboBox);
-//		if (session.getUser().getUserType().equals("USER")) {
-//			userComboBox.setEnabled(false);
-//		}
 		
 		oKButton = new JButton();
 //		oKButton.setAction(oKAction);
@@ -368,7 +346,12 @@ public class EventEditUI extends JPanel{
 				updateDateField.setEditable(false);
 				updateTimeField.setEditable(false);
 				updateAuthorField.setEditable(true);
-				userComboBox.setEnabled(false);
+				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
+				if (session.getUser().getUserType().equals("USER")) {
+					userComboBox.setEnabled(false);
+				} else  {
+					userComboBox.setEnabled(true);
+				}
 				updateDescriptionArea.setEditable(true);
 			
 				
@@ -393,7 +376,6 @@ public class EventEditUI extends JPanel{
 				//Part of event update
 				updateDateField.setEditable(false);
 				updateTimeField.setEditable(false);
-				updateDescriptionArea.setEditable(true);
 				updateAuthorField.setEditable(true);
 				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
 				if (session.getUser().getUserType().equals("USER")) {
@@ -401,6 +383,7 @@ public class EventEditUI extends JPanel{
 				} else  {
 					userComboBox.setEnabled(true);
 				}
+				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
 				
@@ -423,14 +406,14 @@ public class EventEditUI extends JPanel{
 				//Part of event update
 				updateDateField.setEditable(true);
 				updateTimeField.setEditable(true);
-				updateDescriptionArea.setEditable(true);
 				updateAuthorField.setEditable(true);
-				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
+				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la actualización
 				if (session.getUser().getUserType().equals("USER")) {
 					userComboBox.setEnabled(false);
 				} else  {
 					userComboBox.setEnabled(true);
 				}
+				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
 				
@@ -442,7 +425,25 @@ public class EventEditUI extends JPanel{
 				System.out.println("Editando actualización");
 				
 				//Estado inicial de los componentes
-
+				//Part of event
+				eventDateField.setEditable(false);
+				eventTimeField.setEditable(false);
+				areaComboBox.setEnabled(false);
+				eventTypeComboBox.setEnabled(false);
+				eventTitleField.setEditable(false);
+				eventDescriptionArea.setEditable(false);
+				eventStateComboBox.setEnabled(true);
+				//Part of event update
+				updateDateField.setEditable(true);
+				updateTimeField.setEditable(true);
+				updateAuthorField.setEditable(true);
+				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la actualización
+				if (session.getUser().getUserType().equals("USER")) {
+					userComboBox.setEnabled(false);
+				} else  {
+					userComboBox.setEnabled(true);
+				}
+				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
 				
