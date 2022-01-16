@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import main.java.event.Event;
@@ -222,11 +223,8 @@ public class EventEditUI extends JPanel{
 		eventDescriptionArea.setLineWrap(true);
 		eventDescriptionArea.setWrapStyleWord(true);
 		eventDescriptionArea.setBounds(260, 375, 500, 75);
-		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
-		Color color = ((LineBorder)eventTitleField.getBorder()).getLineColor();
-//		LineBorder border = (LineBorder)state.getBorder().getLineColor();
-//		((LineBorder)JTextField.getBorder()).getLineColor();
-		eventDescriptionArea.setBorder(BorderFactory.createLineBorder(color));
+		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
+		eventDescriptionArea.setBorder(eventTitleField.getBorder());
 		eventDescriptionArea.setEditable(false);
 		add(eventDescriptionArea);
 		
@@ -248,7 +246,7 @@ public class EventEditUI extends JPanel{
 		updateDescriptionArea.setWrapStyleWord(true);
 		updateDescriptionArea.setBounds(260, 575, 500, 75);
 		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
-		updateDescriptionArea.setBorder(BorderFactory.createLineBorder(color));
+		updateDescriptionArea.setBorder(eventTitleField.getBorder());
 		updateDescriptionArea.setEditable(false);
 		add(updateDescriptionArea);
 		
@@ -259,13 +257,9 @@ public class EventEditUI extends JPanel{
 		add(updateAuthorField);
 		
 		areaComboList = getAreaComboBoxItems();
-		//La lista no puede estar vacía, comprobar en EventDataUI Nueva incidencia
+		//La lista no puede estar vacía, comprobar en EventDataUI NewEventAction
 		//Mensaje de advertencia de que no se puede añadir incidencias a una unidad
-		//de negocio que no tiene ningún area asignada.
-//		if (userComboList.length == 0) {
-//			userComboList = new String[1];
-//			userComboList[0] = "<Ningún usuario seleccionable>";
-//		}		
+		//de negocio que no tiene ningún area asignada.		
 		areaComboBox = new JComboBox(areaComboList);
 //		areaComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		areaComboBox.setBounds(510, 225, 250, 25);
@@ -419,19 +413,19 @@ public class EventEditUI extends JPanel{
 		return ToolBox.toSortedArray(tempList);
 	}
 
-	public static int getEventeditActionNewEvent() {
+	public static int getEventEditActionNewEvent() {
 		return EVENTEDIT_ACTION_NEW_EVENT;
 	}
 
-	public static int getEventeditActionEditEvent() {
+	public static int getEventEditActionEditEvent() {
 		return EVENTEDIT_ACTION_EDIT_EVENT;
 	}
 
-	public static int getEventeditActionNewUpdate() {
+	public static int getEventEditActionNewUpdate() {
 		return EVENTEDIT_ACTION_NEW_UPDATE;
 	}
 
-	public static int getEventeditActionEditUpdate() {
+	public static int getEventEditActionEditUpdate() {
 		return EVENTEDIT_ACTION_EDIT_UPDATE;
 	}
 

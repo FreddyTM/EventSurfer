@@ -175,8 +175,8 @@ public class AreaUI extends JPanel {
 		areaDescription.setWrapStyleWord(true);
 		areaDescription.setBounds(260, 225, 400, 75);
 		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
-		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
-		areaDescription.setBorder(border);
+//		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
+		areaDescription.setBorder(areaNameField.getBorder());
 		areaDescription.setEditable(false);
 		add(areaDescription);
 		
