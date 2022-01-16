@@ -201,21 +201,21 @@ public class EventEditUI extends JPanel{
 		
 		eventDateField = new JTextField();
 //		eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), DATE_PATTERN));
-		eventDateField.setEditable(false);
+//		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 100, 25);
 		add(eventDateField);
 		
 		eventTimeField = new JTextField();
 //		eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), TIME_PATTERN));
-		eventTimeField.setEditable(false);
+//		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
 		eventTimeField.setBounds(260, 275, 50, 25);
 		add(eventTimeField);
 		
 		eventTitleField = new JTextField();
 //		eventTitleField.setText(eventSelected.getTitulo());
-		eventTitleField.setEditable(false);
+//		eventTitleField.setEditable(false);
 		eventTitleField.setColumns(10);
 		eventTitleField.setBounds(260, 325, 500, 25);
 		add(eventTitleField);
@@ -223,21 +223,22 @@ public class EventEditUI extends JPanel{
 		eventDescriptionArea.setLineWrap(true);
 		eventDescriptionArea.setWrapStyleWord(true);
 		eventDescriptionArea.setBounds(260, 375, 500, 75);
-		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
+		eventDescriptionArea.setBackground(Color.WHITE);
+//		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
 		eventDescriptionArea.setBorder(eventTitleField.getBorder());
-		eventDescriptionArea.setEditable(false);
+//		eventDescriptionArea.setEditable(false);
 		add(eventDescriptionArea);
 		
 		updateDateField = new JTextField();
 //		updateDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), DATE_PATTERN));
-		updateDateField.setEditable(false);
+//		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 100, 25);
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
 //		updateTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), TIME_PATTERN));
-		updateTimeField.setEditable(false);
+//		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 50, 25);
 		add(updateTimeField);
@@ -245,21 +246,22 @@ public class EventEditUI extends JPanel{
 		updateDescriptionArea.setLineWrap(true);
 		updateDescriptionArea.setWrapStyleWord(true);
 		updateDescriptionArea.setBounds(260, 575, 500, 75);
-		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
+		updateDescriptionArea.setBackground(Color.WHITE);
+//		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		updateDescriptionArea.setBorder(eventTitleField.getBorder());
-		updateDescriptionArea.setEditable(false);
+//		updateDescriptionArea.setEditable(false);
 		add(updateDescriptionArea);
 		
 		updateAuthorField = new JTextField();
-		updateAuthorField.setEditable(false);
+//		updateAuthorField.setEditable(false);
 		updateAuthorField.setColumns(10);
 		updateAuthorField.setBounds(510, 475, 250, 25);
 		add(updateAuthorField);
 		
 		areaComboList = getAreaComboBoxItems();
-		//La lista no puede estar vacía, comprobar en EventDataUI NewEventAction
-		//Mensaje de advertencia de que no se puede añadir incidencias a una unidad
-		//de negocio que no tiene ningún area asignada.		
+		//Si intentamos crear una nueva incidencia, la lista de areas no puede estar vacía
+		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
+		//incidencias a una unidad de negocio que no tiene ningún area asignada.		
 		areaComboBox = new JComboBox(areaComboList);
 //		areaComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		areaComboBox.setBounds(510, 225, 250, 25);
@@ -273,13 +275,9 @@ public class EventEditUI extends JPanel{
 //		}
 		
 		eventTypeComboList = getEventTypeComboBoxItems();
-		//La lista no puede estar vacía, comprobar en EventDataUI Nueva incidencia
-		//Mensaje de advertencia de que no se puede añadir incidencias a una unidad
-		//de negocio si no hay ningún tipo de incidencia registrada
-//		if (userComboList.length == 0) {
-//			userComboList = new String[1];
-//			userComboList[0] = "<Ningún usuario seleccionable>";
-//		}		
+		//Si intentamos crear una nueva incidencia, la lista de tipos de incidencia no puede estar vacía
+		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
+		//incidencias a una unidad de negocio si no hay ningún tipo de incidencia registrada		
 		eventTypeComboBox = new JComboBox(eventTypeComboList);
 //		eventTypeComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		eventTypeComboBox.setBounds(510, 275, 250, 25);
@@ -357,12 +355,40 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Nueva incidencia");
 				
+				//Estado inicial de los componentes
+				eventDateField.setEditable(true);
+				eventTimeField.setEditable(true);
+				eventTitleField.setEditable(true);
+				eventDescriptionArea.setEditable(true);
+				updateDateField.setEditable(false);
+				updateTimeField.setEditable(false);
+				updateDescriptionArea.setEditable(true);
+				updateAuthorField.setEditable(true);
+				areaComboBox.setEnabled(true);
+				eventTypeComboBox.setEnabled(true);
+				userComboBox.setEnabled(false);
+				eventStateComboBox.setEnabled(true);
+			
+				
+				//Información inicial de los componentes
+				
 				
 				break;
 			//Edit event
 			case EVENTEDIT_ACTION_EDIT_EVENT:
 				//Debug
 				System.out.println("Editando incidencia");
+				
+				//Estado inicial de los componentes
+
+				
+//				if (session.getUser().getUserType().equals("ADMIN")) {
+//					userComboBox.setEnabled(true);
+//				} else  {
+//					userComboBox.setEnabled(false);
+//				}
+				
+				//Información inicial de los componentes
 				
 				
 				break;
@@ -371,12 +397,29 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Nueva actualización");
 				
+				//Estado inicial de los componentes
+
+				
+				
+//				if (session.getUser().getUserType().equals("ADMIN")) {
+//					userComboBox.setEnabled(true);
+//				} else  {
+//					userComboBox.setEnabled(false);
+//				}
+				
+				//Información inicial de los componentes
+				
 				
 				break;
 			//Edit update
 			case EVENTEDIT_ACTION_EDIT_UPDATE:
 				//Debug
 				System.out.println("Editando actualización");
+				
+				//Estado inicial de los componentes
+
+				
+				//Información inicial de los componentes
 				
 				
 				break;
