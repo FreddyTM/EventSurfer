@@ -2109,3 +2109,4 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				   --update comboboxes border color--
 				   --update components initial state--
 		Update setup() --new event initial state ok--
+			       --edit event initial state, not tested yet--

@@ -380,13 +380,23 @@ public class EventEditUI extends JPanel{
 				System.out.println("Editando incidencia");
 				
 				//Estado inicial de los componentes
-
-				
-//				if (session.getUser().getUserType().equals("ADMIN")) {
-//					userComboBox.setEnabled(true);
-//				} else  {
-//					userComboBox.setEnabled(false);
-//				}
+				eventDateField.setEditable(true);
+				eventTimeField.setEditable(true);
+				eventTitleField.setEditable(true);
+				eventDescriptionArea.setEditable(true);
+				updateDateField.setEditable(false);
+				updateTimeField.setEditable(false);
+				updateDescriptionArea.setEditable(true);
+				updateAuthorField.setEditable(true);
+				areaComboBox.setEnabled(true);
+				eventTypeComboBox.setEnabled(true);
+				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
+				if (session.getUser().getUserType().equals("USER")) {
+					userComboBox.setEnabled(false);
+				} else  {
+					userComboBox.setEnabled(true);
+				}
+				eventStateComboBox.setEnabled(true);
 				
 				//Información inicial de los componentes
 				
@@ -401,10 +411,10 @@ public class EventEditUI extends JPanel{
 
 				
 				
-//				if (session.getUser().getUserType().equals("ADMIN")) {
-//					userComboBox.setEnabled(true);
-//				} else  {
+//				if (session.getUser().getUserType().equals("USER")) {
 //					userComboBox.setEnabled(false);
+//				} else  {
+//					userComboBox.setEnabled(true);
 //				}
 				
 				//Información inicial de los componentes
