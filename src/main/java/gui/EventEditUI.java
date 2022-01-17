@@ -308,7 +308,7 @@ public class EventEditUI extends JPanel{
 //		eventStateComboList = getEventStateComboBoxItems();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
 //		}		
-		eventStateComboBox = new JComboBox(eventStateComboList);
+		eventStateComboBox = new JComboBox();
 //		eventStateComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		eventStateComboBox.setBounds(260, 675, 200, 25);
 //		eventStateComboBox.addItemListener(new UserComboListener());
@@ -367,7 +367,13 @@ public class EventEditUI extends JPanel{
 				tNow = ToolBox.getTimestampNow();
 				eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
 				eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
-				fillAreaComboBox(0);
+				fillAreaComboBox(-1);
+				fillEventTypeComboBox(-1);
+				updateDateField.setText(eventDateField.getText());
+				updateTimeField.setText(eventTimeField.getText());
+				userField.setText(session.getUser().getUserAlias());
+				updateDescriptionArea.setText("NUEVA INCIDENCIA");
+				fillEventStateComboBox(0);
 				
 				break;
 			//Edit event
