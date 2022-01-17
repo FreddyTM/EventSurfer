@@ -2090,6 +2090,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			EVENTDATA_ACTION_EDIT_UPDATE
 		Add goToNewEvent() --ok, not tested with no event types--
 		Update infoLabel alignment to CENTER
+		Move stringTotimestamp() to EventEditUI
 
 	· New EventAction (new inner EventDataUI class):
 		Update actionPerformed --switch to EventEditUI in new event mode, ok--
@@ -2111,10 +2112,11 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
 				EVENTEDIT_ACTION_EDIT_UPDATE
-		Add fillAreaComboBox() --not tested yet--
-		Add fillEventTypeComboBox() --not tested yet--
-		Add fillEventStateComboBox() --not tested yet--
-		Add getSelectedIndexFromArray() 
+		Add fillAreaComboBox() --ok--
+		Add fillEventTypeComboBox() --ok--
+		Add fillEventStateComboBox() --ok--
+		Add getSelectedIndexFromArray()
+		Add stringTotimestamp() --not tested yet--
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list not tested yet--

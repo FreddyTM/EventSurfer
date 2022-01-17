@@ -873,19 +873,6 @@ public class EventDataUI extends JPanel{
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 	}
 	
-	
-	/**
-	 * Retorna un timestamp a partir de un string que sigue el formato de pattern
-	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
-	 * @param pattern patrón para dar el formato
-	 * @return Timestamp con la fecha y la hora pasadas por parámetro
-	 */
-	private Timestamp stringToTimestamp(String stringToParse, String pattern) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
-		return Timestamp.valueOf(ldt);
-	}
-	
 	/**
 	 * Habilita o deshabilita los botones de nuevo, editar y borrar de las tablas de incidencias y actualizaciones
 	 * @param buttonSet determina el grupo de botones afectado (tablas incidencias o actualizaciones)
@@ -1055,12 +1042,7 @@ public class EventDataUI extends JPanel{
 						//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
 						//y el número de incidencias mostradas y totales
 						filterSelected.doClick();
-//						//Refrescar tabla de incidencias
-//						
-//						//Borrar tabla actualizaciones
-//						
-//						//Actualizar botones
-//						buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
+
 					}
 					
 					break;
@@ -1133,21 +1115,6 @@ public class EventDataUI extends JPanel{
 				//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
 				//y el número de incidencias mostradas y totales
 				filterSelected.doClick();
-//				//Renovamos la tabla de eventos
-//				List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
-////				updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-//				updateEventTable(eventList, EVENTS_TABLE_HEADER);
-//				//Actualizamos el número de incidencias mostradas
-//				eventsShown.setText(((Integer)eventList.size()).toString());
-//				//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-//				totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
-//				//Seleccionamos el filtro
-//				last25.setSelected(true);
-//				//Vaciamos la tabla de actualizaciones
-//				updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
-//				//Solo el botón nueva incidencia queda habilitado
-//				buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
-//				buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 			
 				//EN PRINCIPIO NO REACTIVAR
 //				//Vaciamos label de información
@@ -1186,23 +1153,6 @@ public class EventDataUI extends JPanel{
 					//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
 					//y el número de incidencias mostradas y totales
 					filterSelected.doClick();
-//					//Renovamos la tabla de eventos
-//					List<Event> eventList = getLastEventsByNumber(session.getbUnit().getEvents(), 25);
-//					updateEventTable(eventList, EVENTS_TABLE_HEADER);
-//					//Actualizamos el número de incidencias mostradas
-//					eventsShown.setText(((Integer)eventList.size()).toString());
-//					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-//					totalEvents.setText(((Integer) session.getbUnit().getEvents().size()).toString());
-////					updateEventTable(getLastEventsByNumber(session.getbUnit().getEvents(), 25), EVENTS_TABLE_HEADER);
-//					//Seleccionamos el filtro
-//					last25.setSelected(true);
-//					//Actualizamos el número total de incidencias de la unidad de negocio seleccionada
-//					totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
-//					//Vaciamos la tabla de actualizaciones
-//					updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
-//					//Solo el botón nueva incidencia queda habilitado
-//					buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
-//					buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
 					
 					//EN PRINCIPIO NO REACTIVAR
 //					//Vaciamos label de información
@@ -1525,6 +1475,10 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción de los botones borrar. Si el origen es deleteEventButton se borra la incidencia seleccionada,
+	 * si es deleteUpdateButton se borra la actualización seleccionada
+	 */
 	private class DeleteAction extends AbstractAction {
 		public DeleteAction() {
 			putValue(NAME, "Borrar");

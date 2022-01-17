@@ -2,7 +2,13 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,6 +214,7 @@ public class EventEditUI extends JPanel{
 //		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 100, 25);
+		eventDateField.addActionListener(new EventDateListener());
 		add(eventDateField);
 		
 		eventTimeField = new JTextField();
@@ -532,7 +539,76 @@ public class EventEditUI extends JPanel{
 		eventStateComboBox.setModel(new DefaultComboBoxModel(eventStateComboList));
 		eventStateComboBox.setSelectedIndex(index);
 	}
+	
+	/**
+	 * Retorna un timestamp a partir de un string que sigue el formato de pattern
+	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
+	 * @param pattern patrón para dar el formato
+	 * @return Timestamp con la fecha y la hora pasadas por parámetro
+	 */
+	private Timestamp stringToTimestamp(String stringToParse, String pattern) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		LocalDateTime ldt = LocalDateTime.from(formatter.parse(stringToParse));
+		return Timestamp.valueOf(ldt);
+	}
+	
+	/**
+	 * Listener que replica el texto de eventDateField en updateDateField
+	 */
+	private class EventDateListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			updateDateField.setText(eventDateField.getText());
+		}
 
+//		@Override
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			String propertyName = evt.getPropertyName();
+//			if (propertyName.equals("graphicsConfiguration")) {
+//				updateDateField.setText(eventDateField.getText());
+//				
+//			}
+//			
+//			if (propertyName.equals("ancestor")) {
+//				updateDateField.setText(eventDateField.getText());
+//				
+//			}
+//			//Debug
+//			System.out.println("propiedad " + propertyName);
+//			
+//			
+//		}
+		
+	}
+	
+//	/**
+//	 * Listener que replica el texto de eventDateField en updateDateField
+//	 */
+//	private class EventDateListener implements PropertyChangeListener {
+////		@Override
+////		public void actionPerformed(ActionEvent e) {
+////			updateDateField.setText(eventDateField.getText());
+////		}
+//
+//		@Override
+//		public void propertyChange(PropertyChangeEvent evt) {
+//			String propertyName = evt.getPropertyName();
+//			if (propertyName.equals("graphicsConfiguration")) {
+//				updateDateField.setText(eventDateField.getText());
+//				
+//			}
+//			
+//			if (propertyName.equals("ancestor")) {
+//				updateDateField.setText(eventDateField.getText());
+//				
+//			}
+//			//Debug
+//			System.out.println("propiedad " + propertyName);
+//			
+//			
+//		}
+//		
+//	}
 
 	public static int getEventEditActionNewEvent() {
 		return EVENTEDIT_ACTION_NEW_EVENT;
