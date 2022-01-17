@@ -2117,6 +2117,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add fillEventStateComboBox() --ok--
 		Add getSelectedIndexFromArray()
 		Add stringTotimestamp() --not tested yet--
+		Add checkDateTime() --not tested yet--
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list not tested yet--
@@ -2132,5 +2133,6 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			       --new update initial state, not tested yet--
 			       --edit update initial state, not tested yet--
 		Update getAreaComboBoxItemsFromSession() --not tested yet--
+		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
