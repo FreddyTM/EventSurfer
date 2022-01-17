@@ -2065,6 +2065,11 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Rename attribute area to areaNombre
 		Rename getArea() to getAreaNombre()
 
+	* - Package main.java.types_states
+
+	· EventState class:
+		Update getEventStatesArray() --return sorted array--
+
 	* - Package main.java.gui
 
 	· AppWindow class:

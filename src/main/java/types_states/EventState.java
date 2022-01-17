@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -30,13 +31,14 @@ public class EventState {
 	}
 	
 	/**
-	 * Devuelve un array con el nombre de los diferentes estados de eventos
+	 * Devuelve un array con el nombre de los diferentes estados de eventos ordenados alfabéticamente
 	 * @return Estados de eventos
 	 */
 	public String[] getEventStatesArray() {
 		String[] estadosDeEvento = new String[getNumberOfEventStates()];
 		Collection<String> estados = eventStates.values();
 		estadosDeEvento = estados.toArray(estadosDeEvento);
+		Arrays.sort(estadosDeEvento);
 		return estadosDeEvento;
 	}
 	
