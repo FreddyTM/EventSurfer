@@ -2107,7 +2107,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			eventTitleField, eventDescriptionArea, updateDateField, updateTimeField, updateDescriptionArea,
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
-			eventStateComboList, userField, 
+			eventStateComboList, userField, VALIDATION_DATE_PATTERN, 
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
@@ -2118,6 +2118,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add getSelectedIndexFromArray()
 		Add stringTotimestamp() --not tested yet--
 		Add checkDateTime() --not tested yet--
+		Add dateIsValid() --ok--
+		Add timeIsValid() --ok--
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list not tested yet--
@@ -2136,3 +2138,10 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
+
+	· EventDateTimeListener class (new inner EventEditUI class):
+		Add attributes
+			oldText, pattern
+		Add actionPerformed()
+		Update actionPerformed() --updates dates or times depending on the source--
+					 --uses dateIsValid(), timeIsValid()--

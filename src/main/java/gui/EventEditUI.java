@@ -4,19 +4,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -30,7 +30,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.company.Area;
-import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
@@ -44,6 +43,7 @@ public class EventEditUI extends JPanel{
 	//Formato de presentación de fecha/hora
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
 	private static final String DATE_PATTERN = "dd-MM-yyyy";
+	private static final String VALIDATION_DATE_PATTERN = "dd-MM-uuuu";
 	private static final String TIME_PATTERN = "HH:mm";
 	
 	//Se asignan a la variable actionSelector para determinar la acción a ejecutar
@@ -56,9 +56,6 @@ public class EventEditUI extends JPanel{
 	//Tipo de cuadro de diálogo
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
-
-//	//Tipo de cuadro de diálogo
-//	private static final String DIALOG_YES_NO = "yes_no";
 	
 	//Registra la acción a realizar según el botón activado
 	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
@@ -221,39 +218,27 @@ public class EventEditUI extends JPanel{
 //		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(bUnitField);
 		
-//		public static JFormattedTextField createDateField(JPanel pnl, String str, String tip) {
-//		    SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-//		    JFormattedTextField txt = new JFormattedTextField(format);
-//		    txt.setText(str);
-//		    txt.setToolTipText(tip);
-//		    pnl.add(txt);
-//		    return txt;
-//		}
-		
 		eventDateField = new JTextField();
 		eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
 //		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 100, 25);
-		eventDateField.addActionListener(new EventDateListener(eventDateField.getText(), DATE_PATTERN));
+		eventDateField.addActionListener(new EventDateTimeListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
+//		eventDateField.addActionListener(new EventDateListener(eventDateField.getText(), DATE_PATTERN));
 		add(eventDateField);
 		
-		formattedEventDateField = new JFormattedTextField(new SimpleDateFormat(DATE_PATTERN));
-		formattedEventDateField.setColumns(10);
-		formattedEventDateField.setBounds(360, 225, 100, 25);
-		add(formattedEventDateField);
-		
 		eventTimeField = new JTextField();
-//		eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), TIME_PATTERN));
+		eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
 //		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
 		eventTimeField.setBounds(260, 275, 50, 25);
+		eventTimeField.addActionListener(new EventDateTimeListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
-		formattedEventTimeField = new JFormattedTextField(new SimpleDateFormat(TIME_PATTERN));
-		formattedEventTimeField.setColumns(10);
-		formattedEventTimeField.setBounds(310, 275, 50, 25);
-		add(formattedEventTimeField);
+//		formattedEventTimeField = new JFormattedTextField(new SimpleDateFormat(TIME_PATTERN));
+//		formattedEventTimeField.setColumns(10);
+//		formattedEventTimeField.setBounds(310, 275, 50, 25);
+//		add(formattedEventTimeField);
 		
 		eventTitleField = new JTextField();
 //		eventTitleField.setText(eventSelected.getTitulo());
@@ -272,17 +257,19 @@ public class EventEditUI extends JPanel{
 		add(eventDescriptionArea);
 		
 		updateDateField = new JTextField();
-//		updateDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), DATE_PATTERN));
+		updateDateField.setText(eventDateField.getText());
 //		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 100, 25);
+//		updateDateField.addActionListener(new EventDateListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
-//		updateTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(), TIME_PATTERN));
+		updateTimeField.setText(eventTimeField.getText());
 //		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 50, 25);
+//		updateTimeField.addActionListener(new EventDateListener(eventTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
 		
 		updateDescriptionArea.setLineWrap(true);
@@ -607,24 +594,74 @@ public class EventEditUI extends JPanel{
 		 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 		 sdf.setLenient(false);
 		 try {
-			 Date javaDate = sdf.parse(datetime); 
+			 Date date = sdf.parse(datetime);
+			 sdf.parse(datetime);
+			 System.out.println("Formato correcto");
+			 return date != null && sdf.format(date).equals(datetime);
 		 } catch (ParseException e) {
+			 System.out.println("Formato de fecha / hora incorrecto");
+//			 ToolBox.showDialog("Formato de fecha / hora incorrecto", basePanel, DIALOG_INFO);
 			 return false;
 		 }
-		
-		return true;
+//		 try {
+//			 Date javaDate = sdf.parse(datetime); 
+//		 } catch (ParseException e) {
+//			 return false;
+//		 }
+//		
+//		return true;
 	}
 	
-	
+    /**
+     * Date validator
+     * @param date
+     * @param pattern
+     * @return
+     */
+	public static boolean dateIsValid(final String date, String pattern) {
+        boolean validDate = false;
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern)
+                            .withResolverStyle(ResolverStyle.STRICT));
+            System.out.println("Formato de fecha correcto");
+            validDate = true;
+        } catch (DateTimeParseException e) {
+            System.out.println("Error de formato de fecha");
+            validDate = false;
+        }
+        return validDate;
+    }
+
+    /**
+     * Time validator
+     * @param date
+     * @param pattern
+     * @return
+     */
+	public static boolean timeIsValid(final String date, String pattern) {
+        boolean validTime = false;
+        try {
+            LocalTime.parse(date, DateTimeFormatter.ofPattern(pattern)
+            				.withResolverStyle(ResolverStyle.STRICT));
+            System.out.println("Formato de hora correcto");
+            validTime = true;
+        } catch (DateTimeParseException e) {
+            System.out.println("Error de formato de hora");
+            validTime = false;
+        }
+        return validTime;
+    }
 	
 	/**
-	 * Listener que replica el texto de eventDateField en updateDateField
+	 * Listener que replica el texto de eventDateField en updateDateField y de eventTimeField
+	 * en updateTimeField, si la fecha y la hora son correctas. En caso contrario se retorna
+	 * a la fecha inicial de los textfields
 	 */
-	private class EventDateListener implements ActionListener {
+	private class EventDateTimeListener implements ActionListener {
 		String oldText;
 		String pattern;
 		
-		public EventDateListener (String oldText, String pattern) {
+		public EventDateTimeListener (String oldText, String pattern) {
 			this.oldText = oldText;
 			this.pattern = pattern;
 		}
@@ -632,14 +669,37 @@ public class EventEditUI extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String newText = ((JTextField) e.getSource()).getText();
-			Timestamp timestamp = stringToTimestamp(newText, pattern);
-			if (timestamp != null) {
-				((JTextField) e.getSource()).setText(newText);
-				updateDateField.setText(eventDateField.getText());				
-			} else {
-				((JTextField) e.getSource()).setText(oldText);
-				updateDateField.setText(oldText);
+			if (e.getSource() == eventDateField) {
+				if (dateIsValid(newText, pattern)) {
+					updateDateField.setText(eventDateField.getText());
+//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo eventDateField
+//					oldText = newText;
+				} else {
+					eventDateField.setText(oldText);
+					updateDateField.setText(oldText);
+				}
 			}
+			if (e.getSource() == eventTimeField) {
+				if (timeIsValid(newText, pattern)) {
+					updateTimeField.setText(eventTimeField.getText());
+//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo eventTimeField
+//					oldText = newText;
+				} else {
+					eventTimeField.setText(oldText);
+					updateTimeField.setText(oldText);
+				}
+			}
+			
+//			Timestamp timestamp = stringToTimestamp(newText, pattern);
+//			if (timestamp != null) {
+//				((JTextField) e.getSource()).setText(newText);
+//				updateDateField.setText(eventDateField.getText());				
+//			} else {
+//				((JTextField) e.getSource()).setText(oldText);
+//				updateDateField.setText(oldText);
+//			}
 		}
 
 		public String getOldText() {
@@ -649,54 +709,6 @@ public class EventEditUI extends JPanel{
 		public void setOldText(String oldText) {
 			this.oldText = oldText;
 		}
-
-//		@Override
-//		public void propertyChange(PropertyChangeEvent evt) {
-//			String propertyName = evt.getPropertyName();
-//			if (propertyName.equals("graphicsConfiguration")) {
-//				updateDateField.setText(eventDateField.getText());
-//				
-//			}
-//			
-//			if (propertyName.equals("ancestor")) {
-//				updateDateField.setText(eventDateField.getText());
-//				
-//			}
-//			//Debug
-//			System.out.println("propiedad " + propertyName);
-//			
-//			
-//		}
-		
-	}
-	
-	/**
-	 * Listener que replica el texto de eventDateField en updateDateField
-	 */
-	private class EventDatePropertyListener implements PropertyChangeListener {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			updateDateField.setText(eventDateField.getText());
-//		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			String propertyName = evt.getPropertyName();
-			if (evt.getSource() == formattedEventDateField) {
-				updateDateField.setText((String) formattedEventDateField.getValue());
-				
-			}
-			
-			if (evt.getSource() == formattedEventTimeField) {
-				updateDateField.setText(formattedEventTimeField.getText());
-				
-			}
-			//Debug
-			System.out.println("propiedad " + propertyName);
-			
-			
-		}
-		
 	}
 
 	public static int getEventEditActionNewEvent() {
