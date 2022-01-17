@@ -272,7 +272,7 @@ public class EventEditUI extends JPanel{
 		//Si intentamos crear una nueva incidencia, la lista de areas no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio que no tiene ningún area asignada.		
-		areaComboBox = new JComboBox(areaComboList);
+		areaComboBox = new JComboBox();
 //		areaComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		areaComboBox.setBounds(510, 225, 250, 25);
 //		areaComboBox.addItemListener(new AreaComboListener());
@@ -281,11 +281,11 @@ public class EventEditUI extends JPanel{
 		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
 		
-		eventTypeComboList = getEventTypeComboBoxItems();
+//		eventTypeComboList = getEventTypeComboBoxItems();
 		//Si intentamos crear una nueva incidencia, la lista de tipos de incidencia no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio si no hay ningún tipo de incidencia registrada		
-		eventTypeComboBox = new JComboBox(eventTypeComboList);
+		eventTypeComboBox = new JComboBox();
 //		eventTypeComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		eventTypeComboBox.setBounds(510, 275, 250, 25);
 //		eventTypeComboBox.addItemListener(new UserComboListener());
@@ -305,7 +305,7 @@ public class EventEditUI extends JPanel{
 //		userComboBox.setBackground(Color.WHITE);
 //		add(userComboBox);
 		
-		eventStateComboList = getEventStateComboBoxItems();
+//		eventStateComboList = getEventStateComboBoxItems();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
 //		}		
 		eventStateComboBox = new JComboBox(eventStateComboList);
@@ -450,18 +450,6 @@ public class EventEditUI extends JPanel{
 		}
 	}
 	
-	/**
-	 * Devuelve la lista de nombres de areas asignadas a la unidad de negocio de la sesión
-	 * en orden alfabético
-	 * @return array de nombres
-	 */
-	private String[] getAreaComboBoxItemsFromSession() {
-		List<String> tempList = new ArrayList<String>();
-		for (Area area: session.getbUnit().getAreas()) {
-			tempList.add(area.getAreaNombre());
-		}
-		return ToolBox.toSortedArray(tempList);
-	}
 	
 	/**
 	 * Obiene el índice del elemento del comboBox que será seleccionado por defecto a partir
@@ -497,6 +485,19 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
+	 * Devuelve la lista de nombres de areas asignadas a la unidad de negocio de la sesión
+	 * en orden alfabético
+	 * @return array de nombres
+	 */
+	private String[] getAreaComboBoxItemsFromSession() {
+		List<String> tempList = new ArrayList<String>();
+		for (Area area: session.getbUnit().getAreas()) {
+			tempList.add(area.getAreaNombre());
+		}
+		return ToolBox.toSortedArray(tempList);
+	}
+	
+	/**
 	 * Rellena el contenido del areaComboBox y selecciona el elemento de la lista pasado por parámetro
 	 * @param index índice del elemento que se seleccionará por defecto
 	 */
@@ -506,26 +507,26 @@ public class EventEditUI extends JPanel{
 		areaComboBox.setSelectedIndex(index);
 	}
 	
-	private String[] getEventTypeComboBoxItems() {
-		List<String> tempList = new ArrayList<String>();
-		
-		
-		return ToolBox.toSortedArray(tempList);
+	/**
+	 * Rellena el contenido del eventTypeComboBox y selecciona el elemento de la lista pasado por parámetro
+	 * @param index índice del elemento que se seleccionará por defecto
+	 */
+	private void fillEventTypeComboBox(int index) {
+		eventTypeComboList = TypesStatesContainer.getEvType().getEventTypesArray();
+		eventTypeComboBox.setModel(new DefaultComboBoxModel(eventTypeComboList));
+		eventTypeComboBox.setSelectedIndex(index);
 	}
 	
-	private String[] getUserComboBoxItemsFromSession() {
-		List<String> tempList = new ArrayList<String>();
-		
-		
-		return ToolBox.toSortedArray(tempList);
+	/**
+	 * Rellena el contenido del eventStateComboBox y selecciona el elemento de la lista pasado por parámetro
+	 * @param index índice del elemento que se seleccionará por defecto
+	 */
+	private void fillEventStateComboBox(int index) {
+		eventStateComboList = TypesStatesContainer.getEvState().getEventStatesArray();
+		eventStateComboBox.setModel(new DefaultComboBoxModel(eventStateComboList));
+		eventStateComboBox.setSelectedIndex(index);
 	}
-	
-	private String[] getEventStateComboBoxItems() {
-		List<String> tempList = new ArrayList<String>();
-		
-		
-		return ToolBox.toSortedArray(tempList);
-	}
+
 
 	public static int getEventEditActionNewEvent() {
 		return EVENTEDIT_ACTION_NEW_EVENT;

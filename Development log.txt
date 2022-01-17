@@ -2108,13 +2108,12 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
 			eventStateComboList, userField, 
 		Add setup() --switch structure--
-		Add getAreaComboBoxItemsFromSession() --empty--
-		Add getEventTypeComboBoxItems() --empty--
-		Add getUserComboBoxItemsFromSession() --empty--
-		Add getEventStateComboBoxItems() --empty--
+		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
 				EVENTEDIT_ACTION_EDIT_UPDATE
 		Add fillAreaComboBox() --not tested yet--
+		Add fillEventTypeComboBox() --not tested yet--
+		Add fillEventStateComboBox() --not tested yet--
 		Add getSelectedIndexFromArray() 
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
