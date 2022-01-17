@@ -63,16 +63,17 @@ public class EventEditUI extends JPanel{
 	private JTextField updateTimeField;
 	private JTextArea updateDescriptionArea = new JTextArea();
 	private JTextField updateAuthorField;
+	private JTextField userField;
 	
 	private JComboBox areaComboBox = new JComboBox();
 	private JComboBox eventTypeComboBox = new JComboBox();
-	private JComboBox userComboBox = new JComboBox();
+//	private JComboBox userComboBox = new JComboBox();
 	private JComboBox eventStateComboBox = new JComboBox();
 	
 	//Lista de elementos que aparecen en los comboBox
 	private String[] areaComboList;
 	private String[] eventTypeComboList;
-	private String[] userComboList;
+//	private String[] userComboList;
 	private String[] eventStateComboList;
 	
 	private JButton oKButton;
@@ -261,6 +262,12 @@ public class EventEditUI extends JPanel{
 		updateAuthorField.setBounds(510, 475, 250, 25);
 		add(updateAuthorField);
 		
+		userField = new JTextField();
+//		userField.setEditable(false);
+		userField.setColumns(10);
+		userField.setBounds(510, 525, 250, 25);
+		add(userField);
+		
 		areaComboList = getAreaComboBoxItemsFromSession();
 		//Si intentamos crear una nueva incidencia, la lista de areas no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
@@ -287,16 +294,16 @@ public class EventEditUI extends JPanel{
 		eventTypeComboBox.setBackground(Color.WHITE);
 		add(eventTypeComboBox);
 		
-		userComboList = getUserComboBoxItemsFromSession();
-		//La lista nunca estará vacía, porque siempre habrá al menos un usuario creado de inicio
-		userComboBox = new JComboBox(userComboList);
-//		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
-		userComboBox.setBounds(510, 525, 250, 25);
-//		userComboBox.addItemListener(new UserComboListener());
-		userComboBox.setEditable(false);
-		ToolBox.setBlackForeground(userComboBox);
-		userComboBox.setBackground(Color.WHITE);
-		add(userComboBox);
+//		userComboList = getUserComboBoxItemsFromSession();
+//		//La lista nunca estará vacía, porque siempre habrá al menos un usuario creado de inicio
+//		userComboBox = new JComboBox(userComboList);
+////		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
+//		userComboBox.setBounds(510, 525, 250, 25);
+////		userComboBox.addItemListener(new UserComboListener());
+//		userComboBox.setEditable(false);
+//		ToolBox.setBlackForeground(userComboBox);
+//		userComboBox.setBackground(Color.WHITE);
+//		add(userComboBox);
 		
 		eventStateComboList = getEventStateComboBoxItems();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
@@ -352,12 +359,7 @@ public class EventEditUI extends JPanel{
 				updateDateField.setEditable(false);
 				updateTimeField.setEditable(false);
 				updateAuthorField.setEditable(true);
-				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
-				if (session.getUser().getUserType().equals("USER")) {
-					userComboBox.setEnabled(false);
-				} else  {
-					userComboBox.setEnabled(true);
-				}
+				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
 			
 				
@@ -386,12 +388,7 @@ public class EventEditUI extends JPanel{
 				updateDateField.setEditable(false);
 				updateTimeField.setEditable(false);
 				updateAuthorField.setEditable(true);
-				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la incidencia
-				if (session.getUser().getUserType().equals("USER")) {
-					userComboBox.setEnabled(false);
-				} else  {
-					userComboBox.setEnabled(true);
-				}
+				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
@@ -416,12 +413,7 @@ public class EventEditUI extends JPanel{
 				updateDateField.setEditable(true);
 				updateTimeField.setEditable(true);
 				updateAuthorField.setEditable(true);
-				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la actualización
-				if (session.getUser().getUserType().equals("USER")) {
-					userComboBox.setEnabled(false);
-				} else  {
-					userComboBox.setEnabled(true);
-				}
+				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
@@ -446,12 +438,7 @@ public class EventEditUI extends JPanel{
 				updateDateField.setEditable(true);
 				updateTimeField.setEditable(true);
 				updateAuthorField.setEditable(true);
-				//Los usuarios de tipo USER no pueden cambiar al usuario que crea la actualización
-				if (session.getUser().getUserType().equals("USER")) {
-					userComboBox.setEnabled(false);
-				} else  {
-					userComboBox.setEnabled(true);
-				}
+				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
@@ -481,7 +468,7 @@ public class EventEditUI extends JPanel{
 	 * del array y el objeto pasados por parámetro
 	 * @param array array con la lista de elementos que aparecerán en el combobox
 	 * @param object objeto que filtrará el tipo de búsqueda de índice en función de su clase
-	 * @return índice del elemento a seleccionar por defecto
+	 * @return índice del elemento a seleccionar por defecto, 0 si no lo encuentra
 	 */
 	private int getSelectedIndexFromArray(String[] array, Object object) {
 		for (int i = 0; i < array.length; i++) {
@@ -498,24 +485,14 @@ public class EventEditUI extends JPanel{
 					return i;
 				}
 				continue;
-			}
-			//Si buscamos el índice de una lista de usuarios
-			if (object.getClass() == User.class) {
-//				Event event = session.getbUnit().getEvents().get(i);
-//				for (int j = 0; j < eventSelected.getUpdates().size(); j++) {
-//					if (array[i].equals(eventSelected.getUpdates().get(j).getUser().getNombre())) {
-//						return i;
-//					}
-//				}
-				continue;
-			}
-			
+			}			
 			//Si buscamos el índice de una lista de estados de incidencia
 			if (object.getClass() == EventState.class) {
-				
+				if (array[i].equals(TypesStatesContainer.getEvState().getEventStates().get(i + 1))) {
+					return i;
+				}
 			}
 		}
-
 		return 0;
 	}
 	

@@ -2101,7 +2101,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			eventTitleField, eventDescriptionArea, updateDateField, updateTimeField, updateDescriptionArea,
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
-			eventStateComboList, 
+			eventStateComboList, userField, 
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --empty--
 		Add getEventTypeComboBoxItems() --empty--
@@ -2114,6 +2114,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list not tested yet--
+						   --event state list not tested yet--
 		Update eventDescriptionArea border color
 		Update updateDescriptionArea border color
 		Update constructor --uses setup(), add screen label--
@@ -2125,3 +2126,5 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			       --new update initial state, not tested yet--
 			       --edit update initial state, not tested yet--
 		Update getAreaComboBoxItemsFromSession() --not tested yet--
+		Delete userComboBox, change it to userField (JTextField)
+		Delete userComboList
