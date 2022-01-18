@@ -266,7 +266,7 @@ public class Selector extends JPanel {
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de datos de evento
-			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
+			EventDataUI eDataUI = new EventDataUI(session, Selector.this, null);
 			//Mostramos el panel
 			showPanel(frame, eDataUI);	
 		}

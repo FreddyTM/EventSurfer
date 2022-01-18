@@ -159,11 +159,13 @@ public class EventDataUI extends JPanel{
 	private final Action editUpdateAction = new EditUpdateAction();
 	private final Action deleteUpdateAction = new DeleteAction();
 
-	private EventDataState edState;
+	//Estado
+	private EventDataState state;
 
-	public EventDataUI(CurrentSession session, Selector selector) {
+	public EventDataUI(CurrentSession session, Selector selector, EventDataState state) {
 		this.session = session;
 		this.selector = selector;
+		this.state = state;
 		setLayout(null);
 		panelVisible = true;
 		
@@ -377,6 +379,11 @@ public class EventDataUI extends JPanel{
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
 		updatesContainer.add(updatesPane);
+		
+		//Si venimos de un estado previo registrado, volvemos a él
+		if (state != null) {
+			state.setState();
+		}
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -1083,7 +1090,7 @@ public class EventDataUI extends JPanel{
 		//Creamos panel de creación / edición de incidencias y actualizaciones
 		//Modo creación de nueva incidencia
 		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
-				mode, EventDataUI.this.edState);
+				mode, EventDataUI.this.state);
 		//Mostramos el panel
 		selector.showPanel(frame, eEditUI);
 	}
