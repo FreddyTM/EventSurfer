@@ -520,7 +520,7 @@ public class EventEditUI extends JPanel{
 				updateDateField.setText(eventDateField.getText());
 				updateTimeField.setText(eventTimeField.getText());
 				updateAuthorField.setText(eventSelected.getUpdates().get(0).getAutor());
-				userField.setText(eventSelected.getUpdates().get(0).getUser().getNombre());
+				userField.setText(eventSelected.getUpdates().get(0).getUser().getUserAlias());
 				updateDescriptionArea.setText(eventSelected.getUpdates().get(0).getDescripcion());
 				index = getSelectedIndexFromArray(eventStateComboList, TypesStatesContainer.getEvState());
 				fillEventStateComboBox(index);
@@ -554,7 +554,21 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				
+				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+						DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+						TIME_PATTERN));
+				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
+				fillAreaComboBox(index);
+				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
+				fillEventTypeComboBox(index);
+				eventTitleField.setText(eventSelected.getTitulo());
+				eventDescriptionArea.setText(eventSelected.getDescripcion());
+				updateDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
+				updateTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
+				userField.setText(session.getUser().getUserAlias());
+				index = getSelectedIndexFromArray(eventStateComboList, TypesStatesContainer.getEvState());
+				fillEventStateComboBox(index);
 				
 				//Labels
 				for (JLabel label: newEditUpdateList) {
@@ -586,6 +600,11 @@ public class EventEditUI extends JPanel{
 				
 				//Información inicial de los componentes
 				
+				
+				updateDateField.setText(ToolBox.formatTimestamp(updateSelected.getFechaHora(), DATE_PATTERN));
+				updateTimeField.setText(ToolBox.formatTimestamp(updateSelected.getFechaHora(), TIME_PATTERN));
+				updateAuthorField.setText(updateSelected.getAutor());
+				userField.setText(updateSelected.getUser().getUserAlias());
 				
 				//Labels
 				//Edición de la actualización inicial
