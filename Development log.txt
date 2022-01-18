@@ -2140,6 +2140,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
+		Delete checkDateTime()
 
 	· EventDateTimeListener class (new inner EventEditUI class):
 		Add attributes
@@ -2147,3 +2148,9 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add actionPerformed()
 		Update actionPerformed() --updates dates or times depending on the source--
 					 --uses dateIsValid(), timeIsValid()--
+
+	· OKAction class (inner EventEditUI class):
+		Add actionPerformed() --empty--
+
+	· CancelAction class (inner EventEditUI class):
+		Add actionPerformed() --empty--

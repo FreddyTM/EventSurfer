@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,6 +34,8 @@ import javax.swing.UIManager;
 import main.java.company.Area;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.gui.AreaUI.CancelAction;
+import main.java.gui.AreaUI.OKAction;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
@@ -98,10 +102,12 @@ public class EventEditUI extends JPanel{
 	
 	private JButton oKButton;
 	private JButton cancelButton;
+	private final Action oKAction = new OKAction();
+	private final Action cancelAction = new CancelAction();
 	
 	//Incidencia y actualización seleccionados
-	Event eventSelected;
-	EventUpdate updateSelected;
+	private Event eventSelected;
+	private EventUpdate updateSelected;
 	
 	public EventEditUI(CurrentSession session, Selector selector, int actionSelector) {
 		this.session = session;
@@ -431,13 +437,13 @@ public class EventEditUI extends JPanel{
 		add(eventStateComboBox);
 		
 		oKButton = new JButton();
-//		oKButton.setAction(oKAction);
+		oKButton.setAction(oKAction);
 		oKButton.setText("Aceptar");
 		oKButton.setBounds(611, 675, 89, 23);
 		add(oKButton);
 		
 		cancelButton = new JButton();
-//		cancelButton.setAction(cancelAction);
+		cancelButton.setAction(cancelAction);
 		cancelButton.setText("Cancelar");
 		cancelButton.setBounds(711, 675, 89, 23);
 		add(cancelButton);
@@ -454,6 +460,8 @@ public class EventEditUI extends JPanel{
 	 * y/o de la actualización seleccionadas)
 	 */
 	private void setup(int setupOption) {
+		actionSelector = setupOption;
+		
 		switch (setupOption) {
 			//New event
 			case EVENTEDIT_ACTION_NEW_EVENT:
@@ -699,40 +707,40 @@ public class EventEditUI extends JPanel{
 		return Timestamp.valueOf(ldt);
 	}
 	
-	/**
-	 * Comprueba que los campos de fecha y hora del formulario contienen datos válidos
-	 * @param datetime fecha / hora a comprobar
-	 * @param pattern patrón de fecha / hora
-	 * @return true si la fecha / hora es válida, false en caso contrario
-	 */
-	public boolean checkDateTime(String datetime, String pattern) {
-		datetime.trim();
-		 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-		 sdf.setLenient(false);
-		 try {
-			 Date date = sdf.parse(datetime);
-			 sdf.parse(datetime);
-			 System.out.println("Formato correcto");
-			 return date != null && sdf.format(date).equals(datetime);
-		 } catch (ParseException e) {
-			 System.out.println("Formato de fecha / hora incorrecto");
-//			 ToolBox.showDialog("Formato de fecha / hora incorrecto", basePanel, DIALOG_INFO);
-			 return false;
-		 }
+//	/**
+//	 * Comprueba que los campos de fecha y hora del formulario contienen datos válidos
+//	 * @param datetime fecha / hora a comprobar
+//	 * @param pattern patrón de fecha / hora
+//	 * @return true si la fecha / hora es válida, false en caso contrario
+//	 */
+//	public boolean checkDateTime(String datetime, String pattern) {
+//		datetime.trim();
+//		 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+//		 sdf.setLenient(false);
 //		 try {
-//			 Date javaDate = sdf.parse(datetime); 
+//			 Date date = sdf.parse(datetime);
+//			 sdf.parse(datetime);
+//			 System.out.println("Formato correcto");
+//			 return date != null && sdf.format(date).equals(datetime);
 //		 } catch (ParseException e) {
+//			 System.out.println("Formato de fecha / hora incorrecto");
+////			 ToolBox.showDialog("Formato de fecha / hora incorrecto", basePanel, DIALOG_INFO);
 //			 return false;
 //		 }
-//		
-//		return true;
-	}
+////		 try {
+////			 Date javaDate = sdf.parse(datetime); 
+////		 } catch (ParseException e) {
+////			 return false;
+////		 }
+////		
+////		return true;
+//	}
 	
     /**
-     * Date validator
-     * @param date
-     * @param pattern
-     * @return
+     * Comprueba que la fecha introducida respeta el formato establecido y es una fecha válida
+     * @param date fecha a comprobar
+     * @param pattern formato de fecha
+     * @return true si la fecha es correcta y respeta el formato, falso en caso contrario
      */
 	public static boolean dateIsValid(final String date, String pattern) {
         boolean validDate = false;
@@ -749,15 +757,15 @@ public class EventEditUI extends JPanel{
     }
 
     /**
-     * Time validator
-     * @param date
-     * @param pattern
-     * @return
+     * Comprueba que la hora introducida respeta el formato establecido y es una hora válida
+     * @param time hora a comprobar
+     * @param pattern formato de hora
+     * @return true si la hora es correcta y respeta el formato, falso en caso contrario
      */
-	public static boolean timeIsValid(final String date, String pattern) {
+	public static boolean timeIsValid(final String time, String pattern) {
         boolean validTime = false;
         try {
-            LocalTime.parse(date, DateTimeFormatter.ofPattern(pattern)
+            LocalTime.parse(time, DateTimeFormatter.ofPattern(pattern)
             				.withResolverStyle(ResolverStyle.STRICT));
             System.out.println("Formato de hora correcto");
             validTime = true;
@@ -826,6 +834,38 @@ public class EventEditUI extends JPanel{
 			this.oldText = oldText;
 		}
 	}
+	
+	private class OKAction extends AbstractAction {
+		public OKAction() {
+			putValue(NAME, "Aceptar");
+			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			
+			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
+		}
+		
+	}
+	
+	/**
+	 * Acción del botón cancelar. Se descarta cualquier introducción / edición de datos y se retorna a la
+	 * pantalla anterior
+	 */
+	private class CancelAction extends AbstractAction {
+		public CancelAction() {
+			putValue(NAME, "Cancelar");
+			putValue(SHORT_DESCRIPTION, "Cancel data edit");
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			
+			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
+		}
+		
+	}
 
 	public static int getEventEditActionNewEvent() {
 		return EVENTEDIT_ACTION_NEW_EVENT;
@@ -841,6 +881,22 @@ public class EventEditUI extends JPanel{
 
 	public static int getEventEditActionEditUpdate() {
 		return EVENTEDIT_ACTION_EDIT_UPDATE;
+	}
+
+	public Event getEventSelected() {
+		return eventSelected;
+	}
+
+	public void setEventSelected(Event eventSelected) {
+		this.eventSelected = eventSelected;
+	}
+
+	public EventUpdate getUpdateSelected() {
+		return updateSelected;
+	}
+
+	public void setUpdateSelected(EventUpdate updateSelected) {
+		this.updateSelected = updateSelected;
 	}
 
 }
