@@ -38,7 +38,7 @@ public class EventState {
 		String[] estadosDeEvento = new String[getNumberOfEventStates()];
 		Collection<String> estados = eventStates.values();
 		estadosDeEvento = estados.toArray(estadosDeEvento);
-		Arrays.sort(estadosDeEvento);
+//		Arrays.sort(estadosDeEvento);
 		return estadosDeEvento;
 	}
 	

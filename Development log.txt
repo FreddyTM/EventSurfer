@@ -2068,7 +2068,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 	* - Package main.java.types_states
 
 	· EventState class:
-		Update getEventStatesArray() --return sorted array--
+		Update getEventStatesArray() --return non sorted array--
 
 	* - Package main.java.gui
 
