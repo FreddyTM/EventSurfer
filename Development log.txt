@@ -2101,13 +2101,16 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				       --uses goToNewEdit()--
 				       
 	· EditEventAction (inner EventDataUI class):
-		Update actionPerformed 
+		Update actionPerformed --switch to EventEditUI in edit event mode, not tested yet--
+				       --uses goToNewEdit()--
 
 	· NewUpdateAction (inner EventDataUI class):
-		Update actionPerformed 
+		Update actionPerformed --switch to EventEditUI in new update mode, not tested yet--
+				       --uses goToNewEdit()--
 
 	· EditUpdateAction (inner EventDataUI class):
-		Update actionPerformed 
+		Update actionPerformed --switch to EventEditUI in edit update mode, not tested yet--
+				       --uses goToNewEdit()--
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
@@ -2171,4 +2174,4 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add actionPerformed() --empty--
 
 	· CancelAction class (new inner EventEditUI class):
-		Add actionPerformed() --uses goToData()--
+		Add actionPerformed() --ok--

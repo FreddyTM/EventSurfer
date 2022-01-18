@@ -1475,6 +1475,8 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Editar incidencia");
 			
+			goToNewEdit(EventEditUI.getEventEditActionEditEvent());
+			
 		}
 	}
 	
@@ -1514,6 +1516,8 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Crear nueva actualización");
 			
+			goToNewEdit(EventEditUI.getEventEditActionNewUpdate());
+			
 		}
 	}
 	
@@ -1527,6 +1531,8 @@ public class EventDataUI extends JPanel{
 
 			//Debug
 			System.out.println("Editar actualización");
+			
+			goToNewEdit(EventEditUI.getEventEditActionEditUpdate());
 			
 		}
 	}
