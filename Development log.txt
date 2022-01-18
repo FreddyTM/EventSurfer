@@ -2107,7 +2107,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			eventTitleField, eventDescriptionArea, updateDateField, updateTimeField, updateDescriptionArea,
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
-			eventStateComboList, userField, VALIDATION_DATE_PATTERN, 
+			eventStateComboList, userField, VALIDATION_DATE_PATTERN, newEventList, editEventList, newUpdateList,
+			editUpdateList
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
@@ -2130,6 +2131,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				   --all visual components in layout--
 				   --update comboboxes border color--
 				   --update components initial state--
+				   --all new/edit warning labels--
 		Update setup() --new event initial state ok, no area or event type default selection--
 			       --edit event initial state, not tested yet--
 			       --new update initial state, not tested yet--

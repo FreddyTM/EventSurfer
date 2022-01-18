@@ -52,13 +52,12 @@ public class EventEditUI extends JPanel{
 	private static final int EVENTEDIT_ACTION_EDIT_EVENT = 2;
 	private static final int EVENTEDIT_ACTION_NEW_UPDATE = 4;
 	private static final int EVENTEDIT_ACTION_EDIT_UPDATE = 5;
+	//Registra la acción a realizar según el botón activado
+	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
 	//Tipo de cuadro de diálogo
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
-	
-	//Registra la acción a realizar según el botón activado
-	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
 	private CurrentSession session;
 	private Selector selector;
@@ -68,8 +67,8 @@ public class EventEditUI extends JPanel{
 	
 	private JTextField companyField;
 	private JTextField bUnitField;
-	private JFormattedTextField formattedEventDateField;
-	private JFormattedTextField formattedEventTimeField;
+//	private JFormattedTextField formattedEventDateField;
+//	private JFormattedTextField formattedEventTimeField;
 	private JTextField eventDateField;
 	private JTextField eventTimeField;
 	private JTextField eventTitleField;
@@ -79,6 +78,12 @@ public class EventEditUI extends JPanel{
 	private JTextArea updateDescriptionArea = new JTextArea();
 	private JTextField updateAuthorField;
 	private JTextField userField;
+	
+	//Lista de etiquetas informativas creación/edición de incidencias/actualizaciones
+	private List<JLabel> newEventList = new ArrayList<JLabel>();
+	private List<JLabel> editEventList = new ArrayList<JLabel>();
+	private List<JLabel> newEditUpdateList = new ArrayList<JLabel>();
+	private List<JLabel> editFirstUpdateList = new ArrayList<JLabel>();
 	
 	private JComboBox areaComboBox = new JComboBox();
 	private JComboBox eventTypeComboBox = new JComboBox();
@@ -94,6 +99,7 @@ public class EventEditUI extends JPanel{
 	private JButton oKButton;
 	private JButton cancelButton;
 	
+	//Incidencia y actualización seleccionados
 	Event eventSelected;
 	EventUpdate updateSelected;
 	
@@ -141,13 +147,13 @@ public class EventEditUI extends JPanel{
 		JLabel areaLabel = new JLabel("Area");
 		areaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		areaLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		areaLabel.setBounds(400, 225, 100, 25);
+		areaLabel.setBounds(440, 225, 100, 25);
 		add(areaLabel);
 		
-		JLabel eventTypeLabel = new JLabel("Tipo de evento");
+		JLabel eventTypeLabel = new JLabel("Tipo de incidencia");
 		eventTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		eventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		eventTypeLabel.setBounds(350, 275, 150, 25);
+		eventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		eventTypeLabel.setBounds(390, 275, 150, 25);
 		add(eventTypeLabel);
 		
 		JLabel eventTitle = new JLabel("Título incidencia");
@@ -177,13 +183,13 @@ public class EventEditUI extends JPanel{
 		JLabel authorLabel = new JLabel("Autor");
 		authorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		authorLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		authorLabel.setBounds(400, 475, 100, 25);
+		authorLabel.setBounds(440, 475, 100, 25);
 		add(authorLabel);
 		
 		JLabel userLabel = new JLabel("Usuario");
 		userLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		userLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		userLabel.setBounds(400, 525, 100, 25);
+		userLabel.setBounds(440, 525, 100, 25);
 		add(userLabel);
 		
 		JLabel updateDescription = new JLabel("Descripción actualización");
@@ -197,6 +203,88 @@ public class EventEditUI extends JPanel{
 		state.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		state.setBounds(50, 675, 200, 25);
 		add(state);
+		
+		JLabel dateFormatLabel = new JLabel("DD-MM-AAAA");
+		dateFormatLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dateFormatLabel.setBounds(340, 225, 146, 25);
+		dateFormatLabel.setVisible(false);
+		newEventList.add(dateFormatLabel);
+		editEventList.add(dateFormatLabel);
+		add(dateFormatLabel);
+		
+		JLabel timeFormatLabel = new JLabel("HH:MM");
+		timeFormatLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		timeFormatLabel.setBounds(310, 275, 146, 25);
+		timeFormatLabel.setVisible(false);
+		newEventList.add(timeFormatLabel);
+		editEventList.add(timeFormatLabel);
+		add(timeFormatLabel);
+		
+		JLabel chooseAreaLabel = new JLabel("Escoger");
+		chooseAreaLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		chooseAreaLabel.setBounds(810, 225, 146, 25);
+		chooseAreaLabel.setVisible(false);
+		newEventList.add(chooseAreaLabel);
+		editEventList.add(chooseAreaLabel);
+		add(chooseAreaLabel);
+		
+		JLabel chooseEventTypeLabel = new JLabel("Escoger");
+		chooseEventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		chooseEventTypeLabel.setBounds(810, 275, 146, 25);
+		chooseEventTypeLabel.setVisible(false);
+		newEventList.add(chooseEventTypeLabel);
+		editEventList.add(chooseEventTypeLabel);
+		add(chooseEventTypeLabel);
+		
+		JLabel maxCharsTitleLabel = new JLabel("Max: 200 caracteres");
+		maxCharsTitleLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsTitleLabel.setBounds(810, 325, 146, 25);
+		maxCharsTitleLabel.setVisible(false);
+		newEventList.add(maxCharsTitleLabel);
+		editEventList.add(maxCharsTitleLabel);
+		add(maxCharsTitleLabel);
+		
+		JLabel mustDescribeEventLabel = new JLabel("Descripción obligatoria");
+		mustDescribeEventLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		mustDescribeEventLabel.setBounds(810, 375, 146, 25);
+		mustDescribeEventLabel.setVisible(false);
+		newEventList.add(mustDescribeEventLabel);
+		editEventList.add(mustDescribeEventLabel);
+		add(mustDescribeEventLabel);
+		
+		JLabel maxCharsAuthorLabel = new JLabel("Max: 50 caracteres");
+		maxCharsAuthorLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		maxCharsAuthorLabel.setBounds(810, 475, 146, 25);
+		maxCharsAuthorLabel.setVisible(false);
+		newEventList.add(maxCharsAuthorLabel);
+		newEditUpdateList.add(maxCharsAuthorLabel);
+		editFirstUpdateList.add(maxCharsAuthorLabel);
+		add(maxCharsAuthorLabel);
+		
+		JLabel mustDescribeUpdateLabel = new JLabel("Descripción obligatoria");
+		mustDescribeUpdateLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		mustDescribeUpdateLabel.setBounds(810, 575, 146, 25);
+		mustDescribeUpdateLabel.setVisible(false);
+		newEventList.add(mustDescribeUpdateLabel);
+		newEditUpdateList.add(mustDescribeUpdateLabel);
+		editFirstUpdateList.add(mustDescribeUpdateLabel);
+		add(mustDescribeUpdateLabel);
+		
+		JLabel dateFormatLabel2 = new JLabel("DD-MM-AAAA");
+		dateFormatLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		dateFormatLabel2.setBounds(340, 475, 146, 25);
+		dateFormatLabel2.setVisible(false);
+		newEditUpdateList.add(dateFormatLabel2);
+//		editFirstUpdateList.add(dateFormatLabel2);
+		add(dateFormatLabel2);
+		
+		JLabel timeFormatLabel2 = new JLabel("HH:MM");
+		timeFormatLabel2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		timeFormatLabel2.setBounds(310, 525, 146, 25);
+		timeFormatLabel2.setVisible(false);
+		newEditUpdateList.add(timeFormatLabel2);
+//		editFirstUpdateList.add(timeFormatLabel2);
+		add(timeFormatLabel2);
 		
 		companyField = new JTextField();
 		companyField.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -222,7 +310,7 @@ public class EventEditUI extends JPanel{
 		eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
 //		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
-		eventDateField.setBounds(260, 225, 100, 25);
+		eventDateField.setBounds(260, 225, 70, 25);
 		eventDateField.addActionListener(new EventDateTimeListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 //		eventDateField.addActionListener(new EventDateListener(eventDateField.getText(), DATE_PATTERN));
 		add(eventDateField);
@@ -231,7 +319,7 @@ public class EventEditUI extends JPanel{
 		eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
 //		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
-		eventTimeField.setBounds(260, 275, 50, 25);
+		eventTimeField.setBounds(260, 275, 40, 25);
 		eventTimeField.addActionListener(new EventDateTimeListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
@@ -244,12 +332,12 @@ public class EventEditUI extends JPanel{
 //		eventTitleField.setText(eventSelected.getTitulo());
 //		eventTitleField.setEditable(false);
 		eventTitleField.setColumns(10);
-		eventTitleField.setBounds(260, 325, 500, 25);
+		eventTitleField.setBounds(260, 325, 540, 25);
 		add(eventTitleField);
 		
 		eventDescriptionArea.setLineWrap(true);
 		eventDescriptionArea.setWrapStyleWord(true);
-		eventDescriptionArea.setBounds(260, 375, 500, 75);
+		eventDescriptionArea.setBounds(260, 375, 540, 75);
 		eventDescriptionArea.setBackground(Color.WHITE);
 //		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
 		eventDescriptionArea.setBorder(eventTitleField.getBorder());
@@ -260,7 +348,7 @@ public class EventEditUI extends JPanel{
 		updateDateField.setText(eventDateField.getText());
 //		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
-		updateDateField.setBounds(260, 475, 100, 25);
+		updateDateField.setBounds(260, 475, 70, 25);
 //		updateDateField.addActionListener(new EventDateListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(updateDateField);
 		
@@ -268,13 +356,13 @@ public class EventEditUI extends JPanel{
 		updateTimeField.setText(eventTimeField.getText());
 //		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
-		updateTimeField.setBounds(260, 525, 50, 25);
+		updateTimeField.setBounds(260, 525, 40, 25);
 //		updateTimeField.addActionListener(new EventDateListener(eventTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
 		
 		updateDescriptionArea.setLineWrap(true);
 		updateDescriptionArea.setWrapStyleWord(true);
-		updateDescriptionArea.setBounds(260, 575, 500, 75);
+		updateDescriptionArea.setBounds(260, 575, 540, 75);
 		updateDescriptionArea.setBackground(Color.WHITE);
 //		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		updateDescriptionArea.setBorder(eventTitleField.getBorder());
@@ -284,13 +372,13 @@ public class EventEditUI extends JPanel{
 		updateAuthorField = new JTextField();
 //		updateAuthorField.setEditable(false);
 		updateAuthorField.setColumns(10);
-		updateAuthorField.setBounds(510, 475, 250, 25);
+		updateAuthorField.setBounds(550, 475, 250, 25);
 		add(updateAuthorField);
 		
 		userField = new JTextField();
 //		userField.setEditable(false);
 		userField.setColumns(10);
-		userField.setBounds(510, 525, 250, 25);
+		userField.setBounds(550, 525, 250, 25);
 		add(userField);
 		
 		areaComboList = getAreaComboBoxItemsFromSession();
@@ -299,7 +387,7 @@ public class EventEditUI extends JPanel{
 		//incidencias a una unidad de negocio que no tiene ningún area asignada.		
 		areaComboBox = new JComboBox();
 //		areaComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
-		areaComboBox.setBounds(510, 225, 250, 25);
+		areaComboBox.setBounds(550, 225, 250, 25);
 //		areaComboBox.addItemListener(new AreaComboListener());
 		areaComboBox.setEditable(false);
 		ToolBox.setBlackForeground(areaComboBox);
@@ -312,7 +400,7 @@ public class EventEditUI extends JPanel{
 		//incidencias a una unidad de negocio si no hay ningún tipo de incidencia registrada		
 		eventTypeComboBox = new JComboBox();
 //		eventTypeComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
-		eventTypeComboBox.setBounds(510, 275, 250, 25);
+		eventTypeComboBox.setBounds(550, 275, 250, 25);
 //		eventTypeComboBox.addItemListener(new UserComboListener());
 		eventTypeComboBox.setEditable(false);
 		ToolBox.setBlackForeground(eventTypeComboBox);
@@ -345,13 +433,13 @@ public class EventEditUI extends JPanel{
 		oKButton = new JButton();
 //		oKButton.setAction(oKAction);
 		oKButton.setText("Aceptar");
-		oKButton.setBounds(572, 675, 89, 23);
+		oKButton.setBounds(611, 675, 89, 23);
 		add(oKButton);
 		
 		cancelButton = new JButton();
 //		cancelButton.setAction(cancelAction);
 		cancelButton.setText("Cancelar");
-		cancelButton.setBounds(672, 675, 89, 23);
+		cancelButton.setBounds(711, 675, 89, 23);
 		add(cancelButton);
 		
 		//Initial setup
@@ -361,8 +449,9 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
-	 * Configura la activación / desactivación de los componentes en pantalla en función de la acción que se vaya a realizar, y la
-	 * información inicial que presentan (si dicha información depende de la incidencia y/o de la actualización seleccionadas)
+	 * Configura la activación / desactivación / visualización de los componentes en pantalla en función de la acción
+	 * que se vaya a realizar, y la información inicial que presentan (si dicha información depende de la incidencia
+	 * y/o de la actualización seleccionadas)
 	 */
 	private void setup(int setupOption) {
 		switch (setupOption) {
@@ -386,11 +475,14 @@ public class EventEditUI extends JPanel{
 				updateAuthorField.setEditable(true);
 				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
-			
+				//Labels
+				for (JLabel label: newEventList) {
+					label.setVisible(true);
+				}
 				
 				//Información inicial de los componentes
 				eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
-				formattedEventDateField.setValue(tNow);
+//				formattedEventDateField.setValue(tNow);
 				
 				
 				eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
@@ -427,6 +519,12 @@ public class EventEditUI extends JPanel{
 				//Información inicial de los componentes
 				
 				
+				//Labels
+				for (JLabel label: editEventList) {
+					label.setVisible(true);
+				}
+				
+				
 				break;
 			//New update
 			case EVENTEDIT_ACTION_NEW_UPDATE:
@@ -450,6 +548,12 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
+				
+				
+				//Labels
+				for (JLabel label: newEditUpdateList) {
+					label.setVisible(true);
+				}
 				
 				
 				break;
@@ -477,6 +581,18 @@ public class EventEditUI extends JPanel{
 				//Información inicial de los componentes
 				
 				
+				//Labels
+				//Edición de la actualización inicial
+				if (updateSelected == eventSelected.getUpdates().get(0)) {
+					for (JLabel label : editFirstUpdateList) {
+						label.setVisible(true);
+					} 
+				//Edición del resto de actualizaciones
+				} else {
+					for (JLabel label : newEditUpdateList) {
+						label.setVisible(true);
+					} 
+				}
 				break;
 			default:
 				//Undefined option
