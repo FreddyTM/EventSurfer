@@ -2099,25 +2099,18 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 	· NewEventAction (inner EventDataUI class):
 		Update actionPerformed --switch to EventEditUI in new event mode, ok--
 				       --uses goToNewEdit()--
-				       --creates new EventDataState instance--
-
+				       
 	· EditEventAction (inner EventDataUI class):
-		Update actionPerformed --creates new EventDataState instance--
+		Update actionPerformed 
 
 	· NewUpdateAction (inner EventDataUI class):
-		Update actionPerformed --creates new EventDataState instance--
+		Update actionPerformed 
 
 	· EditUpdateAction (inner EventDataUI class):
-		Update actionPerformed --creates new EventDataState instance--
+		Update actionPerformed 
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
-
-	· EventDataState class (new inner EventDataUI class):
-		Add attributes
-			event, update, filter, checkbox
-		Add setState() --not tested yet--
-		Add getters
 
 	· EventEditUI class:
 		Add attributes
@@ -2142,6 +2135,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add checkDateTime() --not tested yet--
 		Add dateIsValid() --ok--
 		Add timeIsValid() --ok--
+		Add goToData() --not tested yet--
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list not tested yet--
@@ -2164,6 +2158,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
 		Delete checkDateTime()
+		Delete goToData()
 
 	· EventDateTimeListener class (new inner EventEditUI class):
 		Add attributes
@@ -2176,4 +2171,4 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add actionPerformed() --empty--
 
 	· CancelAction class (new inner EventEditUI class):
-		Add actionPerformed() --empty--
+		Add actionPerformed() --uses goToData()--

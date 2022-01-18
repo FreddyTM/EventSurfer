@@ -33,7 +33,6 @@ import javax.swing.UIManager;
 import main.java.company.Area;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
-import main.java.gui.EventDataUI.EventDataState;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
@@ -55,6 +54,7 @@ public class EventEditUI extends JPanel{
 	private static final int EVENTEDIT_ACTION_NEW_UPDATE = 4;
 	private static final int EVENTEDIT_ACTION_EDIT_UPDATE = 5;
 	//Registra la acción a realizar según el botón activado
+//	private int actionSelector;
 	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
 	//Tipo de cuadro de diálogo
@@ -69,8 +69,6 @@ public class EventEditUI extends JPanel{
 	
 	private JTextField companyField;
 	private JTextField bUnitField;
-//	private JFormattedTextField formattedEventDateField;
-//	private JFormattedTextField formattedEventTimeField;
 	private JTextField eventDateField;
 	private JTextField eventTimeField;
 	private JTextField eventTitleField;
@@ -89,13 +87,11 @@ public class EventEditUI extends JPanel{
 	
 	private JComboBox areaComboBox = new JComboBox();
 	private JComboBox eventTypeComboBox = new JComboBox();
-//	private JComboBox userComboBox = new JComboBox();
 	private JComboBox eventStateComboBox = new JComboBox();
 	
 	//Lista de elementos que aparecen en los comboBox
 	private String[] areaComboList;
 	private String[] eventTypeComboList;
-//	private String[] userComboList;
 	private String[] eventStateComboList;
 	
 	private JButton oKButton;
@@ -106,14 +102,15 @@ public class EventEditUI extends JPanel{
 	//Incidencia y actualización seleccionados
 	private Event eventSelected;
 	private EventUpdate updateSelected;
-	//Estado previo
-	EventDataState previousState;
 	
-	public EventEditUI(CurrentSession session, Selector selector, int actionSelector, EventDataState previousState) {
+	private EventDataUI eDataUI;
+
+	
+	public EventEditUI(CurrentSession session, Selector selector, int actionSelector, EventDataUI eDataUI) {
 		this.session = session;
 		this.selector = selector;
 		this.actionSelector = actionSelector;
-		this.previousState = previousState;
+		this.eDataUI = eDataUI;
 		setLayout(null);
 		panelVisible = true;
 		
@@ -330,11 +327,6 @@ public class EventEditUI extends JPanel{
 		eventTimeField.addActionListener(new EventDateTimeListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
-//		formattedEventTimeField = new JFormattedTextField(new SimpleDateFormat(TIME_PATTERN));
-//		formattedEventTimeField.setColumns(10);
-//		formattedEventTimeField.setBounds(310, 275, 50, 25);
-//		add(formattedEventTimeField);
-		
 		eventTitleField = new JTextField();
 //		eventTitleField.setText(eventSelected.getTitulo());
 //		eventTitleField.setEditable(false);
@@ -413,17 +405,6 @@ public class EventEditUI extends JPanel{
 		ToolBox.setBlackForeground(eventTypeComboBox);
 		eventTypeComboBox.setBackground(Color.WHITE);
 		add(eventTypeComboBox);
-		
-//		userComboList = getUserComboBoxItemsFromSession();
-//		//La lista nunca estará vacía, porque siempre habrá al menos un usuario creado de inicio
-//		userComboBox = new JComboBox(userComboList);
-////		userComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
-//		userComboBox.setBounds(510, 525, 250, 25);
-////		userComboBox.addItemListener(new UserComboListener());
-//		userComboBox.setEditable(false);
-//		ToolBox.setBlackForeground(userComboBox);
-//		userComboBox.setBackground(Color.WHITE);
-//		add(userComboBox);
 		
 //		eventStateComboList = getEventStateComboBoxItems();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
@@ -777,6 +758,24 @@ public class EventEditUI extends JPanel{
         return validTime;
     }
 	
+//	/**
+//	 * Nos devuelve la pantalla de gestión de incidencias y actualizaciones en el mismo estado en el
+//	 * que la dejamos
+//	 * @param mode modo de creación / edición de incidencias y actualizaciones
+//	 */
+//	private void goToData() {
+//		this.setVisible(false);
+//		eDataUI.setVisible(true);
+////		AppWindow frame = selector.getFrame();
+////		frame.getBasePanel().remove(this);
+////		selector.hidePanel(frame, frame.getCenterPanel());
+////		//Creamos panel de gestión de incidencias y actualizaciones
+////		EventDataUI eDataUI = new EventDataUI(EventEditUI.this.session, EventEditUI.this.selector,
+////				EventEditUI.this.previousState);
+////		//Mostramos el panel
+////		selector.showPanel(frame, eDataUI);
+//	}
+	
 	/**
 	 * Listener que replica el texto de eventDateField en updateDateField y de eventTimeField
 	 * en updateTimeField, si la fecha y la hora son correctas. En caso contrario se retorna
@@ -845,7 +844,7 @@ public class EventEditUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 			
 			
-			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
+//			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}
 		
 	}
@@ -861,7 +860,8 @@ public class EventEditUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			EventEditUI.this.setVisible(false);
+			eDataUI.setVisible(true);
 			
 			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}

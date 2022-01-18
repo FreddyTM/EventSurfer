@@ -159,13 +159,15 @@ public class EventDataUI extends JPanel{
 	private final Action editUpdateAction = new EditUpdateAction();
 	private final Action deleteUpdateAction = new DeleteAction();
 
-	//Estado
-	private EventDataState state;
+//	//Estado
+//	private EventDataState state;
+	
 
-	public EventDataUI(CurrentSession session, Selector selector, EventDataState state) {
+	public EventDataUI(CurrentSession session, Selector selector) {
 		this.session = session;
 		this.selector = selector;
-		this.state = state;
+//		this.state = state;
+
 		setLayout(null);
 		panelVisible = true;
 		
@@ -205,13 +207,11 @@ public class EventDataUI extends JPanel{
 		editEventButton = new JButton();
 		editEventButton.setAction(editEventAction);
 		editEventButton.setBounds(125, 365, 89, 23);
-//		editEventButton.setEnabled(false);
 		eventsContainer.add(editEventButton);
 		
 		deleteEventButton = new JButton();
 		deleteEventButton.setAction(deleteEventAction);
 		deleteEventButton.setBounds(225, 365, 89, 23);
-//		deleteEventButton.setEnabled(false);
 		eventsContainer.add(deleteEventButton);
 		
 		//Estado inicial de los botones de la tabla de incidencias
@@ -253,19 +253,16 @@ public class EventDataUI extends JPanel{
 		newUpdateButton = new JButton();
 		newUpdateButton.setAction(newUpdateAction);
 		newUpdateButton.setBounds(25, 265, 89, 23);
-//		newUpdateButton.setEnabled(false);
 		updatesContainer.add(newUpdateButton);
 		
 		editUpdateButton = new JButton();
 		editUpdateButton.setAction(editUpdateAction);
 		editUpdateButton.setBounds(125, 265, 89, 23);
-//		editUpdateButton.setEnabled(false);
 		updatesContainer.add(editUpdateButton);
 		
 		deleteUpdateButton = new JButton();
 		deleteUpdateButton.setAction(deleteUpdateAction);
 		deleteUpdateButton.setBounds(225, 265, 89, 23);
-//		deleteUpdateButton.setEnabled(false);
 		updatesContainer.add(deleteUpdateButton);
 		
 		//Estado inicial de los botones de la tabla de actualizaciones
@@ -273,17 +270,17 @@ public class EventDataUI extends JPanel{
 		
 		filtersContainer = new JPanel();
 		filtersContainer.setLayout(null);
-//		filtersContainer.setBackground(Color.CYAN);
 		ButtonGroup filterGroup = new ButtonGroup();
 		
 		allEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		allEvents.setBounds(0, 0, 200, 25);
-		allEvents.setText("Todos");
+		allEvents.setName("Todos");
 		filterGroup.add(allEvents);
 		filtersContainer.add(allEvents);
 		
 		last25.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		last25.setBounds(0, 40, 200, 25);
+		last25.setName("Últimos 25");
 		filterGroup.add(last25);
 		last25.setSelected(true);
 		filterSelected = last25;
@@ -291,26 +288,31 @@ public class EventDataUI extends JPanel{
 		
 		last50.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		last50.setBounds(0, 80, 200, 25);
+		last50.setName("Últimos 50");
 		filterGroup.add(last50);
 		filtersContainer.add(last50);
 		
 		thisMonth.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		thisMonth.setBounds(0, 120, 200, 25);
+		thisMonth.setName("Presente mes");
 		filterGroup.add(thisMonth);
 		filtersContainer.add(thisMonth);
 		
 		last3Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		last3Months.setBounds(0, 160, 200, 25);
+		last3Months.setName("Último trimestre");
 		filterGroup.add(last3Months);
 		filtersContainer.add(last3Months);
 		
 		last6Months.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		last6Months.setBounds(0, 200, 200, 25);
+		last6Months.setName("Último semestre");
 		filterGroup.add(last6Months);
 		filtersContainer.add(last6Months);
 		
 		thisYear.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		thisYear.setBounds(0, 240, 200, 25);
+		thisYear.setName("Presente año");
 		filterGroup.add(thisYear);
 		filtersContainer.add(thisYear);
 		
@@ -379,11 +381,6 @@ public class EventDataUI extends JPanel{
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
 		updatesContainer.add(updatesPane);
-		
-		//Si venimos de un estado previo registrado, volvemos a él
-		if (state != null) {
-			state.setState();
-		}
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -1084,15 +1081,14 @@ public class EventDataUI extends JPanel{
 	 * Muestra la pantalla de creación / edición de incidencias y actualizaciones
 	 * @param mode modo de creación / edición de incidencias y actualizaciones
 	 */
-	private void goToNewEdit(int mode, EventDataState state) {
+	private void goToNewEdit(int mode) {
 		AppWindow frame = selector.getFrame();
-		selector.hidePanel(frame, frame.getCenterPanel());
-		//Creamos panel de creación / edición de incidencias y actualizaciones
-		//Modo creación de nueva incidencia
 		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
-				mode, EventDataUI.this.state);
-		//Mostramos el panel
-		selector.showPanel(frame, eEditUI);
+				mode, EventDataUI.this);
+		eEditUI.setOpaque(true);
+		frame.getBasePanel().add(eEditUI);
+		this.setVisible(false);
+		eEditUI.setVisible(true);
 	}
 	
 	/**
@@ -1442,9 +1438,6 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			EventDataState currentState = new EventDataState();
-			//Debug
-			System.out.println("Crear nueva incidencia");
 			boolean okNew = true;
 			
 			//Si no hay areas asignadas a la unidad de negocio de la sesión, se avisa y se bloquea la creación de una nueva incidencia
@@ -1466,7 +1459,7 @@ public class EventDataUI extends JPanel{
 			} 
 			//Si no hay errores, procedemos a crear la nueva incidencia
 			if (okNew) {
-				goToNewEdit(EventEditUI.getEventEditActionNewEvent(), currentState);
+				goToNewEdit(EventEditUI.getEventEditActionNewEvent());
 			}	
 		}
 	}
@@ -1478,7 +1471,7 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			EventDataState currentState = new EventDataState();
+
 			//Debug
 			System.out.println("Editar incidencia");
 			
@@ -1517,7 +1510,7 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			EventDataState currentState = new EventDataState();
+
 			//Debug
 			System.out.println("Crear nueva actualización");
 			
@@ -1531,52 +1524,60 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			EventDataState currentState = new EventDataState();
+
 			//Debug
 			System.out.println("Editar actualización");
 			
 		}
 	}
 	
-	/**
-	 * Registra el estado de la pantalla de gestión de incidencias para pasarlo a la pantalla de creación / edición
-	 * de incidencias y actualizaciones. En base a la creación / edición que se esté realizando se mostrará la información
-	 * del estado que sea pertinente. Al aceptar o cancelar la creación / edición de incidencias y actualizaciones, se
-	 * utiliza el estado registrado para retornar a la pantalla de gesitión de incidencias mostrando lo mismo que antes
-	 * de salir de ella.
-	 */
-	class EventDataState {
-		private JRadioButton filter = filterSelected;
-		private Event event = eventSelected;
-		private EventUpdate update = updateSelected;
-		private boolean checkbox = activeFilterCheckBox.isSelected();
-		
-		/**
-		 * Actualiza los atributos de la clase EventDataUI: eventSelected, updateSelected, filterSelected, activeFilterCheckBox
-		 */
-		public void setState() {
-			EventDataUI.this.filterSelected = filter;
-			EventDataUI.this.filterSelected.doClick();
-			EventDataUI.this.eventSelected = event;
-			EventDataUI.this.updateSelected = update;
-			EventDataUI.this.activeFilterCheckBox.setSelected(checkbox);
-		}
-		
-		public Event getEvent() {
-			return event;
-		}
-		public EventUpdate getUpdate() {
-			return update;
-		}
-		public JRadioButton getFilter() {
-			return filter;
-		}
-		public boolean isCheckbox() {
-			return checkbox;
-		}
-		
-	}
-	
+//	/**
+//	 * Registra el estado de la pantalla de gestión de incidencias para pasarlo a la pantalla de creación / edición
+//	 * de incidencias y actualizaciones. En base a la creación / edición que se esté realizando se mostrará la información
+//	 * del estado que sea pertinente. Al aceptar o cancelar la creación / edición de incidencias y actualizaciones, se
+//	 * utiliza el estado registrado para retornar a la pantalla de gesitión de incidencias mostrando lo mismo que antes
+//	 * de salir de ella.
+//	 */
+//	class EventDataState {
+//		private JRadioButton filter;
+//		private Event event;
+//		private EventUpdate update;
+//		private boolean checkbox;
+//		
+//		public EventDataState (JRadioButton filter, Event event, EventUpdate update, boolean checkbox) {
+//			this.filter = filter;
+//			this.event = event;
+//			this.update = update;
+//			this.checkbox = checkbox;
+//		}
+//		
+//		/**
+//		 * Actualiza los atributos de la clase EventDataUI: eventSelected, updateSelected, filterSelected, activeFilterCheckBox
+//		 */
+//		public void setState() {
+//			EventDataUI.this.filterSelected = filter;
+//			EventDataUI.this.filterSelected.setSelected(true);
+//			EventDataUI.this.filterSelected.doClick();
+//			EventDataUI.this.eventSelected = event;
+//			EventDataUI.this.updateSelected = update;
+//			EventDataUI.this.activeFilterCheckBox.setSelected(checkbox);
+//		}
+//		
+//		public Event getEvent() {
+//			return event;
+//		}
+//		public EventUpdate getUpdate() {
+//			return update;
+//		}
+//		public JRadioButton getFilter() {
+//			return filter;
+//		}
+//		public boolean isCheckbox() {
+//			return checkbox;
+//		}
+//		
+//	}
+//	
 	/**
 	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
 	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel no está visible, no se
