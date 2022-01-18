@@ -111,6 +111,8 @@ public class EventEditUI extends JPanel{
 		this.selector = selector;
 		this.actionSelector = actionSelector;
 		this.eDataUI = eDataUI;
+		eventSelected = eDataUI.getEventSelected();
+		updateSelected = eDataUI.getUpdateSelected();
 		setLayout(null);
 		panelVisible = true;
 		
@@ -394,6 +396,7 @@ public class EventEditUI extends JPanel{
 		add(areaComboBox);
 		
 //		eventTypeComboList = getEventTypeComboBoxItems();
+		eventTypeComboList = TypesStatesContainer.getEvType().getEventTypesArray();
 		//Si intentamos crear una nueva incidencia, la lista de tipos de incidencia no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio si no hay ningún tipo de incidencia registrada		
@@ -406,7 +409,7 @@ public class EventEditUI extends JPanel{
 		eventTypeComboBox.setBackground(Color.WHITE);
 		add(eventTypeComboBox);
 		
-//		eventStateComboList = getEventStateComboBoxItems();
+		eventStateComboList = TypesStatesContainer.getEvState().getEventStatesArray();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
 //		}		
 		eventStateComboBox = new JComboBox();
@@ -443,7 +446,7 @@ public class EventEditUI extends JPanel{
 	 */
 	private void setup(int setupOption) {
 		actionSelector = setupOption;
-		
+		int index = -1;
 		switch (setupOption) {
 			//New event
 			case EVENTEDIT_ACTION_NEW_EVENT:
@@ -472,12 +475,9 @@ public class EventEditUI extends JPanel{
 				
 				//Información inicial de los componentes
 				eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
-//				formattedEventDateField.setValue(tNow);
-				
-				
 				eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
-				fillAreaComboBox(-1);
-				fillEventTypeComboBox(-1);
+				fillAreaComboBox(index);
+				fillEventTypeComboBox(index);
 				updateDateField.setText(eventDateField.getText());
 				updateTimeField.setText(eventTimeField.getText());
 				userField.setText(session.getUser().getUserAlias());
@@ -507,7 +507,23 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				
+				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+						DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+						TIME_PATTERN));
+				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
+				fillAreaComboBox(index);
+				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
+				fillEventTypeComboBox(index);
+				eventTitleField.setText(eventSelected.getTitulo());
+				eventDescriptionArea.setText(eventSelected.getDescripcion());
+				updateDateField.setText(eventDateField.getText());
+				updateTimeField.setText(eventTimeField.getText());
+				updateAuthorField.setText(eventSelected.getUpdates().get(0).getAutor());
+				userField.setText(eventSelected.getUpdates().get(0).getUser().getNombre());
+				updateDescriptionArea.setText(eventSelected.getUpdates().get(0).getDescripcion());
+				index = getSelectedIndexFromArray(eventStateComboList, TypesStatesContainer.getEvState());
+				fillEventStateComboBox(index);
 				
 				//Labels
 				for (JLabel label: editEventList) {
@@ -608,14 +624,17 @@ public class EventEditUI extends JPanel{
 			}
 			//Si buscamos el índice de una lista de tipos de incidencia
 			if (object.getClass() == EventType.class) {
-				if (array[i].equals(TypesStatesContainer.getEvType().getEventTypes().get(i + 1))) {
+				if (array[i].equals(eventSelected.getEventType())) {
 					return i;
 				}
+//				if (array[i].equals(TypesStatesContainer.getEvType().getEventTypes().get(i + 1))) {
+//					return i;
+//				}
 				continue;
 			}			
 			//Si buscamos el índice de una lista de estados de incidencia
 			if (object.getClass() == EventState.class) {
-				if (array[i].equals(TypesStatesContainer.getEvState().getEventStates().get(i + 1))) {
+				if (array[i].equals(eventSelected.getEventState())) {
 					return i;
 				}
 			}
@@ -641,7 +660,7 @@ public class EventEditUI extends JPanel{
 	 * @param index índice del elemento que se seleccionará por defecto
 	 */
 	private void fillAreaComboBox(int index) {
-		areaComboList = getAreaComboBoxItemsFromSession();
+		areaComboList = getAreaComboBoxItemsFromSession(); //Comprobar si se puede borrar
 		areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
 		areaComboBox.setSelectedIndex(index);
 	}

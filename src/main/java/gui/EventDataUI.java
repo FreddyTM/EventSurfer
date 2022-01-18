@@ -1637,6 +1637,22 @@ public class EventDataUI extends JPanel{
 		}
 	}
 
+	public Event getEventSelected() {
+		return eventSelected;
+	}
+
+	public void setEventSelected(Event eventSelected) {
+		this.eventSelected = eventSelected;
+	}
+
+	public EventUpdate getUpdateSelected() {
+		return updateSelected;
+	}
+
+	public void setUpdateSelected(EventUpdate updateSelected) {
+		this.updateSelected = updateSelected;
+	}
+
 }
 
 //SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE
