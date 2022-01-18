@@ -159,6 +159,7 @@ public class EventDataUI extends JPanel{
 	private final Action editUpdateAction = new EditUpdateAction();
 	private final Action deleteUpdateAction = new DeleteAction();
 
+	private EventDataState edState;
 
 	public EventDataUI(CurrentSession session, Selector selector) {
 		this.session = session;
@@ -1076,13 +1077,13 @@ public class EventDataUI extends JPanel{
 	 * Muestra la pantalla de creación / edición de incidencias y actualizaciones
 	 * @param mode modo de creación / edición de incidencias y actualizaciones
 	 */
-	private void goToNewEdit(int mode) {
+	private void goToNewEdit(int mode, EventDataState state) {
 		AppWindow frame = selector.getFrame();
 		selector.hidePanel(frame, frame.getCenterPanel());
 		//Creamos panel de creación / edición de incidencias y actualizaciones
 		//Modo creación de nueva incidencia
 		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
-				mode);
+				mode, EventDataUI.this.edState);
 		//Mostramos el panel
 		selector.showPanel(frame, eEditUI);
 	}
@@ -1434,6 +1435,7 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			EventDataState currentState = new EventDataState();
 			//Debug
 			System.out.println("Crear nueva incidencia");
 			boolean okNew = true;
@@ -1457,7 +1459,7 @@ public class EventDataUI extends JPanel{
 			} 
 			//Si no hay errores, procedemos a crear la nueva incidencia
 			if (okNew) {
-				goToNewEdit(EventEditUI.getEventEditActionNewEvent());
+				goToNewEdit(EventEditUI.getEventEditActionNewEvent(), currentState);
 			}	
 		}
 	}
@@ -1469,6 +1471,7 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			EventDataState currentState = new EventDataState();
 			//Debug
 			System.out.println("Editar incidencia");
 			
@@ -1507,6 +1510,7 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			EventDataState currentState = new EventDataState();
 			//Debug
 			System.out.println("Crear nueva actualización");
 			
@@ -1520,10 +1524,50 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			EventDataState currentState = new EventDataState();
 			//Debug
 			System.out.println("Editar actualización");
 			
 		}
+	}
+	
+	/**
+	 * Registra el estado de la pantalla de gestión de incidencias para pasarlo a la pantalla de creación / edición
+	 * de incidencias y actualizaciones. En base a la creación / edición que se esté realizando se mostrará la información
+	 * del estado que sea pertinente. Al aceptar o cancelar la creación / edición de incidencias y actualizaciones, se
+	 * utiliza el estado registrado para retornar a la pantalla de gesitión de incidencias mostrando lo mismo que antes
+	 * de salir de ella.
+	 */
+	class EventDataState {
+		private JRadioButton filter = filterSelected;
+		private Event event = eventSelected;
+		private EventUpdate update = updateSelected;
+		private boolean checkbox = activeFilterCheckBox.isSelected();
+		
+		/**
+		 * Actualiza los atributos de la clase EventDataUI: eventSelected, updateSelected, filterSelected, activeFilterCheckBox
+		 */
+		public void setState() {
+			EventDataUI.this.filterSelected = filter;
+			EventDataUI.this.filterSelected.doClick();
+			EventDataUI.this.eventSelected = event;
+			EventDataUI.this.updateSelected = update;
+			EventDataUI.this.activeFilterCheckBox.setSelected(checkbox);
+		}
+		
+		public Event getEvent() {
+			return event;
+		}
+		public EventUpdate getUpdate() {
+			return update;
+		}
+		public JRadioButton getFilter() {
+			return filter;
+		}
+		public boolean isCheckbox() {
+			return checkbox;
+		}
+		
 	}
 	
 	/**

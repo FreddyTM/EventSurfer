@@ -2092,12 +2092,28 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update infoLabel alignment to CENTER
 		Move stringTotimestamp() to EventEditUI
 
-	· New EventAction (new inner EventDataUI class):
+	· NewEventAction (inner EventDataUI class):
 		Update actionPerformed --switch to EventEditUI in new event mode, ok--
-				       --uses goToNewEvent()--
+				       --uses goToNewEdit()--
+				       --creates new EventDataState instance--
+
+	· EditEventAction (inner EventDataUI class):
+		Update actionPerformed --creates new EventDataState instance--
+
+	· NewUpdateAction (inner EventDataUI class):
+		Update actionPerformed --creates new EventDataState instance--
+
+	· EditUpdateAction (inner EventDataUI class):
+		Update actionPerformed --creates new EventDataState instance--
 
 	· DeleteAction (inner EventDataUI class):
 		Update actionPerformed() --uses actionSelector--
+
+	· EventDataState class (new inner EventDataUI class):
+		Add attributes
+			event, update, filter, checkbox
+		Add setState() --not tested yet--
+		Add getters
 
 	· EventEditUI class:
 		Add attributes
@@ -2108,7 +2124,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
 			eventStateComboList, userField, VALIDATION_DATE_PATTERN, newEventList, editEventList, newUpdateList,
-			editUpdateList
+			editUpdateList, previousState
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
@@ -2116,7 +2132,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add fillAreaComboBox() --ok--
 		Add fillEventTypeComboBox() --ok--
 		Add fillEventStateComboBox() --ok--
-		Add getSelectedIndexFromArray()
+		Add getSelectedIndexFromArray() --not tested yet--
+		Add goToNewEdit() --ok--
 		Add stringTotimestamp() --not tested yet--
 		Add checkDateTime() --not tested yet--
 		Add dateIsValid() --ok--
@@ -2132,12 +2149,14 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				   --update comboboxes border color--
 				   --update components initial state--
 				   --all new/edit warning labels--
+				   --add previousState parameter--
 		Update setup() --new event initial state ok, no area or event type default selection--
 			       --edit event initial state, not tested yet--
 			       --new update initial state, not tested yet--
 			       --edit update initial state, not tested yet--
 		Update getAreaComboBoxItemsFromSession() --not tested yet--
 		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
+		Update goToNewEdit() --add EventDataState parameter--
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
 		Delete checkDateTime()
@@ -2149,8 +2168,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update actionPerformed() --updates dates or times depending on the source--
 					 --uses dateIsValid(), timeIsValid()--
 
-	· OKAction class (inner EventEditUI class):
+	· OKAction class (new inner EventEditUI class):
 		Add actionPerformed() --empty--
 
-	· CancelAction class (inner EventEditUI class):
+	· CancelAction class (new inner EventEditUI class):
 		Add actionPerformed() --empty--

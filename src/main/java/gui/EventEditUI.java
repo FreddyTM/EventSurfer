@@ -22,7 +22,6 @@ import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -34,8 +33,7 @@ import javax.swing.UIManager;
 import main.java.company.Area;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
-import main.java.gui.AreaUI.CancelAction;
-import main.java.gui.AreaUI.OKAction;
+import main.java.gui.EventDataUI.EventDataState;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
@@ -108,11 +106,14 @@ public class EventEditUI extends JPanel{
 	//Incidencia y actualización seleccionados
 	private Event eventSelected;
 	private EventUpdate updateSelected;
+	//Estado previo
+	EventDataState previousState;
 	
-	public EventEditUI(CurrentSession session, Selector selector, int actionSelector) {
+	public EventEditUI(CurrentSession session, Selector selector, int actionSelector, EventDataState previousState) {
 		this.session = session;
 		this.selector = selector;
 		this.actionSelector = actionSelector;
+		this.previousState = previousState;
 		setLayout(null);
 		panelVisible = true;
 		
