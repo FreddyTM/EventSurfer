@@ -2087,12 +2087,12 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 	· EventDataUI class:
 		Add attributes
-			DIALOG_INFO, state
+			DIALOG_INFO
 		Delete attributes
 			EVENTDATA_ACTION_NEW_EVENT, EVENTDATA_ACTION_EDIT_EVENT, EVENTDATA_ACTION_NEW_UPDATE,
 			EVENTDATA_ACTION_EDIT_UPDATE
 		Add goToNewEvent() --ok, not tested with no event types--
-		Update constructor --add state parameter--
+		Update constructor 
 		Update infoLabel alignment to CENTER
 		Move stringTotimestamp() to EventEditUI
 
@@ -2121,7 +2121,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
 			eventStateComboList, userField, VALIDATION_DATE_PATTERN, newEventList, editEventList, newUpdateList,
-			editUpdateList, previousState
+			editUpdateList
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
@@ -2151,7 +2151,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update setup() --new event initial state & initial data ok, no area or event type default selection--
 			       --edit event initial state & initial data, not tested yet--
 			       --new update initial state & initial data, not tested yet--
-			       --edit update initial state, not tested yet--
+			       --edit update initial state & initial data, not tested yet--
 		Update getAreaComboBoxItemsFromSession() --not tested yet--
 		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
 		Update goToNewEdit() --add EventDataState parameter--
