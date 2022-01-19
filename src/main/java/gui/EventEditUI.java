@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.FocusAdapter;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.company.Area;
+import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
 import main.java.session.CurrentSession;
@@ -305,6 +309,7 @@ public class EventEditUI extends JPanel{
 		companyField.setBounds(260, 125, 400, 25);
 		companyField.setText(session.getbUnit().getCompany().getNombre());
 		companyField.setEditable(false);
+		companyField.setFocusable(false);
 //		textFieldList.add(companyField);
 //		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
@@ -315,6 +320,7 @@ public class EventEditUI extends JPanel{
 		bUnitField.setBounds(260, 175, 400, 25);
 		bUnitField.setText(session.getbUnit().getNombre());
 		bUnitField.setEditable(false);
+		bUnitField.setFocusable(false);
 //		textFieldList.add(companyField);
 //		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(bUnitField);
@@ -324,8 +330,8 @@ public class EventEditUI extends JPanel{
 //		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 70, 25);
-		eventDateField.addActionListener(new EventDateTimeListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
-//		eventDateField.addActionListener(new EventDateListener(eventDateField.getText(), DATE_PATTERN));
+		eventDateField.addActionListener(new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
+		eventDateField.addFocusListener(new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(eventDateField);
 		
 		eventTimeField = new JTextField();
@@ -333,7 +339,8 @@ public class EventEditUI extends JPanel{
 //		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
 		eventTimeField.setBounds(260, 275, 40, 25);
-		eventTimeField.addActionListener(new EventDateTimeListener(eventTimeField.getText(), TIME_PATTERN));
+		eventTimeField.addActionListener(new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN));
+		eventTimeField.addFocusListener(new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
 		eventTitleField = new JTextField();
@@ -357,7 +364,8 @@ public class EventEditUI extends JPanel{
 //		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 70, 25);
-//		updateDateField.addActionListener(new EventDateListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
+		updateDateField.addActionListener(new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
+		updateDateField.addFocusListener(new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
@@ -365,7 +373,8 @@ public class EventEditUI extends JPanel{
 //		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 40, 25);
-//		updateTimeField.addActionListener(new EventDateListener(eventTimeField.getText(), TIME_PATTERN));
+		updateTimeField.addActionListener(new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN));
+		updateTimeField.addFocusListener(new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
 		
 		updateDescriptionArea.setLineWrap(true);
@@ -387,6 +396,7 @@ public class EventEditUI extends JPanel{
 //		userField.setEditable(false);
 		userField.setColumns(10);
 		userField.setBounds(550, 525, 250, 25);
+		userField.setFocusable(false);
 		add(userField);
 		
 		areaComboList = getAreaComboBoxItemsFromSession();
@@ -755,35 +765,6 @@ public class EventEditUI extends JPanel{
 		return Timestamp.valueOf(ldt);
 	}
 	
-//	/**
-//	 * Comprueba que los campos de fecha y hora del formulario contienen datos válidos
-//	 * @param datetime fecha / hora a comprobar
-//	 * @param pattern patrón de fecha / hora
-//	 * @return true si la fecha / hora es válida, false en caso contrario
-//	 */
-//	public boolean checkDateTime(String datetime, String pattern) {
-//		datetime.trim();
-//		 SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-//		 sdf.setLenient(false);
-//		 try {
-//			 Date date = sdf.parse(datetime);
-//			 sdf.parse(datetime);
-//			 System.out.println("Formato correcto");
-//			 return date != null && sdf.format(date).equals(datetime);
-//		 } catch (ParseException e) {
-//			 System.out.println("Formato de fecha / hora incorrecto");
-////			 ToolBox.showDialog("Formato de fecha / hora incorrecto", basePanel, DIALOG_INFO);
-//			 return false;
-//		 }
-////		 try {
-////			 Date javaDate = sdf.parse(datetime); 
-////		 } catch (ParseException e) {
-////			 return false;
-////		 }
-////		
-////		return true;
-//	}
-	
     /**
      * Comprueba que la fecha introducida respeta el formato establecido y es una fecha válida
      * @param date fecha a comprobar
@@ -825,15 +806,34 @@ public class EventEditUI extends JPanel{
     }
 	
 	/**
-	 * Listener que replica el texto de eventDateField en updateDateField y de eventTimeField
-	 * en updateTimeField, si la fecha y la hora son correctas. En caso contrario se retorna
-	 * a la fecha inicial de los textfields
+	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
+	 * con el fondo del campo en amarillo
+	 * @return true si son correctos, false si no lo son
 	 */
-	private class EventDateTimeListener implements ActionListener {
+	private boolean testData() {
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
+		Boolean errorLength = false;
+		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		
+		
+		
+		
+		return true;
+	}
+	
+	/**
+	 * COMPROBACIÓN AL HACER INTRO
+	 * Listener que comprueba que el texto de eventDateField, eventTimeField, updateDateField y updateTimeField
+	 * son correctos para validar una fecha o una hora según sea el origen del texto a comprobar. Si el origen es
+	 * eventDateField o eventTimeField y se puede validar la fecha o la hora, se replica el texto de dichos
+	 * componentes en updateDateField o updateTimeField. En caso contrario se retorna a la fecha inicial que
+	 * tuviesen los textfields
+	 */
+	private class EventDateTimeIntroListener implements ActionListener {
 		String oldText;
 		String pattern;
 		
-		public EventDateTimeListener (String oldText, String pattern) {
+		public EventDateTimeIntroListener (String oldText, String pattern) {
 			this.oldText = oldText;
 			this.pattern = pattern;
 		}
@@ -850,6 +850,9 @@ public class EventEditUI extends JPanel{
 				} else {
 					eventDateField.setText(oldText);
 					updateDateField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
 				}
 			}
 			if (e.getSource() == eventTimeField) {
@@ -861,6 +864,33 @@ public class EventEditUI extends JPanel{
 				} else {
 					eventTimeField.setText(oldText);
 					updateTimeField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			if (e.getSource() == updateDateField) {
+				if (dateIsValid(newText, pattern)) {
+					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo updateDateField
+//					oldText = newText;
+				} else {
+					updateDateField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			if (e.getSource() == updateTimeField) {
+				if (timeIsValid(newText, pattern)) {
+					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo updateTimeField
+//					oldText = newText;
+				} else {
+					updateTimeField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
 				}
 			}
 		}
@@ -871,6 +901,91 @@ public class EventEditUI extends JPanel{
 
 		public void setOldText(String oldText) {
 			this.oldText = oldText;
+		}
+
+	}
+	
+	/**
+	 * COMPROBACIÓN AL PERDER EL FOCO
+	 * Listener que comprueba que el texto de eventDateField, eventTimeField, updateDateField y updateTimeField
+	 * son correctos para validar una fecha o una hora según sea el origen del texto a comprobar. Si el origen es
+	 * eventDateField o eventTimeField y se puede validar la fecha o la hora, se replica el texto de dichos
+	 * componentes en updateDateField o updateTimeField. En caso contrario se retorna a la fecha inicial que
+	 * tuviesen los textfields.
+	 */
+	private class EventDateTimeFocusListener extends FocusAdapter {
+		String oldText;
+		String pattern;
+		
+		public EventDateTimeFocusListener (String oldText, String pattern) {
+			this.oldText = oldText;
+			this.pattern = pattern;
+		}
+		
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			System.out.println("We have the focus!");
+		}
+		
+		@Override
+		public void focusLost(FocusEvent e) {
+			System.out.println("We lost the focus!");
+			
+			String newText = ((JTextField) e.getSource()).getText();
+			if (e.getSource() == eventDateField) {
+				if (dateIsValid(newText, pattern)) {
+					updateDateField.setText(eventDateField.getText());
+//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo eventDateField
+//					oldText = newText;
+				} else {
+					eventDateField.setText(oldText);
+					updateDateField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			if (e.getSource() == eventTimeField) {
+				if (timeIsValid(newText, pattern)) {
+					updateTimeField.setText(eventTimeField.getText());
+//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo eventTimeField
+//					oldText = newText;
+				} else {
+					eventTimeField.setText(oldText);
+					updateTimeField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			if (e.getSource() == updateDateField) {
+				if (dateIsValid(newText, pattern)) {
+					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo updateDateField
+//					oldText = newText;
+				} else {
+					updateDateField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			if (e.getSource() == updateTimeField) {
+				if (timeIsValid(newText, pattern)) {
+					//Opción de recuperar el último texto válido introducido. Si no, se recupera
+//					//el primer valor que tuvo updateTimeField
+//					oldText = newText;
+				} else {
+					updateTimeField.setText(oldText);
+					ToolBox.showDialog(
+							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							EventEditUI.this, DIALOG_INFO);
+				}
+			}
+			
 		}
 	}
 	

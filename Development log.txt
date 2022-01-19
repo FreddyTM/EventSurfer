@@ -2217,6 +2217,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
 
+	· NewEventAction (inner EventDataUI class):
+		Update actionPerformed --all JOptionPanel show centered justified text--
+
 
 	· EventEditUI class:
 		Delete attributes
@@ -2224,3 +2227,11 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
+
+	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
+		Update actionPerformed() --added to all date & time fields--
+
+	· EventDateTimeFocusListener class (new inner EventEditUI class):
+		Add focusGained()
+		Add focusLost()
+		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--

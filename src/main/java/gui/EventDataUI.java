@@ -1480,7 +1480,8 @@ public class EventDataUI extends JPanel{
 			if (TypesStatesContainer.getEvType().getEventTypes().size() == 0) {
 				if (session.getbUnit().getAreas().size() == 0) {
 					ToolBox.showDialog(
-							"No existen tipos de incidencias registrados.\nNo se pueden abrir incidencias", EventDataUI.this,
+							"<html><body><div align='center'>No existen tipos de incidencias registrados<br>"
+							+ "No se pueden abrir incidencias</div></body></html>", EventDataUI.this,
 							DIALOG_INFO);
 					okNew = false;
 				} 
