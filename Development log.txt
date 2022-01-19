@@ -2124,7 +2124,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			updateAuthorField, areaComboBox, eventTypeComboBox, userComboBox, eventStateComboBox, oKButton,
 			cancelButton, DATE_PATTERN, TIME_PATTERN, areaComboList, eventTypeComboList, userComboList,
 			eventStateComboList, userField, VALIDATION_DATE_PATTERN, newEventList, editEventList, newUpdateList,
-			editUpdateList
+			editUpdateList, NEW_EVENT_TITLE, EDIT_EVENT_TITLE, NEW_UPDATE_TITLE, EDIT_UPDATE_TITLE, eventEditTxt
 		Add setup() --switch structure--
 		Add getAreaComboBoxItemsFromSession() --not tested yet--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
@@ -2152,9 +2152,10 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				   --all new/edit warning labels--
 				   --add previousState parameter--
 		Update setup() --new event initial state & initial data ok, no area or event type default selection--
-			       --edit event initial state & initial data, not tested yet--
-			       --new update initial state & initial data, not tested yet--
-			       --edit update initial state & initial data, not tested yet--
+			       --edit event initial state & initial data ok, areatexts background color ok--
+			       --new update initial state & initial dataok, areatexts background color ok--
+			       --edit update initial state & initial dataok, areatexts background color ok--
+			       --screen title changes on action--
 		Update getAreaComboBoxItemsFromSession() --not tested yet--
 		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
 		Update goToNewEdit() --add EventDataState parameter--

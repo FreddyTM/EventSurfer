@@ -57,6 +57,12 @@ public class EventEditUI extends JPanel{
 //	private int actionSelector;
 	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
+	//Títulos de pantalla
+	private static final String NEW_EVENT_TITLE = "NUEVA INCIDENCIA";
+	private static final String EDIT_EVENT_TITLE = "EDITAR INCIDENCIA";
+	private static final String NEW_UPDATE_TITLE = "NUEVA ACTUALIZACIÓN";
+	private static final String EDIT_UPDATE_TITLE = "EDITAR ACTUALIZACIÓN";
+	
 	//Tipo de cuadro de diálogo
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
@@ -67,6 +73,7 @@ public class EventEditUI extends JPanel{
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	
+	private JTextPane eventEditTxt;
 	private JTextField companyField;
 	private JTextField bUnitField;
 	private JTextField eventDateField;
@@ -117,8 +124,8 @@ public class EventEditUI extends JPanel{
 		panelVisible = true;
 		
 		//Swing Components
-		JTextPane eventEditTxt = new JTextPane();
-		eventEditTxt.setText("CREACIÓN / EDICIÓN DE INCIDENCIAS Y ACTUALIZACIONES");
+		eventEditTxt = new JTextPane();
+//		eventEditTxt.setText("CREACIÓN / EDICIÓN DE INCIDENCIAS Y ACTUALIZACIONES");
 		eventEditTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		eventEditTxt.setFocusable(false);
 		eventEditTxt.setEditable(false);
@@ -453,6 +460,7 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Nueva incidencia");
 				
+				eventEditTxt.setText(NEW_EVENT_TITLE);
 				//Estado inicial de los componentes
 				//Part of event
 				eventDateField.setEditable(true);
@@ -490,6 +498,7 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Editando incidencia");
 				
+				eventEditTxt.setText(EDIT_EVENT_TITLE);
 				//Estado inicial de los componentes
 				//Part of event
 				eventDateField.setEditable(true);
@@ -502,10 +511,10 @@ public class EventEditUI extends JPanel{
 				//Part of event update
 				updateDateField.setEditable(false);
 				updateTimeField.setEditable(false);
-				updateAuthorField.setEditable(true);
+				updateAuthorField.setEditable(false);
 				userField.setEditable(false);
-				updateDescriptionArea.setEditable(true);
-				
+				updateDescriptionArea.setEditable(false);
+				updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				//Información inicial de los componentes
 				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
 						DATE_PATTERN));
@@ -537,6 +546,7 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Nueva actualización");
 				
+				eventEditTxt.setText(NEW_UPDATE_TITLE);
 				//Estado inicial de los componentes
 				//Part of event
 				eventDateField.setEditable(false);
@@ -545,6 +555,7 @@ public class EventEditUI extends JPanel{
 				eventTypeComboBox.setEnabled(false);
 				eventTitleField.setEditable(false);
 				eventDescriptionArea.setEditable(false);
+				eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				eventStateComboBox.setEnabled(true);
 				//Part of event update
 				updateDateField.setEditable(true);
@@ -582,6 +593,7 @@ public class EventEditUI extends JPanel{
 				//Debug
 				System.out.println("Editando actualización");
 				
+				eventEditTxt.setText(EDIT_UPDATE_TITLE);
 				//Estado inicial de los componentes
 				//Part of event
 				eventDateField.setEditable(false);
@@ -590,10 +602,16 @@ public class EventEditUI extends JPanel{
 				eventTypeComboBox.setEnabled(false);
 				eventTitleField.setEditable(false);
 				eventDescriptionArea.setEditable(false);
+				eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				eventStateComboBox.setEnabled(true);
 				//Part of event update
-				updateDateField.setEditable(true);
-				updateTimeField.setEditable(true);
+				if (updateSelected == eventSelected.getUpdates().get(0)) {
+					updateDateField.setEditable(false);
+					updateTimeField.setEditable(false);
+				} else {
+					updateDateField.setEditable(true);
+					updateTimeField.setEditable(true);
+				}
 				updateAuthorField.setEditable(true);
 				userField.setEditable(false);
 				updateDescriptionArea.setEditable(true);
@@ -615,7 +633,7 @@ public class EventEditUI extends JPanel{
 				userField.setText(updateSelected.getUser().getUserAlias());
 				index = getSelectedIndexFromArray(eventStateComboList, TypesStatesContainer.getEvState());
 				fillEventStateComboBox(index);
-				
+				updateDescriptionArea.setText(updateSelected.getDescripcion());
 				//Labels
 				//Edición de la actualización inicial
 				if (updateSelected == eventSelected.getUpdates().get(0)) {
