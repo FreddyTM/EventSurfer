@@ -1,12 +1,15 @@
 package main.java.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusAdapter;
+import java.awt.Graphics;
+import java.awt.KeyboardFocusManager;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,13 +26,16 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
@@ -89,6 +95,9 @@ public class EventEditUI extends JPanel{
 	private JTextArea updateDescriptionArea = new JTextArea();
 	private JTextField updateAuthorField;
 	private JTextField userField;
+	private JLabel infoLabel;
+	private JLabel areaLabel;
+	private JLabel eventTypeLabel;
 	
 	//Lista de etiquetas informativas creación/edición de incidencias/actualizaciones
 	private List<JLabel> newEventList = new ArrayList<JLabel>();
@@ -104,6 +113,9 @@ public class EventEditUI extends JPanel{
 	private String[] areaComboList;
 	private String[] eventTypeComboList;
 	private String[] eventStateComboList;
+	
+	//Lista de componentes que alertan de error en el formulario
+	private List <Component> errorList = new ArrayList<Component>();
 	
 	private JButton oKButton;
 	private JButton cancelButton;
@@ -161,16 +173,18 @@ public class EventEditUI extends JPanel{
 		eventTime.setBounds(50, 275, 200, 25);
 		add(eventTime);
 		
-		JLabel areaLabel = new JLabel("Area");
+		areaLabel = new JLabel("Area");
 		areaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		areaLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		areaLabel.setBounds(440, 225, 100, 25);
+		areaLabel.setBounds(494, 225, 46, 25);
+		errorList.add(areaLabel);
 		add(areaLabel);
 		
-		JLabel eventTypeLabel = new JLabel("Tipo de incidencia");
+		eventTypeLabel = new JLabel("Tipo de incidencia");
 		eventTypeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		eventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		eventTypeLabel.setBounds(390, 275, 150, 25);
+		eventTypeLabel.setBounds(398, 275, 142, 25);
+		errorList.add(eventTypeLabel);
 		add(eventTypeLabel);
 		
 		JLabel eventTitle = new JLabel("Título incidencia");
@@ -348,6 +362,7 @@ public class EventEditUI extends JPanel{
 //		eventTitleField.setEditable(false);
 		eventTitleField.setColumns(10);
 		eventTitleField.setBounds(260, 325, 540, 25);
+		errorList.add(eventTitleField);
 		add(eventTitleField);
 		
 		eventDescriptionArea.setLineWrap(true);
@@ -357,6 +372,7 @@ public class EventEditUI extends JPanel{
 //		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
 		eventDescriptionArea.setBorder(eventTitleField.getBorder());
 //		eventDescriptionArea.setEditable(false);
+		errorList.add(eventDescriptionArea);
 		add(eventDescriptionArea);
 		
 		updateDateField = new JTextField();
@@ -384,6 +400,7 @@ public class EventEditUI extends JPanel{
 //		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		updateDescriptionArea.setBorder(eventTitleField.getBorder());
 //		updateDescriptionArea.setEditable(false);
+		errorList.add(updateDescriptionArea);
 		add(updateDescriptionArea);
 		
 		updateAuthorField = new JTextField();
@@ -449,6 +466,12 @@ public class EventEditUI extends JPanel{
 		cancelButton.setText("Cancelar");
 		cancelButton.setBounds(711, 675, 89, 23);
 		add(cancelButton);
+		
+		infoLabel = new JLabel();
+		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLabel.setBounds(50, 725, 900, 25);
+		infoLabel.setText("TEXTO DE PRUEBA");
+		add(infoLabel);
 		
 		//Initial setup
 		setup(actionSelector);
@@ -811,14 +834,68 @@ public class EventEditUI extends JPanel{
 	 * @return true si son correctos, false si no lo son
 	 */
 	private boolean testData() {
-		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
-		Boolean errorLength = false;
+		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no se selecciona ninguna
+		//opción de los combobox
+		boolean goodData = true;
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorComboBoxItem = "SE DEBE DE ESCOGER UNA OPCIÓN";
 		
+		//Si estamos creando una incidencia nueva
+		if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+			if (areaComboBox.getSelectedIndex() == -1) {
+				infoLabel.setText(errorComboBoxItem);
+				areaLabel.setOpaque(true);
+				areaLabel.setBackground(Color.YELLOW);
+				goodData = false;
+			}
+
+			if (eventTypeComboBox.getSelectedIndex() == -1) {
+				infoLabel.setText(errorComboBoxItem);
+				eventTypeLabel.setOpaque(true);
+				eventTypeLabel.setBackground(Color.YELLOW);
+				goodData =  false;
+			}
+			//Comprobamos la longitud de los datos
+			if (eventTitleField.getText().length() > 200 || eventTitleField.getText().length() == 0) {
+				eventTitleField.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+			if (eventDescriptionArea.getText().length() == 0) {
+				eventDescriptionArea.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+			if (updateDescriptionArea.getText().length() == 0) {
+				updateDescriptionArea.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+		}
 		
+		if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+			//Comprobamos la longitud de los datos
+			if (eventTitleField.getText().length() > 200 || eventTitleField.getText().length() == 0) {
+				eventTitleField.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+			if (eventDescriptionArea.getText().length() == 0) {
+				eventDescriptionArea.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+		}
 		
+		if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+			if (eventDescriptionArea.getText().length() == 0) {
+				eventDescriptionArea.setBackground(Color.YELLOW);
+				infoLabel.setText(errorLengthText);
+				goodData = false;
+			}
+		}		
 		
-		return true;
+		return goodData;
 	}
 	
 	/**
@@ -893,15 +970,17 @@ public class EventEditUI extends JPanel{
 							EventEditUI.this, DIALOG_INFO);
 				}
 			}
+			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		    manager.focusNextComponent();
 		}
-
-		public String getOldText() {
-			return oldText;
-		}
-
-		public void setOldText(String oldText) {
-			this.oldText = oldText;
-		}
+//
+//		public String getOldText() {
+//			return oldText;
+//		}
+//
+//		public void setOldText(String oldText) {
+//			this.oldText = oldText;
+//		}
 
 	}
 	
@@ -996,7 +1075,19 @@ public class EventEditUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//no los deje amarillos permanentemente
+			for (Component comp : errorList) {
+				if (comp == areaLabel || comp == eventTypeLabel) {
+					comp.setBackground(new JPanel().getBackground());
+				} else {
+					comp.setBackground(Color.WHITE);					
+				}
+			}
 			
+			if (testData()) {
+				infoLabel.setText("TODO CORRECTO PARA ACEPTAR");
+			}
 			
 //			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}
