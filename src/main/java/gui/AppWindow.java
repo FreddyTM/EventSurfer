@@ -33,7 +33,7 @@ public class AppWindow extends JFrame {
 	private JPanel rightPanel;
 	private JPanel basePanel;
 	private JLabel infoLabel;
-	private String versionNumber = "0.1.15";
+	private String versionNumber = "0.1.16";
 	private String fullTitle = getTitle() + "               Versión " + versionNumber + "  Usuario: ";
 	private CurrentSession session;
 	private Connection conn;
@@ -67,7 +67,7 @@ public class AppWindow extends JFrame {
 		System.out.println("Monitor actual: " + currentDisplay.getIDstring());
 		
 		ToolBox.centerFrame(this, displays, currentDisplay, 1000, 700);
-
+		
 		basePanel = new JPanel();
 		basePanel.setLayout(new BorderLayout());
 		basePanel.setFont(new Font("Tahoma", Font.PLAIN, 15));	

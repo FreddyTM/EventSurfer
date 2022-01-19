@@ -68,10 +68,10 @@ public class EventEditUI extends JPanel{
 	private static final String DIALOG_YES_NO = "yes_no";
 	
 	private CurrentSession session;
-	private Selector selector;
+//	private Selector selector;
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Registra si el panel está visible o no
-	private boolean panelVisible;
+//	private boolean panelVisible;
 	
 	private JTextPane eventEditTxt;
 	private JTextField companyField;
@@ -113,15 +113,15 @@ public class EventEditUI extends JPanel{
 	private EventDataUI eDataUI;
 
 	
-	public EventEditUI(CurrentSession session, Selector selector, int actionSelector, EventDataUI eDataUI) {
+	public EventEditUI(CurrentSession session, int actionSelector, EventDataUI eDataUI) {
 		this.session = session;
-		this.selector = selector;
+//		this.selector = selector;
 		this.actionSelector = actionSelector;
 		this.eDataUI = eDataUI;
 		eventSelected = eDataUI.getEventSelected();
 		updateSelected = eDataUI.getUpdateSelected();
 		setLayout(null);
-		panelVisible = true;
+//		panelVisible = true;
 		
 		//Swing Components
 		eventEditTxt = new JTextPane();
@@ -824,24 +824,6 @@ public class EventEditUI extends JPanel{
         return validTime;
     }
 	
-//	/**
-//	 * Nos devuelve la pantalla de gestión de incidencias y actualizaciones en el mismo estado en el
-//	 * que la dejamos
-//	 * @param mode modo de creación / edición de incidencias y actualizaciones
-//	 */
-//	private void goToData() {
-//		this.setVisible(false);
-//		eDataUI.setVisible(true);
-////		AppWindow frame = selector.getFrame();
-////		frame.getBasePanel().remove(this);
-////		selector.hidePanel(frame, frame.getCenterPanel());
-////		//Creamos panel de gestión de incidencias y actualizaciones
-////		EventDataUI eDataUI = new EventDataUI(EventEditUI.this.session, EventEditUI.this.selector,
-////				EventEditUI.this.previousState);
-////		//Mostramos el panel
-////		selector.showPanel(frame, eDataUI);
-//	}
-	
 	/**
 	 * Listener que replica el texto de eventDateField en updateDateField y de eventTimeField
 	 * en updateTimeField, si la fecha y la hora son correctas. En caso contrario se retorna
@@ -881,15 +863,6 @@ public class EventEditUI extends JPanel{
 					updateTimeField.setText(oldText);
 				}
 			}
-			
-//			Timestamp timestamp = stringToTimestamp(newText, pattern);
-//			if (timestamp != null) {
-//				((JTextField) e.getSource()).setText(newText);
-//				updateDateField.setText(eventDateField.getText());				
-//			} else {
-//				((JTextField) e.getSource()).setText(oldText);
-//				updateDateField.setText(oldText);
-//			}
 		}
 
 		public String getOldText() {
@@ -926,7 +899,12 @@ public class EventEditUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+//			EventEditUI.this.setVisible(false);
+//			eDataUI.setVisible(true);
+			
 			EventEditUI.this.setVisible(false);
+			eDataUI.getScrollPane().getViewport().remove(EventEditUI.this);
+			eDataUI.getScrollPane().setViewportView(eDataUI);
 			eDataUI.setVisible(true);
 			
 			actionSelector = EVENTEDIT_ACTION_UNDEFINED;

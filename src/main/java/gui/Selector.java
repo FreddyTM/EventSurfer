@@ -2,6 +2,8 @@ package main.java.gui;
 
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import main.java.session.CurrentSession;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -131,6 +133,25 @@ public class Selector extends JPanel {
 	}
 	
 	/**
+	 * Asigna el panel entrado por parámetro al centerPanel del frame, lo coloca
+	 * en la zona central del basePanel y lo hace visible
+	 * @param frame ventana de la aplicación
+	 * @param panel panel a mostrar
+	 */
+	public void showPane(AppWindow frame, JScrollPane pane) {
+//		JPanel panel = new JPanel();
+//		panel.add(pane);
+//		frame.setCenterPanel(panel);
+//		frame.getCenterPanel().add(pane);
+		frame.getBasePanel().add(pane, BorderLayout.CENTER);
+		frame.revalidate();
+		frame.repaint();
+//		Dimension dim = new Dimension(panel.getWidth(), panel.getHeight());
+//		panel.setPreferredSize(dim);
+//		pane.getHorizontalScrollBar().setMaximum(panel.getContainersTotalWidth());
+	}
+	
+	/**
 	 * Quita la visibilidad del centerPanel y lo elimina del basePanel
 	 * @param frame ventana de la aplicación
 	 * @param panel panel a eliminar
@@ -138,6 +159,18 @@ public class Selector extends JPanel {
 	public void hidePanel(AppWindow frame, JPanel panel) {
 		panel.setVisible(false);
 		frame.getBasePanel().remove(panel);
+	}
+	
+	/**
+	 * Elimina de la pantalla todos los paneles excepto el selector
+	 */
+	public void cleanScreen() {
+		Component[] compList = frame.getBasePanel().getComponents();
+		for (Component comp : compList) {
+			if (comp.getClass() != Selector.class) {
+				comp.setVisible(false);
+			}
+		}
 	}
 
 	/**
@@ -170,6 +203,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show Company screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de empresa			
@@ -188,6 +222,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show BusinessUnit screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de unidad de negocio	
@@ -206,6 +241,7 @@ public class Selector extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Show user screen");
 		}
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de usuario
@@ -225,6 +261,7 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de area
@@ -244,6 +281,7 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de tipo de evento
@@ -263,16 +301,32 @@ public class Selector extends JPanel {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de datos de evento
 			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
+			eDataUI.setPreferredSize(new Dimension(1770, 980));		
+			JScrollPane scrollPane = new JScrollPane(eDataUI);
+			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.getHorizontalScrollBar().setBlockIncrement(500);
+			scrollPane.getHorizontalScrollBar().setUnitIncrement(50);
+			scrollPane.getVerticalScrollBar().setUnitIncrement(50);
+			eDataUI.setScrollPane(scrollPane);
+			scrollPane.setVisible(true);
 			//Mostramos el panel
-			showPanel(frame, eDataUI);	
+			showPane(frame, scrollPane);
+//			//new code
+			
+//			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
+//			//Mostramos el panel
+//			showPanel(frame, eDataUI);	
 		}
 	}
 	
 	public AppWindow getFrame() {
 		return frame;
 	}
+
 }

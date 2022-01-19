@@ -2,6 +2,7 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -112,7 +114,7 @@ public class EventDataUI extends JPanel{
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	//Tamaño del monitor que ejecuta la aplicación
-	String screenSize = getScreenSize();
+	private String screenSize = getScreenSize();
 	
 	private JPanel eventsContainer;
 	private JPanel updatesContainer;
@@ -158,15 +160,14 @@ public class EventDataUI extends JPanel{
 	private final Action newUpdateAction = new NewUpdateAction();
 	private final Action editUpdateAction = new EditUpdateAction();
 	private final Action deleteUpdateAction = new DeleteAction();
-
-//	//Estado
-//	private EventDataState state;
 	
+	//Componente que proporciona las scrollbars al panel
+	JScrollPane scrollPane;
+
 
 	public EventDataUI(CurrentSession session, Selector selector) {
 		this.session = session;
 		this.selector = selector;
-//		this.state = state;
 
 		setLayout(null);
 		panelVisible = true;
@@ -364,7 +365,10 @@ public class EventDataUI extends JPanel{
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 965, 900, 25);
+		infoLabel.setBounds(50, 950, 900, 25);
+//		infoLabel.setBounds(50, 965, 900, 25);
+		infoLabel.setBackground(Color.RED);
+		infoLabel.setText("TEXTO DE PRUEBA");
 		add(infoLabel);
 		
 		//Por defecto se muestran las últimas 25 incidencias registradas
@@ -381,6 +385,8 @@ public class EventDataUI extends JPanel{
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
 		updatesContainer.add(updatesPane);
+		
+//		setHorizontalScrollBarMaxWidth();
 		
 		/*Iniciamos la comprobación periódica de actualizaciones
 		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
@@ -570,6 +576,21 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+//	public int getContainersTotalWidth () {
+//		return eventsContainer.getWidth() + filtersContainer.getWidth() + 100;
+//	}
+	
+//	private void setHorizontalScrollBarMaxWidth() {
+//		
+////		EventDataUI.this.getParent().getClass();
+//		JScrollPane pane = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, EventDataUI.this);
+//		pane.getHorizontalScrollBar().setMaximum(getContainersTotalWidth ());
+//		
+////		Container container = EventDataUI.this.get
+////		JScrollPane pane = (JScrollPane) EventDataUI.this.getParent();
+////		JScrollBar hBar = (JScrollBar) this.getParent().getHorizontalScrollBar();
+//	}
+	
 	/**
 	 * Dimensiona los paneles que contendrán las tablas de incidencias y actualizaciones en función del tamaño de la pantalla
 	 * @param panel panel a dimensionar
@@ -579,15 +600,15 @@ public class EventDataUI extends JPanel{
 		switch (screenSize) {
 			case "small":
 				eventsContainer.setBounds(50, 225, 1075, 400);
-				updatesContainer.setBounds(50, 650, 1075, 300);
+				updatesContainer.setBounds(50, 635, 1075, 300); //50, 650, 1075, 300
 				break;
 			case "medium":
 				eventsContainer.setBounds(50, 225, 1175, 400);
-				updatesContainer.setBounds(50, 650, 1175, 300);
+				updatesContainer.setBounds(50, 635, 1175, 300);
 				break;
 			case "big":
 				eventsContainer.setBounds(50, 225, 1675, 400);
-				updatesContainer.setBounds(50, 650, 1675, 300);
+				updatesContainer.setBounds(50, 635, 1675, 300);
 		}
 
 		filtersContainer.setBounds(eventsContainer.getBounds().width - 200, 25, 175, 325);
@@ -1081,14 +1102,21 @@ public class EventDataUI extends JPanel{
 	 * Muestra la pantalla de creación / edición de incidencias y actualizaciones
 	 * @param mode modo de creación / edición de incidencias y actualizaciones
 	 */
-	private void goToNewEdit(int mode) {
-		AppWindow frame = selector.getFrame();
-		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
-				mode, EventDataUI.this);
+	private void goToNewEditScreen(int mode) {
+//		AppWindow frame = selector.getFrame();
+//		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
+//				mode, EventDataUI.this);
+		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, mode, EventDataUI.this);
 		eEditUI.setOpaque(true);
-		frame.getBasePanel().add(eEditUI);
+//		frame.getBasePanel().add(eEditUI);
+//		this.setVisible(false);
+//		eEditUI.setVisible(true);
+		
 		this.setVisible(false);
 		eEditUI.setVisible(true);
+		scrollPane.getViewport().add(eEditUI);
+
+		
 	}
 	
 	/**
@@ -1459,7 +1487,7 @@ public class EventDataUI extends JPanel{
 			} 
 			//Si no hay errores, procedemos a crear la nueva incidencia
 			if (okNew) {
-				goToNewEdit(EventEditUI.getEventEditActionNewEvent());
+				goToNewEditScreen(EventEditUI.getEventEditActionNewEvent());
 			}	
 		}
 	}
@@ -1475,7 +1503,7 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Editar incidencia");
 			
-			goToNewEdit(EventEditUI.getEventEditActionEditEvent());
+			goToNewEditScreen(EventEditUI.getEventEditActionEditEvent());
 			
 		}
 	}
@@ -1516,7 +1544,7 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Crear nueva actualización");
 			
-			goToNewEdit(EventEditUI.getEventEditActionNewUpdate());
+			goToNewEditScreen(EventEditUI.getEventEditActionNewUpdate());
 			
 		}
 	}
@@ -1532,7 +1560,7 @@ public class EventDataUI extends JPanel{
 			//Debug
 			System.out.println("Editar actualización");
 			
-			goToNewEdit(EventEditUI.getEventEditActionEditUpdate());
+			goToNewEditScreen(EventEditUI.getEventEditActionEditUpdate());
 			
 		}
 	}
@@ -1657,6 +1685,14 @@ public class EventDataUI extends JPanel{
 
 	public void setUpdateSelected(EventUpdate updateSelected) {
 		this.updateSelected = updateSelected;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
 	}
 
 }

@@ -2056,8 +2056,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 				  --update events table, not tested yet--
 				  --update updates table, not tested yet--
 
-ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDITUI
-
+ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDITUI & BACK
 	
 	* - Package main.java.company
 
@@ -2076,11 +2075,29 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Update attribute versionNumber --ver 0.1.15--
 
 	· Selector class:
+		Add cleanScreen() --ok--
 		Update getFrame() --returns AppWindow object, not JFrame object--
 		Update eventTypeButton text to "TIPOS DE INCIDENCIA"
 
+	· CompanyAction class (inner Selector class):
+		Update actionPerformed() --uses cleanScreen()--
+
+	· BunitAction class (inner Selector class):
+		Update actionPerformed() --uses cleanScreen()--
+
+	· UserAction class (inner Selector class):
+		Update actionPerformed() --uses cleanScreen()--
+
+	· AreaAction class (inner Selector class):
+		Update actionPerformed() --uses cleanScreen()--
+
+	· EventTypeAction class (inner Selector class):
+		Update actionPerformed() --uses cleanScreen()--
+
 	· EventAction class (inner Selector class):
 		Update actionPerformed() --add state parameter--
+					 --delete state parameter--
+					 --uses cleanScreen()--
 
 	· AreaUI class:
 		Update areaDescription border color
@@ -2140,6 +2157,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 		Add timeIsValid() --ok--
 		Add goToData() --not tested yet--
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
+		Rename goToNewEdit() to goToNewEditScreen()
 		Update getSelectedIndexFromArray() --area list not tested yet--
 						   --event type list new search, not tested yet--
 						   --event state list new search, not tested yet--
@@ -2176,3 +2194,33 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 	· CancelAction class (new inner EventEditUI class):
 		Add actionPerformed() --ok--
+
+ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED, 
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.16--
+
+	· Selector class:
+		Add showPane() --ok--
+		
+	· EventAction class (inner Selector class):
+		Update actionPerformed() --uses a scroll pane & uses showPane()--
+
+
+	· EventDataUI class:
+		Add attributes
+			scrollPane
+
+		Update infoLabel x position
+		Update setPanelsDimensions() --update containers x position--
+		Update goToNewEditScreen() --uses scrollPane to switch panels--
+
+
+	· EventEditUI class:
+		Delete attributes
+			selector, panelVisible
+
+	· CancelAction class (inner EventEditUI class):
+		Update actionPerformed() --uses scrollPane to switch panels--
