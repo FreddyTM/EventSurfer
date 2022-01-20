@@ -58,6 +58,7 @@ public class EventEditUI extends JPanel{
 	private static final String DATE_PATTERN = "dd-MM-yyyy";
 	private static final String VALIDATION_DATE_PATTERN = "dd-MM-uuuu";
 	private static final String TIME_PATTERN = "HH:mm";
+	private static final String TIMESTAMP_GENERATOR_DATE_TIME_PATTERN = "uuuu-MM-dd HH:mm";
 	
 	//Se asignan a la variable actionSelector para determinar la acción a ejecutar
 	private static final int EVENTEDIT_ACTION_UNDEFINED = 0; //Default
@@ -768,23 +769,32 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
+	 * Construye un string con formato Timestamp a partir de dos strings que contienen
+	 * la fecha y la hora
+	 * @param date texto que contiene la fecha en formato dd-MM-uuuu
+	 * @param time texto que contiene la hora en formato HH:mm
+	 * @return texto en formato Timestamp (uuuu-MM-dd HH:mm)
+	 */
+	private String buildStringTimestamp (String date, String time) {
+		String[] splitDate = date.split("-");
+		String stringTimestamp = splitDate[2] + "-" + splitDate[1] + "-" + splitDate[0] + " "
+				+ time;
+		return stringTimestamp;
+	}
+	
+	/**
 	 * Retorna un timestamp a partir de un string que sigue el formato de pattern
 	 * @param stringToParse string que contiene la fecha y la hora a transformar en un objeto Timestamp
 	 * @param pattern patrón para dar el formato
 	 * @return Timestamp con la fecha y la hora pasadas por parámetro
 	 */
 	private Timestamp stringToTimestamp(String stringToParse, String pattern) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime ldt = null;
 		try {
-			ldt = LocalDateTime.from(formatter.parse(stringToParse));
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+			ldt = LocalDateTime.parse(stringToParse, formatter);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			System.out.println("Error de formato de fecha / hora");
-			ToolBox.showDialog(
-					"Formato de fecha / hora incorrecto", EventEditUI.this,
-					DIALOG_INFO);
 			return null;
 		}
 		return Timestamp.valueOf(ldt);
@@ -1132,11 +1142,9 @@ public class EventEditUI extends JPanel{
 						//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 						EventUpdate newEventUpdate = new EventUpdate();
 						newEventUpdate.setEvent(storedEvent);
-						
-//						newEventUpdate.setFechaHora(tNow);
 						//Construir fech/hora a partir de los campos del formulario correspondientes
-						
-						
+						String stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+						newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 						newEventUpdate.setDescripcion(updateDescriptionArea.getText());
 						newEventUpdate.setAutor(updateAuthorField.getText());
 						newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
