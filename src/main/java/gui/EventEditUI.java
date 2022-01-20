@@ -54,6 +54,7 @@ public class EventEditUI extends JPanel{
 	
 	//Formato de presentación de fecha/hora
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
+	private static final String VALIDATION_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	private static final String DATE_PATTERN = "dd-MM-yyyy";
 	private static final String VALIDATION_DATE_PATTERN = "dd-MM-uuuu";
 	private static final String TIME_PATTERN = "HH:mm";
@@ -1131,7 +1132,11 @@ public class EventEditUI extends JPanel{
 						//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 						EventUpdate newEventUpdate = new EventUpdate();
 						newEventUpdate.setEvent(storedEvent);
-						newEventUpdate.setFechaHora(tNow);
+						
+//						newEventUpdate.setFechaHora(tNow);
+						//Construir fech/hora a partir de los campos del formulario correspondientes
+						
+						
 						newEventUpdate.setDescripcion(updateDescriptionArea.getText());
 						newEventUpdate.setAutor(updateAuthorField.getText());
 						newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
@@ -1151,19 +1156,39 @@ public class EventEditUI extends JPanel{
 						session.getbUnit().getEvents().add(storedEvent);
 						
 						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
-						
+//						eventSelected = null;
+//						updateSelected = null;
 					}
 				}
 				
 				//Edición de incidencia
 				if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
 					
+					//Objeto que recoge los datos actualizados
+					Event updatedEvent = new Event();
+					updatedEvent.setId(eventSelected.getId());
+					updatedEvent.setbUnit(eventSelected.getbUnit());
+					updatedEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
+					updatedEvent.setEventType(areaComboBox.getSelectedItem().toString());
+					updatedEvent.setTitulo(eventTitleField.getText());
+					updatedEvent.setDescripcion(eventDescriptionArea.getText());
+					updatedEvent.setEventState(eventStateComboBox.getSelectedItem().toString());
+					updatedEvent.setUpdates(eventSelected.getUpdates());
+					//Borramos la incidencia seleccionada de la lista de incidencias de la bUnit de la sesión, y le añadimos
+					//la incidencia actualizada
+					session.getbUnit().getEvents().remove(eventSelected);
+					session.getbUnit().getEvents().add(updatedEvent);
+					
+					//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+//					eventSelected = null;
+//					updateSelected = null;
 				}
 				
 				//Nueva actualización
 				if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
 					
-					//Generamos
+					//Creamos nuevo EventUpdate a partir de los datos del formulario y de la incidencia seleccionada
+					EventUpdate newEventUpdate = new EventUpdate();
 				}
 				
 				//Edición de actualización
