@@ -283,9 +283,9 @@ public class EventEditUI extends JPanel{
 		editEventList.add(mustDescribeEventLabel);
 		add(mustDescribeEventLabel);
 		
-		JLabel maxCharsAuthorLabel = new JLabel("Max: 50 caracteres");
+		JLabel maxCharsAuthorLabel = new JLabel("Max: 50 caracteres (opcional)");
 		maxCharsAuthorLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		maxCharsAuthorLabel.setBounds(810, 475, 146, 25);
+		maxCharsAuthorLabel.setBounds(810, 475, 200, 25);
 		maxCharsAuthorLabel.setVisible(false);
 		newEventList.add(maxCharsAuthorLabel);
 		newEditUpdateList.add(maxCharsAuthorLabel);
@@ -888,8 +888,8 @@ public class EventEditUI extends JPanel{
 		}
 		
 		if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-			if (eventDescriptionArea.getText().length() == 0) {
-				eventDescriptionArea.setBackground(Color.YELLOW);
+			if (updateDescriptionArea.getText().length() == 0) {
+				updateDescriptionArea.setBackground(Color.YELLOW);
 				infoLabel.setText(errorLengthText);
 				goodData = false;
 			}
@@ -1075,13 +1075,25 @@ public class EventEditUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
+			//Se recupera el fondo de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			for (Component comp : errorList) {
-				if (comp == areaLabel || comp == eventTypeLabel) {
-					comp.setBackground(new JPanel().getBackground());
-				} else {
-					comp.setBackground(Color.WHITE);					
+				if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+					if (comp == areaLabel || comp == eventTypeLabel) {
+						comp.setBackground(new JPanel().getBackground());
+					} else {
+						comp.setBackground(Color.WHITE);
+					} 
+				}
+				if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+					if (comp != areaLabel && comp != eventTypeLabel && comp != updateDescriptionArea) {
+						comp.setBackground(Color.WHITE);
+					}
+				}
+				if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+					if (comp == updateDescriptionArea) {
+						comp.setBackground(Color.WHITE);
+					}
 				}
 			}
 			
