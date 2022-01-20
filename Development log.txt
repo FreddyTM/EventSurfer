@@ -2197,6 +2197,11 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 
 ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED, 
 
+	* - Package main.java.company
+
+	· User class:
+		Add getUserByAlias(userList, alias) --overloaded from getUserById(bUnit, alias)--
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -2213,7 +2218,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add attributes
 			scrollPane
 
-		Update infoLabel x position
+		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
 
@@ -2231,6 +2236,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· OKAction class (inner EventEditUI class):
 		Update actionPerformed() --logic to filter what components change background ok--
+					 --NEW EVENT logic, not tested yet--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--

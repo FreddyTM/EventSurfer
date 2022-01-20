@@ -434,6 +434,22 @@ public class User {
 	}
 	
 	/**
+	 * Devuelve el usuario al que pertenece el alias entrado por parámetro
+	 * @param userList lista en la que queremos encontrar al usuario con el alias pasado por parámetro
+	 * @param alias alias del usuario buscado
+	 * @return usuario con el alias entrado por parámetro (null si no existe)
+	 */
+	public User getUserByAlias (List<User> userList, String alias) {
+//		List<User> userList = bUnit.getUsers();
+		for (User user: userList) {
+			if (user.getUserAlias().equals(alias)) {
+				return user;
+			}
+		}	
+		return null;
+	}
+	
+	/**
 	 * Devuelve el usuario al que pertenece el id entrado por parámetro
 	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
 	 * @param id id del usuario buscado

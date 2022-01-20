@@ -43,6 +43,7 @@ import main.java.company.Area;
 import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
+import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 import main.java.types_states.EventState;
@@ -1097,8 +1098,78 @@ public class EventEditUI extends JPanel{
 				}
 			}
 			
+			//Si los datos del formulario son correctos
 			if (testData()) {
-				infoLabel.setText("TODO CORRECTO PARA ACEPTAR");
+
+				//infoLabel.setText("TODO CORRECTO PARA ACEPTAR");
+				System.out.println("TODO CORRECTO PARA ACEPTAR EventEditUI");
+				
+				//Nueva incidencia
+				if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+					
+					//Creamos nuevo Event a partir de los datos del formulario
+					Event newEvent = new Event();
+					newEvent.setbUnit(session.getbUnit());
+					newEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
+					newEvent.setEventType(areaComboBox.getSelectedItem().toString());
+//					newEvent.setEventType((String) areaComboBox.getSelectedItem());
+					newEvent.setTitulo(eventTitleField.getText());
+					newEvent.setDescripcion(eventDescriptionArea.getText());
+					newEvent.setEventState(eventStateComboBox.getSelectedItem().toString());
+					
+					//Intentamos grabar la nueva incidencia en la base de datos, retornando un objeto con idénticos datos que incluye también
+					//el id que le ha asignado dicha base de datos
+					Event storedEvent = new Event().addNewEvent(session.getConnection(), newEvent);
+					//Si la incidencia se almacena correctamente en la base de datos
+					if (storedEvent != null) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla event
+						tNow = ToolBox.getTimestampNow();
+						//Registramos fecha y hora de la actualización de los datos de la tabla event
+						PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
+								session.getConnection(), tNow, Event.TABLE_NAME);
+						
+						//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
+						EventUpdate newEventUpdate = new EventUpdate();
+						newEventUpdate.setEvent(storedEvent);
+						newEventUpdate.setFechaHora(tNow);
+						newEventUpdate.setDescripcion(updateDescriptionArea.getText());
+						newEventUpdate.setAutor(updateAuthorField.getText());
+						newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
+						
+						//Intentamos grabar la actualización inicial de la incidencia en la base de datos, retornando un objeto con idénticos
+						//datos que incluye también el id que le ha asignado dicha base de datos
+						EventUpdate storedEventUpdate = new EventUpdate().addNewEventUpdate(session.getConnection(), newEventUpdate);
+						//Si la actualización se almacena correctamente en la base de datos
+						if (storedEventUpdate != null) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
+									session.getConnection(), tNow, Event.TABLE_NAME);
+						}
+						//Almacenamos la actualización inicial de la nueva incidencia
+						storedEvent.getUpdates().add(storedEventUpdate);
+						//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
+						session.getbUnit().getEvents().add(storedEvent);
+						
+						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+						
+					}
+				}
+				
+				//Edición de incidencia
+				if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+					
+				}
+				
+				//Nueva actualización
+				if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+					
+					//Generamos
+				}
+				
+				//Edición de actualización
+				if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+					
+				}
 			}
 			
 //			actionSelector = EVENTEDIT_ACTION_UNDEFINED;

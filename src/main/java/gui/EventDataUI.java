@@ -365,7 +365,7 @@ public class EventDataUI extends JPanel{
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		infoLabel.setBounds(50, 950, 900, 25);
+		infoLabel.setBounds(50, 950, eventsContainer.getBounds().width, 25);
 //		infoLabel.setBounds(50, 965, 900, 25);
 		infoLabel.setBackground(Color.RED);
 		infoLabel.setText("TEXTO DE PRUEBA");
