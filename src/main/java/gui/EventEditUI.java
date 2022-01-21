@@ -841,7 +841,7 @@ public class EventEditUI extends JPanel{
 	private boolean testData() { 
 		
 		//FALTA COMPROBAR FECHAS EN TODOS LOS CASOS PARA QUE NO SEAN ANTERIORES A LAS DE INCIDENCIAS O
-		//ACTUALIZACIONES YA CREADAS
+		//ACTUALIZACIONES YA CREADAS O A LAS PRIMERAS ACTUALIZACIONES
 		
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no se selecciona ninguna
 		//opción de los combobox
