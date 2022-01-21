@@ -1136,8 +1136,9 @@ public class EventEditUI extends JPanel{
 						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						tNow = ToolBox.getTimestampNow();
 						//Registramos fecha y hora de la actualización de los datos de la tabla event
-						PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
-								session.getConnection(), tNow, Event.TABLE_NAME);
+						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow, Event.TABLE_NAME);
+//						PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
+//								session.getConnection(), tNow, Event.TABLE_NAME);
 						
 						//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 						EventUpdate newEventUpdate = new EventUpdate();
@@ -1154,16 +1155,16 @@ public class EventEditUI extends JPanel{
 						EventUpdate storedEventUpdate = new EventUpdate().addNewEventUpdate(session.getConnection(), newEventUpdate);
 						//Si la actualización se almacena correctamente en la base de datos
 						if (storedEventUpdate != null) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							//Registramos fecha y hora de la actualización de los datos de la tabla event_update
 							PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
-									session.getConnection(), tNow, Event.TABLE_NAME);
+									session.getConnection(), tNow, EventUpdate.TABLE_NAME);
+							//Almacenamos la actualización inicial de la nueva incidencia
+							storedEvent.getUpdates().add(storedEventUpdate);
+							//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
+							session.getbUnit().getEvents().add(storedEvent);
 						}
-						//Almacenamos la actualización inicial de la nueva incidencia
-						storedEvent.getUpdates().add(storedEventUpdate);
-						//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
-						session.getbUnit().getEvents().add(storedEvent);
 						
-						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
 //						eventSelected = null;
 //						updateSelected = null;
 					}
@@ -1176,16 +1177,38 @@ public class EventEditUI extends JPanel{
 					Event updatedEvent = new Event();
 					updatedEvent.setId(eventSelected.getId());
 					updatedEvent.setbUnit(eventSelected.getbUnit());
+					//Construir fech/hora a partir de los campos del formulario correspondientes para modificar la actualización inicial
+					//de la incidencia seleccionada
+					String stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+					eventSelected.getUpdates().get(0).setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 					updatedEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
 					updatedEvent.setEventType(areaComboBox.getSelectedItem().toString());
 					updatedEvent.setTitulo(eventTitleField.getText());
 					updatedEvent.setDescripcion(eventDescriptionArea.getText());
 					updatedEvent.setEventState(eventStateComboBox.getSelectedItem().toString());
+					//Copiamos la lista de actualizaciones de la incidencia seleccionada al objeto actualizado
 					updatedEvent.setUpdates(eventSelected.getUpdates());
-					//Borramos la incidencia seleccionada de la lista de incidencias de la bUnit de la sesión, y le añadimos
-					//la incidencia actualizada
-					session.getbUnit().getEvents().remove(eventSelected);
-					session.getbUnit().getEvents().add(updatedEvent);
+					
+					//Intentamos actualizar la incidencia en la base de datos
+					if (new Event().updateEventToDB(session.getConnection(), updatedEvent)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla event
+						tNow = ToolBox.getTimestampNow();
+						//Registramos fecha y hora de la actualización de los datos de la tabla event
+						PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA ACTUALIZADA: ",
+								session.getConnection(), tNow, Event.TABLE_NAME);
+						//Intentamos actualizar la actualización inicial de la incidencia en la base de datos
+						if (new EventUpdate().updateEventUpdateToDB(session.getConnection(), updatedEvent.getUpdates().get(0))) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA ACTUALIZADA: ",
+									session.getConnection(), tNow, EventUpdate.TABLE_NAME);
+							//Borramos la incidencia seleccionada de la lista de incidencias de la bUnit de la sesión, y le añadimos
+							//la incidencia actualizada
+							session.getbUnit().getEvents().remove(eventSelected);
+							session.getbUnit().getEvents().add(updatedEvent);
+						}
+					}
+					
+					
 					
 					//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 //					eventSelected = null;
