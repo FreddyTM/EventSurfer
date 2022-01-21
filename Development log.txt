@@ -2218,6 +2218,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add attributes
 			scrollPane
 		Add getInfoLabel()
+		Add getFilterSelected()
+		Add getCurrentEventList()
+		Add getAllEvents()
 		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
@@ -2233,6 +2236,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 			selector, panelVisible
 		Add testData() --ok--
 		Add buildStringTimestamp() --ok--
+		Add backToEventDataScreen()
 		Update testData() --all new or edit event/update checked--
 		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to
 					     get a Timestamp--
@@ -2240,7 +2244,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· OKAction class (inner EventEditUI class):
 		Update actionPerformed() --logic to filter what components change background ok--
 					 --NEW EVENT logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI not ready yet--
+					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI not ready yet--
 					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,
@@ -2250,6 +2254,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
+					 --uses backToEventDataScreen()--
 
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Update actionPerformed() --added to all date & time fields--

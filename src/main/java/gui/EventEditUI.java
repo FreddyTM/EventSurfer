@@ -904,6 +904,17 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
+	 * Cierra la pantalla de creación / edición de incidencias y actualizaciones y devuelve la vista a la pantalla
+	 * de gestión de incidencias
+	 */
+	void backToEventDataScreen() {
+		EventEditUI.this.setVisible(false);
+		eDataUI.getScrollPane().getViewport().remove(EventEditUI.this);
+		eDataUI.getScrollPane().setViewportView(eDataUI);
+		eDataUI.setVisible(true);
+	}
+	
+	/**
 	 * COMPROBACIÓN AL HACER INTRO
 	 * Listener que comprueba que el texto de eventDateField, eventTimeField, updateDateField y updateTimeField
 	 * son correctos para validar una fecha o una hora según sea el origen del texto a comprobar. Si el origen es
@@ -1156,10 +1167,22 @@ public class EventEditUI extends JPanel{
 							//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
 							session.getbUnit().getEvents().add(storedEvent);
 							
-							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
-//							eventSelected = null;
-//							updateSelected = null;
-							
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar referencias en EventDataUI
+							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
+							eDataUI.getFilterSelected().doClick();
+							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
+							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
+								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
+								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
+									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
+											+ ". LA INCIDENCIA CREADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
+								}
+							}
+							//Deseleccionamos evento y actualización
+							eDataUI.setEventSelected(null);
+							eDataUI.setUpdateSelected(null);
+							//Volvemos a la pantalla de gestión de incidencias
+							backToEventDataScreen();
 						}
 					}
 				}
@@ -1290,10 +1313,7 @@ public class EventEditUI extends JPanel{
 //			EventEditUI.this.setVisible(false);
 //			eDataUI.setVisible(true);
 			
-			EventEditUI.this.setVisible(false);
-			eDataUI.getScrollPane().getViewport().remove(EventEditUI.this);
-			eDataUI.getScrollPane().setViewportView(eDataUI);
-			eDataUI.setVisible(true);
+			backToEventDataScreen();
 			
 			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}

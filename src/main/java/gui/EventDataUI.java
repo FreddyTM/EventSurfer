@@ -1700,6 +1700,18 @@ public class EventDataUI extends JPanel{
 		return infoLabel;
 	}
 
+	public JRadioButton getFilterSelected() {
+		return filterSelected;
+	}
+
+	public List<Event> getCurrentEventList() {
+		return currentEventList;
+	}
+
+	public JRadioButton getAllEvents() {
+		return allEvents;
+	}
+
 }
 
 //SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE
