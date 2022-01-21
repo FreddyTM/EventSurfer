@@ -380,7 +380,7 @@ public class EventDataUI extends JPanel{
 		eventsContainer.add(eventsPane);
 	
 		//Por defecto la tabla de actualizaciones aparecerá vacía. Solo se llena cuando se selecciona un evento
-		buildUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+		buildUpdatesTable(new ArrayList<EventUpdate>(), getUpdatesTableHeader());
 		JScrollPane updatesPane = new JScrollPane(updatesTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		updatesTable.scrollRectToVisible(updatesTable.getCellRect(updatesTable.getRowCount()-1, 0, true));
 		updatesPane.setBounds(25, 25, updatesContainer.getBounds().width - 50, 225);
@@ -555,7 +555,7 @@ public class EventDataUI extends JPanel{
 	 * @param list lista a ordenar
 	 * @return lista ordenada
 	 */
-	private List<EventUpdate> sortEventUpdatesByDate (List<EventUpdate> list) {
+	List<EventUpdate> sortEventUpdatesByDate (List<EventUpdate> list) {
 		List<EventUpdate> sortedList = list;
 		sortedList.sort(new EventUpdateComparator());
 		return list;
@@ -850,7 +850,7 @@ public class EventDataUI extends JPanel{
 	 * @param list lista de actualizaciones del evento seleccionado
 	 * @param header encabezados de las columnas de la tabla
 	 */
-	private void updateUpdatesTable(List<EventUpdate> list, String[] header) {
+	void updateUpdatesTable(List<EventUpdate> list, String[] header) {
 		//Encabezados de la tabla
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
@@ -1085,7 +1085,7 @@ public class EventDataUI extends JPanel{
 						eventSelected.getUpdates().remove(updateSelected);
 //						new EventUpdate().deleteEventUpdate(eventSelected, updateSelected);
 						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
 						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
 			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
 					}
@@ -1291,7 +1291,7 @@ public class EventDataUI extends JPanel{
 			//Seleccionamos el filtro
 			filterSelected.setSelected(true);
 			//Vaciamos la tabla de actualizaciones
-			updateUpdatesTable(new ArrayList<EventUpdate>(), UPDATES_TABLE_HEADER);
+			updateUpdatesTable(new ArrayList<EventUpdate>(), getUpdatesTableHeader());
 			//Solo el botón nueva incidencia queda habilitado
 			buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 			buttonSwitcher(UPDATE_BUTTON_SET, ALL_DISABLED);
@@ -1324,7 +1324,7 @@ public class EventDataUI extends JPanel{
 
 				} 
 				//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
         	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
@@ -1658,7 +1658,7 @@ public class EventDataUI extends JPanel{
 					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
 					if (updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
 						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
 						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
 			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
 						//Informamos por pantalla de la actualización
@@ -1710,6 +1710,10 @@ public class EventDataUI extends JPanel{
 
 	public JRadioButton getAllEvents() {
 		return allEvents;
+	}
+
+	public static String[] getUpdatesTableHeader() {
+		return UPDATES_TABLE_HEADER;
 	}
 
 }

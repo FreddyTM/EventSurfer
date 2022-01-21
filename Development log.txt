@@ -2221,9 +2221,12 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add getFilterSelected()
 		Add getCurrentEventList()
 		Add getAllEvents()
+		Add getUpdatesTableHeader()
 		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
+		Update updateUpdatesTable() --set visibility from private to default--
+		Update sortEventUpdatesByDate() --set visibility from private to default--
 
 	· NewEventAction (inner EventDataUI class):
 		Update actionPerformed --all JOptionPanel show centered justified text--
@@ -2234,7 +2237,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN
 		Delete attributes
 			selector, panelVisible
-		Add testData() --ok--
+		Add testData() --ok-- ****TEST DATES NOT BEFORE EXISTING DATES****
 		Add buildStringTimestamp() --ok--
 		Add backToEventDataScreen()
 		Update testData() --all new or edit event/update checked--
@@ -2248,9 +2251,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI not ready yet--
+					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 					 --UPDATE UPDATE logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI not ready yet--
+					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--

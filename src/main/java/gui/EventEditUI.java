@@ -838,7 +838,11 @@ public class EventEditUI extends JPanel{
 	 * con el fondo del campo en amarillo
 	 * @return true si son correctos, false si no lo son
 	 */
-	private boolean testData() {
+	private boolean testData() { 
+		
+		//FALTA COMPROBAR FECHAS EN TODOS LOS CASOS PARA QUE NO SEAN ANTERIORES A LAS DE INCIDENCIAS O
+		//ACTUALIZACIONES YA CREADAS
+		
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no se selecciona ninguna
 		//opción de los combobox
 		boolean goodData = true;
@@ -1167,7 +1171,7 @@ public class EventEditUI extends JPanel{
 							//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
 							session.getbUnit().getEvents().add(storedEvent);
 							
-							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar referencias en EventDataUI
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
 							eDataUI.getFilterSelected().doClick();
 							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
@@ -1223,7 +1227,7 @@ public class EventEditUI extends JPanel{
 							session.getbUnit().getEvents().remove(eventSelected);
 							session.getbUnit().getEvents().add(updatedEvent);
 							
-							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar referencias en EventDataUI
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
 							eDataUI.getFilterSelected().doClick();
 							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
@@ -1239,7 +1243,6 @@ public class EventEditUI extends JPanel{
 							eDataUI.setUpdateSelected(null);
 							//Volvemos a la pantalla de gestión de incidencias
 							backToEventDataScreen();
-							
 						}	
 					}	
 				}
@@ -1268,10 +1271,14 @@ public class EventEditUI extends JPanel{
 						//Añadimos la actualización a la incidencia seleccionada
 						eventSelected.getUpdates().add(storedEventUpdate);
 						
-						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
-//						eventSelected = null;
-//						updateSelected = null;
-						
+						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+						//Renovamos la tabla de actualizaciones
+						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
+						//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+						eDataUI.setEventSelected(null);
+						eDataUI.setUpdateSelected(null);
+						//Volvemos a la pantalla de gestión de incidencias
+						backToEventDataScreen();
 					}
 				}
 				
@@ -1299,10 +1306,14 @@ public class EventEditUI extends JPanel{
 						eventSelected.getUpdates().remove(updateSelected);
 						eventSelected.getUpdates().add(updatedEventUpdate);
 						
-						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
-//						eventSelected = null;
-//						updateSelected = null;
-						
+						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+						//Renovamos la tabla de actualizaciones
+						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
+						//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+						eDataUI.setEventSelected(null);
+						eDataUI.setUpdateSelected(null);
+						//Volvemos a la pantalla de gestión de incidencias
+						backToEventDataScreen();
 					}
 				}
 			}
