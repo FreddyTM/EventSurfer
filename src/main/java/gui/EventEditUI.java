@@ -1178,7 +1178,7 @@ public class EventEditUI extends JPanel{
 											+ ". LA INCIDENCIA CREADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
 								}
 							}
-							//Deseleccionamos evento y actualización
+							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
 							eDataUI.setEventSelected(null);
 							eDataUI.setUpdateSelected(null);
 							//Volvemos a la pantalla de gestión de incidencias
@@ -1223,9 +1223,22 @@ public class EventEditUI extends JPanel{
 							session.getbUnit().getEvents().remove(eventSelected);
 							session.getbUnit().getEvents().add(updatedEvent);
 							
-							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
-//							eventSelected = null;
-//							updateSelected = null;
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar referencias en EventDataUI
+							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
+							eDataUI.getFilterSelected().doClick();
+							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
+							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
+								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
+								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
+									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
+											+ ". LA INCIDENCIA EDITADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
+								}
+							}
+							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+							eDataUI.setEventSelected(null);
+							eDataUI.setUpdateSelected(null);
+							//Volvemos a la pantalla de gestión de incidencias
+							backToEventDataScreen();
 							
 						}	
 					}	
