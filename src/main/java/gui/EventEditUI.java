@@ -1146,9 +1146,9 @@ public class EventEditUI extends JPanel{
 						//Construir fech/hora a partir de los campos del formulario correspondientes
 						String stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
 						newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
-						newEventUpdate.setDescripcion(updateDescriptionArea.getText());
 						newEventUpdate.setAutor(updateAuthorField.getText());
 						newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
+						newEventUpdate.setDescripcion(updateDescriptionArea.getText());
 						
 						//Intentamos grabar la actualización inicial de la incidencia en la base de datos, retornando un objeto con idénticos
 						//datos que incluye también el id que le ha asignado dicha base de datos
@@ -1162,11 +1162,12 @@ public class EventEditUI extends JPanel{
 							storedEvent.getUpdates().add(storedEventUpdate);
 							//Almacenamos la nueva incidencia en la unidad de negocio de la sesión
 							session.getbUnit().getEvents().add(storedEvent);
+							
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
+//							eventSelected = null;
+//							updateSelected = null;
+							
 						}
-						
-						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA - borrar también referencias en EventDataUI
-//						eventSelected = null;
-//						updateSelected = null;
 					}
 				}
 				
@@ -1205,14 +1206,13 @@ public class EventEditUI extends JPanel{
 							//la incidencia actualizada
 							session.getbUnit().getEvents().remove(eventSelected);
 							session.getbUnit().getEvents().add(updatedEvent);
-						}
-					}
-					
-					
-					
-					//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
-//					eventSelected = null;
-//					updateSelected = null;
+							
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+//							eventSelected = null;
+//							updateSelected = null;
+							
+						}	
+					}	
 				}
 				
 				//Nueva actualización
@@ -1220,6 +1220,25 @@ public class EventEditUI extends JPanel{
 					
 					//Creamos nuevo EventUpdate a partir de los datos del formulario y de la incidencia seleccionada
 					EventUpdate newEventUpdate = new EventUpdate();
+					newEventUpdate.setEvent(eventSelected);
+					//Construir fech/hora a partir de los campos del formulario correspondientes
+					String stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+					newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
+					newEventUpdate.setAutor(updateAuthorField.getText());
+					newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
+					newEventUpdate.setDescripcion(updateDescriptionArea.getText());
+					
+					//Intentamos grabar la nueva actualización en la base de datos, retornando un objeto con idénticos
+					//datos que incluye también el id que le ha asignado dicha base de datos
+					EventUpdate storedEventUpdate = new EventUpdate().addNewEventUpdate(session.getConnection(), newEventUpdate);
+					//Si la actualización se almacena correctamente en la base de datos
+					if (storedEventUpdate != null) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
+						PersistenceManager.registerTableModification(infoLabel, "NUEVA ACTUALIZACIÓN DE INCIDENCIA REGISTRADA: ",
+								session.getConnection(), tNow, EventUpdate.TABLE_NAME);
+						//Añadimos la actualización a la incidencia seleccionada
+						eventSelected.getUpdates().add(storedEventUpdate);
+					}
 				}
 				
 				//Edición de actualización

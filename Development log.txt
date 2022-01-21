@@ -2243,6 +2243,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   update EventDateUI not ready yet--
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI not ready yet--
+					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,
+					   update EventDateUI not ready yet--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
