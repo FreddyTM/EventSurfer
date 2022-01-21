@@ -1696,6 +1696,10 @@ public class EventDataUI extends JPanel{
 		this.scrollPane = scrollPane;
 	}
 
+	public JLabel getInfoLabel() {
+		return infoLabel;
+	}
+
 }
 
 //SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE

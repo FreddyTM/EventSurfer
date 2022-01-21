@@ -2217,7 +2217,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· EventDataUI class:
 		Add attributes
 			scrollPane
-
+		Add getInfoLabel()
 		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
@@ -2244,6 +2244,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI not ready yet--
 					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,
+					   update EventDateUI not ready yet--
+					 --UPDATE UPDATE logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI not ready yet--
 
 	· CancelAction class (inner EventEditUI class):
