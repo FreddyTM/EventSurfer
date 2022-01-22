@@ -2246,8 +2246,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· OKAction class (inner EventEditUI class):
 		Update actionPerformed() --logic to filter what components change background ok--
-					 --NEW EVENT logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
+					 --NEW EVENT logic & timestamp parsing completed, ok,
+					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,

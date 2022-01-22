@@ -1130,8 +1130,10 @@ public class EventEditUI extends JPanel{
 					Event newEvent = new Event();
 					newEvent.setbUnit(session.getbUnit());
 					newEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
-					newEvent.setEventType(areaComboBox.getSelectedItem().toString());
+					//Debug
+//					System.out.println(areaComboBox.getSelectedItem().toString());
 //					newEvent.setEventType((String) areaComboBox.getSelectedItem());
+					newEvent.setEventType(eventTypeComboBox.getSelectedItem().toString());
 					newEvent.setTitulo(eventTitleField.getText());
 					newEvent.setDescripcion(eventDescriptionArea.getText());
 					newEvent.setEventState(eventStateComboBox.getSelectedItem().toString());
@@ -1177,7 +1179,7 @@ public class EventEditUI extends JPanel{
 							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
 							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
 								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
-								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
+								if (!eDataUI.getCurrentEventList().contains(storedEvent)) {
 									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
 											+ ". LA INCIDENCIA CREADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
 								}
