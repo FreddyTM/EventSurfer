@@ -1276,9 +1276,14 @@ public class EventEditUI extends JPanel{
 						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 						//Renovamos la tabla de actualizaciones
 						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
-						//Deseleccionamos incidencia y actualización seleccionados si los hubiera
-						eDataUI.setEventSelected(null);
-						eDataUI.setUpdateSelected(null);
+						//Mantenemos la incidencia seleccionada y seleccionamos la nueva actualización
+//						eDataUI.setEventSelected(null);
+						eDataUI.setUpdateSelected(storedEventUpdate);
+						//Encontrar la fila que ocupa la nueva actualilzación, y seleccionarla en la tabla
+							//Bucle por todas las filas table.getRowCount()
+							//Encontrar fila con el mismo id que el que tiene storedEventUpdate table.getModel().getValueAt(row, column)
+							//Seleccionar dicha fila table.setRowSelectionInterval(lastRow, lastRow);
+						
 						//Volvemos a la pantalla de gestión de incidencias
 						backToEventDataScreen();
 					}

@@ -2250,8 +2250,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
-					 --NEW UPDATE logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
+					 --NEW UPDATE logic & timestamp parsing completed, ok,
+					   update EventDateUI in progress..., uses backToEventDataScreen(), not tested yet--
 					 --UPDATE UPDATE logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 
