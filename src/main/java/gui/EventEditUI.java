@@ -122,6 +122,9 @@ public class EventEditUI extends JPanel{
 	private Event eventSelected;
 	private EventUpdate updateSelected;
 	
+	private String stringToParse;
+	private Timestamp updatedTimestamp;
+	
 	private EventDataUI eDataUI;
 
 	
@@ -908,6 +911,26 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
+	 * Comprueba que la fecha y la hora de la actualización no son anteriores a la fecha y la hora de
+	 * la primera actualización
+	 * @return true si la fecha de la actualización es posterior a la fecha de la incidencia, false en caso contrario
+	 */
+	private boolean checkUpdateAfterEvent(String stringToParse, Timestamp updatedTimestamp) {
+		//Comprobamos que la fecha y la hora de la nueva actualización no son anteriores a la fecha y la hora de
+		//la primera actualización
+		stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+		updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+		if (updatedTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
+//			ToolBox.showDialog(
+//					"<html><body><div align='center'>La fecha y/o la hora de una nueva actualización no pueden ser anteriores<br>"
+//					+ "a la fecha y la hora de la creación de la incidencia</div></body></html>",
+//					EventEditUI.this, DIALOG_INFO);
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Cierra la pantalla de creación / edición de incidencias y actualizaciones y devuelve la vista a la pantalla
 	 * de gestión de incidencias
 	 */
@@ -968,6 +991,15 @@ public class EventEditUI extends JPanel{
 			}
 			if (e.getSource() == updateDateField) {
 				if (dateIsValid(newText, pattern)) {
+					if (true) { //opción nueva actualización
+						//Comprobamos que la fecha y la hora de la nueva actualización
+						if (!checkUpdateAfterEvent(stringToParse, updatedTimestamp)) {
+							ToolBox.showDialog(
+									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
+									+ "a la fecha de la creación de la incidencia</div></body></html>",
+									EventEditUI.this, DIALOG_INFO);
+						}
+					}
 					//Opción de recuperar el último texto válido introducido. Si no, se recupera
 //					//el primer valor que tuvo updateDateField
 //					oldText = newText;
@@ -1255,8 +1287,19 @@ public class EventEditUI extends JPanel{
 				
 				//Nueva actualización
 				if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+					//Comprobamos que la fecha y la hora de la nueva actualización no son anteriores a la fecha y la hora de
+					//la primera actualización
+					stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+					updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+//					if (updatedTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
+//						ToolBox.showDialog(
+//								"<html><body><div align='center'>La fecha y/o la hora de una nueva actualización no pueden ser anteriores<br>"
+//								+ "a la fecha y la hora de la creación de la incidencia</div></body></html>",
+//								EventEditUI.this, DIALOG_INFO);
+//						return;
+//					}
+					//Hora a la que se registra la actualización
 					tNow = ToolBox.getTimestampNow();
-					
 					//Registramos el estado actual de la incidencia seleccionada
 					String eventSelectedState = eventSelected.getEventState();
 					//Si la nueva actualización ha cambiado el estado de la incidencia, hay que actualizar también la incidencia
@@ -1280,8 +1323,8 @@ public class EventEditUI extends JPanel{
 					EventUpdate newEventUpdate = new EventUpdate();
 					newEventUpdate.setEvent(eventSelected);
 					//Construir fech/hora a partir de los campos del formulario correspondientes
-					String stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-					newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
+					stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+					newEventUpdate.setFechaHora(updatedTimestamp);
 					newEventUpdate.setAutor(updateAuthorField.getText());
 					newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
 					newEventUpdate.setDescripcion(updateDescriptionArea.getText());

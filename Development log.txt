@@ -2248,12 +2248,13 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventEditUI class:
 		Add attributes
-			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN
+			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse, updatedTimestamp
 		Delete attributes
 			selector, panelVisible
 		Add testData() --ok-- ****TEST DATES NOT BEFORE EXISTING DATES****
 		Add buildStringTimestamp() --ok--
-		Add backToEventDataScreen()
+		Add backToEventDataScreen() --ok--
+		Add checkUpdateAfterEvent() --not tested yet--
 		Update testData() --all new or edit event/update checked--
 		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to
 					     get a Timestamp--
