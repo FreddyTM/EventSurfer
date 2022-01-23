@@ -79,7 +79,7 @@ public class EventDataUI extends JPanel{
 	
 	//Encabezados de las tablas
 	private static final String[] EVENTS_TABLE_HEADER = {"ID", "Fecha / Hora", "Area", "Tipo", "Título", "Descripción", "Estado"};
-	private static final String[] UPDATES_TABLE_HEADER = {"ID", "Event_ID", "Fecha / Hora", "Actualización", "Autor", "Usuario"};
+	private static final String[] UPDATES_TABLE_HEADER = {"ID", "Event_ID", "Fecha / Hora", "Descripción", "Autor", "Usuario"};
 	
 	//Formato de presentación de fecha/hora
 	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
@@ -904,7 +904,7 @@ public class EventDataUI extends JPanel{
 	 * @param buttonSet determina el grupo de botones afectado (tablas incidencias o actualizaciones)
 	 * @param buttonState determina el estado de los botones
 	 */
-	private void buttonSwitcher (String buttonSet, String buttonState) {
+	void buttonSwitcher (String buttonSet, String buttonState) {
 		switch (buttonState) {
 			case ALL_DISABLED:
 				if (buttonSet.equals(EVENT_BUTTON_SET)) {
@@ -1714,6 +1714,38 @@ public class EventDataUI extends JPanel{
 
 	public static String[] getUpdatesTableHeader() {
 		return UPDATES_TABLE_HEADER;
+	}
+
+	public JTable getEventsTable() {
+		return eventsTable;
+	}
+
+	public JTable getUpdatesTable() {
+		return updatesTable;
+	}
+
+	public static String getEventButtonSet() {
+		return EVENT_BUTTON_SET;
+	}
+
+	public static String getUpdateButtonSet() {
+		return UPDATE_BUTTON_SET;
+	}
+
+	public static String getAllDisabled() {
+		return ALL_DISABLED;
+	}
+
+	public static String getNewEnabled() {
+		return NEW_ENABLED;
+	}
+
+	public static String getNewEditEnabled() {
+		return NEW_EDIT_ENABLED;
+	}
+
+	public static String getAllEnabled() {
+		return ALL_ENABLED;
 	}
 
 }

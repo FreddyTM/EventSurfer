@@ -2202,6 +2202,11 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· User class:
 		Add getUserByAlias(userList, alias) --overloaded from getUserById(bUnit, alias)--
 
+	* - Package main.java.types_states
+
+	· Event class:
+		Add updateEventStateOfEventToDB() --ok--
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -2222,11 +2227,20 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add getCurrentEventList()
 		Add getAllEvents()
 		Add getUpdatesTableHeader()
+		Add getEventsTable()
+		Add getUpdatesTable()
+		Add getEventButtonSet()
+		Add getUpdateButtonSet()
+		Add getAllDisabled()
+		Add getNewEnabled()
+		Add getNewEditEnabled()
+		Add getAllEnabled()
 		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
 		Update updateUpdatesTable() --set visibility from private to default--
 		Update sortEventUpdatesByDate() --set visibility from private to default--
+		Update buttonSwitcher() --set visibility from private to default--
 
 	· NewEventAction (inner EventDataUI class):
 		Update actionPerformed --all JOptionPanel show centered justified text--
@@ -2250,8 +2264,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 					 --EDIT EVENT logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
-					 --NEW UPDATE logic & timestamp parsing completed, ok,
-					   update EventDateUI in progress..., uses backToEventDataScreen(), not tested yet--
+					 --NEW UPDATE logic & timestamp parsing completed, check date not before 1st update in progress,
+					   update EventDateUI ok, uses backToEventDataScreen(), ok--
 					 --UPDATE UPDATE logic & timestamp parsing completed, not tested yet,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 
@@ -2266,3 +2280,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add focusGained()
 		Add focusLost()
 		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--
+
+	* - Package main.java.test
+
+	· EventTest class:
+		Add testUpdateEventStateOfEventToDB() --ok--

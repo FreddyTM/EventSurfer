@@ -143,4 +143,13 @@ class EventTest {
 		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 3) == 1);
 		assertTrue(new Event().getEventTypesOnEventFromDB(conn, 4) == 0);
 	}
+	
+	@Test
+	@Order(9)
+	void testUpdateEventStateOfEventToDB() {
+		Event event = new Event();
+		event.setId(32);
+		event.setEventState("EN CURSO");
+		assertTrue(new Event().updateEventStateOfEventToDB(conn, event));
+	}
 }

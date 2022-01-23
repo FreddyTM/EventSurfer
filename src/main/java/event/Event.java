@@ -130,6 +130,32 @@ public class Event {
 	}
 	
 	/**
+	 * Actualiza el estado de una incidencia que ya existe en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param event incidencia que contiene el estado actualizado
+	 * @return true si la actualización se hizo con éxito, false si no
+	 */
+	public boolean updateEventStateOfEventToDB(Connection conn, Event event) {
+		PreparedStatement pstm = null;
+		String sql = "UPDATE \"event\" "
+				+ "SET "
+				+ "event_state_id = ? "
+				+ "WHERE id = ?;";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, TypesStatesContainer.getEvState().getEventStateId(event.getEventState()));
+			pstm.setInt(2, event.getId());
+			pstm.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			PersistenceManager.closePrepStatement(pstm);
+		}
+	}
+	
+	/**
 	 * Obtiene la lista de eventos del objeto BusinessUnit pasado por parámetro
 	 * @param conn conexión con la base de datos
 	 * @param bUnit unidad de negocio de la que queremos recuperar sus eventos

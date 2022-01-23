@@ -1143,7 +1143,6 @@ public class EventEditUI extends JPanel{
 					Event storedEvent = new Event().addNewEvent(session.getConnection(), newEvent);
 					//Si la incidencia se almacena correctamente en la base de datos
 					if (storedEvent != null) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						tNow = ToolBox.getTimestampNow();
 						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "", session.getConnection(), tNow, Event.TABLE_NAME);
@@ -1187,9 +1186,15 @@ public class EventEditUI extends JPanel{
 							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
 							eDataUI.setEventSelected(null);
 							eDataUI.setUpdateSelected(null);
+//							//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+//							eDataUI.buttonSwitcher(eDataUI.getUpdateButtonSet(), eDataUI.getNewEnabled());
 							//Volvemos a la pantalla de gestión de incidencias
 							backToEventDataScreen();
+						} else {
+							eDataUI.getInfoLabel().setText("ERROR DE CREACIÓN DE UNA NUEVA ACTUALIZACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
 						}
+					} else {
+						eDataUI.getInfoLabel().setText("ERROR DE CREACIÓN DE UNA NUEVA INCIDENCIA EN LA BASE DE DATOS");
 					}
 				}
 				
@@ -1214,7 +1219,6 @@ public class EventEditUI extends JPanel{
 					
 					//Intentamos actualizar la incidencia en la base de datos
 					if (new Event().updateEventToDB(session.getConnection(), updatedEvent)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						tNow = ToolBox.getTimestampNow();
 						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
@@ -1251,7 +1255,27 @@ public class EventEditUI extends JPanel{
 				
 				//Nueva actualización
 				if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+					tNow = ToolBox.getTimestampNow();
 					
+					//Registramos el estado actual de la incidencia seleccionada
+					String eventSelectedState = eventSelected.getEventState();
+					//Si la nueva actualización ha cambiado el estado de la incidencia, hay que actualizar también la incidencia
+					if (!eventStateComboBox.getSelectedItem().toString().equals(eventSelectedState)) {
+						//Actualizamos el estado de la incidencia seleccionada
+						eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
+						//Intentamos actualizar el estado de la la incidencia seleccionada en la base de datos
+						if (new Event().updateEventStateOfEventToDB(session.getConnection(), eventSelected)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
+									session.getConnection(), tNow, Event.TABLE_NAME);
+//							//Actualizamos el estado de la incidencia seleccionada
+//							eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
+						} else {
+							eDataUI.getInfoLabel().setText("ERROR DE ACTUALIZACIÓN DEL ESTADO DE LA INCIDENCIA EN LA BASE DE DATOS");
+						}
+					} 		
+
+					//Si la nueva actualización no cambia el estado de la incidencia, solo añadimos la nueva actualización
 					//Creamos nuevo EventUpdate a partir de los datos del formulario y de la incidencia seleccionada
 					EventUpdate newEventUpdate = new EventUpdate();
 					newEventUpdate.setEvent(eventSelected);
@@ -1274,12 +1298,36 @@ public class EventEditUI extends JPanel{
 						eventSelected.getUpdates().add(storedEventUpdate);
 						
 						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+						int rowId = eDataUI.getEventsTable().getSelectedRow();
+						//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
+						eDataUI.getFilterSelected().doClick(); //eventSelected no cambia
+						//Volvemos a seleccionar la fila de la incidencia seleccionada
+						eDataUI.getEventsTable().setRowSelectionInterval(rowId, rowId);
+//						Se actualizará el estado de los botones aquí gracias a EventTableSelectionListener o tendremos
+						//que llamar a updateEventButtonsStateOnSelection()??? aún no lo sé
+						
+						
 						//Renovamos la tabla de actualizaciones
 						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
+						//Reseteamos la actualización seleccionada
+						eDataUI.setUpdateSelected(null);
+						//Solo el botón nueva actualización queda activado
+						eDataUI.buttonSwitcher(EventDataUI.getUpdateButtonSet(), EventDataUI.getNewEnabled());
+
+
+
+						
+						
 						//Mantenemos la incidencia seleccionada y seleccionamos la nueva actualización
 //						eDataUI.setEventSelected(null);
-						eDataUI.setUpdateSelected(storedEventUpdate);
-						//Encontrar la fila que ocupa la nueva actualilzación, y seleccionarla en la tabla
+//						eDataUI.setUpdateSelected(storedEventUpdate);
+//						//Encontrar la fila que ocupa la nueva actualilzación, y seleccionarla en la tabla
+//						for (int i = 0; i < eDataUI.getUpdatesTable().getRowCount(); i++) {
+//							int rowId = (int) eDataUI.getUpdatesTable().getModel().getValueAt(i, 0);
+//							if (rowId == storedEventUpdate.getId()) {
+//								eDataUI.getUpdatesTable().setRowSelectionInterval(rowId, rowId);
+//							}
+//						}
 							//Bucle por todas las filas table.getRowCount()
 							//Encontrar fila con el mismo id que el que tiene storedEventUpdate table.getModel().getValueAt(row, column)
 							//Seleccionar dicha fila table.setRowSelectionInterval(lastRow, lastRow);
@@ -1316,9 +1364,17 @@ public class EventEditUI extends JPanel{
 						//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 						//Renovamos la tabla de actualizaciones
 						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
-						//Deseleccionamos incidencia y actualización seleccionados si los hubiera
-						eDataUI.setEventSelected(null);
-						eDataUI.setUpdateSelected(null);
+						//Mantenemos la incidencia seleccionada y seleccionamos la nueva actualización
+						eDataUI.setUpdateSelected(updatedEventUpdate);
+						//Encontrar la fila que ocupa la nueva actualilzación, y seleccionarla en la tabla
+						for (int i = 0; i < eDataUI.getUpdatesTable().getRowCount(); i++) {
+							int rowId = (int) eDataUI.getUpdatesTable().getModel().getValueAt(i, 0);
+							if (rowId == updatedEventUpdate.getId()) {
+								eDataUI.getUpdatesTable().setRowSelectionInterval(rowId, rowId);
+							}
+						}
+//						Se actualizará el estado de los botones aquí gracias a EventUpdateTableSelectionListener o tendremos
+						//que llamar a updateEventUpdateButtonsStateOnSelection()??? aún no lo sé
 						//Volvemos a la pantalla de gestión de incidencias
 						backToEventDataScreen();
 					}
