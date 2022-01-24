@@ -118,6 +118,16 @@ public class EventEditUI extends JPanel{
 	private final Action oKAction = new OKAction();
 	private final Action cancelAction = new CancelAction();
 	
+	//Listeners
+	private EventDateTimeIntroListener eventDateIntroListener; //
+	private EventDateTimeIntroListener eventTimeIntroListener; //
+	private EventDateTimeIntroListener updateDateIntroListener; //
+	private EventDateTimeIntroListener updateTimeIntroListener; //
+	private EventDateTimeFocusListener eventDateFocusListener; //
+	private EventDateTimeFocusListener eventTimeFocusListener; //
+	private EventDateTimeFocusListener updateDateFocusListener; //
+	private EventDateTimeFocusListener updateTimeFocusListener; //
+	
 	//Incidencia y actualización seleccionados
 	private Event eventSelected;
 	private EventUpdate updateSelected;
@@ -343,8 +353,8 @@ public class EventEditUI extends JPanel{
 //		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 70, 25);
-		eventDateField.addActionListener(new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
-		eventDateField.addFocusListener(new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
+//		eventDateField.addActionListener(new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
+//		eventDateField.addFocusListener(new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(eventDateField);
 		
 		eventTimeField = new JTextField();
@@ -352,8 +362,8 @@ public class EventEditUI extends JPanel{
 //		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
 		eventTimeField.setBounds(260, 275, 40, 25);
-		eventTimeField.addActionListener(new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN));
-		eventTimeField.addFocusListener(new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN));
+//		eventTimeField.addActionListener(new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN));
+//		eventTimeField.addFocusListener(new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
 		eventTitleField = new JTextField();
@@ -379,8 +389,8 @@ public class EventEditUI extends JPanel{
 //		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 70, 25);
-		updateDateField.addActionListener(new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
-		updateDateField.addFocusListener(new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
+//		updateDateField.addActionListener(new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
+//		updateDateField.addFocusListener(new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
@@ -388,9 +398,31 @@ public class EventEditUI extends JPanel{
 //		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 40, 25);
-		updateTimeField.addActionListener(new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN));
-		updateTimeField.addFocusListener(new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN));
+//		updateTimeField.addActionListener(new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN));
+//		updateTimeField.addFocusListener(new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
+		
+		//Date fields & time fields action & focus listeners
+		
+		eventDateIntroListener = new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN);
+		eventTimeIntroListener = new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN); //
+		updateDateIntroListener = new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
+		updateTimeIntroListener = new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN); //
+		eventDateFocusListener = new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN); //
+		eventTimeFocusListener = new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN); //
+		updateDateFocusListener = new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
+		updateTimeFocusListener = new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN); //
+				
+				
+		eventDateField.addActionListener(eventDateIntroListener);
+		eventDateField.addFocusListener(eventDateFocusListener);
+		eventTimeField.addActionListener(eventTimeIntroListener);
+		eventTimeField.addFocusListener(eventTimeFocusListener);
+		updateDateField.addActionListener(updateDateIntroListener);
+		updateDateField.addFocusListener(updateDateFocusListener);
+		updateTimeField.addActionListener(updateTimeIntroListener);
+		updateTimeField.addFocusListener(updateTimeFocusListener);
+		
 		
 		updateDescriptionArea.setLineWrap(true);
 		updateDescriptionArea.setWrapStyleWord(true);
@@ -678,6 +710,9 @@ public class EventEditUI extends JPanel{
 						label.setVisible(true);
 					} 
 				}
+				//Listeners data update
+				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
+				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				break;
 			default:
 				//Undefined option
@@ -951,10 +986,14 @@ public class EventEditUI extends JPanel{
 	 */
 	private class EventDateTimeIntroListener implements ActionListener {
 		String oldText;
+		String oldUpdateDateText;
+		String oldUpdateTimeText;
 		String pattern;
 		
 		public EventDateTimeIntroListener (String oldText, String pattern) {
 			this.oldText = oldText;
+//			oldUpdateDateText = eventDateField.getText();
+//			oldUpdateTimeText = updateTimeField.getText();
 			this.pattern = pattern;
 		}
 		
@@ -964,9 +1003,7 @@ public class EventEditUI extends JPanel{
 			if (e.getSource() == eventDateField) {
 				if (dateIsValid(newText, pattern)) {
 					updateDateField.setText(eventDateField.getText());
-//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
-//					//el primer valor que tuvo eventDateField
-//					oldText = newText;
+//					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto introducido
 				} else {
 					eventDateField.setText(oldText);
 					updateDateField.setText(oldText);
@@ -978,9 +1015,7 @@ public class EventEditUI extends JPanel{
 			if (e.getSource() == eventTimeField) {
 				if (timeIsValid(newText, pattern)) {
 					updateTimeField.setText(eventTimeField.getText());
-//					//Opción de recuperar el último texto válido introducido. Si no, se recupera
-//					//el primer valor que tuvo eventTimeField
-//					oldText = newText;
+//					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto introducido
 				} else {
 					eventTimeField.setText(oldText);
 					updateTimeField.setText(oldText);
@@ -990,19 +1025,32 @@ public class EventEditUI extends JPanel{
 				}
 			}
 			if (e.getSource() == updateDateField) {
+//				oldUpdateText = updateDateField.getText();
+				//Si es una fecha válida
 				if (dateIsValid(newText, pattern)) {
-					if (true) { //opción nueva actualización
-						//Comprobamos que la fecha y la hora de la nueva actualización
+					//Comprobación de fecha de actualización al crear o editar una actualización
+					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 						if (!checkUpdateAfterEvent(stringToParse, updatedTimestamp)) {
+//							updateDateField.setText(oldText);
+							
+							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+
+								updateDateField.setText(oldText);								
+							}
+							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+//								oldText = updateDateField.getText();
+								updateDateField.setText(oldUpdateDateText);
+								
+							}
+							
+							
 							ToolBox.showDialog(
 									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
 									+ "a la fecha de la creación de la incidencia</div></body></html>",
 									EventEditUI.this, DIALOG_INFO);
 						}
 					}
-					//Opción de recuperar el último texto válido introducido. Si no, se recupera
-//					//el primer valor que tuvo updateDateField
-//					oldText = newText;
+				//Si no es una fecha válida *************REPLICAR RECUPERACIÓN DE DATOS DE VALIDACIÓN DE FECHA EN FECHA NO VÁLIDA*****************
 				} else {
 					updateDateField.setText(oldText);
 					ToolBox.showDialog(
@@ -1011,10 +1059,30 @@ public class EventEditUI extends JPanel{
 				}
 			}
 			if (e.getSource() == updateTimeField) {
+//				oldUpdateText = updateTimeField.getText();
+				//Si es una hora válida
 				if (timeIsValid(newText, pattern)) {
-					//Opción de recuperar el último texto válido introducido. Si no, se recupera
-//					//el primer valor que tuvo updateTimeField
-//					oldText = newText;
+					//Comprobación de hora de actualización al crear o editar una actualización
+					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+						if (!checkUpdateAfterEvent(stringToParse, updatedTimestamp)) {
+//							updateTimeField.setText(oldText);
+							
+							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+
+								updateTimeField.setText(oldText);								
+							}
+							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+//								oldText = updateDateField.getText();
+								updateTimeField.setText(oldUpdateTimeText);
+							}
+							
+							ToolBox.showDialog(
+									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
+									+ "a la fecha de la creación de la incidencia</div></body></html>",
+									EventEditUI.this, DIALOG_INFO);
+						}
+					}
+				//Si no es una hora válida
 				} else {
 					updateTimeField.setText(oldText);
 					ToolBox.showDialog(
@@ -1025,14 +1093,14 @@ public class EventEditUI extends JPanel{
 			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		    manager.focusNextComponent();
 		}
-//
-//		public String getOldText() {
-//			return oldText;
-//		}
-//
-//		public void setOldText(String oldText) {
-//			this.oldText = oldText;
-//		}
+
+		public void setOldUpdateDateText(String text) {
+			oldUpdateDateText = text;
+		}
+
+		public void setOldUpdateTimeText(String text) {
+			oldUpdateTimeText = text;;
+		}
 
 	}
 	

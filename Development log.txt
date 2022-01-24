@@ -2276,6 +2276,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Update actionPerformed() --added to all date & time fields--
+					 --updateDateField date check ok--
+					 --back to selectedUpdate date&time if date before 1st update ok--
+					 --back to selectedUpdate date&time if date not valid in progress--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add focusGained()
