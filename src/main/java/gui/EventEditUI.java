@@ -1628,11 +1628,22 @@ public class EventEditUI extends JPanel{
 								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
 									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
 											+ ". LA INCIDENCIA EDITADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
+									//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+									eDataUI.setEventSelected(null);
+									eDataUI.setUpdateSelected(null);
+									//Vaciamos la tabla de actualizaciones.
+									eDataUI.updateUpdatesTable(new ArrayList<EventUpdate>(),EventDataUI.getUpdatesTableHeader());		
+									//Solo el botón de nueva incidencia queda habilitado
+									eDataUI.buttonSwitcher(EventDataUI.getEventButtonSet(), EventDataUI.getNewEnabled());
+									eDataUI.buttonSwitcher(EventDataUI.getUpdateButtonSet(), EventDataUI.getAllDisabled());
 								}
+							} else {
+								//********LA INCIDENCIA EDITADA SÍ QUE APARECE EN EL FILTRO*********//
+								//Hay que encontrarla y seleccionarla
 							}
-							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
-							eDataUI.setEventSelected(null);
-							eDataUI.setUpdateSelected(null);
+//							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+//							eDataUI.setEventSelected(null);
+//							eDataUI.setUpdateSelected(null);
 							//Volvemos a la pantalla de gestión de incidencias
 							backToEventDataScreen();
 						}	

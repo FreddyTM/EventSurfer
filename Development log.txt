@@ -2291,8 +2291,10 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update constructor
 		Update actionPerformed() --added to all date & time fields--
 					 --updateDateField date check ok--
-					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & UPDATE UPDATE ok--
-					 --back to selectedUpdate date&time if date not valid all cases ok--
+					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & EDIT UPDATE ok--
+					 --back to selectedEdit date&time if date after updates date EDIT EVENT ok--
+					 --back to selectedUpdate or selectedEdit date&time if date not valid all cases ok--
+					 --warning if selectedUpdate date&time before previous updates NEW UPDATE & EDIT UPDATE ok--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add attributes
