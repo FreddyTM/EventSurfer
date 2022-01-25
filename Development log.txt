@@ -2251,28 +2251,32 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse, updatedTimestamp
 		Delete attributes
 			selector, panelVisible
-		Add testData() --ok-- ****TEST DATES NOT BEFORE EXISTING DATES****
+		Add testData() --ok-- 
 		Add buildStringTimestamp() --ok--
 		Add backToEventDataScreen() --ok--
 		Add checkUpdateAfterEvent()
+		Add isDateTimeAfterEventUpdatesDateTime() --ok--
+		Add isDateTimebeforePreviousUpdatesDateTime() --ok--
 		Rename checkUpdateAfterEvent() to isDateTimeBeforeEventDateTime()
 		Update isDateTimeBeforeEventDateTime() --ok--
 		Update testData() --all new or edit event/update checked--
-		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to
-					     get a Timestamp--
+		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to get a Timestamp--
 		Update setup() --edit update backup of initial data of date&time fields (needed in intro listeners)--
 			       --edit event backup of initial data of date&time fields (needed in intro listeners)--
+		Update isDateTimebeforePreviousUpdatesDateTime() --parameters (string, int), new logic--
 
 	· OKAction class (inner EventEditUI class):
 		Update actionPerformed() --logic to filter what components change background ok--
 					 --NEW EVENT logic & timestamp parsing completed, ok,
 					   update EventDateUI ready, uses backToEventDataScreen(), ok--
-					 --EDIT EVENT logic & timestamp parsing completed, check date not after 2nd updateok ,
+					 --EDIT EVENT logic & timestamp parsing completed, check date not after 2nd update ok ,
 					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 					 --NEW UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
-					   update EventDateUI ok, uses backToEventDataScreen(), ok--
+					   check date not before previous updates ok, update EventDateUI ok,
+					   uses backToEventDataScreen(), ok--
 					 --EDIT UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
-					   update EventDateUI ready, uses backToEventDataScreen(), select previous selected update ok--
+					   check date not before previous updates ok, uses backToEventDataScreen(),
+					   select previous selected update in EventDataUI ok--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
@@ -2280,7 +2284,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Add attributes
-			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText
+			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText, secondTest
 		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
 		Update constructor()
 		Update actionPerformed() --added to all date & time fields--

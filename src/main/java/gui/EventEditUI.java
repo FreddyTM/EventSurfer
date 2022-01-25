@@ -25,6 +25,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -647,7 +648,9 @@ public class EventEditUI extends JPanel{
 				for (JLabel label: newEditUpdateList) {
 					label.setVisible(true);
 				}
-				
+				//Actualizamos datos de los listeners
+				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
+				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				
 				break;
 			//Edit update
@@ -876,8 +879,8 @@ public class EventEditUI extends JPanel{
 	 * @return true si la fecha es posterior, false si es anterior
 	 */
 	private boolean isDateTimeBeforeEventDateTime(String stringToParse) {
-		Timestamp updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
-		if (updatedTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
+		Timestamp dateTimeTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+		if (dateTimeTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
 			return true;
 		}
 		return false;
@@ -885,18 +888,45 @@ public class EventEditUI extends JPanel{
 	
 	/**
 	 * Comprueba si la fecha y la hora pasada por parámetro son anteriores a la fecha y la hora de
-	 * la creación de la segunda actualización de la incidencia (si existe)
+	 * la actualización siguiente a la actualización inicial (si existe)
 	 * @param stringToParse texto que contiene la fecha y la hora a comprobar
 	 * @return true si la fecha es posterior, false si es anterior
 	 */
 	private boolean isDateTimeAfterEventUpdatesDateTime(String stringToParse) {
-		Timestamp updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+		Timestamp dateTimeTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
 		//Si la incidencia seleccionada tiene actualizaciones (aparte de la actualización inicial)
 		if (eventSelected.getUpdates().size() > 1) {
-			//Si la hora a comprobar es posterior a la hora de la actualización siguiente a la actualización inicial
-			if (updatedTimestamp.after(eventSelected.getUpdates().get(1).getFechaHora())) {
+			if (dateTimeTimestamp.after(eventSelected.getUpdates().get(1).getFechaHora())) {
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Comprueba si la fecha de la actualización es anterior a la de anteriores actualizaciones
+	 * @param index índice de la fila que ocupa la actualización cuya fecha queremos comprobar
+	 * @return true si la fecha de la actualización a comprobar es anterior a la fecha de la actualización previa,
+	 * false en caso contrario
+	 */
+	private boolean isDateTimebeforePreviousUpdatesDateTime(String stringToParse, int index) {
+		
+//		//Debug
+//		System.out.println("Indice de entrada al método isDateTimebeforePreviousUpdatesDateTime: " + index);
+		Timestamp dateTimeAtIndex = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+//	
+//		//Debug
+//				System.out.println("dateTimeAtIndex: " + dateTimeAtIndex);
+
+		Timestamp dateTimeAtPreviousIndex = (Timestamp) eDataUI.getUpdatesTable().getModel().getValueAt(index - 1, 2);
+//		
+//		//Debug
+//		System.out.println("dateTimeAtPreviousIndex: " + dateTimeAtPreviousIndex);
+
+		//Si la fecha a comprobar es anterior a la fecha de la actualización anterior
+		if (dateTimeAtIndex.before(dateTimeAtPreviousIndex)) {
+//			System.out.println("dateTimeAtIndex.before(dateTimeAtPreviousIndex)");
+			return true;
 		}
 		return false;
 	}
@@ -1002,6 +1032,7 @@ public class EventEditUI extends JPanel{
 		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
 		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
 		String pattern; //Patrón de validación de fechas
+		boolean secondTest = false; //Control de tercera validación de fechas en NEW_UPDATE y EDIT_UPDATE
 		
 		public EventDateTimeIntroListener (String oldText, String pattern) {
 			this.oldText = oldText;
@@ -1018,6 +1049,7 @@ public class EventEditUI extends JPanel{
 					//Comprobación de fecha al editar una incidencia
 					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
 						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
 						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
 							eventDateField.setText(oldEventDateText);
 							ToolBox.showDialog(
@@ -1043,6 +1075,7 @@ public class EventEditUI extends JPanel{
 					//Comprobación de fecha al editar una incidencia
 					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
 						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
 						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
 							eventTimeField.setText(oldEventTimeText);
 							ToolBox.showDialog(
@@ -1069,6 +1102,7 @@ public class EventEditUI extends JPanel{
 					//Comprobación de fecha de actualización al crear o editar una actualización
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
 						if (isDateTimeBeforeEventDateTime(stringToParse)) {
 //							updateDateField.setText(oldText);
 							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
@@ -1082,6 +1116,28 @@ public class EventEditUI extends JPanel{
 									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
 									+ "a la fecha de la creación de la incidencia</div></body></html>",
 									EventEditUI.this, DIALOG_INFO);
+						} else {
+							secondTest = true;
+						}
+						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
+//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+						if (secondTest) {
+							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+							if (eventSelected.getUpdates().size() > 2) {
+								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
+//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
+								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
+								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
+									int optionSelected = ToolBox.showDialog(
+											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
+											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
+											EventEditUI.this, DIALOG_YES_NO);
+									if (optionSelected != JOptionPane.YES_OPTION) {
+										updateDateField.setText(oldUpdateDateText);
+									}
+								}
+							}
+							secondTest = false;
 						}
 					}
 				//Si no es una fecha válida 
@@ -1107,6 +1163,7 @@ public class EventEditUI extends JPanel{
 					//Comprobación de hora de actualización al crear o editar una actualización
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
 						if (isDateTimeBeforeEventDateTime(stringToParse)) {
 //							updateTimeField.setText(oldText);
 							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
@@ -1120,6 +1177,28 @@ public class EventEditUI extends JPanel{
 									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
 									+ "a la fecha de la creación de la incidencia</div></body></html>",
 									EventEditUI.this, DIALOG_INFO);
+						} else {
+							secondTest = true;
+						}
+						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
+//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+						if (secondTest) {
+							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+							if (eventSelected.getUpdates().size() > 2) {
+								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
+//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
+								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
+								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
+									int optionSelected = ToolBox.showDialog(
+											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
+											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
+											EventEditUI.this, DIALOG_YES_NO);
+									if (optionSelected != JOptionPane.YES_OPTION) {
+										updateTimeField.setText(oldUpdateTimeText);
+									}
+								}
+							}
+							secondTest = false;
 						}
 					}
 				//Si no es una hora válida
