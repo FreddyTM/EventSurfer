@@ -2254,7 +2254,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add testData() --ok-- ****TEST DATES NOT BEFORE EXISTING DATES****
 		Add buildStringTimestamp() --ok--
 		Add backToEventDataScreen() --ok--
-		Add checkUpdateAfterEvent() --not tested yet--
+		Add checkUpdateAfterEvent()
+		Rename checkUpdateAfterEvent() to isDateTimeAfterEventDateTime()
+		Update isDateTimeAfterEventDateTime() --ok--
 		Update testData() --all new or edit event/update checked--
 		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to
 					     get a Timestamp--
@@ -2267,8 +2269,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
 					 --NEW UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
 					   update EventDateUI ok, uses backToEventDataScreen(), ok--
-					 --UPDATE UPDATE logic & timestamp parsing completed, not tested yet,
-					   update EventDateUI ready, uses backToEventDataScreen(), not tested yet--
+					 --UPDATE UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
+					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
@@ -2280,8 +2282,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update constructor()
 		Update actionPerformed() --added to all date & time fields--
 					 --updateDateField date check ok--
-					 --back to selectedUpdate date&time if date before 1st update ok--
-					 --back to selectedUpdate date&time if date not valid ok--
+					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & UPDATE UPDATE ok--
+					 --back to selectedUpdate date&time if date not valid all cases ok--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add focusGained()

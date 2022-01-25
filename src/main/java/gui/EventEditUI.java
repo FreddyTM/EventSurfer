@@ -60,7 +60,6 @@ public class EventEditUI extends JPanel{
 	private static final int EVENTEDIT_ACTION_NEW_UPDATE = 4;
 	private static final int EVENTEDIT_ACTION_EDIT_UPDATE = 5;
 	//Registra la acción a realizar según el botón activado
-//	private int actionSelector;
 	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
 	//Títulos de pantalla
@@ -119,14 +118,14 @@ public class EventEditUI extends JPanel{
 	private final Action cancelAction = new CancelAction();
 	
 	//Listeners
-	private EventDateTimeIntroListener eventDateIntroListener; //
-	private EventDateTimeIntroListener eventTimeIntroListener; //
-	private EventDateTimeIntroListener updateDateIntroListener; //
-	private EventDateTimeIntroListener updateTimeIntroListener; //
-	private EventDateTimeFocusListener eventDateFocusListener; //
-	private EventDateTimeFocusListener eventTimeFocusListener; //
-	private EventDateTimeFocusListener updateDateFocusListener; //
-	private EventDateTimeFocusListener updateTimeFocusListener; //
+	private EventDateTimeIntroListener eventDateIntroListener;
+	private EventDateTimeIntroListener eventTimeIntroListener;
+	private EventDateTimeIntroListener updateDateIntroListener;
+	private EventDateTimeIntroListener updateTimeIntroListener;
+	private EventDateTimeFocusListener eventDateFocusListener;
+	private EventDateTimeFocusListener eventTimeFocusListener;
+	private EventDateTimeFocusListener updateDateFocusListener;
+	private EventDateTimeFocusListener updateTimeFocusListener;
 	
 	//Incidencia y actualización seleccionados
 	private Event eventSelected;
@@ -402,8 +401,7 @@ public class EventEditUI extends JPanel{
 //		updateTimeField.addFocusListener(new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
 		
-		//Date fields & time fields action & focus listeners
-		
+		//Listeners para los campos de fecha y hora		
 		eventDateIntroListener = new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN);
 		eventTimeIntroListener = new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN); //
 		updateDateIntroListener = new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
@@ -413,16 +411,14 @@ public class EventEditUI extends JPanel{
 		updateDateFocusListener = new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
 		updateTimeFocusListener = new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN); //
 				
-				
 		eventDateField.addActionListener(eventDateIntroListener);
-		eventDateField.addFocusListener(eventDateFocusListener);
 		eventTimeField.addActionListener(eventTimeIntroListener);
-		eventTimeField.addFocusListener(eventTimeFocusListener);
 		updateDateField.addActionListener(updateDateIntroListener);
-		updateDateField.addFocusListener(updateDateFocusListener);
 		updateTimeField.addActionListener(updateTimeIntroListener);
+		eventDateField.addFocusListener(eventDateFocusListener);
+		eventTimeField.addFocusListener(eventTimeFocusListener);
+		updateDateField.addFocusListener(updateDateFocusListener);
 		updateTimeField.addFocusListener(updateTimeFocusListener);
-		
 		
 		updateDescriptionArea.setLineWrap(true);
 		updateDescriptionArea.setWrapStyleWord(true);
@@ -501,7 +497,7 @@ public class EventEditUI extends JPanel{
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoLabel.setBounds(50, 725, 900, 25);
-		infoLabel.setText("TEXTO DE PRUEBA");
+//		infoLabel.setText("TEXTO DE PRUEBA");
 		add(infoLabel);
 		
 		//Initial setup
@@ -872,6 +868,20 @@ public class EventEditUI extends JPanel{
     }
 	
 	/**
+	 * Comprueba que la fecha y la hora de la pasada por parámetro no son anteriores a la fecha y la hora de
+	 * la creación de la incidencia seleccionada
+	 * @param stringToParse texto que contiene la fecha y la hora a comprobar
+	 * @return true si la fecha es posterior, false si es anterior
+	 */
+	private boolean isDateTimeAfterEventDateTime(String stringToParse) {
+		Timestamp updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
+		if (updatedTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
 	 * con el fondo del campo en amarillo
 	 * @return true si son correctos, false si no lo son
@@ -946,26 +956,6 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
-	 * Comprueba que la fecha y la hora de la actualización no son anteriores a la fecha y la hora de
-	 * la primera actualización
-	 * @return true si la fecha de la actualización es posterior a la fecha de la incidencia, false en caso contrario
-	 */
-	private boolean checkUpdateAfterEvent(String stringToParse, Timestamp updatedTimestamp) {
-		//Comprobamos que la fecha y la hora de la nueva actualización no son anteriores a la fecha y la hora de
-		//la primera actualización
-		stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-		updatedTimestamp = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
-		if (updatedTimestamp.before(eventSelected.getUpdates().get(0).getFechaHora())) {
-//			ToolBox.showDialog(
-//					"<html><body><div align='center'>La fecha y/o la hora de una nueva actualización no pueden ser anteriores<br>"
-//					+ "a la fecha y la hora de la creación de la incidencia</div></body></html>",
-//					EventEditUI.this, DIALOG_INFO);
-			return false;
-		}
-		return true;
-	}
-	
-	/**
 	 * Cierra la pantalla de creación / edición de incidencias y actualizaciones y devuelve la vista a la pantalla
 	 * de gestión de incidencias
 	 */
@@ -1028,7 +1018,8 @@ public class EventEditUI extends JPanel{
 				if (dateIsValid(newText, pattern)) {
 					//Comprobación de fecha de actualización al crear o editar una actualización
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						if (!checkUpdateAfterEvent(stringToParse, updatedTimestamp)) {
+						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+						if (!isDateTimeAfterEventDateTime(stringToParse)) {
 //							updateDateField.setText(oldText);
 							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
 								updateDateField.setText(oldText);								
@@ -1064,7 +1055,8 @@ public class EventEditUI extends JPanel{
 				if (timeIsValid(newText, pattern)) {
 					//Comprobación de hora de actualización al crear o editar una actualización
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						if (!checkUpdateAfterEvent(stringToParse, updatedTimestamp)) {
+						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+						if (!isDateTimeAfterEventDateTime(stringToParse)) {
 //							updateTimeField.setText(oldText);
 							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
 								updateTimeField.setText(oldText);								
@@ -1257,7 +1249,7 @@ public class EventEditUI extends JPanel{
 						EventUpdate newEventUpdate = new EventUpdate();
 						newEventUpdate.setEvent(storedEvent);
 						//Construir fech/hora a partir de los campos del formulario correspondientes
-						String stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
 						newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 						newEventUpdate.setAutor(updateAuthorField.getText());
 						newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
@@ -1396,7 +1388,7 @@ public class EventEditUI extends JPanel{
 					newEventUpdate.setEvent(eventSelected);
 					//Construir fech/hora a partir de los campos del formulario correspondientes
 					stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-					newEventUpdate.setFechaHora(updatedTimestamp);
+					newEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 					newEventUpdate.setAutor(updateAuthorField.getText());
 					newEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
 					newEventUpdate.setDescripcion(updateDescriptionArea.getText());
@@ -1460,7 +1452,7 @@ public class EventEditUI extends JPanel{
 					updatedEventUpdate.setId(updateSelected.getId());
 					updatedEventUpdate.setEvent(eventSelected);
 					//Construir fech/hora a partir de los campos del formulario correspondientes
-					String stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+					stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
 					updatedEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 					updatedEventUpdate.setAutor(updateAuthorField.getText());
 					updatedEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),	userField.getText()));
