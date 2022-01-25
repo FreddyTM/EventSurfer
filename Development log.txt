@@ -2261,8 +2261,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update isDateTimeBeforeEventDateTime() --ok--
 		Update testData() --all new or edit event/update checked--
 		Update stringToTimestamp() --uses a DateTimeFormatter to build a LocalDateTime to get a Timestamp--
-		Update setup() --edit update backup of initial data of date&time fields (needed in intro listeners)--
-			       --edit event backup of initial data of date&time fields (needed in intro listeners)--
+		Update setup() --new update backup of initial data of date&time fields (needed in intro & focus listeners)--
+			       --edit update backup of initial data of date&time fields (needed in intro & focus listeners)--
+			       --edit event backup of initial data of date&time fields (needed in intro & focus listeners)--
 		Update isDateTimebeforePreviousUpdatesDateTime() --parameters (string, int), new logic--
 
 	· OKAction class (inner EventEditUI class):
@@ -2285,17 +2286,23 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Add attributes
 			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText, secondTest
+		Add actionPerformed()
 		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
-		Update constructor()
+		Update constructor
 		Update actionPerformed() --added to all date & time fields--
 					 --updateDateField date check ok--
 					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & UPDATE UPDATE ok--
 					 --back to selectedUpdate date&time if date not valid all cases ok--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
+		Add attributes
+			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText, secondTest
 		Add focusGained()
 		Add focusLost()
+		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
+		Update constructor
 		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--
+				   --all code copied except KeyboardFocusManager.focusNextComponent()--
 
 	* - Package main.java.test
 
