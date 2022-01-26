@@ -2202,10 +2202,13 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· User class:
 		Add getUserByAlias(userList, alias) --overloaded from getUserById(bUnit, alias)--
 
-	* - Package main.java.types_states
+	* - Package main.java.event
 
 	· Event class:
 		Add updateEventStateOfEventToDB() --ok--
+
+	· EventUpdate class:
+		Update saveEventUpdateToDB() --saves eUpdate.getFechaHora() to Db--
 
 	* - Package main.java.gui
 
