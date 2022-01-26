@@ -2,6 +2,8 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -487,6 +490,7 @@ public class EventEditUI extends JPanel{
 	private void setup(int setupOption) {
 		actionSelector = setupOption;
 		int index = -1;
+		setScreenFocusTraversal();
 		switch (setupOption) {
 			//New event
 			case EVENTEDIT_ACTION_NEW_EVENT:
@@ -698,7 +702,22 @@ public class EventEditUI extends JPanel{
 		}
 	}
 	
-	
+	private void setScreenFocusTraversal() {
+		Vector<Component> order = new Vector<Component>(7);
+		order.add(eventDateField);
+		order.add(eventTimeField);
+		order.add(areaComboBox);
+		order.add(eventTypeComboBox);
+		order.add(eventTitleField);
+		order.add(eventDescriptionArea);
+		order.add(updateDateField);
+		order.add(updateTimeField);
+		order.add(updateAuthorField);
+		order.add(updateDescriptionArea);
+		order.add(eventStateComboBox);
+		FocusTraversalPolicy traversalPolicy = new CustomFocusTraversalPolicy(order);
+		this.setFocusTraversalPolicy(traversalPolicy);
+	}
 	
 	/**
 	 * Obiene el índice del elemento del comboBox que será seleccionado por defecto a partir
@@ -1437,6 +1456,47 @@ public class EventEditUI extends JPanel{
 
 		public void setOldEventTimeText(String oldEventTimeText) {
 			this.oldEventTimeText = oldEventTimeText;
+		}
+	}
+	
+	/**
+	 * Controla el ciclo de paso de foco de un componente a otro
+	 * Fuente: https://docs.oracle.com/javase/tutorial/uiswing/examples/misc/FocusTraversalDemoProject/src/misc/FocusTraversalDemo.java
+	 */
+	private class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
+		Vector<Component> order;
+
+		public CustomFocusTraversalPolicy(Vector<Component> order) {
+			this.order = new Vector<Component>(order.size());
+			this.order.addAll(order);
+		}
+		public Component getComponentAfter(Container focusCycleRoot,
+				Component aComponent)
+		{
+			int idx = (order.indexOf(aComponent) + 1) % order.size();
+			return order.get(idx);
+		}
+
+		public Component getComponentBefore(Container focusCycleRoot,
+				Component aComponent)
+		{
+			int idx = order.indexOf(aComponent) - 1;
+			if (idx < 0) {
+				idx = order.size() - 1;
+			}
+			return order.get(idx);
+		}
+
+		public Component getDefaultComponent(Container focusCycleRoot) {
+			return order.get(0);
+		}
+
+		public Component getLastComponent(Container focusCycleRoot) {
+			return order.lastElement();
+		}
+
+		public Component getFirstComponent(Container focusCycleRoot) {
+			return order.get(0);
 		}
 	}
 	

@@ -2307,6 +2307,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 				   --all code copied--
 				   --warning if selectedUpdate date&time before previous updates fixed & ok--
 
+	· CustomFocusTraversalPolicy class (new inner EventEditUI class): --not working yet--
+
 	* - Package main.java.test
 
 	· EventTest class:
