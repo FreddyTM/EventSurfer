@@ -133,9 +133,12 @@ public class EventEditUI extends JPanel{
 	private EventUpdate updateSelected;
 	
 	private String stringToParse;
-	private Timestamp updatedTimestamp;
-	
 	private EventDataUI eDataUI;
+	
+	//Registra si una alerta de fecha anterior a actualizaciones previas se ha mostrado ya o no
+//	private boolean alertShown = false;
+//	private Timestamp updatedTimestamp;
+	
 
 	
 	public EventEditUI(CurrentSession session, int actionSelector, EventDataUI eDataUI) {
@@ -150,7 +153,6 @@ public class EventEditUI extends JPanel{
 		
 		//Swing Components
 		eventEditTxt = new JTextPane();
-//		eventEditTxt.setText("CREACIÓN / EDICIÓN DE INCIDENCIAS Y ACTUALIZACIONES");
 		eventEditTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		eventEditTxt.setFocusable(false);
 		eventEditTxt.setEditable(false);
@@ -315,7 +317,6 @@ public class EventEditUI extends JPanel{
 		dateFormatLabel2.setBounds(340, 475, 146, 25);
 		dateFormatLabel2.setVisible(false);
 		newEditUpdateList.add(dateFormatLabel2);
-//		editFirstUpdateList.add(dateFormatLabel2);
 		add(dateFormatLabel2);
 		
 		JLabel timeFormatLabel2 = new JLabel("HH:MM");
@@ -323,7 +324,6 @@ public class EventEditUI extends JPanel{
 		timeFormatLabel2.setBounds(310, 525, 146, 25);
 		timeFormatLabel2.setVisible(false);
 		newEditUpdateList.add(timeFormatLabel2);
-//		editFirstUpdateList.add(timeFormatLabel2);
 		add(timeFormatLabel2);
 		
 		companyField = new JTextField();
@@ -333,8 +333,6 @@ public class EventEditUI extends JPanel{
 		companyField.setText(session.getbUnit().getCompany().getNombre());
 		companyField.setEditable(false);
 		companyField.setFocusable(false);
-//		textFieldList.add(companyField);
-//		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
 		bUnitField = new JTextField();
@@ -344,31 +342,21 @@ public class EventEditUI extends JPanel{
 		bUnitField.setText(session.getbUnit().getNombre());
 		bUnitField.setEditable(false);
 		bUnitField.setFocusable(false);
-//		textFieldList.add(companyField);
-//		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(bUnitField);
 		
 		eventDateField = new JTextField();
 		eventDateField.setText(ToolBox.formatTimestamp(tNow, DATE_PATTERN));
-//		eventDateField.setEditable(false);
 		eventDateField.setColumns(10);
 		eventDateField.setBounds(260, 225, 70, 25);
-//		eventDateField.addActionListener(new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
-//		eventDateField.addFocusListener(new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(eventDateField);
 		
 		eventTimeField = new JTextField();
 		eventTimeField.setText(ToolBox.formatTimestamp(tNow, TIME_PATTERN));
-//		eventTimeField.setEditable(false);
 		eventTimeField.setColumns(10);
 		eventTimeField.setBounds(260, 275, 40, 25);
-//		eventTimeField.addActionListener(new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN));
-//		eventTimeField.addFocusListener(new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN));
 		add(eventTimeField);
 		
 		eventTitleField = new JTextField();
-//		eventTitleField.setText(eventSelected.getTitulo());
-//		eventTitleField.setEditable(false);
 		eventTitleField.setColumns(10);
 		eventTitleField.setBounds(260, 325, 540, 25);
 		errorList.add(eventTitleField);
@@ -389,8 +377,6 @@ public class EventEditUI extends JPanel{
 //		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 70, 25);
-//		updateDateField.addActionListener(new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
-//		updateDateField.addFocusListener(new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN));
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
@@ -398,8 +384,6 @@ public class EventEditUI extends JPanel{
 //		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 40, 25);
-//		updateTimeField.addActionListener(new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN));
-//		updateTimeField.addFocusListener(new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN));
 		add(updateTimeField);
 		
 		//Listeners para los campos de fecha y hora		
@@ -427,18 +411,15 @@ public class EventEditUI extends JPanel{
 		updateDescriptionArea.setBackground(Color.WHITE);
 //		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		updateDescriptionArea.setBorder(eventTitleField.getBorder());
-//		updateDescriptionArea.setEditable(false);
 		errorList.add(updateDescriptionArea);
 		add(updateDescriptionArea);
 		
 		updateAuthorField = new JTextField();
-//		updateAuthorField.setEditable(false);
 		updateAuthorField.setColumns(10);
 		updateAuthorField.setBounds(550, 475, 250, 25);
 		add(updateAuthorField);
 		
 		userField = new JTextField();
-//		userField.setEditable(false);
 		userField.setColumns(10);
 		userField.setBounds(550, 525, 250, 25);
 		userField.setFocusable(false);
@@ -449,23 +430,18 @@ public class EventEditUI extends JPanel{
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio que no tiene ningún area asignada.		
 		areaComboBox = new JComboBox();
-//		areaComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		areaComboBox.setBounds(550, 225, 250, 25);
-//		areaComboBox.addItemListener(new AreaComboListener());
 		areaComboBox.setEditable(false);
 		ToolBox.setBlackForeground(areaComboBox);
 		areaComboBox.setBackground(Color.WHITE);
 		add(areaComboBox);
 		
-//		eventTypeComboList = getEventTypeComboBoxItems();
 		eventTypeComboList = TypesStatesContainer.getEvType().getEventTypesArray();
 		//Si intentamos crear una nueva incidencia, la lista de tipos de incidencia no puede estar vacía
 		//Comprobar en EventDataUI NewEventAction. Mensaje de advertencia de que no se puede añadir
 		//incidencias a una unidad de negocio si no hay ningún tipo de incidencia registrada		
 		eventTypeComboBox = new JComboBox();
-//		eventTypeComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		eventTypeComboBox.setBounds(550, 275, 250, 25);
-//		eventTypeComboBox.addItemListener(new UserComboListener());
 		eventTypeComboBox.setEditable(false);
 		ToolBox.setBlackForeground(eventTypeComboBox);
 		eventTypeComboBox.setBackground(Color.WHITE);
@@ -473,11 +449,8 @@ public class EventEditUI extends JPanel{
 		
 		eventStateComboList = TypesStatesContainer.getEvState().getEventStatesArray();
 		//La lista nunca estará vacía, porque siempre habrá al menos tres estados de incidencia creados de inicio
-//		}		
 		eventStateComboBox = new JComboBox();
-//		eventStateComboBox.setSelectedIndex(getSelectedUserIndexFromArray(userComboList, true));
 		eventStateComboBox.setBounds(260, 675, 200, 25);
-//		eventStateComboBox.addItemListener(new UserComboListener());
 		eventStateComboBox.setEditable(false);
 		ToolBox.setBlackForeground(eventStateComboBox);
 		eventStateComboBox.setBackground(Color.WHITE);
@@ -498,7 +471,6 @@ public class EventEditUI extends JPanel{
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		infoLabel.setBounds(50, 725, 900, 25);
-//		infoLabel.setText("TEXTO DE PRUEBA");
 		add(infoLabel);
 		
 		//Initial setup
@@ -725,6 +697,7 @@ public class EventEditUI extends JPanel{
 				//Undefined option
 		}
 	}
+	
 	
 	
 	/**
@@ -1038,7 +1011,7 @@ public class EventEditUI extends JPanel{
 		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
 		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
 		String pattern; //Patrón de validación de fechas
-		boolean secondTest = false; //Control de tercera validación de fechas en NEW_UPDATE y EDIT_UPDATE
+//		boolean secondTest = false; //Control de tercera validación de fechas en NEW_UPDATE y EDIT_UPDATE
 		
 		public EventDateTimeIntroListener (String oldText, String pattern) {
 			this.oldText = oldText;
@@ -1047,6 +1020,7 @@ public class EventEditUI extends JPanel{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 			String newText = ((JTextField) e.getSource()).getText();
 			//Fecha de incidencia
 			if (e.getSource() == eventDateField) {
@@ -1067,7 +1041,11 @@ public class EventEditUI extends JPanel{
 					updateDateField.setText(eventDateField.getText());
 //					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
 				} else {
-					eventDateField.setText(oldEventDateText);
+					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+						eventDateField.setText(oldText);
+					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+						eventDateField.setText(oldEventDateText);
+					}
 					updateDateField.setText(eventDateField.getText());
 					ToolBox.showDialog(
 							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
@@ -1093,10 +1071,14 @@ public class EventEditUI extends JPanel{
 					updateTimeField.setText(eventTimeField.getText());
 //					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
 				} else {
-					eventTimeField.setText(oldEventTimeText);
+					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+						eventTimeField.setText(oldText);
+					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+						eventTimeField.setText(oldEventTimeText);
+					}
 					updateTimeField.setText(eventTimeField.getText());
 					ToolBox.showDialog(
-							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
 							EventEditUI.this, DIALOG_INFO);
 				}
 			}
@@ -1122,28 +1104,6 @@ public class EventEditUI extends JPanel{
 									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
 									+ "a la fecha de la creación de la incidencia</div></body></html>",
 									EventEditUI.this, DIALOG_INFO);
-						} else {
-							secondTest = true;
-						}
-						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
-//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						if (secondTest) {
-							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-							if (eventSelected.getUpdates().size() > 2) {
-								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
-//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
-								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
-								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
-									int optionSelected = ToolBox.showDialog(
-											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
-											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
-											EventEditUI.this, DIALOG_YES_NO);
-									if (optionSelected != JOptionPane.YES_OPTION) {
-										updateDateField.setText(oldUpdateDateText);
-									}
-								}
-							}
-							secondTest = false;
 						}
 					}
 				//Si no es una fecha válida 
@@ -1183,29 +1143,7 @@ public class EventEditUI extends JPanel{
 									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
 									+ "a la fecha de la creación de la incidencia</div></body></html>",
 									EventEditUI.this, DIALOG_INFO);
-						} else {
-							secondTest = true;
-						}
-						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
-//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						if (secondTest) {
-							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-							if (eventSelected.getUpdates().size() > 2) {
-								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
-//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
-								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
-								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
-									int optionSelected = ToolBox.showDialog(
-											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
-											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
-											EventEditUI.this, DIALOG_YES_NO);
-									if (optionSelected != JOptionPane.YES_OPTION) {
-										updateTimeField.setText(oldUpdateTimeText);
-									}
-								}
-							}
-							secondTest = false;
-						}
+						} 
 					}
 				//Si no es una hora válida
 				} else {
@@ -1223,7 +1161,7 @@ public class EventEditUI extends JPanel{
 				}
 			}
 			//Pasamos el foco al siguiente componente
-			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+//			manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		    manager.focusNextComponent();
 		}
 
@@ -1277,10 +1215,11 @@ public class EventEditUI extends JPanel{
 		@Override
 		public void focusLost(FocusEvent e) {
 			//Debug
-			System.out.println("We lost the focus!");
+//			System.out.println("We lost the focus!");
+			FocusEvent.Cause cause = e.getCause();
+			System.out.println("We lost the focus! Is temporary? " + e.isTemporary() + ". La causa es: " + FocusEvent.Cause.valueOf(cause.toString()));
 			
 			String newText = ((JTextField) e.getSource()).getText();
-			
 			//Fecha de incidencia
 			if (e.getSource() == eventDateField) {
 				//Si es una fecha válida
@@ -1300,7 +1239,11 @@ public class EventEditUI extends JPanel{
 					updateDateField.setText(eventDateField.getText());
 //					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
 				} else {
-					eventDateField.setText(oldEventDateText);
+					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+						eventDateField.setText(oldText);
+					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+						eventDateField.setText(oldEventDateText);
+					}
 					updateDateField.setText(eventDateField.getText());
 					ToolBox.showDialog(
 							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
@@ -1326,10 +1269,14 @@ public class EventEditUI extends JPanel{
 					updateTimeField.setText(eventTimeField.getText());
 //					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
 				} else {
-					eventTimeField.setText(oldEventTimeText);
+					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+						eventTimeField.setText(oldText);
+					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+						eventTimeField.setText(oldEventTimeText);
+					}
 					updateTimeField.setText(eventTimeField.getText());
 					ToolBox.showDialog(
-							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
 							EventEditUI.this, DIALOG_INFO);
 				}
 			}
@@ -1359,20 +1306,30 @@ public class EventEditUI extends JPanel{
 							secondTest = true;
 						}
 						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
-//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 						if (secondTest) {
 							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+							
+							//Debug
+							System.out.println(stringToParse);
+							
 							if (eventSelected.getUpdates().size() > 2) {
-								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
-//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
+								int selectedRowIndex = 0;
+								if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+									selectedRowIndex = eDataUI.getUpdatesTable().getRowCount();
+								}
+								if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+									selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
+								}
 								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
 								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
-									int optionSelected = ToolBox.showDialog(
-											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
-											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
-											EventEditUI.this, DIALOG_YES_NO);
-									if (optionSelected != JOptionPane.YES_OPTION) {
-										updateDateField.setText(oldUpdateDateText);
+									if ((!e.isTemporary() && cause.toString().equals("TRAVERSAL_FORWARD"))) {
+										int optionSelected = ToolBox.showDialog(
+												"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
+														+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
+												EventEditUI.this, DIALOG_YES_NO);
+										if (optionSelected != JOptionPane.YES_OPTION) {
+											updateDateField.setText(oldUpdateDateText);
+										}
 									}
 								}
 							}
@@ -1381,12 +1338,10 @@ public class EventEditUI extends JPanel{
 					}
 				//Si no es una fecha válida 
 				} else {
-//					updateDateField.setText(oldText);
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
 						updateDateField.setText(oldText);								
 					}
 					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//						oldText = updateDateField.getText();
 						updateDateField.setText(oldUpdateDateText);
 					}
 					ToolBox.showDialog(
@@ -1420,20 +1375,30 @@ public class EventEditUI extends JPanel{
 							secondTest = true;
 						}
 						//Avisamos si la fecha de la actualización editada es anterior a las actualizaciones registradas (excluyendo la primera)
-//						if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 						if (secondTest) {
 							stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+							
+							//Debug
+							System.out.println(stringToParse);
+							
 							if (eventSelected.getUpdates().size() > 2) {
-								int selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
-//								String dateTimeString = (String) eDataUI.getUpdatesTable().getModel().getValueAt(2, selectedRowIndex);
+								int selectedRowIndex = 0;
+								if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+									selectedRowIndex = eDataUI.getUpdatesTable().getRowCount();
+								}
+								if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+									selectedRowIndex = eDataUI.getUpdatesTable().getSelectedRow();
+								}
 								//Comprobamos si la fecha de la actualización seleccionada es anterior a la actualización previa
 								if (isDateTimebeforePreviousUpdatesDateTime(stringToParse, selectedRowIndex)) {
-									int optionSelected = ToolBox.showDialog(
-											"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
-											+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
-											EventEditUI.this, DIALOG_YES_NO);
-									if (optionSelected != JOptionPane.YES_OPTION) {
-										updateTimeField.setText(oldUpdateTimeText);
+									if (!e.isTemporary() || !cause.toString().equals("TRAVERSAL_FORWARD")) {
+										int optionSelected = ToolBox.showDialog(
+												"<html><body><div align='center'>La fecha de la actualización es anterior<br>"
+														+ "a la de las actualizaciones previas<br>¿Desea continuar?</div></body></html>",
+												EventEditUI.this, DIALOG_YES_NO);
+										if (optionSelected != JOptionPane.YES_OPTION) {
+											updateTimeField.setText(oldUpdateTimeText);
+										} 
 									}
 								}
 							}
@@ -1442,12 +1407,10 @@ public class EventEditUI extends JPanel{
 					}
 				//Si no es una hora válida
 				} else {
-//					updateTimeField.setText(oldText);
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
 						updateTimeField.setText(oldText);								
 					}
 					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//						oldText = updateTimeField.getText();
 						updateTimeField.setText(oldUpdateTimeText);
 					}
 					ToolBox.showDialog(
@@ -1455,6 +1418,9 @@ public class EventEditUI extends JPanel{
 							EventEditUI.this, DIALOG_INFO);
 				}
 			}
+			//Pasamos el foco al siguiente componente
+			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		    manager.focusNextComponent();
 		}
 		
 		public void setOldUpdateDateText(String text) {

@@ -2248,9 +2248,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventEditUI class:
 		Add attributes
-			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse, updatedTimestamp
+			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse
 		Delete attributes
-			selector, panelVisible
+			selector, panelVisible, updatedTimestamp 
 		Add testData() --ok-- 
 		Add buildStringTimestamp() --ok--
 		Add backToEventDataScreen() --ok--
@@ -2285,7 +2285,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Add attributes
-			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText, secondTest
+			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText
 		Add actionPerformed()
 		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
 		Update constructor
@@ -2294,7 +2294,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & EDIT UPDATE ok--
 					 --back to selectedEdit date&time if date after updates date EDIT EVENT ok--
 					 --back to selectedUpdate or selectedEdit date&time if date not valid all cases ok--
-					 --warning if selectedUpdate date&time before previous updates NEW UPDATE & EDIT UPDATE ok--
+					 --warning if selectedUpdate date&time before previous updates deleted, done in focus listener--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add attributes
@@ -2304,7 +2304,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
 		Update constructor
 		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--
-				   --all code copied except KeyboardFocusManager.focusNextComponent()--
+				   --all code copied--
+				   --warning if selectedUpdate date&time before previous updates fixed & ok--
 
 	* - Package main.java.test
 
