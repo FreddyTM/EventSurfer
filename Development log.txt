@@ -2281,6 +2281,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --EDIT UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
 					   check date not before previous updates ok, uses backToEventDataScreen(),
 					   select previous selected update in EventDataUI ok--
+					 --fix edit update not refreshing event state--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
