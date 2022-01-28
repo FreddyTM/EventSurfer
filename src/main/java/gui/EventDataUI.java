@@ -576,21 +576,6 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
-//	public int getContainersTotalWidth () {
-//		return eventsContainer.getWidth() + filtersContainer.getWidth() + 100;
-//	}
-	
-//	private void setHorizontalScrollBarMaxWidth() {
-//		
-////		EventDataUI.this.getParent().getClass();
-//		JScrollPane pane = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, EventDataUI.this);
-//		pane.getHorizontalScrollBar().setMaximum(getContainersTotalWidth ());
-//		
-////		Container container = EventDataUI.this.get
-////		JScrollPane pane = (JScrollPane) EventDataUI.this.getParent();
-////		JScrollBar hBar = (JScrollBar) this.getParent().getHorizontalScrollBar();
-//	}
-	
 	/**
 	 * Dimensiona los paneles que contendrán las tablas de incidencias y actualizaciones en función del tamaño de la pantalla
 	 * @param panel panel a dimensionar
@@ -705,7 +690,7 @@ public class EventDataUI extends JPanel{
 						 //Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
 						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
-						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 200 ? 15000 : initialDelay);
+						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 100 ? 15000 : initialDelay);
 //						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
 						 jcomp.setToolTipText(dataLength < 100 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
@@ -725,12 +710,7 @@ public class EventDataUI extends JPanel{
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
 		formatEventTable();
-		
-//		First remove the column from the view
-//			table.removeColumn(table.getColumnModel().getColumn(4));
-//		Then retrieve the data from the model.
-//			table.getModel().getValueAt(table.getSelectedRow(),4);
-		
+
 //		//Debug
 //		System.out.println("Creando el contenido de la tabla de eventos");
 		
@@ -859,11 +839,6 @@ public class EventDataUI extends JPanel{
 		updatesTable.setFillsViewportHeight(true);
 		updatesTable.setAutoCreateRowSorter(true);
 		formatUpdatesTable();
-		
-//		First remove the column from the view
-//			table.removeColumn(table.getColumnModel().getColumn(4));
-//		Then retrieve the data from the model.
-//			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
 //		//Debug
 //		System.out.println("Creando el contenido de la tabla de actualizaciones");
@@ -1742,6 +1717,10 @@ public class EventDataUI extends JPanel{
 
 	public static String getAllEnabled() {
 		return ALL_ENABLED;
+	}
+
+	public JButton getDeleteUpdateButton() {
+		return deleteUpdateButton;
 	}
 
 }
