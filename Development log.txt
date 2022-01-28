@@ -2253,7 +2253,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update actionPerformed --all JOptionPanel show centered justified text--
 
 	· Timerjob class (inner EventDataUI class):
-		Update run() --unified behaviour for BusinessUnit, Event & EventUpdate, need some fixing yet--
+		Update run() --unified behaviour for BusinessUnit, Event & EventUpdate, data updated sometimes but
+			        not always, need some fixing yet--
+			     --gets firstUpdate from findFirstUpdate()--
 
 	· EventEditUI class:
 		Add attributes

@@ -2,7 +2,6 @@ package main.java.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +14,6 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,7 +38,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -62,14 +58,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
-import main.java.company.User;
 import main.java.event.Event;
 import main.java.event.EventUpdate;
-import main.java.gui.AppWindow;
-import main.java.gui.EventEditUI;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
@@ -1096,7 +1088,7 @@ public class EventDataUI extends JPanel{
 					//Si la actualización seleccionada se borra correctamente de la base de datos
 					if (new EventUpdate().deleteEventUpdateFromDb(session.getConnection(), updateSelected)) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
-						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
+						PersistenceManager.registerTableModification(infoLabel, "ACTUALIZACIÓN BORRADA: ", session.getConnection(), tNow,
 								EventUpdate.TABLE_NAME);
 						//Eliminamos la actualización de la lista de actualizaciones de la incidencia seleccionada
 						eventSelected.getUpdates().remove(updateSelected);
@@ -1120,20 +1112,11 @@ public class EventDataUI extends JPanel{
 	 * @param mode modo de creación / edición de incidencias y actualizaciones
 	 */
 	private void goToNewEditScreen(int mode) {
-//		AppWindow frame = selector.getFrame();
-//		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
-//				mode, EventDataUI.this);
 		EventEditUI eEditUI = new EventEditUI(session, mode, this);
 		eEditUI.setOpaque(true);
-//		frame.getBasePanel().add(eEditUI);
-//		this.setVisible(false);
-//		eEditUI.setVisible(true);
-		
 		this.setVisible(false);
 		eEditUI.setVisible(true);
 		scrollPane.getViewport().add(eEditUI);
-
-		
 	}
 	
 	/**
@@ -1535,7 +1518,7 @@ public class EventDataUI extends JPanel{
 		public void actionPerformed(ActionEvent e) {
 
 			//Debug
-			System.out.println("Editar incidencia");
+//			System.out.println("Editar incidencia");
 			int selectedRow = eventsTable.getSelectedRow();
 			System.out.print("Evento seleccionado nulo? ");
 			System.out.println(eventSelected == null);
@@ -1663,7 +1646,7 @@ public class EventDataUI extends JPanel{
 							for (int i = 0; i < bUnitEvents.size(); i++) {
 								if (selectedEventId == bUnitEvents.get(i).getId()) {
 									eventSelected = bUnitEvents.get(i);
-									firstUpdate = eventSelected.getUpdates().get(0);
+									firstUpdate = findFirstUpdate();
 									//Registramos la fila seleccionada en la tabla de incidencias
 									row = i;
 								}
