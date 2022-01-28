@@ -78,10 +78,7 @@ public class EventEditUI extends JPanel{
 	private static final String DIALOG_YES_NO = "yes_no";
 	
 	private CurrentSession session;
-//	private Selector selector;
 	private Timestamp tNow = ToolBox.getTimestampNow();
-	//Registra si el panel está visible o no
-//	private boolean panelVisible;
 	
 	private JTextPane eventEditTxt;
 	private JTextField companyField;
@@ -139,21 +136,14 @@ public class EventEditUI extends JPanel{
 	private String stringToParse;
 	private EventDataUI eDataUI;
 	
-	//Registra si una alerta de fecha anterior a actualizaciones previas se ha mostrado ya o no
-//	private boolean alertShown = false;
-//	private Timestamp updatedTimestamp;
-	
-
 	
 	public EventEditUI(CurrentSession session, int actionSelector, EventDataUI eDataUI) {
 		this.session = session;
-//		this.selector = selector;
 		this.actionSelector = actionSelector;
 		this.eDataUI = eDataUI;
 //		eventSelected = eDataUI.getEventSelected();
 //		updateSelected = eDataUI.getUpdateSelected();
 		setLayout(null);
-//		panelVisible = true;
 		
 		//Swing Components
 		eventEditTxt = new JTextPane();
@@ -370,22 +360,18 @@ public class EventEditUI extends JPanel{
 		eventDescriptionArea.setWrapStyleWord(true);
 		eventDescriptionArea.setBounds(260, 375, 540, 75);
 		eventDescriptionArea.setBackground(Color.WHITE);
-//		eventDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));	
 		eventDescriptionArea.setBorder(eventTitleField.getBorder());
-//		eventDescriptionArea.setEditable(false);
 		errorList.add(eventDescriptionArea);
 		add(eventDescriptionArea);
 		
 		updateDateField = new JTextField();
 		updateDateField.setText(eventDateField.getText());
-//		updateDateField.setEditable(false);
 		updateDateField.setColumns(10);
 		updateDateField.setBounds(260, 475, 70, 25);
 		add(updateDateField);
 		
 		updateTimeField = new JTextField();
 		updateTimeField.setText(eventTimeField.getText());
-//		updateTimeField.setEditable(false);
 		updateTimeField.setColumns(10);
 		updateTimeField.setBounds(260, 525, 40, 25);
 		add(updateTimeField);
@@ -413,7 +399,6 @@ public class EventEditUI extends JPanel{
 		updateDescriptionArea.setWrapStyleWord(true);
 		updateDescriptionArea.setBounds(260, 575, 540, 75);
 		updateDescriptionArea.setBackground(Color.WHITE);
-//		updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 		updateDescriptionArea.setBorder(eventTitleField.getBorder());
 		errorList.add(updateDescriptionArea);
 		add(updateDescriptionArea);
@@ -479,8 +464,7 @@ public class EventEditUI extends JPanel{
 		
 		//Initial setup
 		setup(actionSelector);
-		
-		
+			
 	}
 	
 	/**
@@ -738,9 +722,6 @@ public class EventEditUI extends JPanel{
 				if (array[i].equals(eventSelected.getEventType())) {
 					return i;
 				}
-//				if (array[i].equals(TypesStatesContainer.getEvType().getEventTypes().get(i + 1))) {
-//					return i;
-//				}
 				continue;
 			}			
 			//Si buscamos el índice de una lista de estados de incidencia
@@ -906,22 +887,11 @@ public class EventEditUI extends JPanel{
 	 * false en caso contrario
 	 */
 	private boolean isDateTimebeforePreviousUpdatesDateTime(String stringToParse, int index) {
-		
-//		//Debug
-//		System.out.println("Indice de entrada al método isDateTimebeforePreviousUpdatesDateTime: " + index);
+
 		Timestamp dateTimeAtIndex = stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN);
-//	
-//		//Debug
-//				System.out.println("dateTimeAtIndex: " + dateTimeAtIndex);
-
 		Timestamp dateTimeAtPreviousIndex = (Timestamp) eDataUI.getUpdatesTable().getModel().getValueAt(index - 1, 2);
-//		
-//		//Debug
-//		System.out.println("dateTimeAtPreviousIndex: " + dateTimeAtPreviousIndex);
-
 		//Si la fecha a comprobar es anterior a la fecha de la actualización anterior
 		if (dateTimeAtIndex.before(dateTimeAtPreviousIndex)) {
-//			System.out.println("dateTimeAtIndex.before(dateTimeAtPreviousIndex)");
 			return true;
 		}
 		return false;
@@ -997,8 +967,7 @@ public class EventEditUI extends JPanel{
 				infoLabel.setText(errorLengthText);
 				goodData = false;
 			}
-		}		
-		
+		}				
 		return goodData;
 	}
 	
@@ -1028,8 +997,6 @@ public class EventEditUI extends JPanel{
 		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
 		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
 		String pattern; //Patrón de validación de fechas
-
-//		boolean secondTest = false; //Control de tercera validación de fechas en NEW_UPDATE y EDIT_UPDATE
 		
 		public EventDateTimeIntroListener (String oldText, String pattern) {
 			this.oldText = oldText;
@@ -1179,7 +1146,6 @@ public class EventEditUI extends JPanel{
 //				}
 //			}
 //			//Pasamos el foco al siguiente componente
-////			manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		    manager.focusNextComponent();
 		}
 
@@ -1516,9 +1482,6 @@ public class EventEditUI extends JPanel{
 						tNow = ToolBox.getTimestampNow();
 						//Registramos fecha y hora de la actualización de los datos de la tabla event
 						PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "", session.getConnection(), tNow, Event.TABLE_NAME);
-//						PersistenceManager.registerTableModification(infoLabel, "NUEVA INCIDENCIA REGISTRADA EN " + session.getbUnit().getNombre(),
-//								session.getConnection(), tNow, Event.TABLE_NAME);
-						
 						//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 						EventUpdate newEventUpdate = new EventUpdate();
 						newEventUpdate.setEvent(storedEvent);
@@ -1557,8 +1520,6 @@ public class EventEditUI extends JPanel{
 							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
 							eDataUI.setEventSelected(null);
 							eDataUI.setUpdateSelected(null);
-//							//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
-//							eDataUI.buttonSwitcher(eDataUI.getUpdateButtonSet(), eDataUI.getNewEnabled());
 							//Volvemos a la pantalla de gestión de incidencias
 							backToEventDataScreen();
 						} else {
@@ -1647,13 +1608,6 @@ public class EventEditUI extends JPanel{
 							System.out.println("updatedEvent añadido. Eventos en bUnit? " + session.getbUnit().getEvents().size());
 //							eventSelected = updatedEvent;
 							
-//							eventSelected.setArea(updatedEvent.getArea());
-//							eventSelected.setEventType(updatedEvent.getEventType());
-//							eventSelected.setTitulo(updatedEvent.getTitulo());
-//							eventSelected.setDescripcion(updatedEvent.getDescripcion());
-//							eventSelected.setEventState(updatedEvent.getEventState());
-							
-
 //							//Debug
 //							int index2 = session.getbUnit().getEvents().indexOf(eventSelected);
 //							if (index2 != -1) {
@@ -1935,8 +1889,7 @@ public class EventEditUI extends JPanel{
 //						eventSelected.getUpdates().add(index, updatedEventUpdate);
 //						////////////////////////////////////////////////////////////////////////////////
 
-						
-						
+											
 //						//Debug
 //						System.out.println("eventUpdate eliminado");
 						
@@ -1947,12 +1900,6 @@ public class EventEditUI extends JPanel{
 //						eventSelected.getUpdates().remove(updateSelected);
 //						eventSelected.getUpdates().add(updatedEventUpdate);
 //						updateSelected = updatedEventUpdate;
-						
-						
-//						updateSelected.setFechaHora(updatedEventUpdate.getFechaHora());
-//						updateSelected.setAutor(updatedEventUpdate.getAutor());
-//						updateSelected.setDescripcion(updatedEventUpdate.getDescripcion());
-						
 						
 						//Debug
 						System.out.println("El id de la actualización actualizada es: " + updatedEventUpdate.getId());
