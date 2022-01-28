@@ -556,10 +556,14 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(false);
 				updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
+//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						DATE_PATTERN));
+//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -609,10 +613,14 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
+//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						DATE_PATTERN));
+//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -665,10 +673,14 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
+//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						DATE_PATTERN));
+//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
+//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -1865,34 +1877,65 @@ public class EventEditUI extends JPanel{
 						PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "INCIDENCIA ACTUALIZADA: ",
 								session.getConnection(), tNow, EventUpdate.TABLE_NAME);
 						
+						eventSelected.getUpdates().remove(updateSelected);
+						eventSelected.getUpdates().add(updatedEventUpdate);
+						eDataUI.setFirstUpdate(eDataUI.findFirstUpdate());
 						
-						Iterator<EventUpdate> eUiterator = eventSelected.getUpdates().iterator();
-						int index = 0;
-						while(eUiterator.hasNext()) {
-							EventUpdate up = (EventUpdate) eUiterator.next();
-							if (up.getId() == updatedEventUpdate.getId()) {
-								eUiterator.remove();
-								System.out.println("eventUpdate eliminado en índice " + index);
-								break;
-							}
-							index ++;
-						}
+//						List<EventUpdate> newUpdatesList = new ArrayList<EventUpdate>();
+//						if (updateSelected.getId() == eDataUI.getFirstUpdate().getId()) {
+//							
+//							//Debug
+//							System.out.println("Editamos la actualización inicial ");
+//							System.out.println("Id actualización inicial " + eDataUI.getFirstUpdate().getId());
+//							System.out.println("Id actualización seleccionada " + updateSelected.getId());
+//							
+//							//Añadir primero updatedEventUpdate a newUpdatesList y luego todas las demás
+//							newUpdatesList.add(updatedEventUpdate);
+//							for (int i = 1; i < eventSelected.getUpdates().size(); i++) {
+//								newUpdatesList.add(eventSelected.getUpdates().get(i));
+//								
+//								//Debug
+//								System.out.println("Id actualización inicial en newUpdatesList " + newUpdatesList.get(0).getId());
+//								
+//							}
+//							//Asignar newUpdatesList como lista de actualizaciones de la incidencia seleccionada
+//							eventSelected.setUpdates(newUpdatesList);
+//							//Asignar updatedEventUpdate como actualización inicial
+//							eDataUI.setFirstUpdate(eDataUI.findFirstUpdate());
+//							
+//						} else {
+//							//Debug
+//							System.out.println("Editamos una actualización que no es la actualización inicial ");
+//							System.out.println("Id actualización inicial " + eDataUI.getFirstUpdate().getId());
+//							System.out.println("Id actualización seleccionada " + updateSelected.getId());
+//							
+//							//Averiguar índice de actualización seleccionada
+//							for (int i = 1; i < eventSelected.getUpdates().size(); i++) {
+//								
+//							}
+//							//Insertar actualizaciones en newUpdatesList hasta indice, luego updatedEventUpdate y luego el resto si quedan
+//							
+//							//Asignar newUpdatesList(0) como actualización inicial
+//						}
 						
-//						session.getbUnit().getEvents().add(updatedEvent); // add update at index
 						
-						eventSelected.getUpdates().add(index, updatedEventUpdate);
-						
-//						Iterator<Event> eIterator = session.getbUnit().getEvents().iterator();
-//						while(eIterator.hasNext()) {
-//							Event ev = (Event) eIterator.next();
-//							if (ev.getId() == eventSelected.getId()) {
-//								eIterator.remove();
-//								System.out.println("eventSelected eliminado");
+//						////////////////////////////////////////////////////////////////////////////////
+//						Iterator<EventUpdate> eUiterator = eventSelected.getUpdates().iterator();
+//						int index = 0;
+//						while(eUiterator.hasNext()) {
+//							EventUpdate up = (EventUpdate) eUiterator.next();
+//							if (up.getId() == updatedEventUpdate.getId()) {
+//								eUiterator.remove();
+//								System.out.println("eventUpdate eliminado en índice " + index);
 //								break;
 //							}
+//							index ++;
 //						}
 //						
-//						session.getbUnit().getEvents().add(eventSelected);
+//						eventSelected.getUpdates().add(index, updatedEventUpdate);
+//						////////////////////////////////////////////////////////////////////////////////
+
+						
 						
 //						//Debug
 //						System.out.println("eventUpdate eliminado");

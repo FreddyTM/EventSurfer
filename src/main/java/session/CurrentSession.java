@@ -492,7 +492,7 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event":
-								
+							case "event_update":	
 								//Recargamos los datos de las incidencias de todas las unidades de negocio
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 									List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
@@ -517,17 +517,17 @@ public class CurrentSession {
 //								}
 //								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 //								break;
-							case "event_update":
-								//Recargamos los datos de las incidencias de todas las unidades de negocio
-								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
-									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
-									for (Event event: oneUnit.getEvents()) {
-										List<EventUpdate> eUpdates = new EventUpdate().getEventUpdatesFromDB(conn, event);
-										event.setUpdates(eUpdates);
-									}
-								}
-								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
-								break;
+//							case "event_update":
+//								//Recargamos los datos de las incidencias de todas las unidades de negocio
+//								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+//									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
+//									for (Event event: oneUnit.getEvents()) {
+//										List<EventUpdate> eUpdates = new EventUpdate().getEventUpdatesFromDB(conn, event);
+//										event.setUpdates(eUpdates);
+//									}
+//								}
+//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+//								break;
 								
 								//Old code --only session.bunit get its events updates updated--
 //								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 

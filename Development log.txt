@@ -2143,24 +2143,24 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			eventStateComboList, userField, VALIDATION_DATE_PATTERN, newEventList, editEventList, newUpdateList,
 			editUpdateList, NEW_EVENT_TITLE, EDIT_EVENT_TITLE, NEW_UPDATE_TITLE, EDIT_UPDATE_TITLE, eventEditTxt
 		Add setup() --switch structure--
-		Add getAreaComboBoxItemsFromSession() --not tested yet--
+		Add getAreaComboBoxItemsFromSession() --ok--
 		Add getters for EVENTEDIT_ACTION_NEW_EVENT, EVENTEDIT_ACTION_EDIT_EVENT, EVENTEDIT_ACTION_NEW_UPDATE,
 				EVENTEDIT_ACTION_EDIT_UPDATE
 		Add fillAreaComboBox() --ok--
 		Add fillEventTypeComboBox() --ok--
 		Add fillEventStateComboBox() --ok--
-		Add getSelectedIndexFromArray() --not tested yet--
+		Add getSelectedIndexFromArray() --ok--
 		Add goToNewEdit() --ok--
-		Add stringTotimestamp() --not tested yet--
-		Add checkDateTime() --not tested yet--
+		Add stringTotimestamp() --ok--
+		Add checkDateTime() 
 		Add dateIsValid() --ok--
 		Add timeIsValid() --ok--
-		Add goToData() --not tested yet--
+		Add goToData() 
 		Rename getSelectedAreaIndexFromArray() to getSelectedIndexFromArray()
 		Rename goToNewEdit() to goToNewEditScreen()
-		Update getSelectedIndexFromArray() --area list not tested yet--
-						   --event type list new search, not tested yet--
-						   --event state list new search, not tested yet--
+		Update getSelectedIndexFromArray() --area ok--
+						   --event type list new search, ok--
+						   --event state list new search, ok--
 		Update eventDescriptionArea border color
 		Update updateDescriptionArea border color
 		Update constructor --uses setup(), add screen label--
@@ -2174,8 +2174,8 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 			       --new update initial state & initial dataok, areatexts background color ok--
 			       --edit update initial state & initial dataok, areatexts background color ok--
 			       --screen title changes on action--
-		Update getAreaComboBoxItemsFromSession() --not tested yet--
-		Update stringTotimestamp() --try/catch to control date parse errors, in progress--
+		Update getAreaComboBoxItemsFromSession() --ok--
+		Update stringTotimestamp() --try/catch to control date parse errors, ok--
 		Update goToNewEdit() --add EventDataState parameter--
 		Delete userComboBox, change it to userField (JTextField)
 		Delete userComboList
@@ -2238,6 +2238,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add getNewEnabled()
 		Add getNewEditEnabled()
 		Add getAllEnabled()
+		Add findFirstUpdate() --first update found by earlier timestamp, ok--
 		Update infoLabel x position & width (same width as eventsContainer)
 		Update setPanelsDimensions() --update containers x position--
 		Update goToNewEditScreen() --uses scrollPane to switch panels--
@@ -2245,9 +2246,14 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update sortEventUpdatesByDate() --set visibility from private to default--
 		Update buttonSwitcher() --set visibility from private to default--
 
+	· EventTableSelectionListener (inner EventDataUI class):
+		Update valueChanged() --uses findFirstUpdate()--
+
 	· NewEventAction (inner EventDataUI class):
 		Update actionPerformed --all JOptionPanel show centered justified text--
 
+	· Timerjob class (inner EventDataUI class):
+		Update run() --unified behaviour for BusinessUnit, Event & EventUpdate, need some fixing yet--
 
 	· EventEditUI class:
 		Add attributes
@@ -2267,6 +2273,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update setup() --new update backup of initial data of date&time fields (needed in intro & focus listeners)--
 			       --edit update backup of initial data of date&time fields (needed in intro & focus listeners)--
 			       --edit event backup of initial data of date&time fields (needed in intro & focus listeners)--
+			       --uses findFirstUpdate()--
 		Update isDateTimebeforePreviousUpdatesDateTime() --parameters (string, int), new logic--
 
 	· OKAction class (inner EventEditUI class):
@@ -2284,7 +2291,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   select previous selected update in EventDataUI ok--
 					 --fix edit update not refreshing event state--
 					 --fix edit event not refreshing event table correctly--
-					 --edit update still having problems, work in progress...--
+					 --edit update almost done, more testing needed but working fine, uses findFirstUpdate()--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
