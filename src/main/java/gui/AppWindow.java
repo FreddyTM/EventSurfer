@@ -128,21 +128,21 @@ public class AppWindow extends JFrame {
 			session.setDisplays(displays);
 			session.setCurrentDisplay(currentDisplay);
 			
-			//Debug
-			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
+//			//Debug
+//			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
 			
 		  }
 
 		@Override
 		public void componentResized(ComponentEvent e) {
-			Dimension frameDimension = getSize();
-			System.out.println(frameDimension);
-			if (frameDimension.getWidth() < 1920) {
-				System.out.println("Anchura insuficiente");
-			}
-			if (frameDimension.getHeight() < 1024) {
-				System.out.println("Altura insuficiente");
-			}
+//			Dimension frameDimension = getSize();
+//			System.out.println(frameDimension);
+//			if (frameDimension.getWidth() < 1920) {
+//				System.out.println("Anchura insuficiente");
+//			}
+//			if (frameDimension.getHeight() < 1024) {
+//				System.out.println("Altura insuficiente");
+//			}
 		}
 
 		@Override
@@ -151,8 +151,8 @@ public class AppWindow extends JFrame {
 			session.setDisplays(displays);
 			session.setCurrentDisplay(currentDisplay);
 			
-			//Debug
-			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
+//			//Debug
+//			System.out.println("Detectado cambio en ventana del programa. Monitor actual: " + currentDisplay.getIDstring());
 			
 		}
 

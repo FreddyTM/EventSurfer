@@ -2274,7 +2274,8 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --NEW EVENT logic & timestamp parsing completed, ok,
 					   update EventDateUI ready, uses backToEventDataScreen(), ok--
 					 --EDIT EVENT logic & timestamp parsing completed, check date not after 2nd update ok ,
-					   update EventDateUI ready, uses backToEventDataScreen(), ok--
+					   update EventDateUI ready, select previous selected update in EventDataUI not tested yet,
+					   uses backToEventDataScreen(), ok--
 					 --NEW UPDATE logic & timestamp parsing completed, check date not before 1st update ok,
 					   check date not before previous updates ok, update EventDateUI ok,
 					   uses backToEventDataScreen(), ok--
@@ -2282,6 +2283,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					   check date not before previous updates ok, uses backToEventDataScreen(),
 					   select previous selected update in EventDataUI ok--
 					 --fix edit update not refreshing event state--
+					 --fix edit event not refreshing event table correctly--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
@@ -2299,6 +2301,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --back to selectedEdit date&time if date after updates date EDIT EVENT ok--
 					 --back to selectedUpdate or selectedEdit date&time if date not valid all cases ok--
 					 --warning if selectedUpdate date&time before previous updates deleted, done in focus listener--
+					 --Delegates all work on EventDateTimeFocusListener, only moves focus to next component--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add attributes
@@ -2310,8 +2313,6 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--
 				   --all code copied--
 				   --warning if selectedUpdate date&time before previous updates fixed & ok--
-
-	· CustomFocusTraversalPolicy class (new inner EventEditUI class): --not working yet--
 
 	* - Package main.java.test
 

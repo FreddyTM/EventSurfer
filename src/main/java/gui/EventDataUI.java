@@ -368,7 +368,7 @@ public class EventDataUI extends JPanel{
 		infoLabel.setBounds(50, 950, eventsContainer.getBounds().width, 25);
 //		infoLabel.setBounds(50, 965, 900, 25);
 		infoLabel.setBackground(Color.RED);
-		infoLabel.setText("TEXTO DE PRUEBA");
+//		infoLabel.setText("TEXTO DE PRUEBA");
 		add(infoLabel);
 		
 		//Por defecto se muestran las últimas 25 incidencias registradas
@@ -461,8 +461,8 @@ public class EventDataUI extends JPanel{
 		if(list.size() <= number) {
 			return list;
 		} else {
-			//Debug
-			System.out.println("Filtering...");
+//			//Debug
+//			System.out.println("Filtering...");
 			
 			List<Event> sublist = new ArrayList<Event>();
 			sublist = list.subList(list.size() - number, list.size());
@@ -501,16 +501,16 @@ public class EventDataUI extends JPanel{
 	    			//Orden ascendente
 	    			months = - months + 1;
 	    			
-	    			//Debug
-	    			System.out.println("months " + months);
+//	    			//Debug
+//	    			System.out.println("months " + months);
 	    			
 	    			for (int i = months; i <= 0; i++) { //orden ascendente
 	    				calendarReference = Calendar.getInstance();
 	    				calendarReference.add(Calendar.MONTH, i);
 	    				
-	    				//Debug
-	    				System.out.println("i " + i);
-	    				System.out.println("calendarReference " + calendarReference.get(Calendar.MONTH));
+//	    				//Debug
+//	    				System.out.println("i " + i);
+//	    				System.out.println("calendarReference " + calendarReference.get(Calendar.MONTH));
 	    				
 	    				for (Event event : list) {
 		    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
@@ -616,7 +616,8 @@ public class EventDataUI extends JPanel{
 	
 	/**
 	 * Dimensiona los paneles que contendrán las tablas de incidencias y actualizaciones en función del tamaño de la pantalla
-	 * Método que dimensiona automáticamente los paneles en función del tamaño de la pantalla (work in progress...)
+	 * Método que dimensiona automáticamente los paneles en función del tamaño de la pantalla
+	 * MÉTODO INCOMPLETO (work in progress...)
 	 */
 	private void setPanelsDimensions() {
 		//This code to windowlistener
@@ -629,7 +630,9 @@ public class EventDataUI extends JPanel{
 		System.out.println(currentDisplay.getDefaultConfiguration().getBounds().x);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		System.out.println(screenSize.height + " " + screenSize.width);
+		
+//		//Debug
+//		System.out.println(screenSize.height + " " + screenSize.width);
 		
 		//work in progress...
 		
@@ -643,6 +646,13 @@ public class EventDataUI extends JPanel{
 	private void buildEventTable(List<Event> list, String[] header) {
 		//Encabezados de la tabla
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
+		
+		//Debug
+		System.out.println();
+		System.out.println("CONSTRUYENDO TABLA DE INCIDENCIAS....");
+		System.out.println("-------------------------------------");
+		int num = 0;
+		
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
 		for (Event event: list) {
@@ -655,6 +665,21 @@ public class EventDataUI extends JPanel{
 			eventVector.add(event.getDescripcion());
 			eventVector.add(event.getEventState());
 			dataVector.add(eventVector);
+			
+			//Debug
+			System.out.println("Elemento " + num + " de la lista");
+			System.out.println("id " + event.getId());
+			System.out.println("fechahora: " + event.getUpdates().get(0).getFechaHora());
+			System.out.println("ACTUALIZACIONES");
+			for (int i = 0; i < event.getUpdates().size(); i++) {
+				EventUpdate update = event.getUpdates().get(i);
+				System.out.println("Update id " + update.getId());
+				System.out.println("Update event id " + update.getEvent().getId());
+				System.out.println("Update fechahora " + update.getFechaHora().toString());
+				System.out.println("Update descripcion " + update.getDescripcion());
+			}
+			
+			num +=1;
 		}
 		eventsTable = new JTable(dataVector, headerVector) {
 					
@@ -680,9 +705,9 @@ public class EventDataUI extends JPanel{
 						 //Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
 						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
-						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 500 ? 15000 : initialDelay);
+						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 200 ? 15000 : initialDelay);
 //						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
-						 jcomp.setToolTipText(dataLength < 500 ? getValueAt(row, col).toString()
+						 jcomp.setToolTipText(dataLength < 100 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
 				 }
@@ -706,8 +731,8 @@ public class EventDataUI extends JPanel{
 //		Then retrieve the data from the model.
 //			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
-		//Debug
-		System.out.println("Creando el contenido de la tabla de eventos");
+//		//Debug
+//		System.out.println("Creando el contenido de la tabla de eventos");
 		
 	}
 	
@@ -814,10 +839,10 @@ public class EventDataUI extends JPanel{
 						//Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
 						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
-						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 500 ? 15000 : initialDelay);
+						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 200 ? 15000 : initialDelay);
 //						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
-						 jcomp.setToolTipText(dataLength < 500 ? getValueAt(row, col).toString()
-								 : "<html><p width=\"600\">" + getValueAt(row, col).toString() + "</p></html>");
+						 jcomp.setToolTipText(dataLength < 250 ? getValueAt(row, col).toString()
+								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
 				 }
 				 return comp;
@@ -840,8 +865,8 @@ public class EventDataUI extends JPanel{
 //		Then retrieve the data from the model.
 //			table.getModel().getValueAt(table.getSelectedRow(),4);
 		
-		//Debug
-		System.out.println("Creando el contenido de la tabla de actualizaciones");
+//		//Debug
+//		System.out.println("Creando el contenido de la tabla de actualizaciones");
 		
 	}
 	
@@ -992,8 +1017,8 @@ public class EventDataUI extends JPanel{
 	private void updateEventUpdateButtonsStateOnSelection(int selectedRow) {
 		//Actualización inicial, usuarios ADMIN y MANAGER
 		if (selectedRow == 0 && !session.getUser().getUserType().equals("USER")) {
-			//Debug
-			System.out.println("La actualización inicial no se puede borrar");
+//			//Debug
+//			System.out.println("La actualización inicial no se puede borrar");
 			buttonSwitcher(UPDATE_BUTTON_SET, NEW_EDIT_ENABLED);
 			//return;
 		}
@@ -1106,7 +1131,7 @@ public class EventDataUI extends JPanel{
 //		AppWindow frame = selector.getFrame();
 //		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, EventDataUI.this.selector,
 //				mode, EventDataUI.this);
-		EventEditUI eEditUI = new EventEditUI(EventDataUI.this.session, mode, EventDataUI.this);
+		EventEditUI eEditUI = new EventEditUI(session, mode, this);
 		eEditUI.setOpaque(true);
 //		frame.getBasePanel().add(eEditUI);
 //		this.setVisible(false);
@@ -1140,10 +1165,10 @@ public class EventDataUI extends JPanel{
 				BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);
 				//La asignamos a la sesión
 				session.setbUnit(selectedBunit);
-				//Debug
-				for (User user : session.getbUnit().getUsers()) {
-					System.out.println(user.getUserAlias());
-				}
+//				//Debug
+//				for (User user : session.getbUnit().getUsers()) {
+//					System.out.println(user.getUserAlias());
+//				}
 				//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
 				//y el número de incidencias mostradas y totales
 				filterSelected.doClick();
@@ -1177,8 +1202,8 @@ public class EventDataUI extends JPanel{
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
 					
-					//Debug
-					System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
+//					//Debug
+//					System.out.println("BUnit de la sesión: " + session.getbUnit().getNombre());
 					
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
@@ -1310,6 +1335,7 @@ public class EventDataUI extends JPanel{
         	if (!e.getValueIsAdjusting()) {
         		
 				//Debug
+        		System.out.println("EventTableSelectionListener");
 				System.out.print("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
 				
 				if (eventsTable.getSelectedRow() > -1) {
@@ -1317,6 +1343,7 @@ public class EventDataUI extends JPanel{
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
 					
 					//Debug
+					
 					System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 					
 					//Actualizamos el estado de los botones de la tabla de incidencias
@@ -1488,6 +1515,9 @@ public class EventDataUI extends JPanel{
 			} 
 			//Si no hay errores, procedemos a crear la nueva incidencia
 			if (okNew) {
+				//Debug
+				System.out.println("Nueva incidencia");
+				
 				goToNewEditScreen(EventEditUI.getEventEditActionNewEvent());
 			}	
 		}
@@ -1503,6 +1533,14 @@ public class EventDataUI extends JPanel{
 
 			//Debug
 			System.out.println("Editar incidencia");
+			int selectedRow = eventsTable.getSelectedRow();
+			System.out.print("Evento seleccionado nulo? ");
+			System.out.println(eventSelected == null);
+			System.out.print("Evento seleccionado id: ");
+			System.out.println(eventSelected == null ? "evento nulo" : eventSelected.getId());
+			Event eventInBunit = new Event().getEventById(session.getbUnit(), (int) eventsTable.getModel().getValueAt(selectedRow, 0));
+			boolean x = eventSelected.getId() == eventInBunit.getId();
+			System.out.println("Evento seleccionado igual al que se almacena en la unidad de negocio? " + x);
 			
 			goToNewEditScreen(EventEditUI.getEventEditActionEditEvent());
 			
@@ -1565,54 +1603,7 @@ public class EventDataUI extends JPanel{
 			
 		}
 	}
-	
-//	/**
-//	 * Registra el estado de la pantalla de gestión de incidencias para pasarlo a la pantalla de creación / edición
-//	 * de incidencias y actualizaciones. En base a la creación / edición que se esté realizando se mostrará la información
-//	 * del estado que sea pertinente. Al aceptar o cancelar la creación / edición de incidencias y actualizaciones, se
-//	 * utiliza el estado registrado para retornar a la pantalla de gesitión de incidencias mostrando lo mismo que antes
-//	 * de salir de ella.
-//	 */
-//	class EventDataState {
-//		private JRadioButton filter;
-//		private Event event;
-//		private EventUpdate update;
-//		private boolean checkbox;
-//		
-//		public EventDataState (JRadioButton filter, Event event, EventUpdate update, boolean checkbox) {
-//			this.filter = filter;
-//			this.event = event;
-//			this.update = update;
-//			this.checkbox = checkbox;
-//		}
-//		
-//		/**
-//		 * Actualiza los atributos de la clase EventDataUI: eventSelected, updateSelected, filterSelected, activeFilterCheckBox
-//		 */
-//		public void setState() {
-//			EventDataUI.this.filterSelected = filter;
-//			EventDataUI.this.filterSelected.setSelected(true);
-//			EventDataUI.this.filterSelected.doClick();
-//			EventDataUI.this.eventSelected = event;
-//			EventDataUI.this.updateSelected = update;
-//			EventDataUI.this.activeFilterCheckBox.setSelected(checkbox);
-//		}
-//		
-//		public Event getEvent() {
-//			return event;
-//		}
-//		public EventUpdate getUpdate() {
-//			return update;
-//		}
-//		public JRadioButton getFilter() {
-//			return filter;
-//		}
-//		public boolean isCheckbox() {
-//			return checkbox;
-//		}
-//		
-//	}
-//	
+
 	/**
 	 * Clase que consulta al objeto session si los datos que le atañen han sido actualizados en la base de datos,
 	 * de manera que pueda actualizar el contenido del panel con dichos datos. Si el panel no está visible, no se
@@ -1620,6 +1611,8 @@ public class EventDataUI extends JPanel{
 	 */
 	private class TimerJob extends TimerTask {
 
+		///////////**************FIX UPDATING DATA DOES NOT RESPECT TABLES SELECTIONS & BUTTONS STATE***************//////////
+		
 		@Override
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
@@ -1657,8 +1650,11 @@ public class EventDataUI extends JPanel{
 					
 					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
 					if (updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
-						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
+						if (eventSelected != null) {
+							//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()),
+									getUpdatesTableHeader());
+						}
 						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
 			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
 						//Informamos por pantalla de la actualización

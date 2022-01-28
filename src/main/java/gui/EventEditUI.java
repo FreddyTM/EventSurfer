@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -149,8 +150,8 @@ public class EventEditUI extends JPanel{
 //		this.selector = selector;
 		this.actionSelector = actionSelector;
 		this.eDataUI = eDataUI;
-		eventSelected = eDataUI.getEventSelected();
-		updateSelected = eDataUI.getUpdateSelected();
+//		eventSelected = eDataUI.getEventSelected();
+//		updateSelected = eDataUI.getUpdateSelected();
 		setLayout(null);
 //		panelVisible = true;
 		
@@ -490,7 +491,9 @@ public class EventEditUI extends JPanel{
 	private void setup(int setupOption) {
 		actionSelector = setupOption;
 		int index = -1;
-		setScreenFocusTraversal();
+
+		eventSelected = eDataUI.getEventSelected();
+		updateSelected = eDataUI.getUpdateSelected();
 		switch (setupOption) {
 			//New event
 			case EVENTEDIT_ACTION_NEW_EVENT:
@@ -700,23 +703,6 @@ public class EventEditUI extends JPanel{
 			default:
 				//Undefined option
 		}
-	}
-	
-	private void setScreenFocusTraversal() {
-		Vector<Component> order = new Vector<Component>(7);
-		order.add(eventDateField);
-		order.add(eventTimeField);
-		order.add(areaComboBox);
-		order.add(eventTypeComboBox);
-		order.add(eventTitleField);
-		order.add(eventDescriptionArea);
-		order.add(updateDateField);
-		order.add(updateTimeField);
-		order.add(updateAuthorField);
-		order.add(updateDescriptionArea);
-		order.add(eventStateComboBox);
-		FocusTraversalPolicy traversalPolicy = new CustomFocusTraversalPolicy(order);
-		this.setFocusTraversalPolicy(traversalPolicy);
 	}
 	
 	/**
@@ -1030,6 +1016,7 @@ public class EventEditUI extends JPanel{
 		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
 		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
 		String pattern; //Patrón de validación de fechas
+
 //		boolean secondTest = false; //Control de tercera validación de fechas en NEW_UPDATE y EDIT_UPDATE
 		
 		public EventDateTimeIntroListener (String oldText, String pattern) {
@@ -1040,147 +1027,147 @@ public class EventEditUI extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-			String newText = ((JTextField) e.getSource()).getText();
-			//Fecha de incidencia
-			if (e.getSource() == eventDateField) {
-				//Si es una fecha válida
-				if (dateIsValid(newText, pattern)) {
-					//Comprobación de fecha al editar una incidencia
-					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
-						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
-						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
-						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
-							eventDateField.setText(oldEventDateText);
-							ToolBox.showDialog(
-									"<html><body><div align='center'>La fecha de una incidencia no puede ser posterior<br>"
-									+ "a la fecha de sus actualizaciones</div></body></html>",
-									EventEditUI.this, DIALOG_INFO);
-						}
-					}
-					updateDateField.setText(eventDateField.getText());
-//					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
-				} else {
-					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
-						eventDateField.setText(oldText);
-					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
-						eventDateField.setText(oldEventDateText);
-					}
-					updateDateField.setText(eventDateField.getText());
-					ToolBox.showDialog(
-							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
-							EventEditUI.this, DIALOG_INFO);
-				}
-			}
-			//Hora de incidencia
-			if (e.getSource() == eventTimeField) {
-				//Si es una fecha válida
-				if (timeIsValid(newText, pattern)) {
-					//Comprobación de fecha al editar una incidencia
-					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
-						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
-						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
-						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
-							eventTimeField.setText(oldEventTimeText);
-							ToolBox.showDialog(
-									"<html><body><div align='center'>La fecha de una incidencia no puede ser posterior<br>"
-									+ "a la fecha de sus actualizaciones</div></body></html>",
-									EventEditUI.this, DIALOG_INFO);
-						}
-					}
-					updateTimeField.setText(eventTimeField.getText());
-//					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
-				} else {
-					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
-						eventTimeField.setText(oldText);
-					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
-						eventTimeField.setText(oldEventTimeText);
-					}
-					updateTimeField.setText(eventTimeField.getText());
-					ToolBox.showDialog(
-							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
-							EventEditUI.this, DIALOG_INFO);
-				}
-			}
-			//Fecha de actualización
-			if (e.getSource() == updateDateField) {
-//				oldUpdateText = updateDateField.getText();
-				//Si es una fecha válida
-				if (dateIsValid(newText, pattern)) {
-					//Comprobación de fecha de actualización al crear o editar una actualización
-					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
-						if (isDateTimeBeforeEventDateTime(stringToParse)) {
-//							updateDateField.setText(oldText);
-							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
-								updateDateField.setText(oldText);								
-							}
-							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//								oldText = updateDateField.getText();
-								updateDateField.setText(oldUpdateDateText);
-							}
-							ToolBox.showDialog(
-									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
-									+ "a la fecha de la creación de la incidencia</div></body></html>",
-									EventEditUI.this, DIALOG_INFO);
-						}
-					}
-				//Si no es una fecha válida 
-				} else {
-//					updateDateField.setText(oldText);
-					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
-						updateDateField.setText(oldText);								
-					}
-					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//						oldText = updateDateField.getText();
-						updateDateField.setText(oldUpdateDateText);
-					}
-					ToolBox.showDialog(
-							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
-							EventEditUI.this, DIALOG_INFO);
-				}
-			}
-			//Hora de actualización
-			if (e.getSource() == updateTimeField) {
-//				oldUpdateText = updateTimeField.getText();
-				//Si es una hora válida
-				if (timeIsValid(newText, pattern)) {
-					//Comprobación de hora de actualización al crear o editar una actualización
-					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
-						if (isDateTimeBeforeEventDateTime(stringToParse)) {
-//							updateTimeField.setText(oldText);
-							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
-								updateTimeField.setText(oldText);								
-							}
-							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//								oldText = updateTimeField.getText();
-								updateTimeField.setText(oldUpdateTimeText);
-							}
-							ToolBox.showDialog(
-									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
-									+ "a la fecha de la creación de la incidencia</div></body></html>",
-									EventEditUI.this, DIALOG_INFO);
-						} 
-					}
-				//Si no es una hora válida
-				} else {
-//					updateTimeField.setText(oldText);
-					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
-						updateTimeField.setText(oldText);								
-					}
-					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
-//						oldText = updateTimeField.getText();
-						updateTimeField.setText(oldUpdateTimeText);
-					}
-					ToolBox.showDialog(
-							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
-							EventEditUI.this, DIALOG_INFO);
-				}
-			}
-			//Pasamos el foco al siguiente componente
-//			manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+//			String newText = ((JTextField) e.getSource()).getText();
+//			//Fecha de incidencia
+//			if (e.getSource() == eventDateField) {
+//				//Si es una fecha válida
+//				if (dateIsValid(newText, pattern)) {
+//					//Comprobación de fecha al editar una incidencia
+//					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+//						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+//						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
+//						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
+//							eventDateField.setText(oldEventDateText);
+//							ToolBox.showDialog(
+//									"<html><body><div align='center'>La fecha de una incidencia no puede ser posterior<br>"
+//									+ "a la fecha de sus actualizaciones</div></body></html>",
+//									EventEditUI.this, DIALOG_INFO);
+//						}
+//					}
+//					updateDateField.setText(eventDateField.getText());
+////					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
+//				} else {
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+//						eventDateField.setText(oldText);
+//					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+//						eventDateField.setText(oldEventDateText);
+//					}
+//					updateDateField.setText(eventDateField.getText());
+//					ToolBox.showDialog(
+//							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+//							EventEditUI.this, DIALOG_INFO);
+//				}
+//			}
+//			//Hora de incidencia
+//			if (e.getSource() == eventTimeField) {
+//				//Si es una fecha válida
+//				if (timeIsValid(newText, pattern)) {
+//					//Comprobación de fecha al editar una incidencia
+//					if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+//						stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
+//						//Comprobamos que la fecha introducida no sea posterior a la de las actualizaciones de la incidencia
+//						if (isDateTimeAfterEventUpdatesDateTime(stringToParse)) {
+//							eventTimeField.setText(oldEventTimeText);
+//							ToolBox.showDialog(
+//									"<html><body><div align='center'>La fecha de una incidencia no puede ser posterior<br>"
+//									+ "a la fecha de sus actualizaciones</div></body></html>",
+//									EventEditUI.this, DIALOG_INFO);
+//						}
+//					}
+//					updateTimeField.setText(eventTimeField.getText());
+////					oldText = newText; //Opción de recuperar el último texto válido introducido, no el primer texto que apareció en el textfield
+//				} else {
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+//						eventTimeField.setText(oldText);
+//					} else if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {	
+//						eventTimeField.setText(oldEventTimeText);
+//					}
+//					updateTimeField.setText(eventTimeField.getText());
+//					ToolBox.showDialog(
+//							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+//							EventEditUI.this, DIALOG_INFO);
+//				}
+//			}
+//			//Fecha de actualización
+//			if (e.getSource() == updateDateField) {
+////				oldUpdateText = updateDateField.getText();
+//				//Si es una fecha válida
+//				if (dateIsValid(newText, pattern)) {
+//					//Comprobación de fecha de actualización al crear o editar una actualización
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+//						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+//						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
+//						if (isDateTimeBeforeEventDateTime(stringToParse)) {
+////							updateDateField.setText(oldText);
+//							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+//								updateDateField.setText(oldText);								
+//							}
+//							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+////								oldText = updateDateField.getText();
+//								updateDateField.setText(oldUpdateDateText);
+//							}
+//							ToolBox.showDialog(
+//									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
+//									+ "a la fecha de la creación de la incidencia</div></body></html>",
+//									EventEditUI.this, DIALOG_INFO);
+//						}
+//					}
+//				//Si no es una fecha válida 
+//				} else {
+////					updateDateField.setText(oldText);
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+//						updateDateField.setText(oldText);								
+//					}
+//					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+////						oldText = updateDateField.getText();
+//						updateDateField.setText(oldUpdateDateText);
+//					}
+//					ToolBox.showDialog(
+//							"<html><body><div align='center'>Fecha incorrecta</div></body></html>",
+//							EventEditUI.this, DIALOG_INFO);
+//				}
+//			}
+//			//Hora de actualización
+//			if (e.getSource() == updateTimeField) {
+////				oldUpdateText = updateTimeField.getText();
+//				//Si es una hora válida
+//				if (timeIsValid(newText, pattern)) {
+//					//Comprobación de hora de actualización al crear o editar una actualización
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE || actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+//						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
+//						//Comprobamos que la fecha introducida no sea anterior a la creación de la incidencia
+//						if (isDateTimeBeforeEventDateTime(stringToParse)) {
+////							updateTimeField.setText(oldText);
+//							if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+//								updateTimeField.setText(oldText);								
+//							}
+//							if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+////								oldText = updateTimeField.getText();
+//								updateTimeField.setText(oldUpdateTimeText);
+//							}
+//							ToolBox.showDialog(
+//									"<html><body><div align='center'>La fecha de una nueva actualización no pueden ser anteriores<br>"
+//									+ "a la fecha de la creación de la incidencia</div></body></html>",
+//									EventEditUI.this, DIALOG_INFO);
+//						} 
+//					}
+//				//Si no es una hora válida
+//				} else {
+////					updateTimeField.setText(oldText);
+//					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+//						updateTimeField.setText(oldText);								
+//					}
+//					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
+////						oldText = updateTimeField.getText();
+//						updateTimeField.setText(oldUpdateTimeText);
+//					}
+//					ToolBox.showDialog(
+//							"<html><body><div align='center'>Hora incorrecta</div></body></html>",
+//							EventEditUI.this, DIALOG_INFO);
+//				}
+//			}
+//			//Pasamos el foco al siguiente componente
+////			manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		    manager.focusNextComponent();
 		}
 
@@ -1459,47 +1446,6 @@ public class EventEditUI extends JPanel{
 		}
 	}
 	
-	/**
-	 * Controla el ciclo de paso de foco de un componente a otro
-	 * Fuente: https://docs.oracle.com/javase/tutorial/uiswing/examples/misc/FocusTraversalDemoProject/src/misc/FocusTraversalDemo.java
-	 */
-	private class CustomFocusTraversalPolicy extends FocusTraversalPolicy {
-		Vector<Component> order;
-
-		public CustomFocusTraversalPolicy(Vector<Component> order) {
-			this.order = new Vector<Component>(order.size());
-			this.order.addAll(order);
-		}
-		public Component getComponentAfter(Container focusCycleRoot,
-				Component aComponent)
-		{
-			int idx = (order.indexOf(aComponent) + 1) % order.size();
-			return order.get(idx);
-		}
-
-		public Component getComponentBefore(Container focusCycleRoot,
-				Component aComponent)
-		{
-			int idx = order.indexOf(aComponent) - 1;
-			if (idx < 0) {
-				idx = order.size() - 1;
-			}
-			return order.get(idx);
-		}
-
-		public Component getDefaultComponent(Container focusCycleRoot) {
-			return order.get(0);
-		}
-
-		public Component getLastComponent(Container focusCycleRoot) {
-			return order.lastElement();
-		}
-
-		public Component getFirstComponent(Container focusCycleRoot) {
-			return order.get(0);
-		}
-	}
-	
 	private class OKAction extends AbstractAction {
 		public OKAction() {
 			putValue(NAME, "Aceptar");
@@ -1544,7 +1490,7 @@ public class EventEditUI extends JPanel{
 					newEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
 					//Debug
 //					System.out.println(areaComboBox.getSelectedItem().toString());
-//					newEvent.setEventType((String) areaComboBox.getSelectedItem());
+//					newEvent.setEventType((String) eventTypeComboBox.getSelectedItem());
 					newEvent.setEventType(eventTypeComboBox.getSelectedItem().toString());
 					newEvent.setTitulo(eventTitleField.getText());
 					newEvent.setDescripcion(eventDescriptionArea.getText());
@@ -1587,14 +1533,15 @@ public class EventEditUI extends JPanel{
 							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
 							eDataUI.getFilterSelected().doClick();
-							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
-							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
-								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
-								if (!eDataUI.getCurrentEventList().contains(storedEvent)) {
-									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
-											+ ". LA INCIDENCIA CREADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
-								}
-							}
+//							//Si el filtro seleccionado no es allEvents
+//							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
+//								//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
+//								//Buscamos la incidencia creada en la lista de incidencias filtrada
+//								if (!eDataUI.getCurrentEventList().contains(storedEvent)) {
+//									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
+//											+ ". LA INCIDENCIA CREADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
+//								}
+//							}
 							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
 							eDataUI.setEventSelected(null);
 							eDataUI.setUpdateSelected(null);
@@ -1610,8 +1557,22 @@ public class EventEditUI extends JPanel{
 					}
 				}
 				
-				//Edición de incidencia
+				//Edición de incidencia **********************************************************************************************
 				if (actionSelector == EVENTEDIT_ACTION_EDIT_EVENT) {
+					
+					//Debug
+					System.out.println("Dentro de EVENTEDIT_ACTION_EDIT_EVENT");
+					
+					eventSelected = eDataUI.getEventSelected();
+//					//Debug
+//					int index = session.getbUnit().getEvents().indexOf(eventSelected);
+//					System.out.println("eventSelected null: " + eventSelected == null);
+//					System.out.println("Buscamos el índice de eventSelected antes de grabar a la dB");
+//					if (index != -1) {
+//						System.out.println("indice encontrado: " + index);
+//					} else {
+//						System.out.println("indice no encontrado: " + index);
+//					}
 					
 					//Objeto que recoge los datos actualizados
 					Event updatedEvent = new Event();
@@ -1621,8 +1582,15 @@ public class EventEditUI extends JPanel{
 					//de la incidencia seleccionada
 					String stringToParse = buildStringTimestamp(eventDateField.getText(), eventTimeField.getText());
 					eventSelected.getUpdates().get(0).setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
+					
+//					//Debug
+//					System.out.println("La actualización inicial es " + eventSelected.getUpdates().get(0).getId() + " - "
+//							+ eventSelected.getUpdates().get(0).getFechaHora() + " - " + eventSelected.getUpdates().get(0).getDescripcion());
+					
+					
+					
 					updatedEvent.setArea(new Area().getAreaByName(session.getbUnit(), areaComboBox.getSelectedItem().toString()));
-					updatedEvent.setEventType(areaComboBox.getSelectedItem().toString());
+					updatedEvent.setEventType(eventTypeComboBox.getSelectedItem().toString());
 					updatedEvent.setTitulo(eventTitleField.getText());
 					updatedEvent.setDescripcion(eventDescriptionArea.getText());
 					updatedEvent.setEventState(eventStateComboBox.getSelectedItem().toString());
@@ -1640,40 +1608,154 @@ public class EventEditUI extends JPanel{
 							//Registramos fecha y hora de la actualización de los datos de la tabla event_update
 							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "INCIDENCIA ACTUALIZADA: ",
 									session.getConnection(), tNow, EventUpdate.TABLE_NAME);
-							//Borramos la incidencia seleccionada de la lista de incidencias de la bUnit de la sesión, y le añadimos
-							//la incidencia actualizada
-							session.getbUnit().getEvents().remove(eventSelected);
+							
+							//Actualizamos la incidencia seleccionada
+							
+							//Debug
+							System.out.println("Eventos en bUnit? " + session.getbUnit().getEvents().size());
+							
+//							session.getbUnit().getEvents().remove(eventSelected);
+							
+							Iterator<Event> iterator = session.getbUnit().getEvents().iterator();
+							while(iterator.hasNext()) {
+								Event ev = (Event) iterator.next();
+								if (ev.getId() == updatedEvent.getId()) {
+									iterator.remove();
+									System.out.println("eventSelected eliminado");
+									break;
+								}
+							}
+							
+							//Debug
+							System.out.println("Eventos en bUnit? " + session.getbUnit().getEvents().size());
+							
 							session.getbUnit().getEvents().add(updatedEvent);
 							
+							//Debug
+							System.out.println("updatedEvent añadido. Eventos en bUnit? " + session.getbUnit().getEvents().size());
+//							eventSelected = updatedEvent;
+							
+//							eventSelected.setArea(updatedEvent.getArea());
+//							eventSelected.setEventType(updatedEvent.getEventType());
+//							eventSelected.setTitulo(updatedEvent.getTitulo());
+//							eventSelected.setDescripcion(updatedEvent.getDescripcion());
+//							eventSelected.setEventState(updatedEvent.getEventState());
+							
+
+//							//Debug
+//							int index2 = session.getbUnit().getEvents().indexOf(eventSelected);
+//							if (index2 != -1) {
+//								System.out.println("indice encontrado: " + index2);
+//							} else {
+//								System.out.println("indice no encontrado: " + index2);
+//							}
+							
+							
+//							VERIFICAR QUE EL BORRADO Y LA REINSERCIÓN DE LA INCIDENCIA NO ROMPEN NADA
+//							//Borramos la incidencia seleccionada de la lista de incidencias de la bUnit de la sesión, y le añadimos
+//							//la incidencia actualizada
+//							session.getbUnit().getEvents().remove(eventSelected);
+//							session.getbUnit().getEvents().add(updatedEvent);
+//							eventSelected = updatedEvent;
+
 							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+							
 							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
 							eDataUI.getFilterSelected().doClick();
-							//Si la incidencia creada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
-							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
-								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
-								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
-									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
-											+ ". LA INCIDENCIA EDITADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
-									//Deseleccionamos incidencia y actualización seleccionados si los hubiera
-									eDataUI.setEventSelected(null);
-									eDataUI.setUpdateSelected(null);
-									//Vaciamos la tabla de actualizaciones.
-									eDataUI.updateUpdatesTable(new ArrayList<EventUpdate>(),EventDataUI.getUpdatesTableHeader());		
-									//Solo el botón de nueva incidencia queda habilitado
-									eDataUI.buttonSwitcher(EventDataUI.getEventButtonSet(), EventDataUI.getNewEnabled());
-									eDataUI.buttonSwitcher(EventDataUI.getUpdateButtonSet(), EventDataUI.getAllDisabled());
-								}
-							} else {
-								//********LA INCIDENCIA EDITADA SÍ QUE APARECE EN EL FILTRO*********//
-								//Hay que encontrarla y seleccionarla
-							}
-//							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
-//							eDataUI.setEventSelected(null);
-//							eDataUI.setUpdateSelected(null);
+							
+//							//Encontrar la fila que ocupa la actualilzación editada , y seleccionarla en la tabla
+//							for (int i = 0; i < eDataUI.getEventsTable().getRowCount(); i++) {
+//								
+//								//Debug
+//								System.out.println("El número de filas es: " + eDataUI.getEventsTable().getRowCount());
+//								System.out.println("Buscando en fila: " + i);
+//								
+//								int eventIdAtSelectedRow = (int) eDataUI.getEventsTable().getModel().getValueAt(i, 0);
+//								
+//								//Debug
+//								System.out.println("El id encontrado es: " + (int) eDataUI.getEventsTable().getModel().getValueAt(i, 0));
+//								
+//								if (eventIdAtSelectedRow == eventSelected.getId()) {
+//									eDataUI.getEventsTable().setRowSelectionInterval(i, i);
+////									eventSelected = new Event().getEventById(session.getbUnit(), eventIdAtSelectedRow);
+//									
+//									//Debug
+//									System.out.println("Id de eventSelected" + eventSelected.getId());
+//									System.out.println("Id de rowId: " + eventIdAtSelectedRow);
+//									System.out.println("Fechahora de 1a actualización de eventselected" + eventSelected.getUpdates().get(0).getFechaHora());
+//									
+//									eDataUI.getEventsTable().repaint();
+//									System.out.println("Fechahora de 1a actualización de eventselected después de repintar la tabla de incidencias"
+//									+ eventSelected.getUpdates().get(0).getFechaHora());
+//									System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+//									//eDataUI EventTableSelectionListener se encarga de gestionar el estado adecuado de los botones
+//								}
+//							}
+							
+//							//Si el filtro seleccionado no es allEvents
+//							if (eDataUI.getFilterSelected() != eDataUI.getAllEvents()) {
+//								//Buscamos la incidencia seleccionada en la lista de incidencias filtrada
+//								//Si la incidencia actualizada queda fuera de la tabla a causa del filtro seleccionado, mostramos un aviso
+//								if (!eDataUI.getCurrentEventList().contains(eDataUI.getEventSelected())) {
+//									eDataUI.getInfoLabel().setText(eDataUI.getInfoLabel().getText()
+//											+ ". LA INCIDENCIA EDITADA NO APARECE EN LA TABLA DEBIDO AL FILTRO SELECCIONADO");
+//									//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+//									eDataUI.setEventSelected(null);
+//									eDataUI.setUpdateSelected(null);
+//									
+//									//Debug
+//									System.out.println("setEventSelected y setUpdateSelected valen null");
+//									
+////									//Vaciamos la tabla de actualizaciones. --YA LO HACE EL FILTRO--
+////									eDataUI.updateUpdatesTable(new ArrayList<EventUpdate>(),EventDataUI.getUpdatesTableHeader());		
+//									//Solo el botón de nueva incidencia queda habilitado --YA LO HACE EL TABLE SELECTION LISTENER--
+////									eDataUI.buttonSwitcher(EventDataUI.getEventButtonSet(), EventDataUI.getNewEnabled());
+////									eDataUI.buttonSwitcher(EventDataUI.getUpdateButtonSet(), EventDataUI.getAllDisabled());
+//									
+//								//Si la incidencia actualizada no queda fuera de la tabla a causa del filtro seleccionado
+//								} else {
+//									//Encontrar la fila que ocupa la actualilzación editada , y seleccionarla en la tabla
+//									for (int i = 0; i < eDataUI.getEventsTable().getRowCount(); i++) {
+//										
+//										//Debug
+//										System.out.println("El número de filas es: " + eDataUI.getEventsTable().getRowCount());
+//										System.out.println("Buscando en fila: " + i);
+//										
+//										int rowId = (int) eDataUI.getEventsTable().getModel().getValueAt(i, 0);
+//										
+//										//Debug
+//										System.out.println("El id encontrado es: " + (int) eDataUI.getEventsTable().getModel().getValueAt(i, 0));
+//										
+//										if (rowId == eventSelected.getId()) {
+//											eDataUI.getEventsTable().setRowSelectionInterval(i, i);
+//											eventSelected = new Event().getEventById(session.getbUnit(), rowId);
+//											
+//											//Debug
+//											System.out.println("Id de eventSelected" + eventSelected.getId());
+//											System.out.println("Id de rowId: " + rowId);
+//											System.out.println("Fechahora de 1a actualización de eventselected" + eventSelected.getUpdates().get(0).getFechaHora());
+//											
+//											eDataUI.getEventsTable().repaint();
+//											System.out.println("Fechahora de 1a actualización de eventselected después de repintar la tabla de incidencias"
+//											+ eventSelected.getUpdates().get(0).getFechaHora());
+//											System.out.println(eventSelected.getUpdates().get(0).getFechaHora());
+//											//eDataUI EventTableSelectionListener se encarga de gestionar el estado adecuado de los botones
+//										}
+//									}
+//									
+//								}
+//							} 
+							//Deseleccionamos incidencia y actualización seleccionados si los hubiera
+							eDataUI.setEventSelected(null);
+							eDataUI.setUpdateSelected(null);
 							//Volvemos a la pantalla de gestión de incidencias
 							backToEventDataScreen();
-						}	
-					}	
+						} else {
+							eDataUI.getInfoLabel().setText("ERROR DE GRABACIÓN DE ACTUALIZACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
+						}
+					} else {
+						eDataUI.getInfoLabel().setText("ERROR DE GRABACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
+					}
 				}
 				
 				//Nueva actualización
@@ -1735,6 +1817,8 @@ public class EventEditUI extends JPanel{
 						eDataUI.buttonSwitcher(EventDataUI.getUpdateButtonSet(), EventDataUI.getNewEnabled());					
 						//Volvemos a la pantalla de gestión de incidencias
 						backToEventDataScreen();
+					} else {
+						eDataUI.getInfoLabel().setText("ERROR DE GRABACIÓN DE ACTUALIZACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
 					}
 				}
 				
@@ -1774,11 +1858,20 @@ public class EventEditUI extends JPanel{
 						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
 						PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "INCIDENCIA ACTUALIZADA: ",
 								session.getConnection(), tNow, EventUpdate.TABLE_NAME);
-						//Borramos la actualización seleccionada de la lista de actualizaciones de la incidencia seleccionada, y le añadimos
-						//la actualización actualizada
-						eventSelected.getUpdates().remove(updateSelected);
-						eventSelected.getUpdates().add(updatedEventUpdate);
-						updateSelected = updatedEventUpdate;
+						
+						
+						
+						//Actualizamos la actualización seleccionada en la lista de actualizaciones de la incidencia seleccionada
+//						int index = eventSelected.getUpdates().indexOf(updateSelected);	
+//						eventSelected.getUpdates().remove(index);
+//						eventSelected.getUpdates().add(index, updatedEventUpdate);
+//						eventSelected.getUpdates().remove(updateSelected);
+//						eventSelected.getUpdates().add(updatedEventUpdate);
+//						updateSelected = updatedEventUpdate;
+						updateSelected.setFechaHora(updatedEventUpdate.getFechaHora());
+						updateSelected.setAutor(updatedEventUpdate.getAutor());
+						updateSelected.setDescripcion(updatedEventUpdate.getDescripcion());
+						
 						
 						//Debug
 						System.out.println("El id de la actualización actualizada es: " + updateSelected.getId());
@@ -1793,9 +1886,9 @@ public class EventEditUI extends JPanel{
 						
 						//Renovamos la tabla de actualizaciones
 						eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()), EventDataUI.getUpdatesTableHeader());
-						//Mantenemos la incidencia seleccionada y seleccionamos la nueva actualización
+						//Mantenemos la incidencia seleccionada y registramos la actualización editada
 						eDataUI.setUpdateSelected(updateSelected);
-						//Encontrar la fila que ocupa la nueva actualilzación, y seleccionarla en la tabla
+						//Encontrar la fila que ocupa la actualilzación editada , y seleccionarla en la tabla
 						for (int i = 0; i < eDataUI.getUpdatesTable().getRowCount(); i++) {
 							
 							//Debug
@@ -1813,11 +1906,12 @@ public class EventEditUI extends JPanel{
 						}
 						//Volvemos a la pantalla de gestión de incidencias
 						backToEventDataScreen();
+					} else {
+						eDataUI.getInfoLabel().setText("ERROR DE GRABACIÓN DE ACTUALIZACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
 					}
 				}
 			}
 			eDataUI.getInfoLabel().setText("");
-//			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}
 		
 	}
@@ -1833,11 +1927,7 @@ public class EventEditUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-//			EventEditUI.this.setVisible(false);
-//			eDataUI.setVisible(true);
-			
 			backToEventDataScreen();
-			
 			actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 		}
 		
