@@ -48,8 +48,8 @@ import main.java.types_states.TypesStatesContainer;
 public class EventEditUI extends JPanel{
 	
 	//Formato de presentación de fecha/hora
-	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
-	private static final String VALIDATION_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+//	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
+//	private static final String VALIDATION_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	private static final String DATE_PATTERN = "dd-MM-yyyy";
 	private static final String VALIDATION_DATE_PATTERN = "dd-MM-uuuu";
 	private static final String TIME_PATTERN = "HH:mm";
@@ -375,10 +375,10 @@ public class EventEditUI extends JPanel{
 		add(updateTimeField);
 		
 		//Listeners para los campos de fecha y hora		
-		eventDateIntroListener = new EventDateTimeIntroListener(eventDateField.getText(), VALIDATION_DATE_PATTERN);
-		eventTimeIntroListener = new EventDateTimeIntroListener(eventTimeField.getText(), TIME_PATTERN); //
-		updateDateIntroListener = new EventDateTimeIntroListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
-		updateTimeIntroListener = new EventDateTimeIntroListener(updateTimeField.getText(), TIME_PATTERN); //
+		eventDateIntroListener = new EventDateTimeIntroListener();
+		eventTimeIntroListener = new EventDateTimeIntroListener(); //
+		updateDateIntroListener = new EventDateTimeIntroListener(); //
+		updateTimeIntroListener = new EventDateTimeIntroListener(); //
 		eventDateFocusListener = new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN); //
 		eventTimeFocusListener = new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN); //
 		updateDateFocusListener = new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
@@ -542,10 +542,6 @@ public class EventEditUI extends JPanel{
 						DATE_PATTERN));
 				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
-//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						DATE_PATTERN));
-//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -565,8 +561,8 @@ public class EventEditUI extends JPanel{
 					label.setVisible(true);
 				}
 				//Actualizamos datos de los listeners
-				eventDateIntroListener.setOldEventDateText(eventDateField.getText());
-				eventTimeIntroListener.setOldEventTimeText(eventTimeField.getText());
+//				eventDateIntroListener.setOldEventDateText(eventDateField.getText());
+//				eventTimeIntroListener.setOldEventTimeText(eventTimeField.getText());
 				eventDateFocusListener.setOldEventDateText(eventDateField.getText());
 				eventTimeFocusListener.setOldEventTimeText(eventTimeField.getText());
 				
@@ -599,10 +595,6 @@ public class EventEditUI extends JPanel{
 						DATE_PATTERN));
 				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
-//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						DATE_PATTERN));
-//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -620,8 +612,8 @@ public class EventEditUI extends JPanel{
 					label.setVisible(true);
 				}
 				//Actualizamos datos de los listeners
-				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
-				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
+//				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
+//				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				updateDateFocusListener.setOldUpdateDateText(updateDateField.getText());
 				updateTimeFocusListener.setOldUpdateTimeText(updateTimeField.getText());
 				
@@ -659,10 +651,6 @@ public class EventEditUI extends JPanel{
 						DATE_PATTERN));
 				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
 						TIME_PATTERN));
-//				eventDateField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						DATE_PATTERN));
-//				eventTimeField.setText(ToolBox.formatTimestamp(eventSelected.getUpdates().get(0).getFechaHora(),
-//						TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eventSelected.getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -689,8 +677,8 @@ public class EventEditUI extends JPanel{
 					} 
 				}
 				//Actualizamos datos de los listeners
-				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
-				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
+//				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
+//				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				updateDateFocusListener.setOldUpdateDateText(updateDateField.getText());
 				updateTimeFocusListener.setOldUpdateTimeText(updateTimeField.getText());
 				break;
@@ -893,8 +881,7 @@ public class EventEditUI extends JPanel{
 			return true;
 		}
 		return false;
-	}
-	
+	}	
 	
 	/**
 	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
@@ -902,9 +889,6 @@ public class EventEditUI extends JPanel{
 	 * @return true si son correctos, false si no lo son
 	 */
 	private boolean testData() { 
-		
-		//FALTA COMPROBAR FECHAS EN TODOS LOS CASOS PARA QUE NO SEAN ANTERIORES A LAS DE INCIDENCIAS O
-		//ACTUALIZACIONES YA CREADAS O A LAS PRIMERAS ACTUALIZACIONES
 		
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no se selecciona ninguna
 		//opción de los combobox
@@ -990,16 +974,16 @@ public class EventEditUI extends JPanel{
 	 * tuviesen los textfields
 	 */
 	private class EventDateTimeIntroListener implements ActionListener {
-		String oldText; //Recoge fecha u hora actuales
-		String oldEventDateText; //Recoge la fecha de creación de la incidencia
-		String oldEventTimeText; //Recoge la hora de creación de la incidencia
-		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
-		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
-		String pattern; //Patrón de validación de fechas
+//		String oldText; //Recoge fecha u hora actuales
+//		String oldEventDateText; //Recoge la fecha de creación de la incidencia
+//		String oldEventTimeText; //Recoge la hora de creación de la incidencia
+//		String oldUpdateDateText; //Recoge la fecha de creación de la actualización
+//		String oldUpdateTimeText; //Recoge la hora de creación de la actualización
+//		String pattern; //Patrón de validación de fechas
 		
-		public EventDateTimeIntroListener (String oldText, String pattern) {
-			this.oldText = oldText;
-			this.pattern = pattern;
+		public EventDateTimeIntroListener () {
+//			this.oldText = oldText;
+//			this.pattern = pattern;
 		}
 		
 		@Override
@@ -1148,21 +1132,21 @@ public class EventEditUI extends JPanel{
 		    manager.focusNextComponent();
 		}
 
-		public void setOldUpdateDateText(String text) {
-			oldUpdateDateText = text;
-		}
-
-		public void setOldUpdateTimeText(String text) {
-			oldUpdateTimeText = text;;
-		}
-
-		public void setOldEventDateText(String oldEventDateText) {
-			this.oldEventDateText = oldEventDateText;
-		}
-
-		public void setOldEventTimeText(String oldEventTimeText) {
-			this.oldEventTimeText = oldEventTimeText;
-		}
+//		public void setOldUpdateDateText(String text) {
+//			oldUpdateDateText = text;
+//		}
+//
+//		public void setOldUpdateTimeText(String text) {
+//			oldUpdateTimeText = text;;
+//		}
+//
+//		public void setOldEventDateText(String oldEventDateText) {
+//			this.oldEventDateText = oldEventDateText;
+//		}
+//
+//		public void setOldEventTimeText(String oldEventTimeText) {
+//			this.oldEventTimeText = oldEventTimeText;
+//		}
 
 	}
 	

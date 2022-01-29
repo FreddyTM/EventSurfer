@@ -2302,12 +2302,12 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --uses backToEventDataScreen()--
 					 --reads dateTimeOk before cancelling--
 
-	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
+	· EventDateTimeIntroListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Add attributes
 			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText
 		Add actionPerformed()
 		Add setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText
-		Update constructor
+		Update constructor --no parameters--
 		Update actionPerformed() --added to all date & time fields--
 					 --updateDateField date check ok--
 					 --back to selectedUpdate date&time if date before 1st update NEW UPDATE & EDIT UPDATE ok--
@@ -2315,6 +2315,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --back to selectedUpdate or selectedEdit date&time if date not valid all cases ok--
 					 --warning if selectedUpdate date&time before previous updates deleted, done in focus listener--
 					 --Delegates all work on EventDateTimeFocusListener, only moves focus to next component--
+		Delete attributes
+			oldText, oldUpdateDateText, oldUpdateTimeText, pattern, oldEventDateText, oldEventTimeText --now useless--
+		Delete setters for oldUpdateDateText, oldUpdateTimeText, oldEventDateText, oldEventTimeText --now useless--
 
 	· EventDateTimeFocusListener class (new inner EventEditUI class):
 		Add attributes
