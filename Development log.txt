@@ -2277,6 +2277,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 			       --edit event backup of initial data of date&time fields (needed in intro & focus listeners)--
 			       --uses findFirstUpdate()--
 		Update isDateTimebeforePreviousUpdatesDateTime() --parameters (string, int), new logic--
+		Update goToNewEditScreen() --sets panelVisible to false--
 
 	· OKAction class (inner EventEditUI class):
 		Update actionPerformed() --logic to filter what components change background ok--

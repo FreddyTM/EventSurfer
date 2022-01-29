@@ -305,7 +305,7 @@ public class Selector extends JPanel {
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
 			//Creamos panel de datos de evento
-			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
+			EventDataUI eDataUI = new EventDataUI(session);
 			eDataUI.setPreferredSize(new Dimension(1770, 980));		
 			JScrollPane scrollPane = new JScrollPane(eDataUI);
 			scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

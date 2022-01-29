@@ -99,7 +99,6 @@ public class EventDataUI extends JPanel{
 	private int actionSelector = EVENTDATA_ACTION_UNDEFINED;
 	
 	private CurrentSession session;
-	private Selector selector;
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
@@ -160,9 +159,8 @@ public class EventDataUI extends JPanel{
 	JScrollPane scrollPane;
 
 
-	public EventDataUI(CurrentSession session, Selector selector) {
+	public EventDataUI(CurrentSession session) {
 		this.session = session;
-		this.selector = selector;
 
 		setLayout(null);
 		panelVisible = true;
@@ -527,7 +525,6 @@ public class EventDataUI extends JPanel{
 	    			System.out.println("Error de filtrado, criterio no previsto");
 	    	}
 	    }
-//	    eventsShown.setText(((Integer)filteredList.size()).toString());
 		return filteredList;
 	}
 	
@@ -692,15 +689,13 @@ public class EventDataUI extends JPanel{
 					 //Formato para Timestamp
 					 int initialDelay = ToolTipManager.sharedInstance().getInitialDelay();
 					 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
-					 if (getValueAt(row, col).getClass() == Timestamp.class) {
-						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");						 
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {		 
 						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
 					 } else {			 
 						 //Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
 						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
 						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 100 ? 15000 : initialDelay);
-//						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
 						 jcomp.setToolTipText(dataLength < 100 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
@@ -821,15 +816,13 @@ public class EventDataUI extends JPanel{
 					//Formato para Timestamp
 					 int initialDelay = ToolTipManager.sharedInstance().getInitialDelay();
 					 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
-					 if (getValueAt(row, col).getClass() == Timestamp.class) {
-						 //setToolTipText("<html><p width=\"500\">" +value+"</p></html>");					 
+					 if (getValueAt(row, col).getClass() == Timestamp.class) {		 
 						 jcomp.setToolTipText(ToolBox.formatTimestamp((Timestamp)getValueAt(row, col), DATE_TIME_PATTERN));
 					 } else {				 
 						//Multi-line tooltips & Increase display tooltip time if needed (15 seconds)
 						 dataLength = getValueAt(row, col).toString().length(); 
 						 ToolTipManager.sharedInstance().setDismissDelay(initialDelay);
 						 ToolTipManager.sharedInstance().setDismissDelay(dataLength >= 200 ? 15000 : initialDelay);
-//						 jcomp.setToolTipText("<html><p width=\"" + dataLength + "\">" + getValueAt(row, col).toString() + "</p></html>");
 						 jcomp.setToolTipText(dataLength < 250 ? getValueAt(row, col).toString()
 								 : "<html><p width=\"500\">" + getValueAt(row, col).toString() + "</p></html>");
 					 }
@@ -1001,8 +994,6 @@ public class EventDataUI extends JPanel{
 	private void updateEventUpdateButtonsStateOnSelection(int selectedRow) {
 		//Actualización inicial, usuarios ADMIN y MANAGER
 		if (selectedRow == 0 && !session.getUser().getUserType().equals("USER")) {
-//			//Debug
-//			System.out.println("La actualización inicial no se puede borrar");
 			buttonSwitcher(UPDATE_BUTTON_SET, NEW_EDIT_ENABLED);
 			//return;
 		}
@@ -1117,6 +1108,7 @@ public class EventDataUI extends JPanel{
 		this.setVisible(false);
 		eEditUI.setVisible(true);
 		scrollPane.getViewport().add(eEditUI);
+		panelVisible = false;
 	}
 	
 	/**
@@ -1380,7 +1372,6 @@ public class EventDataUI extends JPanel{
 			//Detectamos doble click
 			if (e.getClickCount() == 2) {
 				JTable tableSelected = (JTable) e.getSource();
-//				int selectedRow = tableSelected.getSelectedRow();
 				
 				//Detectamos origen
 				//Tabla incidencias
