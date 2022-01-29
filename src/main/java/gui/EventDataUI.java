@@ -1778,6 +1778,10 @@ public class EventDataUI extends JPanel{
 		this.firstUpdate = firstUpdate;
 	}
 
+	public void setPanelVisible(boolean panelVisible) {
+		this.panelVisible = panelVisible;
+	}
+
 }
 
 //SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE

@@ -2259,7 +2259,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventEditUI class:
 		Add attributes
-			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse
+			areaLabel, eventTypeLabel, errorList, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN, stringToParse, dateTimeOk
 		Delete attributes
 			selector, panelVisible, updatedTimestamp 
 		Add testData() --ok-- 
@@ -2298,6 +2298,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
 					 --uses backToEventDataScreen()--
+					 --reads dateTimeOk before cancelling--
 
 	· EventDateTimeListener class rename to EventDateTimeIntroListener class (inner EventEditUI class):
 		Add attributes
@@ -2323,6 +2324,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update focusLost() --gets de same logic as EventDateTimeIntroListener.actionPerformed()--
 				   --all code copied--
 				   --warning if selectedUpdate date&time before previous updates fixed & ok--
+				   --prevents showing error message in data screen if wrong date/time when cancelling--
 
 	* - Package main.java.test
 
