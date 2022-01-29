@@ -59,8 +59,8 @@ public class EventEditUI extends JPanel{
 	private static final int EVENTEDIT_ACTION_UNDEFINED = 0; //Default
 	private static final int EVENTEDIT_ACTION_NEW_EVENT = 1;
 	private static final int EVENTEDIT_ACTION_EDIT_EVENT = 2;
-	private static final int EVENTEDIT_ACTION_NEW_UPDATE = 4;
-	private static final int EVENTEDIT_ACTION_EDIT_UPDATE = 5;
+	private static final int EVENTEDIT_ACTION_NEW_UPDATE = 3;
+	private static final int EVENTEDIT_ACTION_EDIT_UPDATE = 4;
 	//Registra la acción a realizar según el botón activado
 	private int actionSelector = EVENTEDIT_ACTION_UNDEFINED;
 	
@@ -801,7 +801,7 @@ public class EventEditUI extends JPanel{
      * @param pattern formato de fecha
      * @return true si la fecha es correcta y respeta el formato, falso en caso contrario
      */
-	public static boolean dateIsValid(final String date, String pattern) {
+	public boolean dateIsValid(final String date, String pattern) {
         boolean validDate = false;
         try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern)
@@ -821,7 +821,7 @@ public class EventEditUI extends JPanel{
      * @param pattern formato de hora
      * @return true si la hora es correcta y respeta el formato, falso en caso contrario
      */
-	public static boolean timeIsValid(final String time, String pattern) {
+	public boolean timeIsValid(final String time, String pattern) {
         boolean validTime = false;
         try {
             LocalTime.parse(time, DateTimeFormatter.ofPattern(pattern)
