@@ -2331,3 +2331,4 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 
 	· EventTest class:
 		Add testUpdateEventStateOfEventToDB() --ok--
+		Add testDeleteEventUpdateFromDb() --ok--

@@ -165,4 +165,11 @@ class EventUpdateTest {
 		assertEquals("Pepe Gotera", new EventUpdate().getEventUpdateById(event2, 2).getAutor());
 	}
 
+	@Test
+	@Order(7)
+	void testDeleteEventUpdateFromDb() {
+		EventUpdate update = new EventUpdate();
+		update.setId(58);
+		assertTrue(new EventUpdate().deleteEventUpdateFromDb(conn, update));
+	}
 }
