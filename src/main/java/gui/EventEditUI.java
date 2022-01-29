@@ -801,7 +801,7 @@ public class EventEditUI extends JPanel{
      * @param pattern formato de fecha
      * @return true si la fecha es correcta y respeta el formato, falso en caso contrario
      */
-	public boolean dateIsValid(final String date, String pattern) {
+	public boolean dateIsValid(String date, String pattern) {
         boolean validDate = false;
         try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern)
@@ -821,7 +821,7 @@ public class EventEditUI extends JPanel{
      * @param pattern formato de hora
      * @return true si la hora es correcta y respeta el formato, falso en caso contrario
      */
-	public boolean timeIsValid(final String time, String pattern) {
+	public boolean timeIsValid(String time, String pattern) {
         boolean validTime = false;
         try {
             LocalTime.parse(time, DateTimeFormatter.ofPattern(pattern)
