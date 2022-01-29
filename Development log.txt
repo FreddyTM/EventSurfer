@@ -2294,6 +2294,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 					 --fix edit update not refreshing event state--
 					 --fix edit event not refreshing event table correctly--
 					 --edit update almost done, more testing needed but working fine, uses findFirstUpdate()--
+					 --reads dateTimeOk before accepting--
 
 	· CancelAction class (inner EventEditUI class):
 		Update actionPerformed() --uses scrollPane to switch panels--
