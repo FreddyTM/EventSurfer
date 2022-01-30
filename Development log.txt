@@ -2210,6 +2210,11 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· EventUpdate class:
 		Update saveEventUpdateToDB() --saves eUpdate.getFechaHora() to Db--
 
+	* - Package main.java.session
+
+	· TimerJob class (inner CurrentSession class):
+		Update run() --case event not needed and deleted, only event_update case do the job--
+
 	* - Package main.java.gui
 
 	· AppWindow class:

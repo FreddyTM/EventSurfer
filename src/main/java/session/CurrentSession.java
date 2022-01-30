@@ -491,7 +491,7 @@ public class CurrentSession {
 								//Añadimos la tabla area a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
-							case "event":
+//							case "event":
 							case "event_update":	
 								//Recargamos los datos de las incidencias de todas las unidades de negocio
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
