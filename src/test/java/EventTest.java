@@ -152,4 +152,12 @@ class EventTest {
 		event.setEventState("EN CURSO");
 		assertTrue(new Event().updateEventStateOfEventToDB(conn, event));
 	}
+	
+	@Test
+	@Order(10)
+	void TestDeleteEventFromDb() {
+		Event event = new Event();
+		event.setId(37);
+		assertTrue(new Event().deleteEventFromDb(conn, event));
+	}
 }

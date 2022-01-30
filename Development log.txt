@@ -2342,3 +2342,4 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add testUpdateEventStateOfEventToDB() --ok--
 		Add testDeleteEventUpdateFromDb() --ok--
 		Add testDeleteAllEventUpdatesFromDb() --ok--
+		Add TestDeleteEventFromDb() --ok--
