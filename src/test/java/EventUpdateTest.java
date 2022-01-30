@@ -172,4 +172,11 @@ class EventUpdateTest {
 		update.setId(58);
 		assertTrue(new EventUpdate().deleteEventUpdateFromDb(conn, update));
 	}
+	@Test
+	@Order(8)
+	void testDeleteAllEventUpdatesFromDb() {
+		Event event = new Event();
+		event.setId(37);
+		assertTrue(new EventUpdate().deleteAllEventUpdatesFromDb(conn, event));
+	}
 }
