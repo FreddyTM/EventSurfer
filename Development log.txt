@@ -1888,7 +1888,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add enableOrDisableEditDeleteEventUpdateButtons() --ok--
 		Add setPanelsDimensions() --overloaded from setPanelsDimensions(screenSize), work in progress...--
 		Add buttonSwitcher()
-		Add delete()
+		Add delete() --ok--
 		Update constructor --add company field, bUnit combobox, checkbox--
 				   --add Events titled panel ok--
 				   --add scrollpane ok--
@@ -2255,7 +2255,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update valueChanged() --uses findFirstUpdate()--
 
 	· NewEventAction (inner EventDataUI class):
-		Update actionPerformed --all JOptionPanel show centered justified text--
+		Update actionPerformed() --all JOptionPanel show centered justified text--
 
 	· Timerjob class (inner EventDataUI class):
 		Update run() --unified behaviour for BusinessUnit, Event & EventUpdate, data updated sometimes but

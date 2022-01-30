@@ -1041,12 +1041,12 @@ public class EventDataUI extends JPanel{
 		}
 		int optionSelected = ToolBox.showDialog(text, EventDataUI.this,	DIALOG_YES_NO);
 		if (optionSelected != JOptionPane.YES_OPTION) {
-			//Debug
-			System.out.println("Borrado cancelado");
+//			//Debug
+//			System.out.println("Borrado cancelado");
 			return;
 		} else {
-			//Debug
-			System.out.println("Borrado autorizado");
+//			//Debug
+//			System.out.println("Borrado autorizado");
 			switch (action) {
 				case EVENTDATA_ACTION_DELETE_EVENT:
 					//Debug
