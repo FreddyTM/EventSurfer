@@ -133,7 +133,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 5000, period);
+		timer.scheduleAtFixedRate(task, period / 6, period);
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 5000, period);
+		timer.scheduleAtFixedRate(task, period / 6, period);
 	}
 	
 	/**
@@ -384,7 +384,7 @@ public class CurrentSession {
 											if (oneUnit.getId() == bUnit.getId()) {
 												//Reasignamos la unidad de negocio de la sesión
 												bUnit = oneUnit;
-												break;
+//												break;
 											}
 										}									
 									//Si es un usuario manager o user, solo recargamos su unidad de negocio, que es la misma que la
@@ -400,7 +400,7 @@ public class CurrentSession {
 												company.getBusinessUnits().add(oneUnit);
 												//Reasignamos la unidad de negocio de la sesión
 												bUnit = oneUnit;
-												break;
+//												break;
 											}
 										}
 									}
@@ -424,7 +424,7 @@ public class CurrentSession {
 									for (User oneUser : updatedBunit.getUsers()) {
 										if (oneUser.getId() == user.getId()) {
 											user = oneUser;
-											break;
+//											break;
 										}
 									}
 									//Registramos que la recarga de los usuarios actualizados ya se ha hecho

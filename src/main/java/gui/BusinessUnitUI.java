@@ -571,12 +571,20 @@ public class BusinessUnitUI extends JPanel {
 				tField.setBackground(Color.WHITE);
 			}
 		}
-		//Habilitamos checkbox "Activa" si el centros de trabajoo no es el centros de trabajo por defecto
+		//Habilitamos checkbox "Activo" si creamos un centro de trabajo nuevo, o si el centro
+		//de trabajo no es el centro de trabajo por defecto
 		if (session.getbUnit().getId() != 1 ) {
+			activeCheckBox.setEnabled(true);
+		} else if (session.getbUnit().getId() == 1 && okActionSelector == OK_ACTION_NEW) {
 			activeCheckBox.setEnabled(true);
 		} else {
 			activeCheckBox.setEnabled(false);
 		}
+//		if (session.getbUnit().getId() != 1 ) {
+//			activeCheckBox.setEnabled(true);
+//		} else {
+//			activeCheckBox.setEnabled(false);
+//		}
 	}
 	
 	/**
