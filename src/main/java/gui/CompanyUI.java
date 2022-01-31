@@ -350,7 +350,7 @@ public class CompanyUI extends JPanel {
 		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, 30000);
+		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
 
 	}
 	

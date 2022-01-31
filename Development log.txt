@@ -2348,8 +2348,8 @@ ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 		Add testDeleteAllEventUpdatesFromDb() --ok--
 		Add TestDeleteEventFromDb() --ok--
 
-ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS
-	     VERSION RELEASED IN DAM PROJECT
+ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS,
+	     FIX ERRORS --VERSION RELEASED IN DAM PROJECT--
 
 
 	* - Package main.java.session
@@ -2366,3 +2366,23 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.17--
+
+	· CompanyUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	· BusinessUnitUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	· UserUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	· AreaUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	· EventTypeUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	· EventDataUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
+	
