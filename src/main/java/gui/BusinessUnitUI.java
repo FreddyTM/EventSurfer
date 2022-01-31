@@ -580,11 +580,6 @@ public class BusinessUnitUI extends JPanel {
 		} else {
 			activeCheckBox.setEnabled(false);
 		}
-//		if (session.getbUnit().getId() != 1 ) {
-//			activeCheckBox.setEnabled(true);
-//		} else {
-//			activeCheckBox.setEnabled(false);
-//		}
 	}
 	
 	/**
@@ -1163,7 +1158,7 @@ public class BusinessUnitUI extends JPanel {
 							updateDataCache();
 						}
 
-						//Informamos por pantalla de la actualización
+						//Informamos por pantalla de la actualización 
 						//Si el centro de trabajo que teníamos en pantalla no ha sufrido ninguna modificación
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
 						//que algun centro de trabajo ha sido modificado o añadido
