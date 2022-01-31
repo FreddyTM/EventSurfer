@@ -2416,6 +2416,11 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Clean code
 		Check javadoc
 
+	· EventUpdate class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
+
 	* - Package main.java.gui
 
 	· AppWindow class:

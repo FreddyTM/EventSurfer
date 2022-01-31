@@ -44,9 +44,9 @@ public class EventUpdate {
 	
 	
 	/**
-	 * Inserta un nuevo EventUpdate en la base de datos
+	 * Inserta una nueva actualización de incidencia en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param eUpdate EventUpdate a insertar
+	 * @param eUpdate actualización de incidencia a insertar
 	 * @return true si la insercion se hizo con éxito, false si no 
 	 */
 	public boolean saveEventUpdateToDB (Connection conn, EventUpdate eUpdate) {
@@ -56,7 +56,6 @@ public class EventUpdate {
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, 	eUpdate.getEvent().getId());
-//			pstm.setTimestamp(2, ToolBox.getTimestampNow());
 			pstm.setTimestamp(2, eUpdate.getFechaHora());
 			pstm.setString(3, eUpdate.getDescripcion());
 			pstm.setString(4, eUpdate.getAutor());
@@ -72,12 +71,12 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Si la inserción de un nuevo update en la base de datos tiene éxito,
-	 * recupera el id asignado en el registro de la base de datos y lo almacena
-	 * en el id del objeto EventUpdate
+	 * Si la inserción de una nueva actualización de incidencia en la base de datos tiene éxito,
+	 * recupera el id asignado en el registro de la base de datos y lo almacena en la actualización
+	 * de incidencia
 	 * @param conn conexión con la base de datos
-	 * @param eUpdate objeto a insertar en la base de datos
-	 * @return objeto EventUpdate con el id asignado
+	 * @param eUpdate actualización de incidencia a insertar en la base de datos
+	 * @return actualización de incidencia con el id asignado
 	 */
 	public EventUpdate addNewEventUpdate(Connection conn, EventUpdate eUpdate) {
 		if (saveEventUpdateToDB (conn, eUpdate)) {
@@ -89,9 +88,9 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Actualiza los valores de un EventUpdate que ya existe en la base de datos
-	 * @param conn
-	 * @param eUpdate
+	 * Actualiza los valores de una actualización de incidencia que ya existe en la base de datos
+	 * @param conn conexión con la base de datos
+	 * @param eUpdate actualización de incidencia a actualizar
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateEventUpdateToDB (Connection conn, EventUpdate eUpdate) {
@@ -123,9 +122,9 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Obtiene la lista de EventUpdates del objeto Event pasado por parámetro
+	 * Obtiene la lista de actualizaciones de la incidencia pasada por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param event objeto del que queremos recuperar sus updates
+	 * @param event incidencia del que queremos recuperar sus actualizaciones
 	 * @return lista de updates del objeto almacenados en la base de datos
 	 */
 	public List<EventUpdate> getEventUpdatesFromDB (Connection conn, Event event) {
@@ -149,7 +148,6 @@ public class EventUpdate {
 				eUpdate.setAutor(results.getString(4));
 				BusinessUnit bUnit = event.getbUnit();
 				Company company = bUnit.getCompany();
-//				User user = new User().getUserById(bUnit, results.getInt(5));
 				User user = new User().getUserById(company.getAllCompanyUsers(), results.getInt(5));
 				eUpdate.setUser(user);
 				updatesList.add(eUpdate);
@@ -165,11 +163,11 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Devuelve una lista de actualizaciones de evento que hayan sido realizadas por el 
+	 * Devuelve una lista de actualizaciones de una incidencia que hayan sido realizadas por el 
 	 * usuario cuyo id se pasa por parámetro
-	 * @param event evento del que se buscan las actualizaciones
-	 * @param userId id del usuario que ha hecho las actualizaciones del evento
-	 * @return Lista de actualizaciones de evento realizadas por el usuario
+	 * @param event incidencia de la que se buscan las actualizaciones
+	 * @param userId id del usuario que ha hecho las actualizaciones de la incidencia
+	 * @return Lista de actualizaciones de la incidencia realizadas por el usuario
 	 */
 	public List<EventUpdate> getEventUpdatesByUserId(Event event, int userId) {
 		List<EventUpdate> updatesList = event.getUpdates();
@@ -183,11 +181,11 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Devuelve una lista de actualizaciones de evento que hayan sido realizadas por el 
+	 * Devuelve una lista de actualizaciones de incidencia que hayan sido realizadas por el 
 	 * usuario cuyo alias se pasa por parámetro
-	 * @param event evento del que se buscan las actualizaciones
-	 * @param userAlias alias del usuario que ha hecho las actualizaciones del evento
-	 * @return Lista de actualizaciones de evento realizadas por el usuario
+	 * @param event incidencia de la que se buscan las actualizaciones
+	 * @param userAlias alias del usuario que ha hecho las actualizaciones de la incidencia
+	 * @return Lista de actualizaciones de incidencia realizadas por el usuario
 	 */
 	public List<EventUpdate> getEventUpdatesByUserAlias(Event event, String userAlias) {
 		List<EventUpdate> updatesList = event.getUpdates();
@@ -201,10 +199,10 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Devuelve el EventUpdate al que pertenece el id pasado por parámetro
-	 * @param event Evento del que se busca la actualización
-	 * @param id Id del EventUpdate
-	 * @return EventUpdate con el id entrado por parámetro (null si no existe)
+	 * Devuelve la actualización de incidencia a la que pertenece el id pasado por parámetro
+	 * @param event incidencia del que se busca la actualización
+	 * @param id Id de la actualización
+	 * @return actualización de incidencia con el id entrado por parámetro (null si no existe)
 	 */
 	public EventUpdate getEventUpdateById(Event event, int id) {
 		List<EventUpdate> updatesList = event.getUpdates();
@@ -217,9 +215,9 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Borra una actualización de evento de la base de datos 
+	 * Borra una actualización de incidencia de la base de datos 
 	 * @param conn conexión a la base de datos
-	 * @param eUpdate EventUpdate a borrar de la base de datos
+	 * @param eUpdate actualización de incidencia a borrar de la base de datos
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteEventUpdateFromDb(Connection conn, EventUpdate eUpdate) {
@@ -242,7 +240,7 @@ public class EventUpdate {
 	/**
 	 * Borra de la lista de actualizaciones de la incidencia pasada por parámetro
 	 * la actualización pasada por parámetro, si es que está en la lista
-	 * @param bUnit unidad de negocio de la que borramos la incidencia
+	 * @param event incidencia de la que borramos la actualización
 	 * @param event incidencia a borrar
 	 * @return true si se ha borrado alguna incidencia, false si no
 	 */
@@ -262,9 +260,9 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Borra de la base de datos todos las actualizaciones de un evento pasado por parámetro 
+	 * Borra de la base de datos todos las actualizaciones de una incidencia pasado por parámetro 
 	 * @param conn conexión a la base de datos
-	 * @param event evento del que se borrarán todas las actualizaciones
+	 * @param event incidencia  de la que se borrarán todas las actualizaciones
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteAllEventUpdatesFromDb(Connection conn, Event event) {
