@@ -22,7 +22,6 @@ public class Area {
 	
 	
 	public Area(int id, String area, String descripcion) {
-		//this.connection = connection;
 		this.id = id;
 		this.areaNombre = area;
 		this.descripcion = descripcion;
@@ -80,9 +79,9 @@ public class Area {
 	}
 	
 	/**
-	 * Borra de la lista de areas de la unidad de negocio pasada por parámetro
+	 * Borra de la lista de areas del centro de trabajo pasado por parámetro
 	 * el área pasada por parámetro, si es que está en la lista
-	 * @param bUnit unidad de negocio de la que borramos el area
+	 * @param bUnit centro de trabajo de la que borramos el area
 	 * @param area area a borrar
 	 * @return true si se ha borrado alguna area, false si no
 	 */
@@ -100,9 +99,9 @@ public class Area {
 	
 	/**
 	 * Borra los registros de la tabla b_unit_area con el id del area pasada por
-	 * parámetro. El area dejará de estar asignada a cualquier unidad de negocio.
+	 * parámetro. El area dejará de estar asignada a cualquier centro de trabajo.
 	 * @param conn conexión a la base de datos
-	 * @param area area que deja de estar asignada a la unidad de negocio
+	 * @param area area que deja de estar asignada al  centro de trabajo
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteBUnitAreaFromDB (Connection conn, Area area) {
@@ -123,11 +122,11 @@ public class Area {
 	}
 	
 	/**
-	 * Borra el registro de la tabla b_unit_area con los id del area y la unidad de negocio
-	 * pasados por parámetro. El area dejará de estar asignada a dicha unidad de negocio.
+	 * Borra el registro de la tabla b_unit_area con los id del area y el centro de trabajo
+	 * pasados por parámetro. El area dejará de estar asignada a dicho centro de trabajo.
 	 * @param conn conexión a la base de datos
-	 * @param bUnit unidad de negocio a la que está asignada el area
-	 * @param area area que deja de estar asignada a la unidad de negocio
+	 * @param bUnit centro de trabajo al que está asignado el area
+	 * @param area area que deja de estar asignada al centro de trabajo
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteOneBUnitAreaFromDB (Connection conn, BusinessUnit bUnit, Area area) {
@@ -151,9 +150,9 @@ public class Area {
 	
 	/**
 	 * Inserta un nuevo registro en la tabla b_unit_area con los id del area nueva
-	 * y de la unidad de negocio a la que pertenece
+	 * y del centro de trabajo a la que pertenece
 	 * @param conn conexión a la base de datos
-	 * @param bUnit unidad de negocio a la que pertenece el area nueva
+	 * @param bUnit centro de trabajo al que pertenece el area nueva
 	 * @param area area nueva
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
@@ -196,9 +195,9 @@ public class Area {
 	 * Si la inserción de un area nueva en la base de datos tiene éxito,
 	 * recupera el id asignado en el registro de la base de datos y lo almacena
 	 * en el id del objeto Area. Tras ello, inserta un nuevo registro en la
-	 * tabla b_unit_area con los id del area y de la unidad de negocio a la que pertenece
+	 * tabla b_unit_area con los id del area y del centro de trabajo a la que pertenece
 	 * @param conn conexión a la base de datos
-	 * @param bUnit unidad de negocio a la que pertenece el area nueva
+	 * @param bUnit centro de trabajo al que pertenece el area nueva
 	 * @param area area nueva
 	 * @return el area nueva insertada
 	 */
@@ -242,10 +241,10 @@ public class Area {
 	}
 	
 	/**
-	 * Obtiene la lista de areas del objeto BusinessUnit pasado por parámetro
+	 * Obtiene la lista de areas del centro de trabajo pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param bUnit objeto del que queremos recuperar sus areas
-	 * @return lista de areas del objeto almacenados en la base de datos
+	 * @param bUnit centro de trabajo del que queremos recuperar sus areas
+	 * @return lista de areas del centro de trabajo almacenados en la base de datos
 	 */
 	public List<Area> getAreasFromDB (Connection conn, BusinessUnit bUnit) {
 		List<Area> areaList = new ArrayList<Area>();
@@ -308,7 +307,7 @@ public class Area {
 	}
 	
 	/**
-	 * Comprueba si el area pasada por parámetro está asignada a alguna unidad de negocio
+	 * Comprueba si el area pasada por parámetro está asignada a algun centro de trabajo
 	 * @param conn conexión con la base de datos
 	 * @param area area a comprobar
 	 * @return true si el area está asignada, false si no lo está
@@ -339,7 +338,7 @@ public class Area {
 	
 	/**
 	 * Devuelve el area al que pertenece el nombre entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de areas
+	 * @param bUnit centro de trabajo del que comprobamos la lista de areas
 	 * @param name nombre del area buscado
 	 * @return area con el nombre entrado por parámetro (null si no existe)
 	 */
@@ -370,7 +369,7 @@ public class Area {
 	
 	/**
 	 * Devuelve el area al que pertenece el id entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de areas
+	 * @param bUnit centro de trabajo del que comprobamos la lista de areas
 	 * @param id id del area buscado
 	 * @return area con el id entrado por parámetro (null si no existe)
 	 */
