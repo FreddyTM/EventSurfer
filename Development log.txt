@@ -2374,6 +2374,12 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 		Update loadCurrentSessionData() --timer delay 5 seconds--
 						--period set by period attribute--
 
+	* - Package main.java.types_states
+
+	· EventState class:
+		Clean code
+		Check javadoc
+
 	* - Package main.java.company
 
 	· Company class:
