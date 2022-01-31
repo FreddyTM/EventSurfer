@@ -48,9 +48,9 @@ public class Event {
 	
 	
 	/**
-	 * Inserta un nuevo evento en la base de datos
+	 * Inserta una nueva incidencia en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param event usuario a insertar
+	 * @param event incidencia a insertar
 	 * @return true si la insercion se hizo con éxito, false si no 
 	 */
 	public boolean saveEventToDB(Connection conn, Event event) {
@@ -77,12 +77,12 @@ public class Event {
 	}
 
 	/**
-	 * Si la inserción de un nuevo evento en la base de datos tiene éxito,
+	 * Si la inserción de una nueva incidencia en la base de datos tiene éxito,
 	 * recupera el id asignado en el registro de la base de datos y lo almacena
 	 * en el id del objeto Event
 	 * @param conn conexión con la base de datos
-	 * @param event objeto a insertar en la base de datos
-	 * @returnobjeto Event con el id asignado
+	 * @param event incidencia a insertar en la base de datos
+	 * @returnobjeto incidencia con el id asignado
 	 */
 	public Event addNewEvent(Connection conn, Event event) {
 		if (saveEventToDB(conn, event)) {
@@ -94,9 +94,9 @@ public class Event {
 	}
 	
 	/**
-	 * Actualiza los valores de un evento que ya existe en la base de datos
+	 * Actualiza los valores de una incidencia que ya existe en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param event evento que contiene los datos que actualizan al evento ya existente
+	 * @param event incidencia que contiene los datos que actualizan a la incidencia ya existente
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateEventToDB(Connection conn, Event event) {
@@ -156,10 +156,10 @@ public class Event {
 	}
 	
 	/**
-	 * Obtiene la lista de eventos del objeto BusinessUnit pasado por parámetro
+	 * Obtiene la lista de incidencias del centro de trabajo pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param bUnit unidad de negocio de la que queremos recuperar sus eventos
-	 * @return lista de eventos de la unidad de negocio almacenados en la base de datos
+	 * @param bUnit centro de trabajo del que queremos recuperar sus incidencias
+	 * @return lista de incidencias del centro de trabajo almacenados en la base de datos
 	 */
 	public List<Event> getBunitEventsFromDB(Connection conn, BusinessUnit bUnit) {
 		List<Event> eventList = new ArrayList<Event>();
@@ -196,10 +196,10 @@ public class Event {
 	}
 	
 	/**
-	 * Obtiene el número de veces que un tipo de evento está registrado en algún evento en la base de datos
+	 * Obtiene el número de veces que un tipo de incidencia está registrado en alguna incidencia en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param id id del tipo de evento
-	 * @return número de veces que el tipo de evento está registrado en un evento (-1 si la consulta falla)
+	 * @param id id del tipo de incidencia
+	 * @return número de veces que el tipo de incidencia está registrado en una incidencia (-1 si la consulta falla)
 	 */
 	public int getEventTypesOnEventFromDB(Connection conn, int id) {
 		int eventTypes = 0;
@@ -226,11 +226,11 @@ public class Event {
 	}
 	
 	/**
-	 * Obtiene la lista de eventos sucedidos en el area pasada por parámetro
+	 * Obtiene la lista de incidencias sucedidas en el area pasada por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param area area del que queremos recuperar sus eventos
-	 * @param company empresa a la que pertenecen las unidades de negocio en la que suceden los eventos
-	 * @return lista de eventos sucedidos en el area almacenados en la base de datos
+	 * @param area area del que queremos recuperar sus incidencias
+	 * @param company empresa a la que pertenecen los centros de trabajo en los que suceden las incidencias
+	 * @return lista de incidencias sucedidos en el area almacenados en la base de datos
 	 */
 	public List<Event> getAreaEventsFromDB(Connection conn, Area area, Company company) {
 		List<Event> eventList = new ArrayList<Event>();
@@ -268,10 +268,10 @@ public class Event {
 	}
 	
 	/**
-	 * Devuelve el evento al que pertenece el id entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
-	 * @param id id del usuario buscado
-	 * @return usuario con el id entrado por parámetro (null si no existe)
+	 * Devuelve la incidencia al que pertenece el id entrado por parámetro
+	 * @param bUnit centro de trabajo del que comprobamos la lista de incidencias
+	 * @param id id de la incidencia buscada
+	 * @return incidencia con el id entrado por parámetro (null si no existe)
 	 */
 	public Event getEventById (BusinessUnit bUnit, int id) {
 		List<Event> eventList = bUnit.getEvents();
@@ -284,11 +284,11 @@ public class Event {
 	}
 	
 	/**
-	 * Obtiene una lista con los ids de las unidades de negocio en las que hay eventos registrados con el tipo de evento
-	 * del id pasado por parámetro
+	 * Obtiene una lista con los ids de los centros de trabajo en las que hay incidencias
+	 * registrados con el tipo de incidencia del id pasado por parámetro
 	 * @param conn Conexión con la base de datos
-	 * @param id id del tipo de evento a comprobar
-	 * @return Lista de ids de las unidades de negocio
+	 * @param id id del tipo de incidencia a comprobar
+	 * @return Lista de ids de los centros de trabajo
 	 */
 	public List<Integer> getBunitsIdsWithEventTypes(Connection conn, int id) {
 		List<Integer> bUnitIds = new ArrayList<Integer>();
@@ -339,21 +339,14 @@ public class Event {
 	}
 	
 	/**
-	 * Borra de la lista de incidencias de la unidad de negocio pasada por parámetro
+	 * Borra de la lista de incidencias del centro de trabajo pasado por parámetro
 	 * la incidencia pasada por parámetro, si es que está en la lista
-	 * @param bUnit unidad de negocio de la que borramos la incidencia
+	 * @param bUnit centro de trabajo del que borramos la incidencia
 	 * @param event incidencia a borrar
 	 * @return true si se ha borrado alguna incidencia, false si no
 	 */
 	public boolean deleteEvent(BusinessUnit bUnit, Event event) {
 		boolean eventDeleted = false;
-//		for (int i = 0; i < bUnit.getEvents().size(); i++) {
-//			if (bUnit.getEvents().get(i).getId() == event.getId()) {
-//				bUnit.getEvents().remove(i);
-//				eventDeleted = true;
-//				break;
-//			}
-//		}
 		//Using Iterator for safe remove
 		Iterator<Event> iterator = bUnit.getEvents().iterator();
 		while(iterator.hasNext()) {

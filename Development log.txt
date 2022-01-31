@@ -2348,7 +2348,7 @@ ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 		Add testDeleteAllEventUpdatesFromDb() --ok--
 		Add TestDeleteEventFromDb() --ok--
 
-ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS,
+ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS,
 	     FIX ERRORS --VERSION RELEASED IN DAM PROJECT--
 
 
@@ -2405,6 +2405,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 		Check javadoc
 
 	· Area class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
+
+	* - Package main.java.event
+
+	· Event class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
 		Check javadoc
