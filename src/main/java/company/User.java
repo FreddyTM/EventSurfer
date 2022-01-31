@@ -199,10 +199,10 @@ public class User {
 	}
 	
 	/**
-	 * Obtiene la lista de usuarios del objeto BusinessUnit pasado por parámetro
+	 * Obtiene la lista de usuarios del centro de trabajo pasado por parámetro
 	 * @param conn conexión con la base de datos
 	 * @param bUnit objeto del que queremos recuperar sus usuarios
-	 * @return lista de usuarios del objeto almacenados en la base de datos
+	 * @return lista de usuarios del centro de trabajo almacenados en la base de datos
 	 */
 	public List<User> getUsersFromDB(Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new ArrayList<User>();
@@ -242,6 +242,7 @@ public class User {
 	/**
 	 * Obtiene la lista de todos los usuarios de la empresa
 	 * @param conn conexión con la base de datos
+	 * @param company empresa de la que buscamos todos sus usuarios
 	 * @return lista de todos los usuarios de la empresa almacenados en la base de datos
 	 */
 	public List<User> getAllCompanyUsers(Connection conn, Company company) {
@@ -278,10 +279,10 @@ public class User {
 	}
 	
 	/**
-	 * Marca como no activos todos los usuarios pertenecientes a la unidad de negocio pasada por parámetro,
+	 * Marca como no activos todos los usuarios pertenecientes al centro de trabajo pasada por parámetro,
 	 * y actualiza dichos usuarios en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param bUnit unidad de negocio cuyos usuarios se marcarán como inactivos
+	 * @param bUnit centro de trabajo cuyos usuarios se marcarán como inactivos
 	 * @return lista de usuarios actualizados en la base de datos, null si la lista no se obtiene
 	 */
 	public List<User> setNoActiveUsersToDB (Connection conn, BusinessUnit bUnit) {
@@ -293,15 +294,15 @@ public class User {
 		List<User> updatedUserList = new ArrayList<User>();
 		if (userList.size() > 0) {
 			for (User user : userList) {
-				
-				//Debug
-				System.out.println("User: " + user.getUserAlias());
-				
+//				
+//				//Debug
+//				System.out.println("User: " + user.getUserAlias());
+//				
 				user.setActivo(false);
 				updatedUserList.add(user);
-				
-				//Debug
-				System.out.println("Setting user inactive...");
+//				
+//				//Debug
+//				System.out.println("Setting user inactive...");
 
 			} 
 		} 
@@ -310,10 +311,10 @@ public class User {
 			if (!new User().updateUserToDB(conn, user)) {
 				return null;
 			}
-			
-			//Debug
-			System.out.println("Updating user inactive to Db...");
-			
+//			
+//			//Debug
+//			System.out.println("Updating user inactive to Db...");
+//			
 		}
 		
 		return updatedUserList;
@@ -353,12 +354,12 @@ public class User {
 	}
 	
 	/**
-	 * Obtiene el id de la unidad de negocio a la que pertenece el usuario, si el
+	 * Obtiene el id del centro de trabajo a la que pertenece el usuario, si el
 	 * usuario existe
 	 * @param conn conexión con la base de datos
 	 * @param alias alias del usuario
 	 * @param password password del usuario
-	 * @return id de la unidad de negocio, o 0 si el usuario no existe
+	 * @return id del centro de trabajo, o 0 si el usuario no existe
 	 */
 	public int getBunitIdFromUser (Connection conn, String alias, String password) {
 		PreparedStatement pstm = null;
@@ -419,7 +420,7 @@ public class User {
 	
 	/**
 	 * Devuelve el usuario al que pertenece el alias entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
+	 * @param bUnit centro de trabajo del que comprobamos la lista de usuarios
 	 * @param alias alias del usuario buscado
 	 * @return usuario con el alias entrado por parámetro (null si no existe)
 	 */
@@ -451,7 +452,7 @@ public class User {
 	
 	/**
 	 * Devuelve el usuario al que pertenece el id entrado por parámetro
-	 * @param bUnit BusinessUnit del que comprobamos la lista de usuarios
+	 * @param bUnit centro de trabajo del que comprobamos la lista de usuarios
 	 * @param id id del usuario buscado
 	 * @return usuario con el id entrado por parámetro (null si no existe)
 	 */
@@ -524,7 +525,8 @@ public class User {
 	}
 	
 	/**
-	 * Genera un hash de igual longitud al String pasado por parámetro
+	 * Genera un hash de igual longitud al String pasado por parámetro. Si el string tiene más de
+	 * 25 caracteres, solo devuelve los 25 caracteres del hash
 	 * @param input String de entrada
 	 * @return hash del String de entrada
 	 */
