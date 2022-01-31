@@ -88,6 +88,7 @@ public class Company {
 	 * de dichos datos en la base de datos se realiza con éxito
 	 * @param conn conexión con la base de datos
 	 * @param company empresa que contiene los datos que se actualizan
+	 * @return true si la actualización se hace con éxito, false en caso contrario
 	 */
 	public boolean updateCompany (Connection conn, Company company) {
 		if (updateCompanyToDB(conn, company)) {
@@ -172,10 +173,10 @@ public class Company {
 	}
 	
 	/**
-	 * Añade una unidad de negocio a la lista de unidades de negocio si la inserción de
-	 * la unidad de negocio en la base de datos se hace con éxito
+	 * Añade un centro de trabajo a la lista de unidades de negocio si la inserción del
+	 * centro de trabajo en la base de datos se hace con éxito
 	 * @param conn conexión con la base de datos
-	 * @param bUnit unidad de negocio a añadir
+	 * @param bUnit centro de trabajo a añadir
 	 */
 	public void addBusinessUnit (Connection conn, BusinessUnit bUnit) {
 		BusinessUnit completeBUnit = new BusinessUnit().addNewBusinessUnit(conn, bUnit);

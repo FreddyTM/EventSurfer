@@ -47,9 +47,9 @@ public class BusinessUnit {
 	}
 
 	/**
-	 * Inserta una nueva unidad de negocio en la base de datos
+	 * Inserta una nuevo centro de trabajo en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param bUnit BusinessUnit a insertar
+	 * @param bUnit centro de trabajo a insertar
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
 	public boolean saveBUnitToDB(Connection conn, BusinessUnit bUnit) {
@@ -79,11 +79,11 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Si la inserción de una nueva unidad de negocio en la base de datos tiene éxito,
+	 * Si la inserción de un nuev centro de trabajo en la base de datos tiene éxito,
 	 * recupera el id asignado en el registro de la base de datos y lo almacena en el id
 	 * del objeto BusinessUnit
 	 * @param conn conexión con la base de datos
-	 * @param bUnit objeto a insertar en la base de datos
+	 * @param bUnit centro de trabajo a insertar en la base de datos
 	 * @return objeto BusinessUnit con el id asignado
 	 */
 	public BusinessUnit addNewBusinessUnit (Connection conn, BusinessUnit bUnit) {
@@ -96,10 +96,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Actualiza los valores de una unidad de negocio que ya existe en la base de datos
+	 * Actualiza los valores de un centro de trabajo que ya existe en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param bUnit unidad de negocio que contiene los datos que actualizan
-	 * a la unidad de negocio ya existente
+	 * @param bUnit centro de trabajo que contiene los datos que actualizan
+	 * al centro de trabajo ya existente
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateBusinessUnitToDB(Connection conn, BusinessUnit bUnit) {
@@ -139,10 +139,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Obtiene la lista de BusinessUnits del objeto Company pasado por parámetro
+	 * Obtiene la lista de centros de trabajo del objeto Company pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param company objeto del que queremos recuperar sus BusinessUnits
-	 * @return lista de BusinessUnits del objeto almacenados en la base de datos
+	 * @param company objeto del que queremos recuperar sus centros de trabajo
+	 * @return lista de centros de trabajo del objeto almacenados en la base de datos
 	 */
 	public List<BusinessUnit> getBusinessUnitsFromDB(Connection conn, Company company) {
 		List<BusinessUnit> bUnitsList = new ArrayList<BusinessUnit>();
@@ -182,9 +182,9 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Refresca los datos de la unidad de negocio recargándolos de la base de datos
+	 * Refresca los datos del centro de trabajo recargándolos de la base de datos
 	 * @param conn conexión con la base de datos
-	 * @return true si se refrescan los datos, false si no
+	 * @return true si se refrescan los datos del centro de trabajo, false si no
 	 */
 	public boolean refresh(Connection conn) {
 		PreparedStatement pstm = null;
@@ -219,8 +219,8 @@ public class BusinessUnit {
 	
 	
 	/**
-	 * Añade un usuario a la lista de usuarios si la inserción del usuario en la base de
-	 * datos se hace con éxito
+	 * Añade un usuario a la lista de usuarios del centro de trabajo si la inserción del usuario
+	 * en la base de datos se hace con éxito
 	 * @param conn conexión con la base de datos
 	 * @param user usuario a añadir
 	 */
@@ -232,7 +232,7 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Añade un area a la lista de areas si la inserción del area en la base de
+	 * Añade un area a la lista de areas del centro de trabajo si la inserción del area en la base de
 	 * datos se hace con éxito
 	 * @param conn conexión con la base de datos
 	 * @param area area a añadir
@@ -245,10 +245,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Añade un evento a la lista de eventos si la inserción del evento en la base de
-	 * datos se hace con éxito
+	 * Añade una incidencia a la lista de incidencias del centro de trabajo si la inserción de la
+	 * incidencia en la base de datos se hace con éxito
 	 * @param conn conexión con la base de datos
-	 * @param event evento a añadir
+	 * @param event incidencia a añadir
 	 */
 	public void addEvent(Connection conn, Event event) {
 		Event completeEvent = event.addNewEvent(conn, event);
@@ -258,10 +258,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Devuelve la unidad de negocio al que pertenece el nombre entrado por parámetro
-	 * @param company empresa de la que comprobamos la unidad de negocio
-	 * @param name nombre de la unidad de negocio buscada
-	 * @return unidad de negocio con el nombre entrado por parámetro (null si no existe)
+	 * Devuelve el centro de trabajo al que pertenece el nombre entrado por parámetro
+	 * @param company empresa de la que comprobamos el centro de trabajo
+	 * @param name nombre del centro de trabajo buscado
+	 * @return centro de trabajo con el nombre entrado por parámetro (null si no existe)
 	 */
 	public BusinessUnit getBusinessUnitByName (Company company, String name) {
 		List<BusinessUnit> bUnitList = company.getBusinessUnits();
@@ -274,10 +274,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Devuelve la unidad de negocio al que pertenece el id entrado por parámetro
-	 * @param company empresa de la que comprobamos la unidad de negocio
+	 * Devuelve el centro de trabajo al que pertenece el id entrado por parámetro
+	 * @param company empresa de la que comprobamos el centro de trabajo
 	 * @param id id del usuario buscado
-	 * @return unidad de negocio con el id entrado por parámetro (null si no existe)
+	 * @return centro de trabajo con el id entrado por parámetro (null si no existe)
 	 */
 	public BusinessUnit getBusinessUnitById (Company company, int id) {
 		List<BusinessUnit> bUnitList = company.getBusinessUnits();
@@ -290,11 +290,11 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Devuelve la unidad de negocio al que pertenece el id entrado por parámetro
+	 * Devuelve el centro de trabajo al que pertenece el id entrado por parámetro
 	 * @param conn Conexión con la base de datos
-	 * @param company empresa de la que comprobamos la unidad de negocio
+	 * @param company empresa de la que comprobamos el centro de trabajo
 	 * @param id id del usuario buscado
-	 * @return unidad de negocio con el id entrado por parámetro (null si no existe)
+	 * @return centro de trabajo con el id entrado por parámetro (null si no existe)
 	 */
 	public BusinessUnit getBusinessUnitNameByIdFromDb(Connection conn, Company company, int id) {
 		BusinessUnit bUnit = null;
@@ -336,7 +336,7 @@ public class BusinessUnit {
 	 * @param conn Conexión con la base de datos
 	 * @param company empresa a la que pertenecen las unidades de negocio
 	 * @param area Area de la que se quiere saber dónde está asignada
-	 * @return Lista de unidades de negocio con el area asignada
+	 * @return Lista de centros de trabajo con el area asignada
 	 */
 	public List<BusinessUnit> getBunitsWithArea(Connection conn, Company company, Area area) {
 		List<BusinessUnit> bUnitList = new ArrayList<BusinessUnit>();
@@ -364,11 +364,11 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Obtiene una lista con los ids de las unidades de negocio a las que está asignada el area pasada
+	 * Obtiene una lista con los ids de los centros de trabajo a las que está asignada el area pasada
 	 * por parámetro
 	 * @param conn Conexión con la base de datos
 	 * @param area area a comprobar
-	 * @return Lista de ids
+	 * @return Lista de ids de los centros de trabajo
 	 */
 	public List<Integer> getBunitsWithArea(Connection conn, Area area) {
 		List<Integer> bUnitIds = new ArrayList<Integer>();
@@ -395,11 +395,11 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Obtiene los nombres de todas las unidades de negocio que tengan asignada el area pasada por parámetro
+	 * Obtiene los nombres de todas los centros de trabajo que tengan asignada el area pasada por parámetro
 	 * @param conn Conexión con la base de datos
-	 * @param company empresa a la que pertenecen las unidades de negocio
+	 * @param company empresa a la que pertenecen los centros de trabajo
 	 * @param area Area de la que se quiere saber dónde está asignada
-	 * @return Lista de nombres de las unidades de negocio con el area asignada
+	 * @return Lista de nombres de los centros de trabajo con el area asignada
 	 */
 	public List<String> getAllBunitNamesWithArea(Connection conn, Company company, Area area) {
 		List<String> bUnitNameList = new ArrayList<String>();
@@ -411,10 +411,10 @@ public class BusinessUnit {
 	}
 	
 	/**
-	 * Obtiene la lista de todas las unidades de negocio de la base de datos
+	 * Obtiene la lista de todas los centros de trabajo de la base de datos
 	 * @param conn conexión con la base de datos
-	 * @param company objeto del que queremos recuperar sus BusinessUnits
-	 * @return lista de nombres de las unidades de negocio almacenadas en la base de datos
+	 * @param company objeto del que queremos recuperar sus centros de trabajo
+	 * @return lista de nombres de los centros de trabajo almacenadas en la base de datos
 	 */
 	public List<String> getAllBunitNames(Connection conn, Company company) {
 		List<String> bUnitNames = new ArrayList<String>();

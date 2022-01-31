@@ -2362,6 +2362,18 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 		Update loadCurrentSessionData() --timer delay 5 seconds--
 						--period set by period attribute--
 
+	* - Package main.java.company
+
+	· Company class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
+
+	· BusinessUnit class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -2369,8 +2381,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 
 	· Selector class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
-				    --Clean code--
-				    --Check javadoc--
+		Clean code
+		Check javadoc
 
 	· CompanyUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
