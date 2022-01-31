@@ -72,6 +72,7 @@ public class UserType {
 	/**
 	 * Conecta con la base de datos y almacena cada tipo de usuario con su clave
 	 * en userTypes
+	 * conn conexión con la base de datos
 	 */
 	public void loadData(Connection conn) {
 		Statement statement = null;
@@ -91,13 +92,6 @@ public class UserType {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closeStatement(statement);
 		}
-
-		
-		//Debug
-		System.out.println("Tipos de usuario cargados correctamente");
-		System.out.print(userTypes.entrySet());
-		System.out.println();
-
 	}
 	
 	public Map <Integer, String> getUserTypes() {
