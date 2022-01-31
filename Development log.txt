@@ -2195,7 +2195,7 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 	· CancelAction class (new inner EventEditUI class):
 		Add actionPerformed() --ok--
 
-ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED, 
+ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 
 	* - Package main.java.company
 
@@ -2347,3 +2347,22 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Add testDeleteEventUpdateFromDb() --ok--
 		Add testDeleteAllEventUpdatesFromDb() --ok--
 		Add TestDeleteEventFromDb() --ok--
+
+ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS
+	     VERSION RELEASED IN DAM PROJECT
+
+
+	* - Package main.java.session
+
+	· CurrentSession class:
+		Add attribute
+			period
+		Update loadAllData() --timer delay 5 seconds--
+				     --period set by period attribute--
+		Update loadCurrentSessionData() --timer delay 5 seconds--
+						--period set by period attribute--
+
+	* - Package main.java.gui
+
+	· AppWindow class:
+		Update attribute versionNumber --ver 0.1.17--

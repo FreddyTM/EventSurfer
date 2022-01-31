@@ -45,6 +45,8 @@ public class CurrentSession {
 	private Connection connection;
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
+	//Tiempo de repetición de TimerJob
+	private long period = 30000; 
 	//Acción que devuelve el programa a la pantalla de login
 	private Action logOutAction;
 	
@@ -131,7 +133,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 10000, 60000);
+		timer.scheduleAtFixedRate(task, 5000, period);
 	}
 	
 	/**
@@ -177,7 +179,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 10000, 60000);
+		timer.scheduleAtFixedRate(task, 5000, period);
 	}
 	
 	/**
@@ -659,6 +661,10 @@ public class CurrentSession {
 
 	public void setAlertShown(boolean alertShown) {
 		this.alertShown = alertShown;
+	}
+
+	public long getPeriod() {
+		return period;
 	}
 
 }
