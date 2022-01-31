@@ -2433,6 +2433,9 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· CompanyUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
 
 	· BusinessUnitUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--

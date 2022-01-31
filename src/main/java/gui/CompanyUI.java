@@ -50,7 +50,7 @@ public class CompanyUI extends JPanel {
 	//Lista de campos de datos asociados a las etiquetas informativas
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
 	//Lista de contenidos de los campos de datos. Sirve de caché para recuperarlos
-	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	//Tras cancelar una edición de datos o la creación de un nuevo centro de trabajo
 	private List<String> textFieldContentList = new ArrayList<String>();
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -573,18 +573,8 @@ public class CompanyUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (CompanyUI.this.panelVisible == true){
-				
-				//Debug
-				System.out.println("Comprobando actualización de datos de la empresa");
-				System.out.println(session.getUpdatedTables().size());
-				
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					
-					//Debug
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
-					
 					//Si en la tabla de actualizaciones aparece la clave Company.TABLE_NAME
 					if (updatedTable.getKey().equals(Company.TABLE_NAME)) {
 						//Asignamos el nuevo contenido a los textfields
