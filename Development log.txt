@@ -2380,6 +2380,10 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 		Clean code
 		Check javadoc
 
+	· EventType class:
+		Clean code
+		Check javadoc
+
 	* - Package main.java.company
 
 	· Company class:

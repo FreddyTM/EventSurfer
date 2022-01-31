@@ -25,7 +25,7 @@ public class EventType {
 	}
 	
 	/**
-	 * Conecta con la base de datos y almacena cada tipo de evento con su clave
+	 * Conecta con la base de datos y almacena cada tipo de incidencia con su clave
 	 * en eventTypes
 	 * @param conn conexión con la base de datos
 	 */
@@ -47,19 +47,12 @@ public class EventType {
 			PersistenceManager.closeResultSet(results);
 			PersistenceManager.closeStatement(statement);
 		}
-		
-		
-		//Debug
-		System.out.println("Tipos de eventos cargados correctamente");
-		System.out.print(eventTypes.entrySet());
-		System.out.println();
-
 	}
 	
 	/**
-	 * Inserta un nuevo tipo de evento en la tabla event_type
+	 * Inserta un nuevo tipo de incidencia en la tabla event_type
 	 * @param conn conexión con la base de datos
-	 * @param descripcion descripción del tipo de evento
+	 * @param descripcion descripción del tipo de incidencia
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
 	public boolean saveEventTypeToDB(Connection conn, String descripcion) {
@@ -80,9 +73,9 @@ public class EventType {
 	}
 	
 	/**
-	 * Añade un nuevo tipo de evento a la lista eventTypes
+	 * Añade un nuevo tipo de incidencia a la lista eventTypes
 	 * @param conn conexión con la base de datos
-	 * @param descripcion descripción del nuevo tipo de evento
+	 * @param descripcion descripción del nuevo tipo de incidencia
 	 * @return true si la insercion se hizo con éxito, false si no
 	 */
 	public boolean addNewEventType (Connection conn, String descripcion) {
@@ -96,10 +89,10 @@ public class EventType {
 	}
 	
 	/**
-	 * Actualiza la descripción de un tipo de evento que ya existe en la base de datos
+	 * Actualiza la descripción de un tipo de incidencia que ya existe en la base de datos
 	 * @param conn conexión a la base de datos
-	 * @param id id del tipo de evento buscado
-	 * @param descripcion descripción actualizada del tipo de evento
+	 * @param id id del tipo de incidencia buscado
+	 * @param descripcion descripción actualizada del tipo de incidencia
 	 * @return true si la actualización se hizo con éxito, false si no
 	 */
 	public boolean updateEventTypeToDB(Connection conn, int id, String descripcion) {
@@ -123,10 +116,11 @@ public class EventType {
 	}
 	
 	/**
-	 * Comprueba si el tipo de evento con id pasado por parámetro se ha usado en algún evento registrado en la base de datos
+	 * Comprueba si el tipo de incidencia con id pasado por parámetro se ha usado en algún evento registrado
+	 * en la base de datos
 	 * @param conn conexión a la base de datos
-	 * @param id id del tipo de evento buscado
-	 * @return true si el tipo de evento se ha utilizado, false si no
+	 * @param id id del tipo de incidencia buscado
+	 * @return true si el tipo de incidencia se ha utilizado, false si no
 	 */
 	public boolean isEventTypeUsed(Connection conn, int id) {
 		Statement stm = null;
@@ -153,9 +147,9 @@ public class EventType {
 	}
 	
 	/**
-	 * Borra un tipo de evento de la base de datos 
+	 * Borra un tipo de incidencia de la base de datos 
 	 * @param conn conexión a la base de datos
-	 * @param descripcion descripción del tipo de evento a borrar de la base de datos
+	 * @param descripcion descripción del tipo de incidencia a borrar de la base de datos
 	 * @return true si el borrado se hizo con éxito, false si no
 	 */
 	public boolean deleteEventTypeFromDB(Connection conn, String descripcion) {
@@ -176,16 +170,16 @@ public class EventType {
 	}
 	
 	/**
-	 * Devuelve el número de tipos de evento almacenados en la base de datos
-	 * @return Número de tipos de eventos 
+	 * Devuelve el número de tipos de incidencia almacenados en la base de datos
+	 * @return Número de tipos de incidencia 
 	 */
 	public int getNumberOfEventTypes() {
 		return eventTypes.size();
 	}
 	
 	/**
-	 * Devuelve un array ordenado alfabéticamente con el nombre de los diferentes tipos de eventos
-	 * @return Tipos de eventos
+	 * Devuelve un array ordenado alfabéticamente con el nombre de los diferentes tipos de incidencias
+	 * @return Tipos de incidencias
 	 */
 	public String[] getEventTypesArray() {
 		String[] tiposDeEvento = new String[getNumberOfEventTypes()];
@@ -198,9 +192,9 @@ public class EventType {
 	}
 	
 	/**
-	 * Retorna el id del tipo de evento pasado por parámetro
-	 * @param description tipo de evento del que queremos saber su id
-	 * @return id del tipo de evento (-1 si no existe)
+	 * Retorna el id del tipo de incidencia pasado por parámetro
+	 * @param description tipo de incidencia del que queremos saber su id
+	 * @return id del tipo de incidencia (-1 si no existe)
 	 */
 	public int getEventTypeId (String description) {
 		int id = -1;
@@ -213,9 +207,9 @@ public class EventType {
 	}
 	
 	/**
-	 * Retorna el tipo de evento que corresponde a la clave pasada por parámetro
+	 * Retorna el tipo de incidencia que corresponde a la clave pasada por parámetro
 	 * @param key
-	 * @return tipo de evento o null si la clave no existe
+	 * @return tipo de incidencia o null si la clave no existe
 	 */
 	public String getEventTypeDescription (int key) {
 		if (eventTypes.containsKey(key)) {
