@@ -63,9 +63,6 @@ public class PersistenceManager {
 			} catch (URISyntaxException e) {
 				throw new DatabaseError("Credenciales de conexión erróneas");
 			}
-//			url = "postgres://jqjqasnlbihnyy:0bb8e23db3107a14e61bbdaaae12c176c5b977663abbb1db3a1dfeadc2091bd4@ec2-18-203-7-163.eu-west-1.compute.amazonaws.com:5432/de2ttdn4inqheo\r\n";
-//			user = "jqjqasnlbihnyy";
-//			password = "0bb8e23db3107a14e61bbdaaae12c176c5b977663abbb1db3a1dfeadc2091bd4";
 		default:
 			url = null;
 			user = null;

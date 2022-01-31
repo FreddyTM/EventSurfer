@@ -2352,6 +2352,12 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 	     FIX ERRORS --VERSION RELEASED IN DAM PROJECT--
 
 
+	* - Package main.java.persistence
+
+	· PersistenceManager class:
+		Clean code
+		Check javadoc	
+
 	* - Package main.java.session
 
 	· CurrentSession class:
