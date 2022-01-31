@@ -331,6 +331,9 @@ public class UserUI extends JPanel {
 		userActiveFilterCheckBox.setBounds(666, 225, 150, 25);
 		userActiveFilterCheckBox.addItemListener(new UserCheckBoxListener());
 		userActiveFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
+		if (!session.getUser().getUserType().equals("ADMIN")) {
+			userActiveFilterCheckBox.setEnabled(false);
+		}
 		add(userActiveFilterCheckBox);
 		
 		userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
@@ -462,11 +465,11 @@ public class UserUI extends JPanel {
 	}
 
 	/**
-	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
-	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
-	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
-	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
-	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
+	 * Obtiene la lista de centros de trabajo cargados en el objeto company. Serán todos los que
+	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo uno
+	 * (el correspondiente al usuario que abre sesión) si es un usuario de otro tipo
+	 * @param active true si se muestran solo los centros de trabajo activos, false para mostrarlos todos
+	 * @return array ordenado alfabéticamente con la lista de centros de trabajo
 	 */
 	private String[] getBunitComboBoxItemsFromSession(boolean active) {
 		List<String> tempList = new ArrayList<String>();
@@ -485,7 +488,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Obiene el índice del elemento de bUnitComboBox que será seleccionado por defecto a partir
 	 * del array pasado por parámetro
-	 * @param array array con la lista de unidades de negocio
+	 * @param array array con la lista de centros de trabajo
 	 * @return índice del elemento a seleccionar por defecto
 	 */
 	private int getSelectedBunitIndexFromArray(String[] array) {
@@ -498,7 +501,7 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de usuarios de la unidad de negocio de la sesión. Serán todos los usuarios si
+	 * Obtiene la lista de usuarios del centro de trabajo de la sesión. Serán todos los usuarios si
 	 * userActiveFilterCheckBox está deseleccionado, y solo los usuarios activos si userActiveFilterCheckBox
 	 * está seleccionado.
 	 * @param active true si se muestran solo los usuarios activos, false para mostrarlos todos
@@ -521,7 +524,7 @@ public class UserUI extends JPanel {
 	/**
 	 * Obiene el índice del elemento de userComboBox que será seleccionado por defecto a partir del array de alias de usuarios
 	 * pasado por parámetro. El alias seleccionado será asignado como usuario seleccionado.
-	 * @param array array con la lista de usuarios de la unidad de negocio de la sesión
+	 * @param array array con la lista de usuarios del centro de trabajo de la sesión
 	 * @param firstSearch determina si se accede al método por primera vez
 	 * @return el índice que corresponda al alias del usuario que abrió sesión, o bien el índice del nuevo usuario seleccionado,
 	 * creado o editado (si no queda inactivo y el filtro de usuarios está activo), o bien 0 si el usuario no está en la lista
@@ -657,19 +660,19 @@ public class UserUI extends JPanel {
 				tField.setBackground(Color.WHITE);
 			}
 		}
-		//El usuario administrador por defecto no puede cambiar su condición de administrador
+		//El usuario administrador por defecto no puede cambiar su tipo de usuario
 		//Un usuario de tipo user no puede cambiar su tipo de usuario
 		if (session.getUser().getId() == 1 && selectedUser.getId() == 1 || session.getUser().getUserType().equals("USER")) {
 			userTypeComboBox.setEnabled(false);
+		//El resto de los usuarios administradores y los usuarios manager sí que pueden cambiar su tipo de usuario
 		} else {
 			userTypeComboBox.setEnabled(true);
 		}
-		
 		currentPasswordField.setEditable(true);
 		newPasswordField.setEditable(true);
 		confirmPasswordField.setEditable(true);
 		//Habilitamos checkbox "Activa" si el usuario de la sesión no es de tipo user y si no es el administrador por defecto
-		if (session.getUser().getUserType().equals("USER") || (session.getUser().getId() == 1 && selectedUser.getId() == 1)) {
+		if (session.getUser().getId() == 1 && selectedUser.getId() == 1 || session.getUser().getUserType().equals("USER")) {
 			activeCheckBox.setEnabled(false);
 		} else {
 			activeCheckBox.setEnabled(true);
@@ -750,7 +753,6 @@ public class UserUI extends JPanel {
 	private boolean testData(User userToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean errorLength = false;
-		Boolean oldPasswordOk = false;
 		String errorAliasText = "YA EXISTE UN USUARIO CON ESE ALIAS";
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
 		String errorCurrentPassText = "SI DESEA GUARDAR UNA NUEVA CONTRASEÑA, INTRODUZCA LA CONTRASEÑA ACTUAL";
@@ -758,10 +760,10 @@ public class UserUI extends JPanel {
 		String errorSamePasswordText = "LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA CONTRASEÑA ACTUAL";
 		String errorPassLengthText = "CONTRASEÑA DE LONGITUD INCORRECTA.";
 		String errorPassTypeText = "LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
-				+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL";
+				+ "UNA MINÚSCULA, UN NÚMERO Y UN CARACTER ESPECIAL";
 		String errorPassMatchText = "LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN";
 		
-		//Si estamos creando un nuevo usuario y el alias del usuario creado ya existe en alguna unidad de negocio,
+		//Si estamos creando un nuevo usuario y el alias del usuario creado ya existe en alguun centro de trabajo,
 		//no se permite la asignación del alias. Los alias son únicos en la base de datos, no pueden tener duplicados
 		if (okActionSelector == UserUI.OK_ACTION_NEW) {
 			List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(session.getConnection(),
@@ -873,7 +875,7 @@ public class UserUI extends JPanel {
 	}
 	
 	/**
-	 * Actualiza el contenido del comboBox que selecciona la unidad de negocio activa
+	 * Actualiza el contenido del comboBox que selecciona el centro de trabajo activo
 	 */
 	private void refreshBunitComboBox() {
 		bUnitComboList = getBunitComboBoxItemsFromSession(bUnitActiveFilterCheckBox.isSelected());
@@ -970,10 +972,10 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del comboBox bUnitComboBox. Cada elemento se corresponde con
-	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
-	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
-	 * de la sessión, reemplazando al que hubiera hasta ese momento. Si activeFilterCheckBox está seleccionado,
-	 * no se mostrarán las unidades de negocio que estén marcadas como no activas
+	 * los centros de trabajo de la compañía que se han cargado en la sesión. Por el nombre seleccionado
+	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como centro de trabajo
+	 * de la sesión, reemplazando al que hubiera hasta ese momento. Si activeFilterCheckBox está seleccionado,
+	 * no se mostrarán los centros de trabajo que estén marcados como no activos
 	 */
 	private class BunitComboListener implements ItemListener {
 
@@ -982,11 +984,11 @@ public class UserUI extends JPanel {
 					
 			String item = (String) bUnitComboBox.getSelectedItem();
 			Company company = session.getCompany();
-			//Recuperamos la unidad de negocio seleccionada
+			//Recuperamos el centro de trabajo seleccionado
 			BusinessUnit selectedBunit = new BusinessUnit().getBusinessUnitByName(company, item);			
 			//La asignamos a la sesión
 			session.setbUnit(selectedBunit);
-			//Actualizamos los usuarios de la unidad de negocio de la sesión
+			//Actualizamos los usuarios del centro de trabajo de la sesión
 			refreshUserComboBox();
 			//Mostramos los datos del usuario seleccionado
 			populateUserFields();
@@ -995,7 +997,7 @@ public class UserUI extends JPanel {
 			//Vaciamos label de información
 			infoLabel.setText("");
 			
-			//Si cambiamos la unidad de negocio de la sesión, comprobamos las condiciones de edición de datos de los usuarios
+			//Si cambiamos el centro de trabajo de la sesión, comprobamos las condiciones de edición de datos de los usuarios
 			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
 			verifyAdminEditConditions();
 			disableEditIfDummyUserSelected();
@@ -1004,8 +1006,8 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del checkbox bUnitActiveFilterCheckBox.
-	 * Si activamos el checkbox solo visualizaremos los usuarios de las unidades de negocio activas. Si lo deseleccionamos
-	 * visualizaremos los usuarios de todas las unidades de negocio. La visualización de usuarios está afectada también
+	 * Si activamos el checkbox solo visualizaremos los usuarios de los centros de trabajo activos. Si lo deseleccionamos
+	 * visualizaremos los usuarios de todos los centros de trabajo. La visualización de usuarios está afectada también
 	 * por el propio filtro de usuarios activos.
 	 */
 	private class BunitCheckBoxListener implements ItemListener {
@@ -1021,9 +1023,9 @@ public class UserUI extends JPanel {
 					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
 					//La asignamos como bUnit de la sesión
 					session.setbUnit(userBunit);
-					//Renovamos la lista de las unidades de negocio del comboBox
+					//Renovamos la lista de los centros de trabajo del comboBox
 					refreshBunitComboBox();
-					//Actualizamos los usuarios de la unidad de negocio de la sesión
+					//Actualizamos los usuarios del centro de trabajo de la sesión
 					refreshUserComboBox();
 					//Mostramos los datos del usuario seleccionado
 					populateUserFields();
@@ -1031,17 +1033,18 @@ public class UserUI extends JPanel {
 					updateDataCache();
 					//Vaciamos label de información
 					infoLabel.setText("");
-				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
+				//Si el centro de trabajo de la sesión está activo, hay que renovar el combobox igualmente para que ya no salgan los centros de trabajo
+				//no activos
 				} else {
-					//Renovamos la lista de las unidades de negocio del comboBox
+					//Renovamos la lista de los centros de trabajo del comboBox
 					refreshBunitComboBox();
 				}
 			} else if (state == ItemEvent.DESELECTED) {
-				//Renovamos la lista de las unidades de negocio del comboBox
+				//Renovamos la lista de los centros de trabajo del comboBox
 				refreshBunitComboBox();
 			}
 			
-			//Si cambiamos la unidad de negocio de la sesión, comprobamos condiciones de edición de datos de los usuarios
+			//Si cambiamos el centro de trabajo de la sesión, comprobamos condiciones de edición de datos de los usuarios
 			//administradores y deshabilitamos la edición de datos si el usuario seleccionado es un usuario dummy
 			verifyAdminEditConditions();
 			disableEditIfDummyUserSelected();
@@ -1050,7 +1053,7 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del ComboBox userComboBox. Cada elemento se corresponde con
-	 * los usuarios de la unidad de negocio seleccionada, que es la unidad de negocio de la sesión.
+	 * los usuarios del centro de trabajo seleccionado, que es el centro de trabajo de la sesión.
 	 * Si userActiveFilterCheckBox está seleccionado, no se mostrarán los usuarios que estén marcados como no activos
 	 */
 	private class UserComboListener implements ItemListener {
@@ -1078,8 +1081,8 @@ public class UserUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del checkbox userActiveFilterCheckBox. Si activamos el checkbox solo
-	 * visualizaremos los usuarios activos de la unidad de negocio seleccionada. Si lo deseleccionamos visualizaremos
-	 * todos los usuarios de dicha unidad de negocio. 
+	 * visualizaremos los usuarios activos del centro de trabajo seleccionado. Si lo deseleccionamos visualizaremos
+	 * todos los usuarios de dicho centro de trabajo. 
 	 */
 	private class UserCheckBoxListener implements ItemListener {
 
@@ -1263,12 +1266,10 @@ public class UserUI extends JPanel {
 			confirmPasswordField.setBackground(Color.WHITE);
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de una nueva unidad de negocio
+			//Aceptamos la creación de un nuevo usuario
 			if (okActionSelector == UserUI.OK_ACTION_NEW) {
-				//Debug
-				System.out.println("Acción de grabar un nuevo usuario");
 				
-				//Creamos nuevo BusinessUnit a partir de los datos del formulario
+				//Creamos un nuevo usuario a partir de los datos del formulario
 				User newUser = new User();
 				newUser.setbUnit(session.getbUnit());
 				newUser.setUserType(userTypeComboBox.getSelectedItem().toString());
@@ -1282,9 +1283,6 @@ public class UserUI extends JPanel {
 				if (testData(newUser)) {
 					//Aplicamos hash a la contraseña del nuevo usuario
 					newUser.setPassword(newUser.passwordHash(String.valueOf(newUser.getPassword())));
-					
-					//Debug
-					System.out.println("Nuevo usuario validado correctamente");
 					
 					//Intentamos grabar el nuevo usuario en la base de datos, retornando un objeto con idénticos
 					//datos que incluye también el id que le ha asignado dicha base de datos
@@ -1301,7 +1299,7 @@ public class UserUI extends JPanel {
 						if(!changeRegister) {
 							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
 						}
-						//Añadimos al nuevo usuario a la lista de usuarios de unidad de negocio de la sesión
+						//Añadimos al nuevo usuario a la lista de usuarios del centro de trabajo de la sesión
 						session.getbUnit().getUsers().add(storedUser);
 						
 						//Si el filtro de usuarios está activo y el nuevo usuario se crea como no activo, no puede asignarse como usuario
@@ -1338,12 +1336,7 @@ public class UserUI extends JPanel {
 			//Aceptamos los cambios de la unidad de negocio editada
 			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
 				
-				//Debug
-				System.out.println("Acción de editar un nuevo usuario");
-				System.out.println("selectedUser alias: " + selectedUser.getUserAlias());
-				
 				currentPasswordField.setBackground(Color.WHITE);
-				
 				//Objeto que recoge los datos actualizados
 				User updatedUser = new User();
 				updatedUser.setId(selectedUser.getId());
@@ -1361,23 +1354,10 @@ public class UserUI extends JPanel {
 					//Si no hay contraseña nueva dejamos la del usuario seleccionado
 					if (updatedUser.getPassword().equals("")) {
 						updatedUser.setPassword(selectedUser.getPassword());
-						
-						//Debug
-						System.out.println("Contraseña sin modificar");
-						
 					//Si hay contraseña nueva le aplicamos el hash
 					} else {
 						updatedUser.setPassword(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
-						
-						//Debug
-						System.out.println("Contraseña modificada");
-						System.out.println(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
-						
 					}
-					
-					//Debug
-					System.out.println("updatedUser alias: " + updatedUser.getUserAlias());
-					
 					//Si los datos actualizados se graban en la base de datos
 					if (new User().updateUserToDB(session.getConnection(), updatedUser)) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla user
@@ -1388,7 +1368,7 @@ public class UserUI extends JPanel {
 						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
 						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
 						boolean stillOpenSession = true;
-						//Localizar en la lista de usuarios de la unidad de negocio de la sesión al usuario con el mismo id que el usuario editado 
+						//Localizar en la lista de usuarios del centro de trabajo de la sesión al usuario con el mismo id que el usuario editado 
 						// y suprimirlo
 				        Iterator<User> iter = session.getbUnit().getUsers().iterator();
 				        while (iter.hasNext()) {
@@ -1403,10 +1383,6 @@ public class UserUI extends JPanel {
 						//también se actualizan los datos de la sesión
 						if (updatedUser.isActivo() || (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
 								&& !userActiveFilterCheckBox.isSelected())) {
-							
-							//Debug
-							System.out.println("Opción EDIT 1");
-							
 					        //El usuario editado pasa a ser el usuario seleccionado, y lo añadimos a la lista de usuarios de la unidad de negocio
 							//de la sesión
 							selectedUser = updatedUser;
@@ -1425,10 +1401,6 @@ public class UserUI extends JPanel {
 						//el usuario editado no puede seguir siendo el usuario seleccionado y por tanto tampoco puede visualizarse
 						} else if (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
 								&& userActiveFilterCheckBox.isSelected()) {
-							
-							//Debug
-							System.out.println("Opción EDIT 2");
-							
 							//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
 							session.getbUnit().getUsers().add(updatedUser);
 							//Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
@@ -1438,10 +1410,6 @@ public class UserUI extends JPanel {
 	
 						//Si el usuario que abre sesión deja inactivo su propio usuario	
 						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
-							
-							//Debug
-							System.out.println("Opción EDIT 3");
-							
 							//Se cerrará la sesión
 							stillOpenSession = false;
 							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
@@ -1449,7 +1417,6 @@ public class UserUI extends JPanel {
 							session.backToLogin(User.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
 							
 						}
-			
 						//Si la sesión sigue abierta
 						if (stillOpenSession) {
 							//Devolvemos el formulario a su estado previo
@@ -1458,18 +1425,10 @@ public class UserUI extends JPanel {
 						
 					//Si los datos actualizados no se graban en la base de datos
 					} else {
-						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS DE USUARIO EN LA BASE DE DATOS");
 					}
-					
-					
-					//Debug
-					System.out.println("Usuario editado correctamente");
-
-					
 				}
-
 			}
-			
 		}
 	}
 	
@@ -1494,39 +1453,25 @@ public class UserUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (UserUI.this.panelVisible == true){
-				
-				//Debug
-				System.out.println("Comprobando actualización de datos de los usuarios");
-				System.out.println(session.getUpdatedTables().size());
-				
 				//Loop por el Map de CurrentSession, si aparece la tabla user, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					
-					//Debug
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
-					
 					//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
 					if (updatedTable.getKey().equals(User.TABLE_NAME)) {
 						
-						//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
-						//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
+						//Si el centro de trabajo de la sesión ha sido marcada como no activa y el filtro de centros de trabajo está
+						//activado, el centro de trabajo de la sesión pasa a ser el del usuario que abrió sesión
 						if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-							//Buscamos la bUnit del usuario que abrió sesión
+							//Buscamos el centro de trabajo del usuario que abrió sesión
 							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-							//La asignamos como bUnit de la sesión
+							//Lo asignamos como centro de trabajo de la sesión
 							session.setbUnit(userBunit);
-							//Renovamos la lista de las unidades de negocio del comboBox
+							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshBunitComboBox();
 						}
-						
-						//Debug
-						System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
-						System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
-						
+
 						//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
-						//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
-						//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
+						//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando el centro de trabajo de dicho usuario)
+						//o el primer usuario de la lista de usuarios de cualquier otro centro de trabajo que estemos mostrando
 						//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
 						//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
 						//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
@@ -1537,11 +1482,7 @@ public class UserUI extends JPanel {
 						populateUserFields();
 						//Hacemos backup del contenido de los datos del formulario
 						updateDataCache();
-						
-						//Debug
-						String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
-						System.out.println("El nuevo usuario seleccionado es " + string );
-						
+
 						//Informamos por pantalla de la actualización
 						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
 						//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido

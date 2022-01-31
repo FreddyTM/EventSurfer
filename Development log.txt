@@ -2450,17 +2450,23 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· UserUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
+				   --fix userActiveFilterCheckBox enabled for user type users--
+		Update testData() --update wrong password error text--
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
 
 	· AreaUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 
 	· EventTypeUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
-
-	· EventDataUI class:
-		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
 		Check javadoc
+
+	· EventDataUI class:
+		Update constructor --timerjob period linked to currentsession (period / 2)--
+
 
 	
