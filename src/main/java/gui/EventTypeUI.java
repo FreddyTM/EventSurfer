@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -55,9 +54,9 @@ public class EventTypeUI extends JPanel {
 	
 	//Elementos que aparecerán en la lista de tipos de eventos
 	private String[] registeredEventTypes = getEventTypesFromSession();
-	//Registra el tipo de evento seleccionado en cada momento
+	//Registra el tipo de incidencia seleccionado en cada momento
 	private String selectedEventType;
-	//Backup del tipo de evento seleccionado
+	//Backup del tipo de incidencia seleccionado
 	private String selectedEventTypeBackup;
 	//Registra el índice del elemento seleccionado en la lista
 	private int itemSelectedIndex = 0;
@@ -75,13 +74,13 @@ public class EventTypeUI extends JPanel {
 	private JButton newButton;
 	private JButton deleteButton = new JButton();
 	
-	//Modelo de datos de la lista de tipos de eventos
+	//Modelo de datos de la lista de tipos de incidencias
 	private DefaultListModel<String> registeredModel = new DefaultListModel<String>();
-	//Lista de tipos de evento
+	//Lista de tipos de incidencias
 	private JList<String> registeredList;
-	//Contenedor de la lista de tipos de evento
+	//Contenedor de la lista de tipos de incidencias
 	private JScrollPane registeredScrollPane;
-	//Registra si la lista de tipos de evento ha sido modificada
+	//Registra si la lista de tipos de incidencias ha sido modificada
 	private boolean listModified = false;
 	
 	private final Action editAction = new EditAction();
@@ -99,7 +98,7 @@ public class EventTypeUI extends JPanel {
 		panelVisible = true;
 		
 		JTextPane eventTypeTxt = new JTextPane();
-		eventTypeTxt.setText("GESTIÓN DE TIPOS DE EVENTO");
+		eventTypeTxt.setText("GESTIÓN DE TIPOS DE INCIDENCIAS");
 		eventTypeTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		eventTypeTxt.setFocusable(false);
 		eventTypeTxt.setEditable(false);
@@ -107,10 +106,10 @@ public class EventTypeUI extends JPanel {
 		eventTypeTxt.setBounds(50, 50, 380, 30);
 		add(eventTypeTxt);
 		
-		JLabel eventTypeLabel = new JLabel("Tipo de evento");
+		JLabel eventTypeLabel = new JLabel("Tipo de incidencia");
 		eventTypeLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		eventTypeLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		eventTypeLabel.setBounds(100, 125, 140, 25);
+		eventTypeLabel.setBounds(70, 125, 165, 25);
 		add(eventTypeLabel);
 		
 		maxCharsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -126,10 +125,6 @@ public class EventTypeUI extends JPanel {
 		
 		selectedEventType = eventTypeNameField.getText();
 		selectedEventTypeBackup = selectedEventType;
-		
-		//Debug
-		System.out.println("Constructor. Tipo de evento seleccionado: " + selectedEventType);
-		System.out.println("Constructor. Backup tipo de evento seleccionado: " + selectedEventType);
 		
 		infoLabel = new JLabel();
 		infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -173,7 +168,7 @@ public class EventTypeUI extends JPanel {
 		oKButton.setEnabled(false);
 		add(oKButton);
 		
-		JLabel availableLabel = new JLabel("Tipos de eventos registrados");
+		JLabel availableLabel = new JLabel("Tipos de incidencias registrados");
 		availableLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		availableLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		availableLabel.setBounds(100, 300, 300, 25);
@@ -212,8 +207,8 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de tipos de evento registrados en la sesión abierta
-	 * @return lista de tipos de evento registrados. Si no hay ninguno, la lista incluye solo NO_EVENT_TYPE 
+	 * Obtiene la lista de tipos de incidencias registrados en la sesión abierta
+	 * @return lista de tipos de incidencia registrados. Si no hay ninguno, la lista incluye solo NO_EVENT_TYPE 
 	 */
 	private String[] getEventTypesFromSession() {
 		String[] itemList = TypesStatesContainer.getEvType().getEventTypesArray();
@@ -226,93 +221,85 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Si el usuario de la sesión es de tipo manager, habilita la edición del tipo de evento seleccionado solo en el caso
-	 * de que esté asignado exclusivamente a eventos registrados en la misma unidad de negocio que dicho usuario, o bien que
-	 * no esté asignado a ningún evento
+	 * Si el usuario de la sesión es de tipo manager, habilita la edición del tipo de incidencia seleccionado solo en el caso
+	 * de que el tipo de incidencia esté asignado exclusivamente a incidencias registradas en el mismo centro de trabajo que dicho usuario,
+	 * o bien que no esté asignado a ninguna incidencia
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
 	private boolean verifyManagerEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
 		String action = "";
-		//Si estamos editando el tipo de evento
+		//Si estamos editando el tipo de incidencia
 		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 			action = "editar";
-		//Si queremos borrar el tipo de evento
+		//Si queremos borrar el tipo de incidencia
 		} else {
 			action = "borrar";
 		}
-		//Tipo de evento no registrado en eventos de ninguna unidad de negocio
+		//Tipo de incidencia no registrado en incidencias de ningun centro de trabajo
 		if (bUnitsList.size() == 0) {
 			return true;
 		}
-		//Tipo de evento registrado en eventos de más de una unidad de negocio
+		//Tipo de incidencia registrado en incidencias de más de un centro de trabajo
 		if (bUnitsList.size() > 1) {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de eventos registrados en eventos de varias unidades de negocio",
+					"Un usuario Manager no puede " + action + " tipos de incidencia registrados en eventos de varios centros de trabajo",
 					EventTypeUI.this, DIALOG_INFO);
 			return false;
 		}
-		//Tipo de evento registrado en eventos de la unidad de negocio de usuario manager que abre sesión
+		//Tipo de incidencia registrado en incidencias del centro de trabajo del usuario manager que abre sesión
 		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
 			return true;
-		//Tipo de evento registrado en eventos de una unidad de negocio distinta a la del usuario manager que abre sesión
+		//Tipo de incidencia registrado en incidencias de un centro de trabajo distint al del usuario manager que abre sesión
 		} else {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de evento registrados en eventos de unidades de negocio distintas a la suya",
+					"Un usuario Manager no puede " + action + " tipos de incidencia registrados en incidencias de centros de trabajo distintos al suyo",
 					EventTypeUI.this, DIALOG_INFO);
 			return false;
 		}
 	}
 	
 	/**
-	 * Si el usuario de la sesión es de tipo admin y el tipo de evento seleccionado está registrado en eventos de más
-	 * de una unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta continuar, se habilita
-	 * la edición del tipo de evento seleccionado. También se habilita la edición directamente en el caso de que el
-	 * tipo de evento seleccionado esté registrado en eventos de una sola unidad de negocio o de ninguna. 
+	 * Si el usuario de la sesión es de tipo admin y el tipo de incidencia seleccionado está registrado en incidencias de más
+	 * de un centro de trabajo, advierte al usuario de esta circunstancia. Si el usuario acepta continuar, se habilita
+	 * la edición del tipo de incidencia seleccionado. También se habilita la edición directamente en el caso de que el
+	 * tipo de incidencia seleccionado esté registrado en incidencias de un solo centro de trabajo o de ninguna. 
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
 	private boolean verifyAdminEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
 		String info = "";
-		//Si estamos editando el tipo de evento
+		//Si estamos editando el tipo de incidencia
 		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-			info = "Edición de tipo de evento registrado en más de una unidad de negocio. ¿Desea continuar?";
-		//Si queremos borrar el tipo de evento 
+			info = "Edición de tipo de incidencia registrado en más de un centro de trabajo. ¿Desea continuar?";
+		//Si queremos borrar el tipo de incidencia 
 		} else {
-			info = "Borrado de tipo de evento registrado en más de más de una unidad de negocio. "
+			info = "Borrado de tipo de incidencia registrado en más de más de un centro de trabajo. "
 					+ "No se puede deshacer. " + "¿Desea continuar?";
 		}
-		//Tipo de evento registrado en eventos de más de una unidad de negocio
+		//Tipo de incidencia registrado en incidencias de más de un centro de trabajo
 		if (bUnitsList.size() > 1) {
 			int optionSelected = ToolBox.showDialog(
 					info, EventTypeUI.this,
 					DIALOG_YES_NO);
 			if (optionSelected == JOptionPane.YES_OPTION) {
-				//Debug
-				System.out.println("Edición o borrado OK");
 				return true;
 			} else {
-				//Debug
-				System.out.println("Edición o borrado cancelado");
 				return false;
 			}
-		//Tipo de evento registrado en eventos de una o ninguna unidad de negocio
+		//Tipo de incidencia registrado en incidencias de uno o ningún centro de trabajo
 		} else {
 			if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
 				return true;
 			} else {	
 				int optionSelected = ToolBox.showDialog(
-						"El borrado de tipos de eventos no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+						"El borrado de tipos de incidencias no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
 						DIALOG_YES_NO);
 				if (optionSelected == JOptionPane.YES_OPTION) {
-					//Debug
-					System.out.println("Borrado OK");
 					return true;
 				} else {							
-					//Debug
-					System.out.println("Borrado cancelado");
 					return false;
 				}
 			}
@@ -327,15 +314,15 @@ public class EventTypeUI extends JPanel {
 	private boolean testData () {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
-		String errorNameText = "YA EXISTE UN TIPO DE EVENTO CON ESE NOMBRE";
+		String errorNameText = "YA EXISTE UN TIPO DE INCIDENCIA CON ESE NOMBRE";
 		
-		//Comprobamos que el nombre del tipo de evento no existe ya en la base de datos
-		//Obtenemos la lista de todos los tipos de evento
+		//Comprobamos que el nombre del tipo de incidencia no existe ya en la base de datos
+		//Obtenemos la lista de todos los tipos de incidencia
 		String[] itemList = TypesStatesContainer.getEvType().getEventTypesArray();
 		
-		//Si estamos creando tipo de evento nuevo
+		//Si estamos creando tipo de incidencia nuevo
 		if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
-			//Si el nombre del tipo de evento creado ya existe no se permite su creación
+			//Si el nombre del tipo de incidencia creado ya existe no se permite su creación
 			for (String eType: itemList) {
 				if (eType.equals(eventTypeNameField.getText())) {
 					infoLabel.setText(errorNameText);
@@ -343,11 +330,11 @@ public class EventTypeUI extends JPanel {
 					return false;
 				}
 			}
-		//Si estamos editando un tipo de evento existente
+		//Si estamos editando un tipo de incidencia existente
 		} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-			//Si cambiamos el nombre del tipo de evento editado
+			//Si cambiamos el nombre del tipo de incidencia editado
 			if (!selectedEventType.equals(eventTypeNameField.getText())) {
-				//Comprobamos que el nombre editado no pertenezca a otro tipo de evento existente
+				//Comprobamos que el nombre editado no pertenezca a otro tipo de incidencia existente
 				for (String eType: itemList) {
 					if (eType.equals(eventTypeNameField.getText())) {
 						infoLabel.setText(errorNameText);
@@ -357,7 +344,6 @@ public class EventTypeUI extends JPanel {
 				}
 			}
 		}
-
 		if (eventTypeNameField.getText().length() > 100 || eventTypeNameField.getText().length() == 0) {
 			eventTypeNameField.setBackground(Color.YELLOW);
 			infoLabel.setText(errorLengthText);
@@ -375,9 +361,6 @@ public class EventTypeUI extends JPanel {
 		//Datos editables
 		eventTypeNameField.setEditable(true);
 		eventTypeNameField.setBackground(Color.WHITE);
-		
-		//Debug
-		System.out.println("EditableDataOn. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
@@ -389,34 +372,24 @@ public class EventTypeUI extends JPanel {
 		//Datos no editables
 		eventTypeNameField.setEditable(true);
 		eventTypeNameField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-
-		//Debug
-		System.out.println("EditableDataOff. Tipo de evento seleccionado: " + selectedEventType);
 	}
 	
 	/**
-	 * Vacía el contenido de la lista de tipos de evento
+	 * Vacía el contenido de la lista de tipos de incidencia
 	 */
 	private void emptyList() {
-		
-		//Debug
-		System.out.println("EmptyList. Tipo de evento seleccionado PRE CLEAR: " + selectedEventType);
-		
 		selectedEventType = null;
 		registeredModel.clear();
 		registeredList.setModel(registeredModel);
 		listModified = true;
-		
-		//Debug
-		System.out.println("EmptyList. Tipo de evento seleccionado POST CLEAR: " + selectedEventType);
 	}
 	
 	/**
-	 * Refresca el contenido de la lista de tipos de evento
+	 * Refresca el contenido de la lista de tipos de incidencia
 	 */
 	private void refreshList() {
 		if (selectedEventType != null) {
-			//Obtenemos la lista de todos los tipos de evento
+			//Obtenemos la lista de todos los tipos de incidencia
 			registeredEventTypes = getEventTypesFromSession();
 			registeredModel.clear();
 			for (String item : registeredEventTypes) {
@@ -424,16 +397,14 @@ public class EventTypeUI extends JPanel {
 			}
 			registeredList.setModel(registeredModel);
 		} else {
-			//Debug
-			System.out.println("selectedEventType = null y el modelo se borra");
 			registeredModel.clear();
 		}
 	}
 	
 	/**
-	 * Busca el índice de la lista de tipos de evento que ocupa el nuevo tipo de evento pasado por parámetro
-	 * @param newElement tipo de evento del que buscamos su índice en la lista
-	 * @return índice del tipo de evento (-1 si el elemento no está en la lista)
+	 * Busca el índice de la lista de tipos de incidencia que ocupa el nuevo tipo de incidencia pasado por parámetro
+	 * @param newElement tipo de incidencia del que buscamos su índice en la lista
+	 * @return índice del tipo de incidencia (-1 si el elemento no está en la lista)
 	 */
 	private int getIndexOfElement(String newElement) {
 		for (int i = 0; i < registeredList.getModel().getSize(); i++) {
@@ -446,10 +417,10 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Devuelve el formulario a su estado previo tras la creación o la edición de un tipo de evento
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de un tipo de incidencia
 	 */
 	private void afterNewOrEditData() {
-		//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+		//Hacemos backup del tipo de incidencia y del índice que ocupa en la lista
 		updateDataCache();
 		//Formulario no editable
 		editableDataOff();
@@ -463,7 +434,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Hace una copia del tipo de evento seleccionado y del índice que ocupa en la lista de tipos de evento
+	 * Hace una copia del tipo de incidencia seleccionado y del índice que ocupa en la lista de tipos de incidencias
 	 */
 	private void updateDataCache() {
 		selectedEventTypeBackup = selectedEventType;
@@ -471,7 +442,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que monitoriza la selección de la lista de tipos de evento disponibles
+	 * Listener que monitoriza la selección de la lista de tipos de incidencias disponibles
 	 */
 	private class RegisteredListener implements ListSelectionListener {
 
@@ -501,25 +472,19 @@ public class EventTypeUI extends JPanel {
 						itemSelectedIndex = registeredList.getSelectedIndex();						
 					}
 				} 
-				//Si el evento seleccionado es null
+				//Si la incidencia seleccionada es null
 				if (selectedEventType == null) {
 					selectedEventType = selectedEventTypeBackup;
 					itemSelectedIndex = itemSelectedBackupIndex;
 				}
-				//Debug
-				System.out.println("Listener. Indice seleccionado: " + itemSelectedIndex);
-				
 				eventTypeNameField.setText(selectedEventType);
-				
-				//Debug
-				System.out.println("Listener. Tipo de evento seleccionado: " + selectedEventType);
 			}
 		}		
 	}
 	
 	/**
 	 * Acción del botón Nuevo. Se deshabilita el propio botón, el botón Editar y el botón Borrar. Se vacían
-	 * los campos de texto y se habilita su edición para añadir la información de un nuevo tipo de evento.
+	 * los campos de texto y se habilita su edición para añadir la información de un nuevo tipo de incidencia.
 	 * Se habilita el botón Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
 	 */
 	public class NewAction extends AbstractAction {
@@ -537,16 +502,11 @@ public class EventTypeUI extends JPanel {
 			deleteButton.setEnabled(false);
 			infoLabel.setText("");
 			
-			//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+			//Hacemos backup del tipo de incidencia y del índice que ocupa en la lista
 			updateDataCache();
-			
-			//Debug
-			System.out.println("NewAction. Tipo de evento seleccionado: " + selectedEventTypeBackup);
-			System.out.println("NewAction. Indice de evento seleccionado: " + itemSelectedBackupIndex);
-			
 			//Formulario editable
 			editableDataOn();
-			//Vaciamos las lista de tipos de evento
+			//Vaciamos las lista de tipos de incidencia
 			emptyList();
 			//Vaciamos los campos de texto
 			eventTypeNameField.setText("");
@@ -575,7 +535,7 @@ public class EventTypeUI extends JPanel {
 			}
 			
 			if (editEnabled) {
-				//Hacemos backup del tipo de evento y del índice que ocupa en la lista
+				//Hacemos backup del tipo de incidencia y del índice que ocupa en la lista
 				updateDataCache();
 				oKButton.setEnabled(true);
 				cancelButton.setEnabled(true);
@@ -625,11 +585,11 @@ public class EventTypeUI extends JPanel {
 
 			//Si la lista de tipos de evento ha cambiado
 			if (listModified) {
-				//Refrescamos lista de tipos de evento
+				//Refrescamos lista de tipos de incidencia
 				refreshList();
 				listModified = false;
 			}
-			//Reactivamos la lista de tipos de evento
+			//Reactivamos la lista de tipos de incidencia
 			registeredList.setEnabled(true);
 			//Recuperamos valores previos a la edición de los datos
 			eventTypeNameField.setText(selectedEventTypeBackup);
@@ -648,34 +608,22 @@ public class EventTypeUI extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			//Debug
-			infoLabel.setText("Acción de borrar un tipo de evento");
-			
 			//Usamos okActionSelector para filtrar el comportamiento del RegisteredListener
 			okActionSelector = EventTypeUI.OK_ACTION_EDIT;
 			boolean deleteOK = false;
-			//Comprobamos que el tipo de evento a borrar no está registrado en ningún evento
-			//Obtenemos el id del tipo de evento seleccionado
+			//Comprobamos que el tipo de incidencia a borrar no está registrado en ninguna incidencia
+			//Obtenemos el id del tipo de incidencia seleccionado
 			int id = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 			if (new Event().getEventTypesOnEventFromDB(session.getConnection(), id) != 0) {
-				//Debug
-				System.out.println("Borrado prohibido (ALL)");
-				
 				ToolBox.showDialog(
 						"No se pueden borrar tipos de evento registrados en eventos", EventTypeUI.this,
 						DIALOG_INFO);
 			//Se advierte de que el borrado es irreversible, y se autoriza si se acepta
 			} else {
-				
-				//Debug
-				System.out.println("Borrado autorizado (ALL)");
-				
 				int optionSelected = ToolBox.showDialog(
 						"El borrado de tipos de evento no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
 						DIALOG_YES_NO);
 				if (optionSelected != JOptionPane.YES_OPTION) {
-					//Debug
-					System.out.println("Borrado cancelado");
 					okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
 					return;
 				} else {							
@@ -683,30 +631,27 @@ public class EventTypeUI extends JPanel {
 				}			
 			}
 			
-			//Si el borrado se autoriza, se borra el tipo de evento seleccionado de la base de datos
+			//Si el borrado se autoriza, se borra el tipo de incidencia seleccionado de la base de datos
 			if (deleteOK) {
 				
-				//Debug
-				System.out.println("Borrando tipo de evento de la base de datos...");
-				
-				//Si el tipo de evento se borra correctamente de la base de datos
+				//Si el tipo de incidencia se borra correctamente de la base de datos
 				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
 					//Registramos fecha y hora de la actualización de los datos de la tabla event_type
 					PersistenceManager.registerTableModification(infoLabel, "TIPO DE EVENTO BORRADO:", session.getConnection(), tNow,
 							EventType.TABLE_NAME);					
-				//Si el tipo de evento no se almacena correctamente en la base de datos	
+				//Si el tipo de incidencia no se almacena correctamente en la base de datos	
 				} else {
 					infoLabel.setText("ERROR DE BORRADO DEL TIPO DE EVENTO EN LA BASE DE DATOS");
 				}
 				
-				//Eliminamos el tipo de evento seleccionado de la lista de tipos de evento
+				//Eliminamos el tipo de incidencia seleccionado de la lista de tipos de incidencia
 				TypesStatesContainer.getEvType().getEventTypes().remove(id);
-				//Refrescamos la lista de tipos de evento
+				//Refrescamos la lista de tipos de incidencia
 				refreshList();
-				//Designamos el primer elemento de la lista como tipo de evento seleccionado
+				//Designamos el primer elemento de la lista como tipo de incidencia seleccionado
 				itemSelectedIndex = 0;
 				registeredList.setSelectedIndex(itemSelectedIndex);
-				//Mostramos en pantalla y designamos como tipo de evento seleccionado el primer elemento de la lista
+				//Mostramos en pantalla y designamos como tipo de incidencia seleccionado el primer elemento de la lista
 				eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
 				selectedEventType = eventTypeNameField.getText();
 				//Devolvemos el formulario a su estado previo
@@ -728,85 +673,65 @@ public class EventTypeUI extends JPanel {
 
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de un nuevo tipo de evento
+			//Aceptamos la creación de un nuevo tipo de incidencia
 			if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
-				//Debug
-				System.out.println("Acción de grabar un tipo de evento nuevo");
 				//Validamos los datos del formulario
 				if (testData()) {
-					
-					//Debug
-					System.out.println("Pasamos el test!!");
-					
-					//Intentamos grabar el nuevo tipo de evento en la base de datos, insertando una nueva entrada de tipos
-					//de eventos en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
+					//Intentamos grabar el nuevo tipo de incidencia en la base de datos, insertando una nueva entrada de tipos
+					//de incidencias en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
 					if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
-						//Si el tipo de evento se almacena correctamente en la base de datos
+						//Si el tipo de incidencia se almacena correctamente en la base de datos
 						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-						PersistenceManager.registerTableModification(infoLabel, "NUEVO TIPO DE EVENTO REGISTRADO: ", session.getConnection(), tNow,
+						PersistenceManager.registerTableModification(infoLabel, "NUEVO TIPO DE INCIDENCIA REGISTRADO: ", session.getConnection(), tNow,
 								EventType.TABLE_NAME);			
-						//Asignamos el tipo de evento guardado como tipo de evento seleccionado
+						//Asignamos el tipo de incidencia guardado como tipo de incidencia seleccionado
 						selectedEventType = eventTypeNameField.getText();
-						//Refrescamos la lista de tipos de evento
+						//Refrescamos la lista de tipos de incidencia
 						refreshList();
-						//Buscamos el índice del nuevo tipo de evento y lo seleccionamos en la lista
+						//Buscamos el índice del nuevo tipo de incidencia y lo seleccionamos en la lista
 						int newElementIndex = getIndexOfElement(selectedEventType);
 						registeredList.setSelectedIndex(newElementIndex);		
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditData();
 						
-					//Si el tipo de evento no se almacena correctamente en la base de datos	
+					//Si el tipo de incidencia no se almacena correctamente en la base de datos	
 					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE EVENTO EN LA BASE DE DATOS");
-					}
-								
-					//Debug
-					for (Entry<Integer, String> item : TypesStatesContainer.getEvType().getEventTypes().entrySet()) {
-						System.out.print(item);
+						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE INCIDENCIA EN LA BASE DE DATOS");
 					}
 				}
 				
-			//Aceptamos la edición de un tipo de evento	existente
+			//Aceptamos la edición de un tipo de incidencia	existente
 			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-				
-				//Debug
-				System.out.println("Guardando los cambios del tipo de evento " + eventTypeNameField.getText());
-				
 				//Validamos los datos del formulario
 				if (testData()) {
-					//Buscamos el id del tipo de evento a editar
+					//Buscamos el id del tipo de incidencia a editar
 					int itemId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventTypeBackup);
-					//Si el id obtenido corresponde a un tipo de evento almacenado en la base de datos
+					//Si el id obtenido corresponde a un tipo de incidencia almacenado en la base de datos
 					if (itemId != -1) {
 						//Si los datos actualizados se graban en la base de datos
 						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-							PersistenceManager.registerTableModification(infoLabel, "DATOS DEL TIPO DE EVENTO ACTUALIZADOS: ", session.getConnection(), tNow,
+							PersistenceManager.registerTableModification(infoLabel, "DATOS DEL TIPO DE INCIDENCIA ACTUALIZADOS: ", session.getConnection(), tNow,
 									EventType.TABLE_NAME);
 							//Hacemos backup del contenido del campo de texto
 							selectedEventTypeBackup = eventTypeNameField.getText();
-							//Actualizamos la lista de tipos de evento
+							//Actualizamos la lista de tipos de incidencia
 							TypesStatesContainer.getEvType().getEventTypes().replace(itemId, eventTypeNameField.getText());
-							
-							//Debug
-							System.out.println("Tipo de evento seleccionado antes de la edición: " + selectedEventType);
-							System.out.println("Nuevo valor del tipo de evento: " + eventTypeNameField.getText());
-							
-							//Refrescamos la lista de tipos de evento
+							//Refrescamos la lista de tipos de incidencia
 							refreshList();
-							//Reasignamos el tipo de evento seleccionado y su índice en la lista
+							//Reasignamos el tipo de incidencia seleccionado y su índice en la lista
 							eventTypeNameField.setText(selectedEventType);
-							//Buscamos el índice del  tipo de evento editado y lo seleccionamos en la lista
+							//Buscamos el índice del tipo de incidencia editado y lo seleccionamos en la lista
 							int newElementIndex = getIndexOfElement(selectedEventType);
 							registeredList.setSelectedIndex(newElementIndex);
-							//Reactivamos la lista de tipos de evento
+							//Reactivamos la lista de tipos de incidencia
 							registeredList.setEnabled(true);
 							//Devolvemos el formulario a su estado previo
 							afterNewOrEditData();
 						
 						//Si los datos actualizados no se graban en la base de datos
 						} else {
-							infoLabel.setText("ERROR DE ACTUALIZACIÓN DEL TIPO DE EVENTO EN LA BASE DE DATOS");							
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DEL TIPO DE INCIDENCIA EN LA BASE DE DATOS");							
 						}
 					}
 				}
@@ -835,26 +760,16 @@ public class EventTypeUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (EventTypeUI.this.panelVisible == true){
-				
-				//Debug
-				System.out.println("Comprobando actualización de datos de tipos de eventos");
-				System.out.println(session.getUpdatedTables().size());
-				
 				//Loop por el Map de CurrentSession, si aparece la tabla event_type, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					
-					//Debug
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
-					
-					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
+					//Si en la tabla de actualizaciones aparece la clave EventType.TABLE_NAME
 					if (updatedTable.getKey().equals(EventType.TABLE_NAME)) {
 						
 						//LÓGICA DE ACTUALIZACIÓN
 						
-						//Refrescamos la lista de tipos de eventos
+						//Refrescamos la lista de tipos de incidencias
 						refreshList();
-						//Asignamos el tipo de evento seleccionado y su índice en la lista
+						//Asignamos el tipo de incidencia seleccionado y su índice en la lista
 						eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
 						selectedEventType = eventTypeNameField.getText();
 						itemSelectedIndex = 0;
@@ -863,7 +778,7 @@ public class EventTypeUI extends JPanel {
 						updateDataCache();
 						
 						//Informamos por pantalla de la actualización
-						EventTypeUI.this.infoLabel.setText("DATOS DE TIPOS DE EVENTO ACTUALIZADOS: " +
+						EventTypeUI.this.infoLabel.setText("DATOS DE TIPOS DE INCIDENCIA ACTUALIZADOS: " +
 						ToolBox.formatTimestamp(updatedTable.getValue(), null));					
 					}
 				}
