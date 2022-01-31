@@ -88,7 +88,7 @@ public class Selector extends JPanel {
 		bUnitButton.setAction(bUnitAction);
 		bUnitButton.setMargin(new Insets(2,2,2,2));
 		bUnitButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		bUnitButton.setText("<html><center>"+"UNIDADES" + "<br>" + "DE" + "<br>" + "NEGOCIO" + "</center></html>");
+		bUnitButton.setText("<html><center>"+"CENTROS" + "<br>" + "DE" + "<br>" + "TRABAJO" + "</center></html>");
 		bUnitButton.setMinimumSize(dim);
 		bUnitButton.setPreferredSize(dim);
 		add(bUnitButton);
@@ -139,16 +139,9 @@ public class Selector extends JPanel {
 	 * @param panel panel a mostrar
 	 */
 	public void showPane(AppWindow frame, JScrollPane pane) {
-//		JPanel panel = new JPanel();
-//		panel.add(pane);
-//		frame.setCenterPanel(panel);
-//		frame.getCenterPanel().add(pane);
 		frame.getBasePanel().add(pane, BorderLayout.CENTER);
 		frame.revalidate();
 		frame.repaint();
-//		Dimension dim = new Dimension(panel.getWidth(), panel.getHeight());
-//		panel.setPreferredSize(dim);
-//		pane.getHorizontalScrollBar().setMaximum(panel.getContainersTotalWidth());
 	}
 	
 	/**
@@ -214,7 +207,7 @@ public class Selector extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Unidad de negocio. Muestra los datos de las unidades de negocio
+	 * Acción del botón Centros de trabajo. Muestra los datos de las unidades de negocio
 	 */
 	private class BunitAction extends AbstractAction {
 		public BunitAction() {
@@ -225,7 +218,7 @@ public class Selector extends JPanel {
 			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de unidad de negocio	
+			//Creamos panel de centros de trabajo	
 			BusinessUnitUI bUnitUI = new BusinessUnitUI(session);
 			//Mostramos el panel
 			showPanel(frame, bUnitUI);
@@ -272,7 +265,7 @@ public class Selector extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Tipos de evento. Muestra los tipos de eventos
+	 * Acción del botón Tipos de incidencia. Muestra los tipos de incidencia
 	 */
 	private class EventTypeAction extends AbstractAction {
 		public EventTypeAction() {
@@ -284,7 +277,7 @@ public class Selector extends JPanel {
 			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de tipo de evento
+			//Creamos panel de tipo de incidencia
 			EventTypeUI eTypeUI = new EventTypeUI(session);
 			//Mostramos el panel
 			showPanel(frame, eTypeUI);
@@ -292,7 +285,7 @@ public class Selector extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Eventos. Muestra los datos de los eventos
+	 * Acción del botón Incidencias. Muestra los datos de las incidencias
 	 */
 	private class EventAction extends AbstractAction {
 		public EventAction() {
@@ -304,7 +297,7 @@ public class Selector extends JPanel {
 			cleanScreen();
 			//Vaciamos el panel central y le quitamos visibilidad
 			hidePanel(frame, frame.getCenterPanel());
-			//Creamos panel de datos de evento
+			//Creamos panel de datos de incidencia
 			EventDataUI eDataUI = new EventDataUI(session);
 			eDataUI.setPreferredSize(new Dimension(1770, 980));		
 			JScrollPane scrollPane = new JScrollPane(eDataUI);
@@ -316,12 +309,7 @@ public class Selector extends JPanel {
 			eDataUI.setScrollPane(scrollPane);
 			scrollPane.setVisible(true);
 			//Mostramos el panel
-			showPane(frame, scrollPane);
-//			//new code
-			
-//			EventDataUI eDataUI = new EventDataUI(session, Selector.this);
-//			//Mostramos el panel
-//			showPanel(frame, eDataUI);	
+			showPane(frame, scrollPane);	
 		}
 	}
 	

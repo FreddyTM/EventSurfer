@@ -2367,6 +2367,11 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.17--
 
+	· Selector class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+				    --Clean code--
+				    --Check javadoc--
+
 	· CompanyUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 
