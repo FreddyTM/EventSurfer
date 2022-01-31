@@ -70,10 +70,10 @@ public class BusinessUnitUI extends JPanel {
 	//Lista de campos de datos asociados a las etiquetas informativas
 	private List<JTextField> textFieldList = new ArrayList<JTextField>();
 	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
-	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	//Tras cancelar una edición de datos o la creación de un nuevo centro de trabajo
 	private List<String> textFieldContentList = new ArrayList<String>();
 	//Último valor de activeCheckBox. Sirve de backup para recuperarlo
-	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	//Tras cancelar una edición de datos o la creación de un nuevo centro de trabajo
 	private boolean lastActive;
 	private final Action editAction = new EditAction();
 	private final Action cancelAction = new CancelAction();
@@ -91,7 +91,7 @@ public class BusinessUnitUI extends JPanel {
 		
 		JTextPane bUnitTxt = new JTextPane();
 		bUnitTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
-		bUnitTxt.setText("DATOS DE LAS UNIDADES DE NEGOCIO");
+		bUnitTxt.setText("DATOS DE LOS CENTROS DE TRABAJO");
 		bUnitTxt.setBackground(UIManager.getColor(this.getBackground()));
 		bUnitTxt.setEditable(false);
 		bUnitTxt.setFocusable(false);
@@ -104,7 +104,7 @@ public class BusinessUnitUI extends JPanel {
 		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
 		
-		JLabel selectLabel = new JLabel("Unidades de negocio");
+		JLabel selectLabel = new JLabel("Centros de trabajo");
 		selectLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		selectLabel.setBounds(50, 175, 200, 25);
@@ -152,7 +152,7 @@ public class BusinessUnitUI extends JPanel {
 		mailLabel.setBounds(50, 525, 200, 25);
 		add(mailLabel);
 		
-		JLabel activaLabel = new JLabel("Activa");
+		JLabel activaLabel = new JLabel("Activo");
 		activaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		activaLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activaLabel.setBounds(50, 575, 200, 25);
@@ -168,7 +168,7 @@ public class BusinessUnitUI extends JPanel {
 		textFieldContentList.add(session.getbUnit().getCompany().getNombre());
 		add(companyField);
 		
-		activeFilterCheckBox = new JCheckBox(" solo activas");
+		activeFilterCheckBox = new JCheckBox(" solo activos");
 		activeFilterCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		activeFilterCheckBox.setBounds(666, 175, 154, 25);
 		activeFilterCheckBox.setSelected(session.getbUnit().isActivo() ? true : false);
@@ -437,7 +437,7 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Refresca los datos de la unidad de negocio de la sesión para que se visualicen en pantalla
+	 * Refresca los datos del centro de trabajo de la sesión para que se visualicen en pantalla
 	 */
 	private void populateTextFields() {
 		companyField.setText(session.getCompany().getNombre());
@@ -455,7 +455,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier dato incorrecto se resalta
 	 * con el fondo del campo en amarillo
-	 * @param bUnit unidad de negocio de la que se comprueban los datos
+	 * @param bUnit centro de trabajo del que se comprueban los datos
 	 * @return true si son correctos, false si no lo son
 	 */
 	private boolean testData(BusinessUnit bUnit) {
@@ -512,11 +512,11 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de unidades de negocio cargadas en el objeto company. Serán todas las que
-	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo una
+	 * Obtiene la lista de centro de trabajo cargadas en el objeto company. Serán todos los que
+	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo uno
 	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
-	 * @param active true si se muestran solo las unidades de negocio activas, false para mostrarlas todas
-	 * @return array ordenado alfabéticamente con la lista de unidades de negocio
+	 * @param active true si se muestran solo los centros de trabajo activas, false para mostrarlas todas
+	 * @return array ordenado alfabéticamente con la lista de centros de trabajo
 	 */
 	private String[] getComboBoxItemsFromSession(boolean active) {
 		List<String> tempList = new ArrayList<String>();
@@ -535,7 +535,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Obiene el índice del elemento del objeto comboBox que será seleccionado por defecto a partir
 	 * del array pasado por parámetro
-	 * @param array array con la lista de unidades de negocio
+	 * @param array array con la lista de centros de trabajo
 	 * @return índice del elemento a seleccionar por defecto
 	 */
 	private int getSelectedIndexFromArray(String[] array) {
@@ -571,7 +571,7 @@ public class BusinessUnitUI extends JPanel {
 				tField.setBackground(Color.WHITE);
 			}
 		}
-		//Habilitamos checkbox "Activa" si la unidad de negocio no es la unidad de negocio por defecto
+		//Habilitamos checkbox "Activa" si el centros de trabajoo no es el centros de trabajo por defecto
 		if (session.getbUnit().getId() != 1 ) {
 			activeCheckBox.setEnabled(true);
 		} else {
@@ -597,9 +597,9 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de una
-	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
-	 * estaba seleccionada.
+	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de un
+	 * nuevo centro de trabajo, podremos recuperar por pantalla los datos del último centro de trabajo que
+	 * estaba seleccionado.
 	 */
 	private void updateDataCache() {
 		//Vaciamos la lista de datos del caché de datos
@@ -613,7 +613,7 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Devuelve el formulario a su estado previo tras la creación o la edición de una unidad de negocio
+	 * Devuelve el formulario a su estado previo tras la creación o la edición de un centro de trabajo
 	 */
 	private void afterNewOrEditBunit() {
 		//Hacemos backup del contenido de los datos del formulario
@@ -633,10 +633,10 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
-	 * las unidades de negocio de la compañía que se han cargado en la sesión. Por el nombre seleccionado
-	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como unidad de negocio
+	 * los centros de trabajo de la compañía que se han cargado en la sesión. Por el nombre seleccionado
+	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como centro de trabajo
 	 * de la sessión, reemplazando al que hubiera hasta ese momento. Si activeFilterCheckBox está seleccionado,
-	 * no se mostrarán las unidades de negocio que estén marcadas como no activas
+	 * no se mostrarán ls centros de trabajo que estén marcadas como no activas
 	 */
 	private class ComboListener implements ItemListener {
 
@@ -652,19 +652,17 @@ public class BusinessUnitUI extends JPanel {
 			populateTextFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
-//			//Vaciamos label de información
-//			infoLabel.setText("");
 		}
 		
 	}
 	
 	/**
 	 * Listener que define el comportamiento del checkbox activeFilterCheckBox.
-	 * Si activamos el checkbox y la unidad de negocio en pantalla está activa no habrá ningún cambio. Si no está activa,
-	 * la unidad de negocio de la sesión pasará a ser la del usuario que abrió sesión, y se mostrará en pantalla. En ese
-	 * caso comboBox dejará de mostrar las unidades de negocio no activas.
-	 * Si desactivamos el checkbox no habrá ningún cambio. comboBox pasará a mostrar todas las unidades de negocio cargadas en
-	 * la sesión.
+	 * Si activamos el checkbox y el centro de trabajo en pantalla está activo no habrá ningún cambio. Si no está activo,
+	 * el centro de trabajo de la sesión pasará a ser la del usuario que abrió sesión, y se mostrará en pantalla. En ese
+	 * caso comboBox dejará de mostrar los centros de trabajo no activos.
+	 * Si desactivamos el checkbox no habrá ningún cambio. comboBox pasará a mostrar todas los centros de trabajo cargadas
+	 * en la sesión.
 	 */
 	private class CheckBoxListener implements ItemListener {
 
@@ -683,17 +681,17 @@ public class BusinessUnitUI extends JPanel {
 					populateTextFields();
 					//Hacemos backup del contenido de los datos del formulario
 					updateDataCache();
-					//Renovamos la lista de las unidades de negocio del comboBox
+					//Renovamos la lista de los centros de trabajo del comboBox
 					refreshComboBox();
 					//Vaciamos label de información
 					infoLabel.setText("");
 				//Si la bUnit de la sesión está activa, hay que renovar el combobox igualmente para que ya no salgan las bUnits no activas
 				} else {
-					//Renovamos la lista de las unidades de negocio del comboBox
+					//Renovamos la lista de los centros de trabajo del comboBox
 					refreshComboBox();
 				}
 			} else if (state == ItemEvent.DESELECTED) {
-				//Renovamos la lista de las unidades de negocio del comboBox
+				//Renovamos la lista de los centros de trabajo del comboBox
 				refreshComboBox();
 			}
 		}
@@ -701,12 +699,12 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
-	 * campos de texto y habilitamos su edición para añadir la información de una nueva unidad de negocio.
+	 * campos de texto y habilitamos su edición para añadir la información de un nuevo centro de trabajo.
 	 * Habilitamos el botón de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
 	 */
 	private class NewAction extends AbstractAction {
 		public NewAction() {
-			putValue(NAME, "Nueva");
+			putValue(NAME, "Nuevo");
 			putValue(SHORT_DESCRIPTION, "Add new business unit");
 		}
 		public void actionPerformed(ActionEvent e) {
@@ -791,8 +789,8 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilitan los
-	 * botones Editar y Nueva. Se intentan guardar los datos de la unidad de negocio actualizados en la base
-	 * de datos, o bien los datos de una nueva unidad de negocio. Si se consigue, se actualiza el objeto businessUnit
+	 * botones Editar y Nueva. Se intentan guardar los datos del centro de trabajo actualizados en la base
+	 * de datos, o bien los datos de un nuev centro de trabajo. Si se consigue, se actualiza el objeto businessUnit
 	 * con dichos datos o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación
 	 * del objeto businessUnit y se muestra un mensaje de error. Se intenta guardar el registro
 	 * de la actualización de datos en la base de datos. Si no se consigue se muestra un mensaje de error.
@@ -813,10 +811,10 @@ public class BusinessUnitUI extends JPanel {
 			
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de una nueva unidad de negocio
+			//Aceptamos la creación de un nuevo centro de trabajo
 			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
 				//Debug
-				System.out.println("Acción de grabar nueva unidad de negocio");
+				System.out.println("Acción de grabar un nuevo centro de trabajo");
 
 				//Creamos nuevo BusinessUnit a partir de los datos del formulario
 				BusinessUnit newBunit = new BusinessUnit();
@@ -831,19 +829,19 @@ public class BusinessUnitUI extends JPanel {
 				newBunit.setActivo(activeCheckBox.isSelected());
 				//Validamos los datos del formulario
 				if(testData(newBunit)) {
-					//Intentamos grabar la nueva unidad de negocio en la base de datos, retornando un objeto con idénticos
+					//Intentamos grabar el nuevo centro de trabajo en la base de datos, retornando un objeto con idénticos
 					//datos que incluye también el id que le ha asignado dicha base de datos
 					BusinessUnit storedBunit = new BusinessUnit().addNewBusinessUnit(session.getConnection(), newBunit);
-					//Si la unidad de negocio se almacena correctamente en la base de datos
+					//Si el centro de trabajo se almacena correctamente en la base de datos
 					if (storedBunit != null) {
 						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						PersistenceManager.registerTableModification(infoLabel, "NUEVA UNIDAD DE NEGOCIO REGISTRADA: ", session.getConnection(), tNow,
+						PersistenceManager.registerTableModification(infoLabel, "NUEVO CENTRO DE TRABAJO REGISTRADO: ", session.getConnection(), tNow,
 								BusinessUnit.TABLE_NAME);
-						//Añadimos la nueva unidad de negocio a la lista de unidades de negocio de la compañía
+						//Añadimos el nuevo centro de trabajo a la lista de centros de trabajo de la compañía
 						session.getCompany().getBusinessUnits().add(storedBunit);
 						
-						//Si el filtro de unidades de negocio está activo y la nueva unidad de negocio se crea como no activa, no puede asignarse
-						//como unidad de negocio de la sesión y por tanto tampoco puede visualizarse al aceptar su creación
+						//Si el filtro de centros de trabajo está activo y el nuevo centro de trabajo se crea como no activa, no puede asignarse
+						//como centro de trabajo de la sesión y por tanto tampoco puede visualizarse al aceptar su creación
 						if (activeFilterCheckBox.isSelected() && storedBunit.isActivo() == false) {
 							//Recuperamos la bUnit del usuario que abre sesión
 							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
@@ -854,29 +852,29 @@ public class BusinessUnitUI extends JPanel {
 							//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
 							comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
 							
-						//Si el filtro de unidades de negocio no está activo, la nueva unidad de negocio pasa a ser la unidad de negocio de la sesión,
+						//Si el filtro de centros de trabajo no está activo, el nuevo centro de trabajo pasa a ser el centro de trabajo de la sesión,
 						//tanto si se crea como activa como si no
 						} else {
-							//Asignamos la nueva unidad de negocio como unidad de negocio de la sesión
+							//Asignamos el nuevo centro de trabajo como unidad de negocio de la sesión
 							session.setbUnit(storedBunit);
-							//Renovamos la lista de las unidades de negocio del comboBox
+							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshComboBox();
 						}
 						
 						//Devolvemos el formulario a su estado previo
 						afterNewOrEditBunit();
 				
-					//Si la unidad de negocio no se almacena correctamente en la base de datos 
+					//Si el centro de trabajo no se almacena correctamente en la base de datos 
 					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA UNIDAD DE NEGOCIO EN LA BASE DE DATOS");
+						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO CENTRO DE TRABAJO EN LA BASE DE DATOS");
 					}
 				}
 				
-			//Aceptamos los cambios de la unidad de negocio editada	
+			//Aceptamos los cambios del centro de trabajo editada	
 			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 
 				//Debug
-				System.out.println("Guardando los cambios de la unidad de negocio " + nameField.getText());
+				System.out.println("Guardando los cambios del centro de trabajo " + nameField.getText());
 				
 				//Objeto que recoge los datos actualizados
 				BusinessUnit updatedBunit = new BusinessUnit();
@@ -902,12 +900,12 @@ public class BusinessUnitUI extends JPanel {
 						//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
 						boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 								BusinessUnit.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-						//Variable de control para saber si la sesión sigue activa tras la edición de una unidad de negocio
+						infoLabel.setText("DATOS DEL CENTRO DE TRABAJO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+						//Variable de control para saber si la sesión sigue activa tras la edición de un centro de trabajo
 						boolean stillOpenSession = true;
-						//Si el usuario que abre sesión deja activa la unidad de negocio editada, se actualizan los datos de la sesión
-						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos
-						//Importante: Si la unidad de negocio editada pasa de inactiva a activa, sus usuarios (previamente desactivados también)
+						//Si el usuario que abre sesión deja activa el centro de trabajo editada, se actualizan los datos de la sesión
+						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos
+						//Importante: Si el centro de trabajo editada pasa de inactivo a activo, sus usuarios (previamente desactivados también)
 						//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
 						if (updatedBunit.isActivo()) {
 							
@@ -930,16 +928,16 @@ public class BusinessUnitUI extends JPanel {
 							if(!bUnitChangeRegister) {
 								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 							}
-							//Si la unidad de negocio se marca como activa viniendo de un estado inactivo, anunciamos que sus usuarios no han 
+							//Si el centrosde trabajo se marca como activo viniendo de un estado inactivo, anunciamos que sus usuarios no han 
 							//cambiado de estado
 							if (!lastActive) {
 								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 							}
-							//Renovamos la lista de las unidades de negocio del comboBox
+							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshComboBox();	
 							
-						//Si el usuario que abre sesión deja inactiva una unidad de negocio que no es la suya
-						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo, pero se gestiona de
+						//Si el usuario que abre sesión deja inactiva un centro de trabajo que no es la suya
+						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo, pero se gestiona de
 						//manera diferente en cada caso
 						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
 							
@@ -954,13 +952,13 @@ public class BusinessUnitUI extends JPanel {
 								//Debug
 								System.out.println("Marcando usuarios inactivos");
 								
-								//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+								//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
 								updatedUserList = new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
 								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 								UserChangeRegister = PersistenceManager.updateTimeStampToDB(
 										session.getConnection(), User.TABLE_NAME, tNow);
 							}
-							//Si el filtro de unidades de negocio no está activo, se actualizan los datos de la sesión
+							//Si el filtro de centros de trabajo no está activo, se actualizan los datos de la sesión
 							if (!activeFilterCheckBox.isSelected()) {
 								
 								//Debug
@@ -982,16 +980,16 @@ public class BusinessUnitUI extends JPanel {
 									System.out.println("updatedUserList.size(): " + updatedUserList.size());
 								}
 								
-								//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
+								//Si se ha actualizado la lista de usuarios del centro de trabajo editado
 								if (updatedUserList != null && updatedUserList.size() > 0) {
 									
 									//Debug
 									System.out.println("Anunciando usuarios inactivos");
 									
-									//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
+									//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
 									session.getbUnit().setUsers(updatedUserList);
 									infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
-								//Si no se ha actualizado la lista de usuarios de la unidad de negocio editada
+								//Si no se ha actualizado la lista de usuarios del centro de trabajo editado
 								} else {
 									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 								}							
@@ -1004,15 +1002,15 @@ public class BusinessUnitUI extends JPanel {
 								//Renovamos la lista de las unidades de negocio del comboBox
 								refreshComboBox();
 
-							//Si el filtro de unidades de negocio está activo y la unidad de negocio editada queda inactiva, no puede seguir siendo
-							//la unidad de negocio de la sesión y por tanto tampoco puede visualizarse
+							//Si el filtro de centros de trabajo está activo y el centro de trabajo editado queda inactiv, no puede seguir siendo
+							//el centro de trabajo de la sesión y por tanto tampoco puede visualizarse
 							} else {
 								
 								//Debug
 								System.out.println("Opción EDIT 2 - filtro activo");
 								
 								//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
-								//Se podrían aplicar los cambios a la unidad de negocio de la sesión porque aún no la hemos cambiado, pero de esta
+								//Se podrían aplicar los cambios al centro de trabajo de la sesión porque aún no la hemos cambiado, pero de esta
 								//manera evitamos ambigüedades
 								BusinessUnit targetBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getbUnit().getId());
 								targetBunit.setCompany(updatedBunit.getCompany());
@@ -1024,13 +1022,13 @@ public class BusinessUnitUI extends JPanel {
 								targetBunit.setTelefono(updatedBunit.getTelefono());
 								targetBunit.setMail(updatedBunit.getMail());
 								targetBunit.setActivo(updatedBunit.isActivo());
-								//Sobreescribimos la notificación de la actualización de la unidad de negocio editada citando su nombre porque ya no
+								//Sobreescribimos la notificación de la actualización del centro de trabajo editado a citando su nombre porque ya no
 								//se visualizará por pantalla
-								infoLabel.setText("DATOS DE LA UNIDAD DE NEGOCIO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
+								infoLabel.setText("DATOS DEL CENTRO DE TRABAJO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
 										ToolBox.formatTimestamp(tNow, null));
-								//Si se ha actualizado la lista de usuarios de la unidad de negocio editada
+								//Si se ha actualizado la lista de usuarios del centro de trabajo editada
 								if (updatedUserList != null && updatedUserList.size() > 0) {
-									//Recargar los usuarios pasados a inactivos en la unidad de negocio editada
+									//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
 									targetBunit.setUsers(updatedUserList);
 									infoLabel.setText(infoLabel.getText() +	" . USUARIOS INACTIVOS");
 								} else {
@@ -1042,20 +1040,20 @@ public class BusinessUnitUI extends JPanel {
 								session.setbUnit(userBunit);
 								//Mostramos sus datos
 								populateTextFields();
-								//Renovamos la lista de las unidades de negocio del comboBox
+								//Renovamos la lista de los centros de trabajo del comboBox
 								refreshComboBox();						
 							}
 							//Los usuarios ya han sido actualizados
 							session.setUsersUpdated(true);
 							
-						//Si el usuario que abre sesión deja inactiva su propia unidad de negocio
-						//Esta opción puede darse con el filtro de unidades de negocio activo o inactivo y se gestiona igual en ambos casos 
+						//Si el usuario que abre sesión deja inactiva su propio centro de trabajo
+						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos 
 						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
 							
 							System.out.println("Opción EDIT 3");
 							System.out.println("lastActive: " + lastActive);
 											
-							//Pasar a inactivos todos los usuarios de la unidad de negocio en la base de datos
+							//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
 							new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
 							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
 							PersistenceManager.updateTimeStampToDB(session.getConnection(),
@@ -1120,8 +1118,8 @@ public class BusinessUnitUI extends JPanel {
 					
 					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
 					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
-						//Si la unidad de negocio de la sesión ha sido desactivada y el filtro del combobox está activo, la unidad
-						//de negocio de la sesión pasa a ser la del usuario que abrió sesión, y será la que se visualize
+						//Si el centro de trabajo de la sesión ha sido desactivada y el filtro del combobox está activo, el centro
+						//de trabajo de la sesión pasa a ser el del usuario que abrió sesión, y será el que se visualize
 						if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
 							
 							//Debug
@@ -1138,7 +1136,7 @@ public class BusinessUnitUI extends JPanel {
 							
 							session.getbUnit();
 
-							//Renovamos la lista de las unidades de negocio del comboBox
+							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshComboBox();
 							//Asignamos el nuevo contenido a los textfields
 							populateTextFields();
@@ -1149,7 +1147,7 @@ public class BusinessUnitUI extends JPanel {
 							//Debug
 							System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
 							
-							//Renovamos la lista de las unidades de negocio del comboBox
+							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshComboBox();
 							//Asignamos el nuevo contenido a los textfields
 							populateTextFields();
@@ -1158,10 +1156,10 @@ public class BusinessUnitUI extends JPanel {
 						}
 
 						//Informamos por pantalla de la actualización
-						//Si la unidad de negocio que teníamos en pantalla no ha sufrido ninguna modificación
+						//Si el centro de trabajo que teníamos en pantalla no ha sufrido ninguna modificación
 						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
-						//que alguna unidad de negocio ha sido modificada o añadida
-						BusinessUnitUI.this.infoLabel.setText("DATOS DE LAS UNIDADES DE NEGOCIO ACTUALIZADOS: " +
+						//que algun centro de trabajo ha sido modificado o añadido
+						BusinessUnitUI.this.infoLabel.setText("DATOS DE LOS CENTROS DE TRABAJO ACTUALIZADOS: " +
 						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 				}
