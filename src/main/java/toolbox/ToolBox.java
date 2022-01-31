@@ -117,17 +117,12 @@ public class ToolBox {
 	 * @return valor numérico de la opción escogida por el usuario
 	 */
 	public static int showDialog(String message, JPanel panel, String dialogType) {
-
 		Frame parentFrame = (Frame) SwingUtilities.getRoot((Component) panel);
-		
 		GraphicsDevice [] displays = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
 		GraphicsDevice currentDisplay = parentFrame.getGraphicsConfiguration().getDevice();
-		
 		Frame messageFrame = new Frame(currentDisplay.getDefaultConfiguration());
 		Rectangle frameRectangle = messageFrame.getBounds();
-		
 		centerFrame(messageFrame, displays, currentDisplay, frameRectangle.width, frameRectangle.height);
-		
 		if (dialogType.equals("info")) {
 			JOptionPane.showMessageDialog(messageFrame, message, "Información", JOptionPane.WARNING_MESSAGE);
 			return -1;
@@ -137,7 +132,6 @@ public class ToolBox {
 		} else {
 			return -1;
 		}
-		
 	}
 	
 	

@@ -2356,7 +2356,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, FIX JAVADOC WRONG T
 
 	· PersistenceManager class:
 		Clean code
-		Check javadoc	
+		Check javadoc
+
+	* - Package main.java.toolbox
+
+	· ToolBox class:
+		Clean code
+		Check javadoc
 
 	* - Package main.java.session
 
