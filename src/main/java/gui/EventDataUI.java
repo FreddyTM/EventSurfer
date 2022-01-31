@@ -86,11 +86,7 @@ public class EventDataUI extends JPanel{
 	
 	//Se asignan a la variable actionSelector para determinar la acción a ejecutar
 	private static final int EVENTDATA_ACTION_UNDEFINED = 0; //Default
-//	private static final int EVENTDATA_ACTION_NEW_EVENT = 1;
-//	private static final int EVENTDATA_ACTION_EDIT_EVENT = 2;
 	private static final int EVENTDATA_ACTION_DELETE_EVENT = 1;
-//	private static final int EVENTDATA_ACTION_NEW_UPDATE = 4;
-//	private static final int EVENTDATA_ACTION_EDIT_UPDATE = 5;
 	private static final int EVENTDATA_ACTION_DELETE_UPDATE = 2;
 	//Tipo de cuadro de diálogo
 	private static final String DIALOG_INFO = "info";
@@ -453,9 +449,6 @@ public class EventDataUI extends JPanel{
 		if(list.size() <= number) {
 			return list;
 		} else {
-//			//Debug
-//			System.out.println("Filtering...");
-			
 			List<Event> sublist = new ArrayList<Event>();
 			sublist = list.subList(list.size() - number, list.size());
 			return sublist;
@@ -489,21 +482,12 @@ public class EventDataUI extends JPanel{
 	    		case 3:
 	    		case 6:
 	    			//orden descendente
-//	    			for (int i = 0; i < months; i++) {
+//	    			for (int i = 0; i < months; i++)
 	    			//Orden ascendente
 	    			months = - months + 1;
-	    			
-//	    			//Debug
-//	    			System.out.println("months " + months);
-	    			
 	    			for (int i = months; i <= 0; i++) { //orden ascendente
 	    				calendarReference = Calendar.getInstance();
 	    				calendarReference.add(Calendar.MONTH, i);
-	    				
-//	    				//Debug
-//	    				System.out.println("i " + i);
-//	    				System.out.println("calendarReference " + calendarReference.get(Calendar.MONTH));
-	    				
 	    				for (Event event : list) {
 		    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
 		    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
@@ -714,10 +698,6 @@ public class EventDataUI extends JPanel{
 		eventsTable.setFillsViewportHeight(true);
 		eventsTable.setAutoCreateRowSorter(true);
 		formatEventTable();
-
-//		//Debug
-//		System.out.println("Creando el contenido de la tabla de eventos");
-		
 	}
 	
 	/**
@@ -841,10 +821,6 @@ public class EventDataUI extends JPanel{
 		updatesTable.setFillsViewportHeight(true);
 		updatesTable.setAutoCreateRowSorter(true);
 		formatUpdatesTable();
-		
-//		//Debug
-//		System.out.println("Creando el contenido de la tabla de actualizaciones");
-		
 	}
 	
 	/**
@@ -992,15 +968,21 @@ public class EventDataUI extends JPanel{
 	 * @param selectedRow fila de la tabla de actualizaciones seleccionada
 	 */
 	private void updateEventUpdateButtonsStateOnSelection(int selectedRow) {
+		//Si no hay selección de actualización
+		if (selectedRow == -1) {
+			buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+			return;
+		}
 		//Actualización inicial, usuarios ADMIN y MANAGER
 		if (selectedRow == 0 && !session.getUser().getUserType().equals("USER")) {
 			buttonSwitcher(UPDATE_BUTTON_SET, NEW_EDIT_ENABLED);
-			//return;
+			return;
 		}
 		
 		//Resto de actualizaciones, usuarios ADMIN y MANAGER
 		if (selectedRow != 0 && !session.getUser().getUserType().equals("USER")) {
 			buttonSwitcher(UPDATE_BUTTON_SET, ALL_ENABLED);
+			return;
 		}
 		
 		//Actualización inicial, usuarios USER
@@ -1012,6 +994,7 @@ public class EventDataUI extends JPanel{
 			} else {
 				buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
 			}
+			return;
 		}
 		
 		//Resto de actualizaciones, usuarios USER
@@ -1303,7 +1286,7 @@ public class EventDataUI extends JPanel{
         		
 				//Debug
         		System.out.println("EventTableSelectionListener");
-				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow() + " - ");
+				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
 				
 				if (eventsTable.getSelectedRow() > -1) {
 					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);

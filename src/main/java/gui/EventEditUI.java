@@ -1792,11 +1792,11 @@ public class EventEditUI extends JPanel{
 
 							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
 							//Registramos la fila seleccionada en la tabla de incidencias
-							int rowId = eDataUI.getEventsTable().getSelectedRow();
+							int row = eDataUI.getEventsTable().getSelectedRow();
 							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
 							eDataUI.getFilterSelected().doClick(); //eventSelected no cambia
 							//Volvemos a seleccionar la fila de la incidencia seleccionada
-							eDataUI.getEventsTable().setRowSelectionInterval(rowId, rowId);
+							eDataUI.getEventsTable().setRowSelectionInterval(row, row);
 
 							//Renovamos la tabla de actualizaciones
 							eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()),

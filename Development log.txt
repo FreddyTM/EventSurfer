@@ -2215,6 +2215,9 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 	· TimerJob class (inner CurrentSession class):
 		Update run() --case event not needed and deleted, only event_update case do the job--
 
+	* - Package main.java.gui.listener
+		Delete package & VisibilityListener class
+
 	* - Package main.java.gui
 
 	· AppWindow class:
@@ -2250,6 +2253,7 @@ ver 0.1.16 - EVENTEDITUI SCROLLBARS WHEN NEEDED,
 		Update updateUpdatesTable() --set visibility from private to default--
 		Update sortEventUpdatesByDate() --set visibility from private to default--
 		Update buttonSwitcher() --set visibility from private to default--
+		Update updateEventUpdateButtonsStateOnSelection() --add no selection case & returns--
 
 	· EventTableSelectionListener (inner EventDataUI class):
 		Update valueChanged() --uses findFirstUpdate()--
