@@ -714,8 +714,8 @@ public class AreaUI extends JPanel {
 			populateAreaFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
-			//Vaciamos label de información
-			infoLabel.setText("");
+//			//Vaciamos label de información
+//			infoLabel.setText("");
 			//Refrescamos listas
 			refreshLists();
 			//Deshabilitamos los botones de asignación de areas
@@ -981,6 +981,8 @@ public class AreaUI extends JPanel {
 						setFirstSelectedArea();	
 						//Refrescamos listas
 						refreshLists();
+						allocateButton.setEnabled(false);
+						revokeButton.setEnabled(false);
 					//Si el area no se borra correctamente de la base de datos
 					} else {
 						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
@@ -1013,6 +1015,7 @@ public class AreaUI extends JPanel {
 			areaNameField.setBackground(Color.WHITE);
 			areaDescription.setBackground(Color.WHITE);
 			
+			tNow = ToolBox.getTimestampNow();
 			//Selección de comportamiento
 			
 			//Aceptamos la creación de una nueva area
@@ -1197,13 +1200,17 @@ public class AreaUI extends JPanel {
 					if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
 						
 						//LÓGICA DE ACTUALIZACIÓN
-						
+
 						//Si se ha borrado el area seleccionada, refrescamos la lista de areas del
 						//combobox y mostramos los datos de la nueva area seleccionada por defecto
 						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
 						boolean areaDeleted = true;
 						for (Area area: updatedAreaList) {
 							if (area.getAreaNombre().equals(selectedArea.getAreaNombre()) ) {
+//								
+//								//Debug
+//								System.out.println("El area no se ha borrado");
+//								
 								areaDeleted = false;
 							}
 						}
@@ -1222,6 +1229,8 @@ public class AreaUI extends JPanel {
 						updateDataCache();
 						//Refrescamos listas
 						refreshLists();
+						allocateButton.setEnabled(false);
+						revokeButton.setEnabled(false);
 						
 						//Informamos por pantalla de la actualización
 						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
@@ -1234,6 +1243,8 @@ public class AreaUI extends JPanel {
 					if (updatedTable.getKey().equals(Area.B_UNIT_AREA_TABLE_NAME)) {
 						//Refrescamos listas
 						refreshLists();
+						allocateButton.setEnabled(false);
+						revokeButton.setEnabled(false);
 						
 						//Informamos por pantalla de la actualización
 						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
