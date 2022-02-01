@@ -2429,6 +2429,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.17--
+		Clean code
+		Check javadoc
 
 	· Selector class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
