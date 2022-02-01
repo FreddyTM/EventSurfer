@@ -2461,6 +2461,18 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· AreaUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 
+	· AllocateAction class (AreaUI inner class):
+		Update actionPerformed() --infolabel2 shows area name & bunit name--
+					 --infolabel delete text--
+
+	· RevokeAllocationAction class (AreaUI inner class):
+		Update actionPerformed() --fix revoked area not deleted immediately from bunit list--
+					 --infolabel2 shows area name & bunit name--
+					 --infolabel delete text--
+
+	· OKAction class (AreaUI inner class):
+		Update actionPerformed() --infolabel2 delete text--
+
 	· EventTypeUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
@@ -2470,5 +2482,11 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· EventDataUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 
+	· EventEditUI class:
+		Clean code --not completed yet--
 
+	· TimerJob class (EventEditUI inner class):
+		update run() --new edit actions doesn't update event's row in last_modification table--
+			     --fix infolabel not showing info after new edit actions--
+		
 	

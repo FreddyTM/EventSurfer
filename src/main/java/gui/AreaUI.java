@@ -1080,6 +1080,7 @@ public class AreaUI extends JPanel {
 					}
 				}
 			}
+			infoLabel2.setText("");
 		}
 		
 	}
@@ -1105,6 +1106,10 @@ public class AreaUI extends JPanel {
 						Area.B_UNIT_AREA_TABLE_NAME);			
 				//Añadir el area al objeto BusinessUnit
 				bUnit.getAreas().add(selectedArea);
+				infoLabel2.setText(selectedArea.getAreaNombre() + " SE AÑADE A " + bUnit.getNombre() + ". "
+						+ infoLabel2.getText());
+				//Borramos el texto informativo del area de edición
+				infoLabel.setText("");
 				//Refrescar listas
 				refreshLists();
 				//Deshabilitar botones de asignación
@@ -1138,7 +1143,12 @@ public class AreaUI extends JPanel {
 				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
 						Area.B_UNIT_AREA_TABLE_NAME);	
 				//Eliminar el area del objeto BusinessUnit
-				bUnit.getAreas().remove(selectedArea);
+				if (new Area().deleteArea(bUnit, selectedArea)) {
+					infoLabel2.setText(selectedArea.getAreaNombre() + " YA NO PERTENECE A " + bUnit.getNombre() + ". "
+							+ infoLabel2.getText());
+					//Borramos el texto informativo del area de edición
+					infoLabel.setText("");
+				}
 				//Refrescar listas
 				refreshLists();
 				//Deshabilitar botones de asignación
