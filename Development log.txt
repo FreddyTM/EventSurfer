@@ -2376,6 +2376,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· TimerJob class (inner CurrentSession class):
 		Update run() --fix case business_unit not updating remote data sometimes--
+			     --fix copy case b_unit_area to case area to fix available bunits sometimes not showing after
+			       allocate or revoke allocation (both local & remote)--
 
 
 	* - Package main.java.types_states

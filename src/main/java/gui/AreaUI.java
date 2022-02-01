@@ -3,6 +3,7 @@ package main.java.gui;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -631,7 +632,7 @@ public class AreaUI extends JPanel {
 	/**
 	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro ha sido asignada
 	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
-	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
+	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio asignadas
 	 */
 	private String[] getAllocatedBunitList(Area area) {
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
@@ -640,8 +641,8 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro no ha sido asignada
-	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
-	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio
+	 * @param area area de la que queremos saber a qué unidades de negocio no ha sido asignada
+	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio no asignadas
 	 */
 	private String[] getAvailableBunitList(Area area) {
 		List<String> allBunits = new BusinessUnit().getAllBunitNames(session.getConnection(), session.getCompany());
@@ -664,6 +665,16 @@ public class AreaUI extends JPanel {
 			}
 			for (String item : allocatedBunits) {
 				allocatedModel.addElement(item);
+			}
+			
+			//Debug
+			System.out.println("Interviene refreshLists()");
+			System.out.println("Lista de bunits disponibles:");
+			Iterator<String> iterator = availableModel.elements().asIterator();
+			int num = 0;
+			while(iterator.hasNext()) {
+				String textItem = (String) iterator.next();
+				System.out.println(++num + " - " + textItem);
 			}
 			
 			availableList.setModel(availableModel);;
@@ -1188,6 +1199,15 @@ public class AreaUI extends JPanel {
 				//Debug
 				System.out.println("Comprobando actualización de datos de area");
 				System.out.println(session.getUpdatedTables().size());
+				
+				System.out.println("El area seleccionada antes de leerla del combobox es: " + (selectedArea == null ? null : selectedArea.getAreaNombre()));
+				String item = (String) areaComboBox.getSelectedItem();
+				//Hay un area seleccionada
+				selectedArea = new Area().getAreaByName(allAreas, item);
+				System.out.println("El area seleccionada después de leerla del combobox es: " + (selectedArea == null ? null : selectedArea.getAreaNombre()));
+
+				
+				
 				
 				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
