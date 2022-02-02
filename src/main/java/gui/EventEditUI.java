@@ -48,8 +48,6 @@ import main.java.types_states.TypesStatesContainer;
 public class EventEditUI extends JPanel{
 	
 	//Formato de presentación de fecha/hora
-//	private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
-//	private static final String VALIDATION_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	private static final String DATE_PATTERN = "dd-MM-yyyy";
 	private static final String VALIDATION_DATE_PATTERN = "dd-MM-uuuu";
 	private static final String TIME_PATTERN = "HH:mm";
@@ -139,8 +137,6 @@ public class EventEditUI extends JPanel{
 		this.session = session;
 		this.actionSelector = actionSelector;
 		this.eDataUI = eDataUI;
-//		eventSelected = eDataUI.getEventSelected();
-//		updateSelected = eDataUI.getUpdateSelected();
 		setLayout(null);
 		
 		//Swing Components
@@ -376,13 +372,13 @@ public class EventEditUI extends JPanel{
 		
 		//Listeners para los campos de fecha y hora		
 		eventDateIntroListener = new EventDateTimeIntroListener();
-		eventTimeIntroListener = new EventDateTimeIntroListener(); //
-		updateDateIntroListener = new EventDateTimeIntroListener(); //
-		updateTimeIntroListener = new EventDateTimeIntroListener(); //
-		eventDateFocusListener = new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN); //
-		eventTimeFocusListener = new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN); //
-		updateDateFocusListener = new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN); //
-		updateTimeFocusListener = new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN); //
+		eventTimeIntroListener = new EventDateTimeIntroListener();
+		updateDateIntroListener = new EventDateTimeIntroListener();
+		updateTimeIntroListener = new EventDateTimeIntroListener();
+		eventDateFocusListener = new EventDateTimeFocusListener(eventDateField.getText(), VALIDATION_DATE_PATTERN);
+		eventTimeFocusListener = new EventDateTimeFocusListener(eventTimeField.getText(), TIME_PATTERN);
+		updateDateFocusListener = new EventDateTimeFocusListener(updateDateField.getText(), VALIDATION_DATE_PATTERN);
+		updateTimeFocusListener = new EventDateTimeFocusListener(updateTimeField.getText(), TIME_PATTERN);
 				
 		eventDateField.addActionListener(eventDateIntroListener);
 		eventTimeField.addActionListener(eventTimeIntroListener);
@@ -561,8 +557,6 @@ public class EventEditUI extends JPanel{
 					label.setVisible(true);
 				}
 				//Actualizamos datos de los listeners
-//				eventDateIntroListener.setOldEventDateText(eventDateField.getText());
-//				eventTimeIntroListener.setOldEventTimeText(eventTimeField.getText());
 				eventDateFocusListener.setOldEventDateText(eventDateField.getText());
 				eventTimeFocusListener.setOldEventTimeText(eventTimeField.getText());
 				
@@ -612,8 +606,6 @@ public class EventEditUI extends JPanel{
 					label.setVisible(true);
 				}
 				//Actualizamos datos de los listeners
-//				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
-//				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				updateDateFocusListener.setOldUpdateDateText(updateDateField.getText());
 				updateTimeFocusListener.setOldUpdateTimeText(updateTimeField.getText());
 				
@@ -677,8 +669,6 @@ public class EventEditUI extends JPanel{
 					} 
 				}
 				//Actualizamos datos de los listeners
-//				updateDateIntroListener.setOldUpdateDateText(updateDateField.getText());
-//				updateTimeIntroListener.setOldUpdateTimeText(updateTimeField.getText());
 				updateDateFocusListener.setOldUpdateDateText(updateDateField.getText());
 				updateTimeFocusListener.setOldUpdateTimeText(updateTimeField.getText());
 				break;
@@ -1488,9 +1478,9 @@ public class EventEditUI extends JPanel{
 						//Si la incidencia se almacena correctamente en la base de datos
 						if (storedEvent != null) {
 							tNow = ToolBox.getTimestampNow();
-							//Registramos fecha y hora de la actualización de los datos de la tabla event
-							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
-									session.getConnection(), tNow, Event.TABLE_NAME);
+//							//Registramos fecha y hora de la actualización de los datos de la tabla event
+//							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
+//									session.getConnection(), tNow, Event.TABLE_NAME);
 							//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 							EventUpdate newEventUpdate = new EventUpdate();
 							newEventUpdate.setEvent(storedEvent);
@@ -1588,9 +1578,9 @@ public class EventEditUI extends JPanel{
 						//Intentamos actualizar la incidencia en la base de datos
 						if (new Event().updateEventToDB(session.getConnection(), updatedEvent)) {
 							tNow = ToolBox.getTimestampNow();
-							//Registramos fecha y hora de la actualización de los datos de la tabla event
-							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
-									session.getConnection(), tNow, Event.TABLE_NAME);
+//							//Registramos fecha y hora de la actualización de los datos de la tabla event
+//							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
+//									session.getConnection(), tNow, Event.TABLE_NAME);
 							//Intentamos actualizar la actualización inicial de la incidencia en la base de datos
 							if (new EventUpdate().updateEventUpdateToDB(session.getConnection(),
 									updatedEvent.getUpdates().get(0))) {
@@ -1754,9 +1744,9 @@ public class EventEditUI extends JPanel{
 							eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
 							//Intentamos actualizar el estado de la la incidencia seleccionada en la base de datos
 							if (new Event().updateEventStateOfEventToDB(session.getConnection(), eventSelected)) {
-								//Registramos fecha y hora de la actualización de los datos de la tabla event
-								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
-										session.getConnection(), tNow, Event.TABLE_NAME);
+//								//Registramos fecha y hora de la actualización de los datos de la tabla event
+//								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
+//										session.getConnection(), tNow, Event.TABLE_NAME);
 							} else {
 								eDataUI.getInfoLabel().setText(
 										"ERROR DE ACTUALIZACIÓN DEL ESTADO DE LA INCIDENCIA EN LA BASE DE DATOS");
@@ -1831,9 +1821,9 @@ public class EventEditUI extends JPanel{
 							eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
 							//Intentamos actualizar el estado de la la incidencia seleccionada en la base de datos
 							if (new Event().updateEventStateOfEventToDB(session.getConnection(), eventSelected)) {
-								//Registramos fecha y hora de la actualización de los datos de la tabla event
-								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
-										session.getConnection(), tNow, Event.TABLE_NAME);
+//								//Registramos fecha y hora de la actualización de los datos de la tabla event
+//								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
+//										session.getConnection(), tNow, Event.TABLE_NAME);
 							} else {
 								eDataUI.getInfoLabel().setText(
 										"ERROR DE ACTUALIZACIÓN DEL ESTADO DE LA INCIDENCIA EN LA BASE DE DATOS");
@@ -1971,7 +1961,9 @@ public class EventEditUI extends JPanel{
 						}
 					}
 				}
-				eDataUI.getInfoLabel().setText("");
+				if (!eDataUI.getInfoLabel().getText().equals("")) {
+					eDataUI.getInfoLabel().setText("");
+				}
 			}
 		}
 		

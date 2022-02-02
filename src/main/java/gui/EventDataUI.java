@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -538,16 +539,26 @@ public class EventDataUI extends JPanel{
 	
 	EventUpdate findFirstUpdate() {
 		if (eventSelected.getUpdates().size() == 1) {
-			eventSelected.getUpdates().get(0);
+//			eventSelected.getUpdates().get(0);
+			
+			//Debug
+			System.out.println("Solo hay una actualización. La actualización inicial es esa");
+			
 			return eventSelected.getUpdates().get(0);
 		}
 		
 		EventUpdate tempUpdate = eventSelected.getUpdates().get(0);
-		for (int i = 1; i < eventSelected.getUpdates().size(); i++) {
+		int i;
+		for (i = 1; i < eventSelected.getUpdates().size(); i++) {
 			if (tempUpdate.getFechaHora().after(eventSelected.getUpdates().get(i).getFechaHora())) {
 				tempUpdate = eventSelected.getUpdates().get(i);
 			}
 		}
+		
+		//Debug
+		System.out.println("La tabla de actualizaciones tiene  " + eventSelected.getUpdates().size() + " elementos");
+		System.out.println("La actualización inicial está en la posición " + i);
+		
 		return tempUpdate;
 	}
 	
@@ -641,18 +652,18 @@ public class EventDataUI extends JPanel{
 			eventVector.add(event.getEventState());
 			dataVector.add(eventVector);
 			
-			//Debug
-			System.out.println("Elemento " + num + " de la lista");
-			System.out.println("id " + event.getId());
-			System.out.println("fechahora: " + event.getUpdates().get(0).getFechaHora());
-			System.out.println("ACTUALIZACIONES");
-			for (int i = 0; i < event.getUpdates().size(); i++) {
-				EventUpdate update = event.getUpdates().get(i);
-				System.out.println("Update id " + update.getId());
-				System.out.println("Update event id " + update.getEvent().getId());
-				System.out.println("Update fechahora " + update.getFechaHora().toString());
-				System.out.println("Update descripcion " + update.getDescripcion());
-			}
+//			//Debug
+//			System.out.println("Elemento " + num + " de la lista");
+//			System.out.println("id " + event.getId());
+//			System.out.println("fechahora: " + event.getUpdates().get(0).getFechaHora());
+//			System.out.println("ACTUALIZACIONES");
+//			for (int i = 0; i < event.getUpdates().size(); i++) {
+//				EventUpdate update = event.getUpdates().get(i);
+//				System.out.println("Update id " + update.getId());
+//				System.out.println("Update event id " + update.getEvent().getId());
+//				System.out.println("Update fechahora " + update.getFechaHora().toString());
+//				System.out.println("Update descripcion " + update.getDescripcion());
+//			}
 			
 			num +=1;
 		}
@@ -833,10 +844,12 @@ public class EventDataUI extends JPanel{
 		Vector<Object> headerVector = new Vector<Object>(Arrays.asList(header));
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
+		
+		//Debug
+		System.out.println("[updateUpdatesTable] La lista de actualizaciones contiene " + list.size() + " elementos");
+		
 		for (EventUpdate update: list) {
 			
-			//Debug
-			System.out.println("La lista contiene " + list.size() + " elementos");
 							
 			Vector<Object> updateVector = new Vector<Object>();
 			updateVector.add((Integer) update.getId());
@@ -1284,9 +1297,9 @@ public class EventDataUI extends JPanel{
         	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
         	if (!e.getValueIsAdjusting()) {
         		
-				//Debug
-        		System.out.println("EventTableSelectionListener");
-				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
+//				//Debug
+//        		System.out.println("EventTableSelectionListener");
+//				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
 				
 				if (eventsTable.getSelectedRow() > -1) {
 					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
@@ -1296,16 +1309,17 @@ public class EventDataUI extends JPanel{
 					
 					//Debug
 					
-					System.out.println("Id Incidencia: " + eventSelected.getId() + " " + eventSelected.getDescripcion());
-					System.out.println("Id actualización inicial: " + firstUpdate.getId() + " " + firstUpdate.getDescripcion());
-					System.out.println("-------------------------------------------------------------------------------------");
+//					System.out.println("Id Incidencia: " + eventSelected.getId() + " " + eventSelected.getDescripcion());
+//					System.out.println("Id actualización inicial: " + firstUpdate.getId() + " " + firstUpdate.getDescripcion());
+//					System.out.println("-------------------------------------------------------------------------------------");
 					
 					//Actualizamos el estado de los botones de la tabla de incidencias
 					updateEventButtonsStateOnSelection();
-
+					//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+					updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
 				} 
-				//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
+//				//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+//				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
         	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
@@ -1323,21 +1337,21 @@ public class EventDataUI extends JPanel{
 		public void valueChanged(ListSelectionEvent e) {
 			//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
         	if (!e.getValueIsAdjusting()) {
-				//Debug
-        		System.out.println("UpdateTableSelectionListener");
-        		System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
-				
+//        	
+//				//Debug
+//        		System.out.println("UpdateTableSelectionListener");
+//        		System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
 				
 				
 				if (updatesTable.getSelectedRow() > -1) {
 					int updateID = (Integer) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
 					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
 
-					//Debug
-					System.out.println("Id Actualización: " + updateSelected.getId() + " " + updateSelected.getDescripcion());
-					System.out.print("Es la actualización inicial? ");
-					System.out.println(updateSelected.getId() == firstUpdate.getId());
-					System.out.println("-------------------------------------------------------------------------------------");
+//					//Debug
+//					System.out.println("Id Actualización: " + updateSelected.getId() + " " + updateSelected.getDescripcion());
+//					System.out.print("Es la actualización inicial? ");
+//					System.out.println(updateSelected.getId() == firstUpdate.getId());
+//					System.out.println("-------------------------------------------------------------------------------------");
 
 					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
 				} 
@@ -1363,8 +1377,8 @@ public class EventDataUI extends JPanel{
 					if (editEventButton.isEnabled()) {
 						editEventButton.doClick();
 						
-						//Debug
-						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
+//						//Debug
+//						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 					}
 				}
 				//Tabla actualizaciones
@@ -1373,8 +1387,8 @@ public class EventDataUI extends JPanel{
 					if (editUpdateButton.isEnabled()) {
 						editUpdateButton.doClick();
 						
-						//Debug
-						System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
+//						//Debug
+//						System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
 					}
 				}
 			}
@@ -1493,14 +1507,15 @@ public class EventDataUI extends JPanel{
 
 			//Debug
 //			System.out.println("Editar incidencia");
-			int selectedRow = eventsTable.getSelectedRow();
-			System.out.print("Evento seleccionado nulo? ");
-			System.out.println(eventSelected == null);
-			System.out.print("Evento seleccionado id: ");
-			System.out.println(eventSelected == null ? "evento nulo" : eventSelected.getId());
-			Event eventInBunit = new Event().getEventById(session.getbUnit(), (int) eventsTable.getModel().getValueAt(selectedRow, 0));
-			boolean x = eventSelected.getId() == eventInBunit.getId();
-			System.out.println("Evento seleccionado igual al que se almacena en la unidad de negocio? " + x);
+			
+//			int selectedRow = eventsTable.getSelectedRow();
+//			System.out.print("Evento seleccionado nulo? ");
+//			System.out.println(eventSelected == null);
+//			System.out.print("Evento seleccionado id: ");
+//			System.out.println(eventSelected == null ? "evento nulo" : eventSelected.getId());
+//			Event eventInBunit = new Event().getEventById(session.getbUnit(), (int) eventsTable.getModel().getValueAt(selectedRow, 0));
+//			boolean x = eventSelected.getId() == eventInBunit.getId();
+//			System.out.println("Evento seleccionado igual al que se almacena en la unidad de negocio? " + x);
 			
 			goToNewEditScreen(EventEditUI.getEventEditActionEditEvent());
 			
@@ -1570,8 +1585,6 @@ public class EventDataUI extends JPanel{
 	 * produce la comprobación porque no es necesaria.
 	 */
 	private class TimerJob extends TimerTask {
-
-		///////////**************FIX UPDATING DATA DOES NOT RESPECT TABLES SELECTIONS & BUTTONS STATE***************//////////
 		
 		@Override
 		public void run() {
@@ -1580,10 +1593,15 @@ public class EventDataUI extends JPanel{
 				EventDataUI.this.panelVisible = false;
 				this.cancel();
 				EventDataUI.this.timer.cancel();
+				
+				//Debug
 				 System.out.println("Se ha cerrado la ventana gestión de eventos");
 			}
 			//Se comprueba la actualización de los datos si el panel es visible
 			if (EventDataUI.this.panelVisible == true) {
+				
+				//Debug
+				 System.out.println("Timerjob run()");
 				
 				//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
 				//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
@@ -1595,6 +1613,13 @@ public class EventDataUI extends JPanel{
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 				}
+				
+				
+				if (eventSelected != null) {
+					int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
+					eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
+					firstUpdate = findFirstUpdate();
+				}
 				//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					
@@ -1604,6 +1629,11 @@ public class EventDataUI extends JPanel{
 ////						firstUpdate = eventSelected.getUpdates().get(0);
 //					}
 					
+					//Debug
+					System.out.println("Entramos en el map de tablas actualizadas...");
+					System.out.print(updatedTable.getKey().toString());
+					System.out.println(" - " + updatedTable.getValue().toString());
+					
 					
 					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
 					//Si en la tabla de actualizaciones aparece la clave Event.TABLE_NAME
@@ -1612,29 +1642,48 @@ public class EventDataUI extends JPanel{
 							|| updatedTable.getKey().equals(Event.TABLE_NAME)
 							|| updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
 						
-						//Si hay alguna incidencia seleccionada
-						if (eventsTable.getSelectedRow() != -1) {
-							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-							List<Event> bUnitEvents = session.getbUnit().getEvents();
-							int row = 0;
-							for (int i = 0; i < bUnitEvents.size(); i++) {
-								if (selectedEventId == bUnitEvents.get(i).getId()) {
-									eventSelected = bUnitEvents.get(i);
-									firstUpdate = findFirstUpdate();
-									//Registramos la fila seleccionada en la tabla de incidencias
-									row = i;
-								}
-							}						
+						//Debug
+						System.out.println("Si la tabla es business_unit o eventUpdate, actualizamos datos en pantalla");
+						
+						
+//						//Si hay alguna incidencia seleccionada
+//						if (eventsTable.getSelectedRow() != -1) {
+//							
+//							
+//							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
+//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
+//							firstUpdate = findFirstUpdate();
+//							
+//							//Debug
+//							System.out.println("Fila seleccionada: " + eventsTable.getSelectedRow());
+//							System.out.println("Id de la incidencia de la fila seleccionada: " + selectedEventId);
+//							System.out.println("Título de la incidencia de la fila seleccionada: " + eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 4));
+//													
+//							//Actualizamos la tabla de incidencias de la unidad de negocio de la sesión
+//							filterSelected.doClick();
+//							//
+////							
+//							int row = 0;
+//							for (int i = 0; i < eventsTable.getRowCount(); i++) {
+//								if (eventSelected.getId() == (int) eventsTable.getModel().getValueAt(i, 0)) {
+//
+//									//Registramos la fila seleccionada en la tabla de incidencias
+//									row = i;
+//								}
+//							}
+//							
+//							//Debug
+//							System.out.println("Número de filas en la tabla de incidencias: " + eventsTable.getRowCount());
+//							
+//							
+//							//Volvemos a seleccionar la fila de la incidencia seleccionada
+//							eventsTable.setRowSelectionInterval(row, row);
+//							//Renovamos la tabla de actualizaciones
+//							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
+//						} else {
 							//Actualizamos la tabla de incidencias de la unidad de negocio de la sesión
 							filterSelected.doClick();
-							//Volvemos a seleccionar la fila de la incidencia seleccionada
-							eventsTable.setRowSelectionInterval(row, row);
-							//Renovamos la tabla de actualizaciones
-							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
-						} else {
-							//Actualizamos la tabla de incidencias de la unidad de negocio de la sesión
-							filterSelected.doClick();
-						}
+//						}
 						
 						//Informamos por pantalla de la actualización
 						//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
@@ -1657,6 +1706,16 @@ public class EventDataUI extends JPanel{
 //						//información mostrada, pero seguirá interesando saber que alguna actualización ha sido modificada, añadida o borrada
 //						EventDataUI.this.infoLabel.setText("DATOS DE LAS ACTUALIZACIONES ACTUALIZADOS: " +
 //						ToolBox.formatTimestamp(updatedTable.getValue(), null));
+//					}
+					
+//					//Debug
+//					System.out.println("Interviene refreshLists()");
+//					System.out.println("Lista de bunits disponibles:");
+//					Iterator<String> iterator = availableModel.elements().asIterator();
+//					int num = 0;
+//					while(iterator.hasNext()) {
+//						String textItem = (String) iterator.next();
+//						System.out.println(++num + " - " + textItem);
 //					}
 					
 				}

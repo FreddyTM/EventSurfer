@@ -2505,6 +2505,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· TimerJob class (EventEditUI inner class):
 		update run() --new edit actions doesn't update event's row in last_modification table--
+			     --fixing remote updates bugs in progress...--
 
 		
 	
