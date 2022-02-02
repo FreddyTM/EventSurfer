@@ -1327,8 +1327,11 @@ public class EventEditUI extends JPanel{
 					//infoLabel.setText("TODO CORRECTO PARA ACEPTAR");
 					System.out.println("TODO CORRECTO PARA ACEPTAR EventEditUI");
 
-					//Nueva incidencia
+					//Nueva incidencia **********************************************************************************************
 					if (actionSelector == EVENTEDIT_ACTION_NEW_EVENT) {
+						
+						//Debug
+						System.out.println("Dentro de EVENTEDIT_ACTION_NEW_EVENT");
 
 						//Creamos nuevo Event a partir de los datos del formulario
 						Event newEvent = new Event();
@@ -1349,9 +1352,15 @@ public class EventEditUI extends JPanel{
 						//Si la incidencia se almacena correctamente en la base de datos
 						if (storedEvent != null) {
 							tNow = ToolBox.getTimestampNow();
-//							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							
+							//Debug
+							System.out.println("NEW_EVENT grabando cambios en la incidencia");
+							
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
 //							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
 //									session.getConnection(), tNow, Event.TABLE_NAME);
+							PersistenceManager.updateTimeStampToDB(session.getConnection(), Event.TABLE_NAME, tNow);
+							
 							//Creamos nuevo EventUpdate a partir de los datos del formulario y del nuevo Event
 							EventUpdate newEventUpdate = new EventUpdate();
 							newEventUpdate.setEvent(storedEvent);
@@ -1449,9 +1458,15 @@ public class EventEditUI extends JPanel{
 						//Intentamos actualizar la incidencia en la base de datos
 						if (new Event().updateEventToDB(session.getConnection(), updatedEvent)) {
 							tNow = ToolBox.getTimestampNow();
-//							//Registramos fecha y hora de la actualización de los datos de la tabla event
+							
+							//Debug
+							System.out.println("EDIT_EVENT grabando cambios en la incidencia");
+							
+							//Registramos fecha y hora de la actualización de los datos de la tabla event
 //							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
 //									session.getConnection(), tNow, Event.TABLE_NAME);
+							PersistenceManager.updateTimeStampToDB(session.getConnection(), Event.TABLE_NAME, tNow);
+
 							//Intentamos actualizar la actualización inicial de la incidencia en la base de datos
 							if (new EventUpdate().updateEventUpdateToDB(session.getConnection(),
 									updatedEvent.getUpdates().get(0))) {
@@ -1603,8 +1618,12 @@ public class EventEditUI extends JPanel{
 						}
 					}
 
-					//Nueva actualización
+					//Nueva actualización **********************************************************************************************
 					if (actionSelector == EVENTEDIT_ACTION_NEW_UPDATE) {
+						
+						//Debug
+						System.out.println("Dentro de EVENTEDIT_ACTION_NEW_UPDATE");
+						
 						//Hora a la que se registra la actualización
 						tNow = ToolBox.getTimestampNow();
 						//Registramos el estado actual de la incidencia seleccionada
@@ -1615,9 +1634,15 @@ public class EventEditUI extends JPanel{
 							eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
 							//Intentamos actualizar el estado de la la incidencia seleccionada en la base de datos
 							if (new Event().updateEventStateOfEventToDB(session.getConnection(), eventSelected)) {
-//								//Registramos fecha y hora de la actualización de los datos de la tabla event
+								
+								//Debug
+								System.out.println("NEW_UPDATE grabando cambios en el estado de la incidencia");
+								
+								//Registramos fecha y hora de la actualización de los datos de la tabla event
 //								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
 //										session.getConnection(), tNow, Event.TABLE_NAME);
+								PersistenceManager.updateTimeStampToDB(session.getConnection(), Event.TABLE_NAME, tNow);
+								
 							} else {
 								eDataUI.getInfoLabel().setText(
 										"ERROR DE ACTUALIZACIÓN DEL ESTADO DE LA INCIDENCIA EN LA BASE DE DATOS");
@@ -1674,7 +1699,7 @@ public class EventEditUI extends JPanel{
 						}
 					}
 
-					//Edición de actualización
+					//Edición de actualización **********************************************************************************************
 					if (actionSelector == EVENTEDIT_ACTION_EDIT_UPDATE) {
 
 						//Debug
@@ -1686,15 +1711,23 @@ public class EventEditUI extends JPanel{
 						tNow = ToolBox.getTimestampNow();
 						//Registramos el estado actual de la incidencia seleccionada
 						String eventSelectedState = eventSelected.getEventState();
+						//Actualizamos el estado de la incidencia seleccionada
+						eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
 						//Si la nueva actualización ha cambiado el estado de la incidencia, hay que actualizar también la incidencia
+						//en la base de datos
 						if (!eventStateComboBox.getSelectedItem().toString().equals(eventSelectedState)) {
-							//Actualizamos el estado de la incidencia seleccionada
-							eventSelected.setEventState(eventStateComboBox.getSelectedItem().toString());
 							//Intentamos actualizar el estado de la la incidencia seleccionada en la base de datos
 							if (new Event().updateEventStateOfEventToDB(session.getConnection(), eventSelected)) {
-//								//Registramos fecha y hora de la actualización de los datos de la tabla event
+								
+								//Debug
+								System.out.println("EDIT_UPDATE grabando cambios en el estado de la incidencia");
+								
+								
+								//Registramos fecha y hora de la actualización de los datos de la tabla event
 //								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
 //										session.getConnection(), tNow, Event.TABLE_NAME);
+								PersistenceManager.updateTimeStampToDB(session.getConnection(), Event.TABLE_NAME, tNow);
+								
 							} else {
 								eDataUI.getInfoLabel().setText(
 										"ERROR DE ACTUALIZACIÓN DEL ESTADO DE LA INCIDENCIA EN LA BASE DE DATOS");
@@ -1707,8 +1740,7 @@ public class EventEditUI extends JPanel{
 						updatedEventUpdate.setEvent(eventSelected);
 						//Construir fech/hora a partir de los campos del formulario correspondientes
 						stringToParse = buildStringTimestamp(updateDateField.getText(), updateTimeField.getText());
-						updatedEventUpdate
-								.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
+						updatedEventUpdate.setFechaHora(stringToTimestamp(stringToParse, TIMESTAMP_GENERATOR_DATE_TIME_PATTERN));
 						updatedEventUpdate.setAutor(updateAuthorField.getText());
 						updatedEventUpdate.setUser(new User().getUserByAlias(session.getCompany().getAllCompanyUsers(),
 								userField.getText()));
@@ -1718,11 +1750,62 @@ public class EventEditUI extends JPanel{
 						if (new EventUpdate().updateEventUpdateToDB(session.getConnection(), updatedEventUpdate)) {
 							//Registramos fecha y hora de la actualización de los datos de la tabla event_update
 							PersistenceManager.registerTableModification(eDataUI.getInfoLabel(),
-									"INCIDENCIA ACTUALIZADA: ", session.getConnection(), tNow, EventUpdate.TABLE_NAME);
+									"ACTUALIZACIÓN DE INCIDENCIA ACTUALIZADA: ", session.getConnection(), tNow, EventUpdate.TABLE_NAME);
 
-							eventSelected.getUpdates().remove(updateSelected);
+							//Eliminamos la actualización selecionada de la lista de actualizaciones de la incidencia seleccionada
+							Iterator<EventUpdate> eUiterator = eventSelected.getUpdates().iterator();
+							while(eUiterator.hasNext()) {
+								EventUpdate up = (EventUpdate) eUiterator.next();
+								if (up.getId() == updateSelected.getId()) {
+									eUiterator.remove();
+									break;
+								}
+							}
+							//Añadimos la actualización actualizada a la lista de actualizaciones de la incidencia seleccionada
 							eventSelected.getUpdates().add(updatedEventUpdate);
+							//Reasignamos la actualización seleccionada y refrescamos la primera actualización de la incidencia seleccionada
+							updateSelected = updatedEventUpdate;
 							eDataUI.setFirstUpdate(eDataUI.findFirstUpdate());
+
+							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
+							
+							//Buscamos el id de la fila seleccionada en la tabla de incidencias
+							int selectedEventId = (int) eDataUI.getEventsTable().getModel().getValueAt(eDataUI.getEventsTable().getSelectedRow(), 0);
+							//Buscamos el id de la fila seleccionada en la tabla de actualizaciones
+//							int selectedUpdateId = 0;
+							int selectedUpdateId = (int) eDataUI.getUpdatesTable().getModel().getValueAt(eDataUI.getUpdatesTable().getSelectedRow(), 0);
+							//Actualizamos la tabla de incidencias
+							eDataUI.getFilterSelected().doClick();
+							//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+							int row = 0;
+							for (int i = 0; i < eDataUI.getEventsTable().getRowCount(); i++) {
+								if (selectedEventId == (int) eDataUI.getEventsTable().getModel().getValueAt(i, 0)) {
+									row = i;
+								}
+							}
+							//Volvemos a seleccionar la fila de la incidencia seleccionada
+							eDataUI.getEventsTable().setRowSelectionInterval(row, row);
+							//Actualizamos la tabla de actualizaciones. Los botones se quedan como estaban
+							eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()),
+									EventDataUI.getUpdatesTableHeader());
+							//Buscamos la fila de la tabla de actualizaciones que estaba seleccionada
+							for (int i = 0; i < eDataUI.getUpdatesTable().getRowCount(); i++) {
+								if (selectedUpdateId == (int) eDataUI.getUpdatesTable().getModel().getValueAt(i, 0)) {
+									row = i;
+								}
+							}
+							//Volvemos a seleccionar la fila de la actualización seleccionada
+							eDataUI.getUpdatesTable().setRowSelectionInterval(row, row);
+							
+							//Volvemos a la pantalla de gestión de incidencias
+							backToEventDataScreen();
+							
+							
+							
+//							//Debug
+//							System.out
+//									.println("El id de la actualización actualizada es: " + updatedEventUpdate.getId());
+							
 
 							//						List<EventUpdate> newUpdatesList = new ArrayList<EventUpdate>();
 							//						if (updateSelected.getId() == eDataUI.getFirstUpdate().getId()) {
@@ -1788,53 +1871,42 @@ public class EventEditUI extends JPanel{
 							//						eventSelected.getUpdates().add(updatedEventUpdate);
 							//						updateSelected = updatedEventUpdate;
 
-							//Debug
-							System.out
-									.println("El id de la actualización actualizada es: " + updatedEventUpdate.getId());
 
-							//CÓDIGO DE ACTUALIZACIÓN DE EVENTDATAUI AL RETORNAR A SU PANTALLA
-							//Registramos la fila seleccionada en la tabla de incidencias
-							int row = eDataUI.getEventsTable().getSelectedRow();
-							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
-							eDataUI.getFilterSelected().doClick(); //eventSelected no cambia
-							//Volvemos a seleccionar la fila de la incidencia seleccionada
-							eDataUI.getEventsTable().setRowSelectionInterval(row, row);
+							
+							
+							
+							
+							//************************************************************************************
+//							//Actualizamos la incidencia selecionada
+//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
+//							//Actualizamos la actualización de incidencia selecionada
+//							updateSelected = new EventUpdate().getEventUpdateById(eventSelected, selectedUpdateId);
 
-							//Renovamos la tabla de actualizaciones
-							eDataUI.updateUpdatesTable(eDataUI.sortEventUpdatesByDate(eventSelected.getUpdates()),
-									EventDataUI.getUpdatesTableHeader());
-							//						//Mantenemos la incidencia seleccionada y registramos la actualización editada
-							//						eDataUI.setUpdateSelected(updateSelected);
-							//						//Encontrar la fila que ocupa la actualilzación editada , y seleccionarla en la tabla
-							//						for (int i = 0; i < eDataUI.getUpdatesTable().getRowCount(); i++) {
-							//							
-							//							//Debug
-							//							System.out.println("El número de filas es: " + eDataUI.getUpdatesTable().getRowCount());
-							//							System.out.println("Buscando en fila: " + i);
-							//							
-							//							rowId = (int) eDataUI.getUpdatesTable().getModel().getValueAt(i, 0);
-							//							
-							//							//Debug
-							//							System.out.println("El id encontrado es: " + (int) eDataUI.getUpdatesTable().getModel().getValueAt(i, 0));
-							//							
-							//							if (rowId == updateSelected.getId()) {
-							//								eDataUI.getUpdatesTable().setRowSelectionInterval(i, i);
-							//							}
-							//						}
-							//Deseleccionamos la actualización seleccionada
-							eDataUI.setUpdateSelected(null);
+						
+							
+//							//Registramos la fila seleccionada en la tabla de incidencias
+//							row = eDataUI.getEventsTable().getSelectedRow();
+							
+							
+//							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
+//							eDataUI.getFilterSelected().doClick(); //eventSelected no cambia
+//							//Volvemos a seleccionar la fila de la incidencia seleccionada
+//							eDataUI.getEventsTable().setRowSelectionInterval(row, row);
 
-							//Volvemos a la pantalla de gestión de incidencias
-							backToEventDataScreen();
+
+//							//Deseleccionamos la actualización seleccionada
+//							eDataUI.setUpdateSelected(null);
+
+							
 						} else {
 							eDataUI.getInfoLabel()
 									.setText("ERROR DE GRABACIÓN DE ACTUALIZACIÓN DE INCIDENCIA EN LA BASE DE DATOS");
 						}
 					}
 				}
-				if (!eDataUI.getInfoLabel().getText().equals("")) {
-					eDataUI.getInfoLabel().setText("");
-				}
+//				if (!eDataUI.getInfoLabel().getText().equals("")) {
+//					eDataUI.getInfoLabel().setText("");
+//				}
 			}
 		}
 		

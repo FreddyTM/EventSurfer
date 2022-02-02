@@ -512,8 +512,38 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 //							case "event":
+//								//Recargamos los datos de las incidencias de todos los centros de trabajo
+//								//Debug
+//								System.out.println("Recargando datos................................................");
+//								
+//								
+//								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
+//									
+//									//Debug
+//									System.out.println("Recargando empresa...");
+//									
+//									
+//									List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
+//									
+//									//Debug
+//									System.out.println("Recargando incidencias...");
+//									
+//									oneUnit.setEvents(eventList);
+//									//Asignamos a cada incidencia del centro de trabajo sus actualizaciones
+//									for (Event event: oneUnit.getEvents()) {
+//										
+//										//Debug
+//										System.out.println("Recargando actualizaciones...");
+//										
+//										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
+//										event.setUpdates(eUpdate);
+//									}
+//								}
+//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
+//								break;
+								
 							case "event_update":	
-								//Recargamos los datos de las incidencias de todas las unidades de negocio
+								//Recargamos los datos de las incidencias de todos los centros de trabajo
 								//Debug
 								System.out.println("Recargando datos................................................");
 								
@@ -530,8 +560,8 @@ public class CurrentSession {
 									System.out.println("Recargando incidencias...");
 									
 									oneUnit.setEvents(eventList);
-									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
-									for (Event event: eventList) {
+									//Asignamos a cada incidencia del centro de trabajo sus actualizaciones
+									for (Event event: oneUnit.getEvents()) {
 										
 										//Debug
 										System.out.println("Recargando actualizaciones...");
