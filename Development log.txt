@@ -2464,7 +2464,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc 
 
 	· NewAction class (AreaUI inner class):
 		Update actionPerformed() --areaNameField has the focus on new area--

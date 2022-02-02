@@ -2,17 +2,13 @@ package main.java.gui;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -33,18 +29,15 @@ import main.java.event.Event;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
-import main.java.types_states.EventType;
 
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -762,9 +755,9 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
-	 * campos de texto y habilitamos su edición para añadir la información de una nueva unidad de negocio.
-	 * Se vacían las listas de asignación. Habilitamos el botón de Cancelar para que los cambios no se
-	 * registren y el de Aceptar para que sí lo hagan.
+	 * campos de texto y habilitamos su edición para añadir la información de una nueva area. Se bloquean las
+	 * listas de asignación. Habilitamos el botón de Cancelar para que los cambios no se registren y el de
+	 * Aceptar para que sí lo hagan.
 	 */
 	public class NewAction extends AbstractAction {
 		public NewAction() {
@@ -798,9 +791,9 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Editar. Se deshabilita el propio botón. Habilita la edición de la información
-	 * del formulario, el botón de Cancelar para que los cambios no se registren y el de Aceptar para
-	 * que sí lo hagan.
+	 * Acción del botón Editar. Se deshabilita el propio botón. Se bloquean las listas de asignación.
+	 * Habilita la edición de la información del formulario, el botón de Cancelar para que los cambios
+	 * no se registren y el de Aceptar para que sí lo hagan.
 	 */
 	public class EditAction extends AbstractAction {
 		public EditAction() {
@@ -841,9 +834,9 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Acción del botón cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar, el
-	 * botón Borrar y el botón Nueva. Descarta los cambios en los datos introducidos en el formulario. No se graban
-	 * en la base de datos ni en el objeto Area. Se recupera la información que figuraba anteriormente en el formulario.
-	 * Se borra cualquier mensaje de error mostrado anteriormente
+	 * botón Borrar y el botón Nueva. Se habilitan las listas de asignación. Descarta los cambios en los datos introducidos
+	 * en el formulario. No se graban en la base de datos ni en el objeto Area. Se recupera la información que figuraba
+	 * anteriormente en el formulario. Se borra cualquier mensaje de error mostrado anteriormente
 	 */
 	public class CancelAction extends AbstractAction {
 		public CancelAction() {
@@ -881,7 +874,7 @@ public class AreaUI extends JPanel {
 			refreshLists();
 			//Formulario no editable
 			editableDataOff();
-			
+			//Habilitamos asignaciones
 			availableList.setEnabled(true);
 			allocatedList.setEnabled(true);
 		}		
@@ -908,9 +901,6 @@ public class AreaUI extends JPanel {
 			List<Event> eventList = new Event().getAreaEventsFromDB(session.getConnection(), selectedArea, session.getCompany());
 			//Si hay eventos, borrado prohibido para cualquier usuario
 			if (eventList.size() > 0) {
-				//Debug
-				System.out.println("Borrado prohibido (ALL)");
-				
 				ToolBox.showDialog(
 						"No se puede borrar areas asignadas a eventos registrados", AreaUI.this,
 						DIALOG_INFO);
@@ -920,29 +910,17 @@ public class AreaUI extends JPanel {
 				if (session.getUser().getUserType().equals("MANAGER")) {			
 					//Verificamos que el usuario está autorizado a borrar el area seleccionada
 					if (verifyManagerEditConditions()) {
-						//Debug
-						System.out.println("Borrado autorizado (MANAGER)");
-						
 						int optionSelected = ToolBox.showDialog(
 								"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
 								DIALOG_YES_NO);
 						if (optionSelected != JOptionPane.YES_OPTION) {
-							//Debug
-							System.out.println("Borrado cancelado");
 							return;
 						} else {							
 							deleteOK = true;
-						}
-					//El usuario no está autorizado a borrar el area seleccionada		
-					} else {
-						//Debug
-						System.out.println("Borrado prohibido (MANAGER)");				
-					}
+						}		
+					} 
 				//Si el usuario de la sesión es de tipo admin
 				} else {
-					//Debug
-					System.out.println("Borrado autorizado (ADMIN)");
-					
 					if (verifyAdminEditConditions()) {						
 						deleteOK = true;
 					}
@@ -950,12 +928,9 @@ public class AreaUI extends JPanel {
 			}
 			//Si el borrado se autoriza, se borra el area seleccionada de la base de datos
 			if (deleteOK) {
-				//Debug
-				System.out.println("Borrando area de la base de datos...");
 				
 				//Nueva lógica para respetar referencias de la base de datos
-				
-				//Si el area a borrar está asignada a alguna unidad de negocio en la tabla b_unit area
+				//Si el area a borrar está asignada a algún centro de trabajo en la tabla b_unit area
 				//Borramos primero las referencias a dicha area en la tabla b_unit_area
 				
 				//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
@@ -966,13 +941,11 @@ public class AreaUI extends JPanel {
 						//Registramos fecha y hora de la actualización de los datos de la tabla area
 						PersistenceManager.registerTableModification(infoLabel, "AREA BORRADA: ", session.getConnection(), tNow,
 								Area.TABLE_NAME);
-						//Eliminamos el area borrada de cualquier unidad de negocio a la que estuviera asignada
+						//Eliminamos el area borrada de cualquier centro de trabajo al que estuviera asignada
 						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
 							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
-							//Debug
-							if (areaDeleted) {	
-								System.out.println("Borrando area " + selectedArea.getAreaNombre()
-								+ " de la unidad de negocio " + bUnit.getNombre());
+							if (!areaDeleted) {	
+								infoLabel.setText("ERROR DE BORRADO DEL AREA DE LOS CENTROS DE TRABAJO");
 							}
 						}
 						//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
@@ -998,7 +971,7 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar y el botón. Se habilitan los
+	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilitan los
 	 * botones Editar, Nueva y Borrar. Se intentan guardar los datos del araea actualizados en la base
 	 * de datos, o bien los datos de una area nueva. Si se consigue, se actualiza el objeto Area con dichos datos
 	 * o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación del objeto Area y se
@@ -1095,8 +1068,8 @@ public class AreaUI extends JPanel {
 	/**
 	 * Acción del botón Asignar. Los usuarios de tipo ADMIN pueden asignar cualquier area a cualquier unidad de negocio.
 	 * Los usuarios de tipo MANAGER solo pueden asignar areas a su propia unidad de negocio. Los usuarios de tipo USER no
-	 * pueden asignar areas. Se intenta añadir a la tabla b_unit_area una nueva entrada con el id del area y el id de la
-	 * unidad de negocio a la que se asigna. Si se consigue, se añade el area a la lista de areas del objeto BusinessUnit
+	 * pueden asignar areas. Se intenta añadir a la tabla b_unit_area una nueva entrada con el id del area y el id del
+	 * centro de trabajo al que se asigna. Si se consigue, se añade el area a la lista de areas del objeto BusinessUnit
 	 * al que se ha asignado.
 	 */
 	public class AllocateAction extends AbstractAction {
@@ -1111,7 +1084,7 @@ public class AreaUI extends JPanel {
 				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
 				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
 						Area.B_UNIT_AREA_TABLE_NAME);			
-				//Añadir el area al objeto BusinessUnit
+				//Añadir el area al centro de trabajo
 				bUnit.getAreas().add(selectedArea);
 				infoLabel2.setText(selectedArea.getAreaNombre() + " SE AÑADE A " + bUnit.getNombre() + ". "
 						+ infoLabel2.getText());
@@ -1132,9 +1105,9 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Acción del botón Revocar Asignación. Los usuarios de tipo ADMIN pueden revocar la asignación de cualquier area a
-	 * cualquier unidad de negocio. Los usuarios de tipo MANAGER solo pueden revocar asignaciones de areas de su propia
-	 * unidad de negocio. Los usuarios de tipo USER no pueden revocar asignaciones de areas. Se intenta eliminar de la
-	 * tabla b_unit_area la entrada que contenga el id del area y el id de la unidad de negocio a la que estaba asignada.
+	 * cualquier unidad de negocio. Los usuarios de tipo MANAGER solo pueden revocar asignaciones de areas de su propio
+	 * centro de trabajo. Los usuarios de tipo USER no pueden revocar asignaciones de areas. Se intenta eliminar de la
+	 * tabla b_unit_area la entrada que contenga el id del area y el id del centro de trabajo a la que estaba asignado.
 	 * Si se consigue, se elimina el area a la lista de areas del objeto BusinessUnit al que estaba asignado.
 	 */
 	public class RevokeAllocationAction extends AbstractAction {
@@ -1149,7 +1122,7 @@ public class AreaUI extends JPanel {
 				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
 				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
 						Area.B_UNIT_AREA_TABLE_NAME);	
-				//Eliminar el area del objeto BusinessUnit
+				//Eliminar el area del centro de trabajo
 				if (new Area().deleteArea(bUnit, selectedArea)) {
 					infoLabel2.setText(selectedArea.getAreaNombre() + " YA NO PERTENECE A " + bUnit.getNombre() + ". "
 							+ infoLabel2.getText());
@@ -1189,41 +1162,19 @@ public class AreaUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (AreaUI.this.panelVisible == true){
-				//Debug
-				System.out.println("Comprobando actualización de datos de area");
-				System.out.println(session.getUpdatedTables().size());
-				
-				System.out.println("El area seleccionada antes de leerla del combobox es: " + (selectedArea == null ? null : selectedArea.getAreaNombre()));
-				String item = (String) areaComboBox.getSelectedItem();
-				//Hay un area seleccionada
-				selectedArea = new Area().getAreaByName(allAreas, item);
-				System.out.println("El area seleccionada después de leerla del combobox es: " + (selectedArea == null ? null : selectedArea.getAreaNombre()));
 
-				
-				
-				
 				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					
-					//Debug
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
-					
 					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
 					if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
 						
 						//LÓGICA DE ACTUALIZACIÓN
-
 						//Si se ha borrado el area seleccionada, refrescamos la lista de areas del
 						//combobox y mostramos los datos de la nueva area seleccionada por defecto
 						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
 						boolean areaDeleted = true;
 						for (Area area: updatedAreaList) {
 							if (area.getAreaNombre().equals(selectedArea.getAreaNombre()) ) {
-//								
-//								//Debug
-//								System.out.println("El area no se ha borrado");
-//								
 								areaDeleted = false;
 							}
 						}
@@ -1268,9 +1219,7 @@ public class AreaUI extends JPanel {
 					}
 				}
 			}
-			
 		}
-		
 	}
 }
 
