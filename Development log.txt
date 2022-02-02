@@ -2501,6 +2501,9 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 
 	· EventEditUI class:
+		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--
+		Update isDateTimeAfterEventUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
+		Update isDateTimebeforePreviousUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Clean code --not completed yet--
 
 	· TimerJob class (EventEditUI inner class):
