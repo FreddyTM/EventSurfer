@@ -82,7 +82,7 @@ public class AreaUI extends JPanel {
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de contenidos de los campos de datos. Sirve de backup para recuperarlos
-	//Tras cancelar una edición de datos o la creación de una nueva unidad de negocio
+	//Tras cancelar una edición de datos o la creación de un nuevo centro de trabajo
 	private List<String> textFieldContentList = new ArrayList<String>();
 	
 	
@@ -176,7 +176,6 @@ public class AreaUI extends JPanel {
 		areaDescription.setWrapStyleWord(true);
 		areaDescription.setBounds(260, 225, 400, 75);
 		areaDescription.setBackground(UIManager.getColor(new JPanel().getBackground()));
-//		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
 		areaDescription.setBorder(areaNameField.getBorder());
 		areaDescription.setEditable(false);
 		add(areaDescription);
@@ -251,13 +250,13 @@ public class AreaUI extends JPanel {
 		areaAllocateTxt.setBounds(50, 475, 380, 30);
 		add(areaAllocateTxt);
 		
-		JLabel availableLabel = new JLabel("Unidades de negocio disponibles");
+		JLabel availableLabel = new JLabel("Centros de trabajo disponibles");
 		availableLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		availableLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		availableLabel.setBounds(100, 525, 300, 25);
 		add(availableLabel);
 		
-		JLabel allocatedLabel = new JLabel("Unidades de negocio asignadas");
+		JLabel allocatedLabel = new JLabel("Centros de trabajo asignados");
 		allocatedLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		allocatedLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		allocatedLabel.setBounds(600, 525, 300, 25);
@@ -398,9 +397,9 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de una
-	 * nueva unidad de negocio, podremos recuperar por pantalla los datos de la última unidad de negocio que
-	 * estaba seleccionada.
+	 * Hace una copia de los datos que figuran en el formulario. Al cancelar la edición o la creación de un
+	 * nuevo centro de trabajo, podremos recuperar por pantalla los datos del último centro de trabajo que
+	 * estaba seleccionado.
 	 */
 	private void updateDataCache() {
 		//Vaciamos la lista de datos del caché de datos
@@ -435,8 +434,8 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Si el usuario de la sesión es de tipo manager, habilita la edición del area seleccionada
-	 * solo en el caso de que esté asignada exclusivamente a la misma unidad de negocio que dicho
-	 * usuario, o bien que no esté asignada a ninguna unidad de negocio
+	 * solo en el caso de que esté asignada exclusivamente al mismo centro de trabajo que dicho
+	 * usuario, o bien que no esté asignada a ningún centro de trabajo
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
 	private boolean verifyManagerEditConditions() {
@@ -449,21 +448,21 @@ public class AreaUI extends JPanel {
 		} else {
 			action = "borrar";
 		}
-		//Area no asignada a ninguna unidad de negocio
+		//Area no asignada a ningún centro de trabajo
 		if (bUnitsList.size() == 0) {
 			return true;
 		}
-		//Area asignada a más de una unidad de negocio
+		//Area asignada a más de un centro de trabajo
 		if (bUnitsList.size() > 1) {
 			ToolBox.showDialog(
 					"Un usuario Manager no puede " + action + " areas asignadas a más de una unidad de negocio", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
-		//Area asignada a la unidad de negocio de usuario manager que abre sesión
+		//Area asignada al centro de trabajo de usuario manager que abre sesión
 		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
 			return true;
-		//Area asignada a una unidad de negocio distinta a la del usuario manager que abre sesión
+		//Area asignada a un centro de trabajo distinto a la del usuario manager que abre sesión
 		} else {
 			ToolBox.showDialog(
 					"Un usuario Manager no puede " + action + " areas no asignadas a su unidad de negocio", AreaUI.this,
@@ -473,10 +472,10 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Si el usuario de la sesión es de tipo admin y el area seleccionada está asignada a más de una 
-	 * unidad de negocio, advierte al usuario de esta circunstancia. Si el usuario acepta continuar,
+	 * Si el usuario de la sesión es de tipo admin y el area seleccionada está asignada a más de un
+	 * centro de trabajo, advierte al usuario de esta circunstancia. Si el usuario acepta continuar,
 	 * se habilita la edición del area seleccionada. También se habilita la edición directamente en el
-	 * caso de que el area seleccionada esté asignada a una sola unidad de negocio o a ninguna. 
+	 * caso de que el area seleccionada esté asignada a un solo centro de trabajo o a ninguno. 
 	 * @return true si se cumplen las condiciones para la edición, false si no se cumplen
 	 */
 	private boolean verifyAdminEditConditions() {
@@ -490,21 +489,17 @@ public class AreaUI extends JPanel {
 			info = "Borrado de area asignada a más de una unidad de negocio. "
 					+ "No se puede deshacer. " + "¿Desea continuar?";
 		}
-		//Area seleccionada asignada a más de una unidad de negocio
+		//Area seleccionada asignada a más de un centro de trabajo
 		if (bUnitsList.size() > 1) {
 			int optionSelected = ToolBox.showDialog(
 					info, AreaUI.this,
 					DIALOG_YES_NO);
 			if (optionSelected == JOptionPane.YES_OPTION) {
-				//Debug
-				System.out.println("Edición o borrado OK");
 				return true;
 			} else {
-				//Debug
-				System.out.println("Edición o borrado cancelado");
 				return false;
 			}
-		//Area seleccionada asignada a una o ninguna unidad de negocio
+		//Area seleccionada asignada a uno o ningún centro de trabajo
 		} else {
 			if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
 				return true;
@@ -513,12 +508,8 @@ public class AreaUI extends JPanel {
 						"El borrado de areas no se puede deshacer. ¿Desea continuar?", AreaUI.this,
 						DIALOG_YES_NO);
 				if (optionSelected == JOptionPane.YES_OPTION) {
-					//Debug
-					System.out.println("Borrado OK");
 					return true;
 				} else {							
-					//Debug
-					System.out.println("Borrado cancelado");
 					return false;
 				}
 			}
@@ -630,9 +621,9 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro ha sido asignada
-	 * @param area area de la que queremos saber a qué unidades de negocio ha sido asignada
-	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio asignadas
+	 * Obtiene la lista de nombres de centros de trabajo en los que el area pasada por parámetro ha sido asignada
+	 * @param area area de la que queremos saber a qué centros de trabajo ha sido asignada
+	 * @return array ordenado alfabéticamente con los nombres de los centros de trabajo asignados
 	 */
 	private String[] getAllocatedBunitList(Area area) {
 		List<String> allocatedList = new BusinessUnit().getAllBunitNamesWithArea(session.getConnection(), session.getCompany(), area);
@@ -640,9 +631,9 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de nombres de unidades de negocio en las que el area pasada por parámetro no ha sido asignada
-	 * @param area area de la que queremos saber a qué unidades de negocio no ha sido asignada
-	 * @return array ordenado alfabéticamente con los nombres de las unidades de negocio no asignadas
+	 * Obtiene la lista de nombres de centros de trabajo en los que el area pasada por parámetro no ha sido asignada
+	 * @param area area de la que queremos saber a qué centros de trabajo no ha sido asignada
+	 * @return array ordenado alfabéticamente con los nombres de los centros de trabajo no asignadas
 	 */
 	private String[] getAvailableBunitList(Area area) {
 		List<String> allBunits = new BusinessUnit().getAllBunitNames(session.getConnection(), session.getCompany());
@@ -666,17 +657,7 @@ public class AreaUI extends JPanel {
 			for (String item : allocatedBunits) {
 				allocatedModel.addElement(item);
 			}
-			
-			//Debug
-			System.out.println("Interviene refreshLists()");
-			System.out.println("Lista de bunits disponibles:");
-			Iterator<String> iterator = availableModel.elements().asIterator();
-			int num = 0;
-			while(iterator.hasNext()) {
-				String textItem = (String) iterator.next();
-				System.out.println(++num + " - " + textItem);
-			}
-			
+
 			availableList.setModel(availableModel);;
 			allocatedList.setModel(allocatedModel);;
 		} else {
@@ -697,11 +678,7 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del comboBox. Cada elemento se corresponde con un area
-	 * guardada en la base de datos. Si el usuario que abre sesión es de tipo administrador aparecerán
-	 * todas las areas existentes, si es otro tipo de usuario solo aparecerán las areas asignadas a su
-	 * unidad de negocio, o ninguna si no se han asignado. El area seleccionada se almacena en la variable
-	 * selectedArea.
-	 *
+	 * guardada en la base de datos. El area seleccionada se almacena en la variable selectedArea.
 	 */
 	private class AreaComboListener implements ItemListener {
 
@@ -725,8 +702,6 @@ public class AreaUI extends JPanel {
 			populateAreaFields();
 			//Hacemos backup del contenido de los datos del formulario
 			updateDataCache();
-//			//Vaciamos label de información
-//			infoLabel.setText("");
 			//Refrescamos listas
 			refreshLists();
 			//Deshabilitamos los botones de asignación de areas
@@ -788,7 +763,8 @@ public class AreaUI extends JPanel {
 	/**
 	 * Acción del botón Nueva. Se deshabilita el propio botón, el botón Editar y el combobox. Vaciamos los
 	 * campos de texto y habilitamos su edición para añadir la información de una nueva unidad de negocio.
-	 * Habilitamos el botón de Cancelar para que los cambios no se registren y el de Aceptar para que sí lo hagan.
+	 * Se vacían las listas de asignación. Habilitamos el botón de Cancelar para que los cambios no se
+	 * registren y el de Aceptar para que sí lo hagan.
 	 */
 	public class NewAction extends AbstractAction {
 		public NewAction() {
@@ -810,8 +786,13 @@ public class AreaUI extends JPanel {
 			//Vaciamos los campos de texto
 			areaNameField.setText("");
 			areaDescription.setText("");
-			//Vaciamos las listas de asignación de areas
-			emptyLists();
+			//Bloqueamos asignaciones
+			availableList.setEnabled(false);
+			allocatedList.setEnabled(false);
+			allocateButton.setEnabled(false);
+			revokeButton.setEnabled(false);
+			
+			areaNameField.requestFocusInWindow();
 		}
 		
 	}
@@ -846,6 +827,13 @@ public class AreaUI extends JPanel {
 				infoLabel.setText("");
 				//Formulario editable
 				editableDataOn();
+				//Bloqueamos asignaciones
+				availableList.setEnabled(false);
+				allocatedList.setEnabled(false);
+				allocateButton.setEnabled(false);
+				revokeButton.setEnabled(false);
+				
+				areaNameField.requestFocusInWindow();
 			}
 			
 		}
@@ -893,6 +881,9 @@ public class AreaUI extends JPanel {
 			refreshLists();
 			//Formulario no editable
 			editableDataOff();
+			
+			availableList.setEnabled(true);
+			allocatedList.setEnabled(true);
 		}		
 	}
 	
@@ -1094,6 +1085,8 @@ public class AreaUI extends JPanel {
 					}
 				}
 			}
+			//Refrescamos listas
+			refreshLists();
 			infoLabel2.setText("");
 		}
 		

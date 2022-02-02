@@ -2462,6 +2462,17 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· AreaUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
+		Clean code
+		Check javadoc
+
+	· NewAction class (AreaUI inner class):
+		Update actionPerformed() --areaNameField has the focus on new area--
+					 --allocation area gets disabled but lists remain unchanged--
+
+	· EditAction class (AreaUI inner class):
+		Update actionPerformed() --areaNameField has the focus on edit area--
+					 --allocation area gets disabled but lists remain unchanged--
 
 	· AllocateAction class (AreaUI inner class):
 		Update actionPerformed() --infolabel2 shows area name & bunit name--
