@@ -2503,14 +2503,19 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update formatEventsTable() --job done into a try/catch block except scrollRectToVisible()--
 		Update formatUpdatesTable() --job done into a try/catch block except scrollRectToVisible()--
 		Update updateEventButtonsStateOnSelection() --looks for firstUpdate's user's id--
+		Clean code --not completed yet--
+		Check javadoc --not completed yet--
 
 	· TimerJob class (EventDataUI inner class):
+		Add attribute
+			timerCycle
 		update run() --new edit actions doesn't update event's row in last_modification table--
 			     --fixing remote updates bugs in progress...
 			       no event or update selected, ok
 			       event & update selected, ok
 			       event selected update not selected, ok--
 			     --weird occasional exception thrown with no consequences in program functionality--
+			     --timerjob only updates data once every two cycles due to timerCycle value--
 
 	· EventEditUI class:
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--

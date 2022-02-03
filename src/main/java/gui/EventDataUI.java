@@ -1412,9 +1412,6 @@ public class EventDataUI extends JPanel{
 					//Si el botón de edición está activado
 					if (editEventButton.isEnabled()) {
 						editEventButton.doClick();
-						
-//						//Debug
-//						System.out.println(eventSelected.getId() + " " + eventSelected.getDescripcion());
 					}
 				}
 				//Tabla actualizaciones
@@ -1422,9 +1419,6 @@ public class EventDataUI extends JPanel{
 					//Si el botón de edición está activado
 					if (editUpdateButton.isEnabled()) {
 						editUpdateButton.doClick();
-						
-//						//Debug
-//						System.out.println(updateSelected.getId() + " " + updateSelected.getDescripcion());
 					}
 				}
 			}
@@ -1525,6 +1519,7 @@ public class EventDataUI extends JPanel{
 			} 
 			//Si no hay errores, procedemos a crear la nueva incidencia
 			if (okNew) {
+				
 				//Debug
 				System.out.println("Nueva incidencia");
 				
@@ -1540,21 +1535,11 @@ public class EventDataUI extends JPanel{
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
-			//Debug
-//			System.out.println("Editar incidencia");
 			
-//			int selectedRow = eventsTable.getSelectedRow();
-//			System.out.print("Evento seleccionado nulo? ");
-//			System.out.println(eventSelected == null);
-//			System.out.print("Evento seleccionado id: ");
-//			System.out.println(eventSelected == null ? "evento nulo" : eventSelected.getId());
-//			Event eventInBunit = new Event().getEventById(session.getbUnit(), (int) eventsTable.getModel().getValueAt(selectedRow, 0));
-//			boolean x = eventSelected.getId() == eventInBunit.getId();
-//			System.out.println("Evento seleccionado igual al que se almacena en la unidad de negocio? " + x);
+			//Debug
+			System.out.println("Editar incidencia");
 			
 			goToNewEditScreen(EventEditUI.getEventEditActionEditEvent());
-			
 		}
 	}
 	
@@ -1622,6 +1607,10 @@ public class EventDataUI extends JPanel{
 	 */
 	private class TimerJob extends TimerTask {
 		
+		//TimerJob se ejecuta dos veces por cada ejecución del TimerJob de CurrentSession. timerCycle registra en
+		//qué ciclo de ejecución estamos
+		private int timerCycle = 0;
+		
 		@Override
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
@@ -1637,223 +1626,135 @@ public class EventDataUI extends JPanel{
 			if (EventDataUI.this.panelVisible == true) {
 				
 				//Debug
-				 System.out.println("Timerjob run()");
-				
-				//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
-				//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
-				if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-					//Buscamos la bUnit del usuario que abrió sesión
-					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-					//La asignamos como bUnit de la sesión
-					session.setbUnit(userBunit);
-					//Renovamos la lista de las unidades de negocio del comboBox
-					refreshComboBox();
-				}
-
-				//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
-				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+				System.out.println("Timerjob run()");
+				 
+				//Si estamos en el ciclo 0, TimerJob hace su trabajo 
+				if (timerCycle == 0) {
 					
 					//Debug
-					System.out.println("Entramos en el map de tablas actualizadas...");
-					System.out.print(updatedTable.getKey().toString());
-					System.out.println(" - " + updatedTable.getValue().toString());
+					System.out.println("Ciclo 0");
 					
-					
-					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
-					//Si en la tabla de actualizaciones aparece la clave Event.TABLE_NAME
-					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
-					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)
-//							|| updatedTable.getKey().equals(Event.TABLE_NAME)
-							|| updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
-						
-						//Debug
-						System.out.println("Si la tabla es business_unit o eventUpdate, actualizamos datos en pantalla");
+					//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
+					//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
+					if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
+						//Buscamos la bUnit del usuario que abrió sesión
+						BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(),
+								session.getUser().getbUnit().getId());
+						//La asignamos como bUnit de la sesión
+						session.setbUnit(userBunit);
+						//Renovamos la lista de las unidades de negocio del comboBox
+						refreshComboBox();
+						//Actualizamos la tabla de incidencias
+						filterSelected.doClick();
+					}
+					//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
+					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 
-						
-						// 3 SUPUESTOS
-						// 1 - EVENTSELECTED + UPDATESELECTED
-						// 2 - EVENTSELECTED + NO UPDATESELECTED
-						// 3 - NO EVENTSELECTED + NO UPDATESELECTED
-						
-						// 1 - EVENTSELECTED + UPDATESELECTED
-						if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() != -1) {
-							//Buscamos el id de la incidencia seleccionada
-							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-							
-//							//Actualizamos la incidencia seleccionada
-//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
-//							firstUpdate = findFirstUpdate();
-							
-							//Buscamos el id de la actualización seleccionada
-							int selectedUpdateId = (int) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
-							
-//							//Actualizamos la actualización de incidencia seleccionada
-//							updateSelected = new EventUpdate().getEventUpdateById(eventSelected, selectedUpdateId);
-							
-							//Actualizamos la tabla de incidencias
-							filterSelected.doClick();
-							//Buscamos la fila de la tabla de incidencias que estaba seleccionada
-							int row = 0;
-							for (int i = 0; i < eventsTable.getRowCount(); i++) {
-								if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
-									row = i;
+						//Debug
+						System.out.println("Entramos en el map de tablas actualizadas...");
+						System.out.print(updatedTable.getKey().toString());
+						System.out.println(" - " + updatedTable.getValue().toString());
+
+						//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
+						//Si en la tabla de actualizaciones aparece la clave Event.TABLE_NAME
+						//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
+						if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)
+								//							|| updatedTable.getKey().equals(Event.TABLE_NAME)
+								|| updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
+
+							//Debug
+							System.out.println(
+									"Si la tabla es business_unit o eventUpdate, actualizamos datos en pantalla");
+
+							// 3 SUPUESTOS
+							// 1 - EVENTSELECTED + UPDATESELECTED
+							// 2 - EVENTSELECTED + NO UPDATESELECTED
+							// 3 - NO EVENTSELECTED + NO UPDATESELECTED
+
+							// 1 - EVENTSELECTED + UPDATESELECTED
+							if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() != -1) {
+								//Buscamos el id de la incidencia seleccionada
+								int selectedEventId = (int) eventsTable.getModel()
+										.getValueAt(eventsTable.getSelectedRow(), 0);
+								//Buscamos el id de la actualización seleccionada
+								int selectedUpdateId = (int) updatesTable.getModel()
+										.getValueAt(updatesTable.getSelectedRow(), 0);
+								//Actualizamos la tabla de incidencias
+								filterSelected.doClick();
+								//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+								int row = 0;
+								for (int i = 0; i < eventsTable.getRowCount(); i++) {
+									if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
+										row = i;
+									}
 								}
-							}
-							//Volvemos a seleccionar la fila de la incidencia seleccionada
-							//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
-							//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
-							eventsTable.setRowSelectionInterval(row, row);
-							
-//							//Renovamos la tabla de actualizaciones
-//							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()),
-//									EventDataUI.getUpdatesTableHeader());
-							
-							//Buscamos la fila de la tabla de actualizaciones que estaba seleccionada
-							for (int i = 0; i < updatesTable.getRowCount(); i++) {
-								if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
-									row = i;
+								//Volvemos a seleccionar la fila de la incidencia seleccionada
+								//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
+								//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
+								eventsTable.setRowSelectionInterval(row, row);
+								//Buscamos la fila de la tabla de actualizaciones que estaba seleccionada
+								for (int i = 0; i < updatesTable.getRowCount(); i++) {
+									if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
+										row = i;
+									}
 								}
+								//Volvemos a seleccionar la fila de la actualización seleccionada
+								//EventUpdateTableSelectionListener se encarga de reasignar updateSelected y renovar el estado de los botones
+								//del panel de actualizaciones
+								updatesTable.setRowSelectionInterval(row, row);
 							}
-							//Volvemos a seleccionar la fila de la actualización seleccionada
-							//EventUpdateTableSelectionListener se encarga de reasignar updateSelected y renovar el estado de los botones
-							//del panel de actualizaciones
-							updatesTable.setRowSelectionInterval(row, row);
-						}
-						
-						// 2 - EVENTSELECTED + NO UPDATESELECTED
-						if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() == -1) {
-							//Buscamos el id de la incidencia seleccionada
-							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-							
-//							//Actualizamos la incidencia seleccionada
-//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
-//							firstUpdate = findFirstUpdate();
-							
-							//Actualizamos la tabla de incidencias
-							filterSelected.doClick();
-							//Buscamos la fila de la tabla de incidencias que estaba seleccionada
-							int row = 0;
-							for (int i = 0; i < eventsTable.getRowCount(); i++) {
-								if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
-									row = i;
+
+							// 2 - EVENTSELECTED + NO UPDATESELECTED
+							if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() == -1) {
+								//Buscamos el id de la incidencia seleccionada
+								int selectedEventId = (int) eventsTable.getModel()
+										.getValueAt(eventsTable.getSelectedRow(), 0);
+								//Actualizamos la tabla de incidencias
+								filterSelected.doClick();
+								//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+								int row = 0;
+								for (int i = 0; i < eventsTable.getRowCount(); i++) {
+									if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
+										row = i;
+									}
 								}
+								//Volvemos a seleccionar la fila de la incidencia seleccionada
+								//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
+								//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
+								eventsTable.setRowSelectionInterval(row, row);
+
 							}
-							//Volvemos a seleccionar la fila de la incidencia seleccionada
-							//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
-							//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
-							eventsTable.setRowSelectionInterval(row, row);
-							
-//							//Renovamos la tabla de actualizaciones
-//							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()),
-//									EventDataUI.getUpdatesTableHeader());
-							
+
+							// 3 - NO EVENTSELECTED + NO UPDATESELECTED
+							//Si no hay ninguna fila seleccionada en la tabla de incidencias, solo la actualizamos. No hace falta actualizar
+							//la tabla de actualizaciones porque no mostraba ningún dato
+
+							if (eventsTable.getSelectedRow() == -1 && updatesTable.getSelectedRow() == -1) {
+								filterSelected.doClick();
+								//No hay ni incidencias ni actualizaciones seleccionadas
+								eventSelected = null;
+								updateSelected = null;
+							}
+
+							//Informamos por pantalla de la actualización
+							//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
+							//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
+							EventDataUI.this.infoLabel.setText("DATOS DE LAS INCIDENCIAS ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));	
 						}
-						
-						// 3 - NO EVENTSELECTED + NO UPDATESELECTED
-						//Si no hay ninguna fila seleccionada en la tabla de incidencias, solo la actualizamos. No hace falta actualizar
-						//la tabla de actualizaciones porque no mostraba ningún dato
-						
-						if (eventsTable.getSelectedRow() == -1 && updatesTable.getSelectedRow() == -1) {
-							filterSelected.doClick();
-							//No hay ni incidencias ni actualizaciones seleccionadas
-							eventSelected = null;
-							updateSelected = null;
-						}
-						
-						//Informamos por pantalla de la actualización
-						//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
-						//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
-						EventDataUI.this.infoLabel.setText("DATOS DE LAS INCIDENCIAS ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-						
-						
-						
-					
-						
-						
-						
-						
-						
-						
-						
-						
-//						//Si hay una fila seleccionada en la tabla de incidencias, buscamos el id de la incidencia
-//						if (eventsTable.getSelectedRow() != -1) {
-//							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-//							//Actualizamos la incidencia selecionada
-//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
-//							firstUpdate = findFirstUpdate();
-//							//Si hay una fila seleccionada en la tabla de actualizaciones, buscamos el id de la actualización
-//							int selectedUpdateId = 0;
-//							boolean anyUpdateSelected = false;
-//							if (updatesTable.getSelectedRow() != -1) {
-//								anyUpdateSelected = true;
-//								selectedUpdateId = (int) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
-//								//Actualizamos la actualización de incidencia seleccionada
-//								updateSelected = new EventUpdate().getEventUpdateById(eventSelected, selectedUpdateId);
-//							}
-//							//Actualizamos la tabla de incidencias
-//							filterSelected.doClick();
-//							//Buscamos la fila de la tabla de incidencias que estaba seleccionada
-//							int row = 0;
-//							for (int i = 0; i < eventsTable.getRowCount(); i++) {
-//								if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
-//									row = i;
-//								}
-//							}
-//							//Volvemos a seleccionar la fila de la incidencia seleccionada
-//							eventsTable.setRowSelectionInterval(row, row);
-//							//Renovamos la tabla de actualizaciones
-//							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()),
-//									EventDataUI.getUpdatesTableHeader());
-//							//Si había una fila seleccionada en la tabla de actualizaciones antes de actualizarla, la buscamos
-//							if (anyUpdateSelected) {
-//								for (int i = 0; i < updatesTable.getRowCount(); i++) {
-//									if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
-//										row = i;
-//									}
-//								}
-//								//Volvemos a seleccionar la fila de la incidencia seleccionada
-//								updatesTable.setRowSelectionInterval(row, row);
-//							}
-//							//Renovamos el estado de los botones
-//							if (!anyUpdateSelected) {
-//								buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
-//							}
-//							
-//						//Si no hay ninguna fila seleccionada en la tabla de incidencias, solo la actualizamos. No hace falta actualizar
-//						//la tabla de actualizaciones porque no mostraba ningún dato
-//						} else {
-//							filterSelected.doClick();
-//							//No hay ni incidencias ni actualizaciones seleccionadas
-//							eventSelected = null;
-//							updateSelected = null;
-//						}
-//						//Informamos por pantalla de la actualización
-//						//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
-//						//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
-//						EventDataUI.this.infoLabel.setText("DATOS DE LAS INCIDENCIAS ACTUALIZADOS: " +
-//						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
 					
-
-//							//Debug
-//							System.out.println("Fila seleccionada: " + eventsTable.getSelectedRow());
-//							System.out.println("Id de la incidencia de la fila seleccionada: " + selectedEventId);
-//							System.out.println("Título de la incidencia de la fila seleccionada: " + eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 4));
-//							//Debug
-//							System.out.println("Número de filas en la tabla de incidencias: " + eventsTable.getRowCount());
+					//Incrementamos timerCycle para entrar en el ciclo 1
+					timerCycle = 1;
 					
-//					//Debug
-//					System.out.println("Interviene refreshLists()");
-//					System.out.println("Lista de bunits disponibles:");
-//					Iterator<String> iterator = availableModel.elements().asIterator();
-//					int num = 0;
-//					while(iterator.hasNext()) {
-//						String textItem = (String) iterator.next();
-//						System.out.println(++num + " - " + textItem);
-//					}
+				//Si estamos en el ciclo 1, reseteamos el ciclo	
+				} else if (timerCycle == 1) {
 					
+					//Debug
+					System.out.println("Ciclo 1");
+					
+					infoLabel.setText("");
+					timerCycle = 0;
 				}
 			}
 		}
@@ -1952,83 +1853,3 @@ public class EventDataUI extends JPanel{
 	}
 
 }
-
-//SKETCH PARA PREVENIR DOBLE ACTUALIZACIÓN EN SELF UPDATE
-
-//	PREVIAMENTE EN CURRENTSESSION HEMOS CREADO UN ATRIBUTO Y SU GETTER
-//	private volatile boolean selfUpdate = false;
-//	public boolean isSelfUpdate() {return selfUpdate;}
-//	PREVIAMENTE EN LAS UIs HEMOS CREADO UN ATRIBUTO
-//	private int timerCycle = 0;
-
-////Se comprueba la actualización de los datos si el panel es visible
-//	if (EventDataUI.this.panelVisible == true) {
-	
-//		//Debug
-//		System.out.println(updatedTable.getKey());
-//		System.out.println(updatedTable.getValue());
-//			
-//		//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
-//		if (updatedTable.getKey().equals(User.TABLE_NAME)) {
-	
-//			*** - COMPROBAMOS SELF UPDATE
-//			if (selfUpdate == false) >>> ACTUALIZACIÓN NORMAL {
-//		
-//				//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
-//				//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
-//				if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-//					//Buscamos la bUnit del usuario que abrió sesión
-//					BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-//					//La asignamos como bUnit de la sesión
-//					session.setbUnit(userBunit);
-//					//Renovamos la lista de las unidades de negocio del comboBox
-//					refreshBunitComboBox();
-//				}
-//			
-//				//Debug
-//				System.out.println("Actualizando pantalla cambiando el usuario seleccionado");
-//				System.out.println("El usuario seleccionado era " + selectedUser.getUserAlias());
-//			
-//				//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
-//				//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando la unidad de negocio de dicho usuario)
-//				//o el primer usuario de la lista de usuarios de cualquier otra unidad de negocio que estemos mostrando
-//				//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
-//				//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
-//				//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
-//			
-//				//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
-//				refreshUserComboBox();
-//				//Mostramos los datos del usuario seleccionado
-//				populateUserFields();
-//				//Hacemos backup del contenido de los datos del formulario
-//				updateDataCache();
-//			
-//				//Debug
-//				String string = (selectedUser.getUserAlias() != "") ? selectedUser.getUserAlias() : "ninguno";
-//				System.out.println("El nuevo usuario seleccionado es " + string );
-//			
-//				//Informamos por pantalla de la actualización
-//				//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
-//				//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
-//				UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
-//				ToolBox.formatTimestamp(updatedTable.getValue(), null));
-//			}
-//		
-//			*** - COMPROBAMOS SELF UPDATE
-//			//Si selfUpdate es true, no hay que actualizar, pero hay que renovar el ciclo del timerjob local				
-//			if (selfUpdate == true) {
-//			
-//				//Primer ciclo
-//				if (timerCycle == 0) {
-//					timerCycle += 1;
-//				}
-//				//Segundo ciclo
-//				if (timerCycle == 1) {
-//					timercycle = 0;
-//					session.setSelfUpdate() = false;
-//				infoLabel.setText("");
-//				}
-		
-//			}
-//		}
-// }
