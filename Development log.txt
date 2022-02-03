@@ -2369,9 +2369,9 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· CurrentSession class:
 		Add attribute
 			period
-		Update loadAllData() --timer delay (period / 6) seconds--
+		Update loadAllData() --timer delay 1 second--
 				     --period set by period attribute--
-		Update loadCurrentSessionData() --timer delay (period / 6) seconds--
+		Update loadCurrentSessionData() --timer delay 1 second--
 						--period set by period attribute--
 
 	· TimerJob class (inner CurrentSession class):
@@ -2498,13 +2498,19 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· EventDataUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
+		Update updateEventsTable() --job done into a try/catch block--
+		Update updateUpdatesTable() --job done into a try/catch block--
+		Update formatEventsTable() --job done into a try/catch block except scrollRectToVisible()--
+		Update formatUpdatesTable() --job done into a try/catch block except scrollRectToVisible()--
+		Update updateEventButtonsStateOnSelection() --looks for firstUpdate's user's id--
 
 	· TimerJob class (EventDataUI inner class):
 		update run() --new edit actions doesn't update event's row in last_modification table--
 			     --fixing remote updates bugs in progress...
 			       no event or update selected, ok
 			       event & update selected, ok
-			       event selected update not selected, problem--
+			       event selected update not selected, ok--
+			     --weird occasional exception thrown with no consequences in program functionality--
 
 	· EventEditUI class:
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--

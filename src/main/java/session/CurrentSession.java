@@ -133,7 +133,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, period / 6, period);
+		timer.scheduleAtFixedRate(task, 1000, period);
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class CurrentSession {
 		//Iniciamos la comprobación periódica de actualizaciones
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, period / 6, period);
+		timer.scheduleAtFixedRate(task, 1000, period);
 	}
 	
 	/**
