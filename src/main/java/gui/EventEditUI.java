@@ -1705,6 +1705,7 @@ public class EventEditUI extends JPanel{
 						//Debug
 						System.out.println("Dentro de EVENTEDIT_ACTION_EDIT_UPDATE");
 
+						//CANDIDATO A BORRADO
 						updateSelected = eDataUI.getUpdateSelected();
 
 						//Hora a la que se registra la actualización
@@ -1724,8 +1725,6 @@ public class EventEditUI extends JPanel{
 								
 								
 								//Registramos fecha y hora de la actualización de los datos de la tabla event
-//								PersistenceManager.registerTableModification(eDataUI.getInfoLabel(), "",
-//										session.getConnection(), tNow, Event.TABLE_NAME);
 								PersistenceManager.updateTimeStampToDB(session.getConnection(), Event.TABLE_NAME, tNow);
 								
 							} else {
@@ -1807,42 +1806,6 @@ public class EventEditUI extends JPanel{
 //									.println("El id de la actualización actualizada es: " + updatedEventUpdate.getId());
 							
 
-							//						List<EventUpdate> newUpdatesList = new ArrayList<EventUpdate>();
-							//						if (updateSelected.getId() == eDataUI.getFirstUpdate().getId()) {
-							//							
-							//							//Debug
-							//							System.out.println("Editamos la actualización inicial ");
-							//							System.out.println("Id actualización inicial " + eDataUI.getFirstUpdate().getId());
-							//							System.out.println("Id actualización seleccionada " + updateSelected.getId());
-							//							
-							//							//Añadir primero updatedEventUpdate a newUpdatesList y luego todas las demás
-							//							newUpdatesList.add(updatedEventUpdate);
-							//							for (int i = 1; i < eventSelected.getUpdates().size(); i++) {
-							//								newUpdatesList.add(eventSelected.getUpdates().get(i));
-							//								
-							//								//Debug
-							//								System.out.println("Id actualización inicial en newUpdatesList " + newUpdatesList.get(0).getId());
-							//								
-							//							}
-							//							//Asignar newUpdatesList como lista de actualizaciones de la incidencia seleccionada
-							//							eventSelected.setUpdates(newUpdatesList);
-							//							//Asignar updatedEventUpdate como actualización inicial
-							//							eDataUI.setFirstUpdate(eDataUI.findFirstUpdate());
-							//							
-							//						} else {
-							//							//Debug
-							//							System.out.println("Editamos una actualización que no es la actualización inicial ");
-							//							System.out.println("Id actualización inicial " + eDataUI.getFirstUpdate().getId());
-							//							System.out.println("Id actualización seleccionada " + updateSelected.getId());
-							//							
-							//							//Averiguar índice de actualización seleccionada
-							//							for (int i = 1; i < eventSelected.getUpdates().size(); i++) {
-							//								
-							//							}
-							//							//Insertar actualizaciones en newUpdatesList hasta indice, luego updatedEventUpdate y luego el resto si quedan
-							//							
-							//							//Asignar newUpdatesList(0) como actualización inicial
-							//						}
 
 							//						////////////////////////////////////////////////////////////////////////////////
 							//						Iterator<EventUpdate> eUiterator = eventSelected.getUpdates().iterator();
@@ -1856,46 +1819,9 @@ public class EventEditUI extends JPanel{
 							//							}
 							//							index ++;
 							//						}
-							//						
 							//						eventSelected.getUpdates().add(index, updatedEventUpdate);
 							//						////////////////////////////////////////////////////////////////////////////////
 
-							//						//Debug
-							//						System.out.println("eventUpdate eliminado");
-
-							//Actualizamos la actualización seleccionada en la lista de actualizaciones de la incidencia seleccionada
-							//						int index = eventSelected.getUpdates().indexOf(updateSelected);	
-							//						eventSelected.getUpdates().remove(index);
-							//						eventSelected.getUpdates().add(index, updatedEventUpdate);
-							//						eventSelected.getUpdates().remove(updateSelected);
-							//						eventSelected.getUpdates().add(updatedEventUpdate);
-							//						updateSelected = updatedEventUpdate;
-
-
-							
-							
-							
-							
-							//************************************************************************************
-//							//Actualizamos la incidencia selecionada
-//							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
-//							//Actualizamos la actualización de incidencia selecionada
-//							updateSelected = new EventUpdate().getEventUpdateById(eventSelected, selectedUpdateId);
-
-						
-							
-//							//Registramos la fila seleccionada en la tabla de incidencias
-//							row = eDataUI.getEventsTable().getSelectedRow();
-							
-							
-//							//Ejecutamos de nuevo el filtro seleccionado para actualizar la tabla de incidencias
-//							eDataUI.getFilterSelected().doClick(); //eventSelected no cambia
-//							//Volvemos a seleccionar la fila de la incidencia seleccionada
-//							eDataUI.getEventsTable().setRowSelectionInterval(row, row);
-
-
-//							//Deseleccionamos la actualización seleccionada
-//							eDataUI.setUpdateSelected(null);
 
 							
 						} else {
