@@ -2501,7 +2501,10 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· TimerJob class (EventDataUI inner class):
 		update run() --new edit actions doesn't update event's row in last_modification table--
-			     --fixing remote updates bugs in progress...--
+			     --fixing remote updates bugs in progress...
+			       no event or update selected, ok
+			       event & update selected, ok
+			       event selected update not selected, problem--
 
 	· EventEditUI class:
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--

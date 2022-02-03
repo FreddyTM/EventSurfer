@@ -539,8 +539,7 @@ public class EventDataUI extends JPanel{
 	
 	EventUpdate findFirstUpdate() {
 		if (eventSelected.getUpdates().size() == 1) {
-//			eventSelected.getUpdates().get(0);
-			
+
 			//Debug
 			System.out.println("Solo hay una actualización. La actualización inicial es esa");
 			
@@ -1302,9 +1301,8 @@ public class EventDataUI extends JPanel{
 //				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
 				
 				if (eventsTable.getSelectedRow() > -1) {
-					int eventSelectedID = (Integer) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
+					int eventSelectedID = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
-					
 					firstUpdate = findFirstUpdate();
 					
 					//Debug
@@ -1613,21 +1611,9 @@ public class EventDataUI extends JPanel{
 					//Renovamos la lista de las unidades de negocio del comboBox
 					refreshComboBox();
 				}
-				
-				
-				if (eventSelected != null) {
-					int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
-					eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
-					firstUpdate = findFirstUpdate();
-				}
+
 				//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					
-//					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
-//					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
-//						//
-////						firstUpdate = eventSelected.getUpdates().get(0);
-//					}
 					
 					//Debug
 					System.out.println("Entramos en el map de tablas actualizadas...");
@@ -1639,7 +1625,7 @@ public class EventDataUI extends JPanel{
 					//Si en la tabla de actualizaciones aparece la clave Event.TABLE_NAME
 					//Si en la tabla de actualizaciones aparece la clave EventUpdate.TABLE_NAME
 					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)
-							|| updatedTable.getKey().equals(Event.TABLE_NAME)
+//							|| updatedTable.getKey().equals(Event.TABLE_NAME)
 							|| updatedTable.getKey().equals(EventUpdate.TABLE_NAME)) {
 						
 						//Debug
@@ -1682,9 +1668,61 @@ public class EventDataUI extends JPanel{
 //							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), UPDATES_TABLE_HEADER);
 //						} else {
 							//Actualizamos la tabla de incidencias de la unidad de negocio de la sesión
-							filterSelected.doClick();
+//							filterSelected.doClick();
 //						}
 						
+						//Si hay una fila seleccionada en la tabla de incidencias, buscamos el id de la incidencia
+						if (eventsTable.getSelectedRow() != -1) {
+							int selectedEventId = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(), 0);
+							//Actualizamos la incidencia selecionada
+							eventSelected = new Event().getEventById(session.getbUnit(), selectedEventId);
+							firstUpdate = findFirstUpdate();
+							//Si hay una fila seleccionada en la tabla de actualizaciones, buscamos el id de la actualización
+							int selectedUpdateId = 0;
+							boolean anyUpdateSelected = false;
+							if (updatesTable.getSelectedRow() != -1) {
+								anyUpdateSelected = true;
+								selectedUpdateId = (int) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
+								//Actualizamos la actualización de incidencia seleccionada
+								updateSelected = new EventUpdate().getEventUpdateById(eventSelected, selectedUpdateId);
+							}
+							//Actualizamos la tabla de incidencias
+							filterSelected.doClick();
+							//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+							int row = 0;
+							for (int i = 0; i < eventsTable.getRowCount(); i++) {
+								if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
+									row = i;
+								}
+							}
+							//Volvemos a seleccionar la fila de la incidencia seleccionada
+							eventsTable.setRowSelectionInterval(row, row);
+							//Renovamos la tabla de actualizaciones
+							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()),
+									EventDataUI.getUpdatesTableHeader());
+							//Si había una fila seleccionada en la tabla de actualizaciones antes de actualizarla, la buuscamos
+							if (anyUpdateSelected) {
+								for (int i = 0; i < updatesTable.getRowCount(); i++) {
+									if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
+										row = i;
+									}
+								}
+								//Volvemos a seleccionar la fila de la incidencia seleccionada
+								updatesTable.setRowSelectionInterval(row, row);
+							}
+							//Renovamos el estado de los botones
+							if (!anyUpdateSelected) {
+								buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+							}
+							
+						//Si no hay ninguna fila seleccionada en la tabla de incidencias, solo la actualizamos. No hace falta actualizar
+						//la tabla de actualizaciones porque no mostraba ningún dato
+						} else {
+							filterSelected.doClick();
+							//No hay ni incidencias ni actualizaciones seleccionadas
+							eventSelected = null;
+							updateSelected = null;
+						}
 						//Informamos por pantalla de la actualización
 						//Si las incidencias de la unidad de negocio seleccionada no han sufrido ninguna modificación no habrá ningún cambio en la
 						//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
