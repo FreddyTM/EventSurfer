@@ -551,29 +551,29 @@ public class EventDataUI extends JPanel{
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	EventUpdate findFirstUpdate() {
-		if (eventSelected.getUpdates().size() == 1) {
-
-			//Debug
-			System.out.println("Solo hay una actualización. La actualización inicial es esa");
-			
-			return eventSelected.getUpdates().get(0);
-		}
-		
-		EventUpdate tempUpdate = eventSelected.getUpdates().get(0);
-		int i;
-		for (i = 1; i < eventSelected.getUpdates().size(); i++) {
-			if (tempUpdate.getFechaHora().after(eventSelected.getUpdates().get(i).getFechaHora())) {
-				tempUpdate = eventSelected.getUpdates().get(i);
-			}
-		}
-		
-		//Debug
-		System.out.println("La tabla de actualizaciones tiene  " + eventSelected.getUpdates().size() + " elementos");
-		System.out.println("La actualización inicial está en la posición " + i);
-		
-		return tempUpdate;
-	}
+//	EventUpdate findFirstUpdate() {
+//		if (eventSelected.getUpdates().size() == 1) {
+//
+//			//Debug
+//			System.out.println("Solo hay una actualización. La actualización inicial es esa");
+//			
+//			return eventSelected.getUpdates().get(0);
+//		}
+//		
+//		EventUpdate tempUpdate = eventSelected.getUpdates().get(0);
+//		int i;
+//		for (i = 1; i < eventSelected.getUpdates().size(); i++) {
+//			if (tempUpdate.getFechaHora().after(eventSelected.getUpdates().get(i).getFechaHora())) {
+//				tempUpdate = eventSelected.getUpdates().get(i);
+//			}
+//		}
+//		
+//		//Debug
+//		System.out.println("La tabla de actualizaciones tiene  " + eventSelected.getUpdates().size() + " elementos");
+//		System.out.println("La actualización inicial está en la posición " + i);
+//		
+//		return tempUpdate;
+//	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
@@ -1904,9 +1904,9 @@ public class EventDataUI extends JPanel{
 		return firstUpdate;
 	}
 
-	public void setFirstUpdate(EventUpdate firstUpdate) {
-		this.firstUpdate = firstUpdate;
-	}
+//	public void setFirstUpdate(EventUpdate firstUpdate) {
+//		this.firstUpdate = firstUpdate;
+//	}
 
 	public void setPanelVisible(boolean panelVisible) {
 		this.panelVisible = panelVisible;

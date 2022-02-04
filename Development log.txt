@@ -2539,10 +2539,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 			     --timerjob only updates data once every two cycles due to timerCycle value--
 
 	· EventEditUI class:
+		Delete attributes
+			eventSelected, updateSelected
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--
 		Update isDateTimeAfterEventUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Update isDateTimebeforePreviousUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Update backToEventDataScreen() --tries to cancel EventDataUI's timer & starts a new one--
+		Update setup() --references to eDataUI firstUpdate come from eDataUI.getFirstUpdate()--
 		Delete all references to eventSelected / updateSelected --Now use direct references eDataUI.getEventSelected()
 									  and eDataUI.getUpdateSelected()--
 		Clean code --not completed yet--

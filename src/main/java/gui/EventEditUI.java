@@ -531,10 +531,8 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setBackground(UIManager.getColor(new JPanel().getBackground()));
 				
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						TIME_PATTERN));
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eDataUI.getEventSelected().getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -543,11 +541,8 @@ public class EventEditUI extends JPanel{
 				eventDescriptionArea.setText(eDataUI.getEventSelected().getDescripcion());
 				updateDateField.setText(eventDateField.getText());
 				updateTimeField.setText(eventTimeField.getText());
-//				updateAuthorField.setText(eDataUI.getEventSelected().getUpdates().get(0).getAutor());
 				updateAuthorField.setText(eDataUI.getFirstUpdate().getAutor());
-//				userField.setText(eDataUI.getEventSelected().getUpdates().get(0).getUser().getUserAlias());
 				userField.setText(eDataUI.getFirstUpdate().getUser().getUserAlias());
-//				updateDescriptionArea.setText(eDataUI.getEventSelected().getUpdates().get(0).getDescripcion());
 				updateDescriptionArea.setText(eDataUI.getFirstUpdate().getDescripcion());
 				index = getSelectedIndexFromArray(eventStateComboList, TypesStatesContainer.getEvState());
 				fillEventStateComboBox(index);
@@ -562,12 +557,12 @@ public class EventEditUI extends JPanel{
 				eventTimeFocusListener.setOldEventDateText(eventDateField.getText()); //CHECK
 				eventTimeFocusListener.setOldEventTimeText(eventTimeField.getText());
 				
-				//Debug
-				System.out.println("EDIT EVENT");
-				System.out.println("Valor de eventDateFocusListener.getOldEventDateText(): " + eventDateFocusListener.oldEventDateText);
-				System.out.println("Valor de eventDateFocusListener.getOldEventTimeText(): " + eventDateFocusListener.oldEventTimeText);
-				System.out.println("Valor de eventTimeFocusListener.getOldEventDateText(): " + eventTimeFocusListener.oldEventDateText);
-				System.out.println("Valor de eventTimeFocusListener.getOldEventTimeText(): " + eventTimeFocusListener.oldEventTimeText);
+//				//Debug
+//				System.out.println("EDIT EVENT");
+//				System.out.println("Valor de eventDateFocusListener.getOldEventDateText(): " + eventDateFocusListener.oldEventDateText);
+//				System.out.println("Valor de eventDateFocusListener.getOldEventTimeText(): " + eventDateFocusListener.oldEventTimeText);
+//				System.out.println("Valor de eventTimeFocusListener.getOldEventDateText(): " + eventTimeFocusListener.oldEventDateText);
+//				System.out.println("Valor de eventTimeFocusListener.getOldEventTimeText(): " + eventTimeFocusListener.oldEventTimeText);
 				
 				break;
 				
@@ -593,10 +588,8 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						TIME_PATTERN));
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eDataUI.getEventSelected().getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -645,10 +638,8 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setEditable(true);
 				
 				//Información inicial de los componentes
-				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						DATE_PATTERN));
-				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),
-						TIME_PATTERN));
+				eventDateField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	DATE_PATTERN));
+				eventTimeField.setText(ToolBox.formatTimestamp(eDataUI.getFirstUpdate().getFechaHora(),	TIME_PATTERN));
 				index = getSelectedIndexFromArray(areaComboList, eDataUI.getEventSelected().getArea());
 				fillAreaComboBox(index);
 				index = getSelectedIndexFromArray(eventTypeComboList, TypesStatesContainer.getEvType());
@@ -664,7 +655,7 @@ public class EventEditUI extends JPanel{
 				updateDescriptionArea.setText(eDataUI.getUpdateSelected().getDescripcion());
 				//Labels
 				//Edición de la actualización inicial
-				if (eDataUI.getUpdateSelected() == eDataUI.getFirstUpdate()) {
+				if (eDataUI.getUpdateSelected().equals(eDataUI.getFirstUpdate())) {
 					for (JLabel label : editFirstUpdateList) {
 						label.setVisible(true);
 					} 
