@@ -2511,6 +2511,9 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update updateEventButtonsStateOnSelection() --looks for firstUpdate's user's id--
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
+	
+	· EventComparator class (EventDataUI inner class):
+		update compare() --new logic fixes sorting errors--
 
 	· EventTableSelectionListener class (EventDataUI inner class):
 		Update valueChanged() --updates eventsRow--

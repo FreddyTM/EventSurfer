@@ -481,7 +481,6 @@ public class EventDataUI extends JPanel{
 	private List<Event> getLastEventsByDate(List<Event> list, int months) {
 		List<Event> filteredList = new ArrayList<Event>();
 		Calendar calendarReference = Calendar.getInstance();
-//	    calendarReference.add(Calendar.MONTH, Math.negateExact(months));
 	    Calendar eventReference = Calendar.getInstance();
 	    if (months >= 0) {
 	    	switch (months) {
@@ -1489,7 +1488,36 @@ public class EventDataUI extends JPanel{
 	private class EventComparator implements Comparator<Event> {
 		@Override
 		public int compare(Event o1, Event o2) {
-			return o1.getUpdates().get(0).getFechaHora().compareTo(o2.getUpdates().get(0).getFechaHora());
+			Timestamp fechaHoraO1 = o1.findFirstUpdate().getFechaHora();
+			Timestamp fechaHoraO2 = o2.findFirstUpdate().getFechaHora();
+			
+//			if (o1.getUpdates().size() == 1) {
+//				fechaHoraO1 = o1.getUpdates().get(0).getFechaHora();
+//			} else {
+//				Timestamp tempFechaHora1 = o1.getUpdates().get(0).getFechaHora();
+//				int i;
+//				for (i = 1; i < o1.getUpdates().size(); i++) {
+//					if (tempFechaHora1.after(o1.getUpdates().get(i).getFechaHora())) {
+//						tempFechaHora1 = o1.getUpdates().get(i).getFechaHora();
+//					}
+//				}
+//				fechaHoraO1 = tempFechaHora1;
+//			}
+//			
+//			if (o2.getUpdates().size() == 1) {
+//				fechaHoraO2 = o2.getUpdates().get(0).getFechaHora();
+//			} else {
+//				Timestamp tempFechaHora2 = o2.getUpdates().get(0).getFechaHora();
+//				int i;
+//				for (i = 1; i < o2.getUpdates().size(); i++) {
+//					if (tempFechaHora2.after(o2.getUpdates().get(i).getFechaHora())) {
+//						tempFechaHora2 = o2.getUpdates().get(i).getFechaHora();
+//					}
+//				}
+//				fechaHoraO2 = tempFechaHora2;
+//			}
+			
+			return fechaHoraO1.compareTo(fechaHoraO2);
 		}	
 	}
 	
