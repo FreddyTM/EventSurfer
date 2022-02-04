@@ -2497,6 +2497,9 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Check javadoc
 
 	· EventDataUI class:
+		Add attributes
+			eventsRow, updatesRow
+		Add startAnewTimer() --creates a new timer after getting back from create/edit screen--
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Update updateEventsTable() --job done into a try/catch block--
 		Update updateUpdatesTable() --job done into a try/catch block--
@@ -2506,10 +2509,16 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
 
+	· EventTableSelectionListener class (EventDataUI inner class):
+		Update valueChanged() --updates eventsRow--
+
+	· EventUpdateTableSelectionListener class (EventDataUI inner class):
+		Update valueChanged() --updates updatesRow--
+
 	· TimerJob class (EventDataUI inner class):
 		Add attribute
 			timerCycle
-		update run() --new edit actions doesn't update event's row in last_modification table--
+		Update run() --new edit actions doesn't update event's row in last_modification table--
 			     --fixing remote updates bugs in progress...
 			       no event or update selected, ok
 			       event & update selected, ok
@@ -2521,10 +2530,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--
 		Update isDateTimeAfterEventUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Update isDateTimebeforePreviousUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
+		Update backToEventDataScreen() --tries to cancel EventDataUI's timer & starts a new one--
+		Delete all references to eventSelected / updateSelected --Now use direct references eDataUI.getEventSelected()
+									  and eDataUI.getUpdateSelected()--
 		Clean code --not completed yet--
 
 	· OKAction class EventEditUI inner class):
-		Update actionPerformed() ----EDIT UPDATE logic updated, errors fixed--
+		Update actionPerformed() --New logic for all cases, still not working...--
 
 		
 	

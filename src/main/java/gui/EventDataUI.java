@@ -111,6 +111,8 @@ public class EventDataUI extends JPanel{
 	private JTable updatesTable;
 	private Event eventSelected;
 	private EventUpdate updateSelected;
+	private int eventsRow;
+	private int updatesRow;
 	
 	private JTextField companyField;
 	private JComboBox comboBox;
@@ -389,6 +391,18 @@ public class EventDataUI extends JPanel{
 		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
 		* o más lenta que la comprobación de los datos que hace el objeto session.
 		*/
+		
+//		timer = new Timer();
+//		TimerTask task = new TimerJob();
+//		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		
+		startAnewTimer();
+	}
+	
+	/**
+	 * Crea un nuevo Timer y le asigna un Timertask
+	 */
+	void startAnewTimer() {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
@@ -1083,7 +1097,7 @@ public class EventDataUI extends JPanel{
 			switch (action) {
 				case EVENTDATA_ACTION_DELETE_EVENT:
 					//Debug
-					System.out.println("Borrando evento... ID " + eventSelected.getId());
+					System.out.println("Borrando incidencia... ID " + eventSelected.getId());
 					
 					//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
 					if (new EventUpdate().deleteAllEventUpdatesFromDb(session.getConnection(), eventSelected)) {
@@ -1334,15 +1348,17 @@ public class EventDataUI extends JPanel{
         	//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
         	if (!e.getValueIsAdjusting()) {
         		
-//				//Debug
-//        		System.out.println("EventTableSelectionListener");
-//				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
+				//Debug
+        		System.out.println("###############################################################");
+        		System.out.println("EventTableSelectionListener");
+				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
+				System.out.println("###############################################################");
 				
 				if (eventsTable.getSelectedRow() > -1) {
 					int eventSelectedID = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
 					firstUpdate = findFirstUpdate();
-					
+					eventsRow = eventsTable.getSelectedRow();
 					//Debug
 					
 //					System.out.println("Id Incidencia: " + eventSelected.getId() + " " + eventSelected.getDescripcion());
@@ -1373,16 +1389,19 @@ public class EventDataUI extends JPanel{
 		public void valueChanged(ListSelectionEvent e) {
 			//Consideramos solo el valor final de la selección (el listener se ejecuta una sola vez)
         	if (!e.getValueIsAdjusting()) {
-//        	
-//				//Debug
-//        		System.out.println("UpdateTableSelectionListener");
-//        		System.out.print("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow() + " - ");
+       	
+				//Debug
+        		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        		System.out.println("EventUpdateTableSelectionListener");
+				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
+				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 				
 				
 				if (updatesTable.getSelectedRow() > -1) {
 					int updateID = (int) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
 					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
-
+					updatesRow = eventsTable.getSelectedRow();
+					
 //					//Debug
 //					System.out.println("Id Actualización: " + updateSelected.getId() + " " + updateSelected.getDescripcion());
 //					System.out.print("Es la actualización inicial? ");
@@ -1850,6 +1869,30 @@ public class EventDataUI extends JPanel{
 
 	public void setPanelVisible(boolean panelVisible) {
 		this.panelVisible = panelVisible;
+	}
+
+	public Timer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+	public int getEventsRow() {
+		return eventsRow;
+	}
+
+	public void setEventsRow(int eventsRow) {
+		this.eventsRow = eventsRow;
+	}
+
+	public int getUpdatesRow() {
+		return updatesRow;
+	}
+
+	public void setUpdatesRow(int updatesRow) {
+		this.updatesRow = updatesRow;
 	}
 
 }
