@@ -2510,7 +2510,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update formatUpdatesTable() --job done into a try/catch block except scrollRectToVisible()--
 		Update updateEventButtonsStateOnSelection() --looks for firstUpdate's user's id--
 		Update getLastEventsByDate() --uses event's findFirstUpdate()--
-		Update buildEventTable() --uses event's findFirstUpdate()--15:35 04/02/2022
+		Update buildEventTable() --uses event's findFirstUpdate()--
+		Update updateEventTable() --uses event's findFirstUpdate()--
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
 	

@@ -651,14 +651,16 @@ public class EventDataUI extends JPanel{
 		System.out.println();
 		System.out.println("CONSTRUYENDO TABLA DE INCIDENCIAS....");
 		System.out.println("-------------------------------------");
-		int num = 0;
+		
+//		//Debug
+//		int num = 0;
 		
 		//Datos de la tabla
 		Vector<Vector<Object>> dataVector = new Vector<Vector<Object>>();
 		for (Event event: list) {
 			Vector<Object> eventVector = new Vector<Object>();
 			eventVector.add((Integer) event.getId());
-			eventVector.add(event.getUpdates().get(0).getFechaHora());
+			eventVector.add(event.findFirstUpdate().getFechaHora());
 			eventVector.add(event.getArea().getAreaNombre());
 			eventVector.add(event.getEventType());
 			eventVector.add(event.getTitulo());
@@ -679,7 +681,8 @@ public class EventDataUI extends JPanel{
 //				System.out.println("Update descripcion " + update.getDescripcion());
 //			}
 			
-			num +=1;
+//			//Debug
+//			num +=1;
 		}
 		eventsTable = new JTable(dataVector, headerVector) {
 					
@@ -743,7 +746,7 @@ public class EventDataUI extends JPanel{
 			for (Event event : list) {
 				Vector<Object> eventVector = new Vector<Object>();
 				eventVector.add((Integer) event.getId());
-				eventVector.add(event.getUpdates().get(0).getFechaHora());
+				eventVector.add(event.findFirstUpdate().getFechaHora());
 				eventVector.add(event.getArea().getAreaNombre());
 				eventVector.add(event.getEventType());
 				eventVector.add(event.getTitulo());
