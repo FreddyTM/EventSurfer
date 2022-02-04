@@ -550,6 +550,7 @@ public class EventDataUI extends JPanel{
 		return list;
 	}
 	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	EventUpdate findFirstUpdate() {
 		if (eventSelected.getUpdates().size() == 1) {
 
@@ -573,6 +574,7 @@ public class EventDataUI extends JPanel{
 		
 		return tempUpdate;
 	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * Busca la anchura de la pantalla en la que se ejecuta la aplicación. En base a esa anchura se dimensionarán los elementos de la pantalla
