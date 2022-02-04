@@ -2355,6 +2355,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	* - Package main.java.persistence
 
 	· PersistenceManager class:
+		Update registerTableModification() --checks null timestamp parameter, adds a new one if so--
 		Clean code
 		Check javadoc
 
@@ -2512,6 +2513,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update getLastEventsByDate() --uses event's findFirstUpdate()--
 		Update buildEventTable() --uses event's findFirstUpdate()--
 		Update updateEventTable() --uses event's findFirstUpdate()--
+		Update startAnewTimer() --add delay parameter--
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
 	

@@ -298,7 +298,9 @@ public class PersistenceManager {
 	public static boolean registerTableModification(JLabel infoLabel, String text, Connection conn, 
 			Timestamp tNow, String tableName) {
 		//Registramos fecha y hora de la actualización de los datos de la tabla
-		tNow = ToolBox.getTimestampNow();
+		if (tNow == null) {
+			tNow = ToolBox.getTimestampNow();
+		}
 		infoLabel.setText(text + " " + ToolBox.formatTimestamp(tNow, null));
 		//Actualizamos los datos de la tabla last_modification
 		boolean changeRegister = updateTimeStampToDB(conn, tableName, tNow);
