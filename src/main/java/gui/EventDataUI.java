@@ -1734,55 +1734,65 @@ public class EventDataUI extends JPanel{
 
 							// 1 - EVENTSELECTED + UPDATESELECTED
 							if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() != -1) {
-								//Buscamos el id de la incidencia seleccionada
-								int selectedEventId = (int) eventsTable.getModel()
-										.getValueAt(eventsTable.getSelectedRow(), 0);
-								//Buscamos el id de la actualización seleccionada
-								int selectedUpdateId = (int) updatesTable.getModel()
-										.getValueAt(updatesTable.getSelectedRow(), 0);
-								//Actualizamos la tabla de incidencias
-								filterSelected.doClick();
-								//Buscamos la fila de la tabla de incidencias que estaba seleccionada
-								int row = 0;
-								for (int i = 0; i < eventsTable.getRowCount(); i++) {
-									if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
-										row = i;
+								try {
+									//Buscamos el id de la incidencia seleccionada
+									int selectedEventId = (int) eventsTable.getModel()
+											.getValueAt(eventsTable.getSelectedRow(), 0);
+									//Buscamos el id de la actualización seleccionada
+									int selectedUpdateId = (int) updatesTable.getModel()
+											.getValueAt(updatesTable.getSelectedRow(), 0);
+									//Actualizamos la tabla de incidencias
+									filterSelected.doClick();
+									//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+									int row = 0;
+									for (int i = 0; i < eventsTable.getRowCount(); i++) {
+										if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
+											row = i;
+										}
 									}
-								}
-								//Volvemos a seleccionar la fila de la incidencia seleccionada
-								//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
-								//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
-								eventsTable.setRowSelectionInterval(row, row);
-								//Buscamos la fila de la tabla de actualizaciones que estaba seleccionada
-								for (int i = 0; i < updatesTable.getRowCount(); i++) {
-									if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
-										row = i;
+									//Volvemos a seleccionar la fila de la incidencia seleccionada
+									//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
+									//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
+									eventsTable.setRowSelectionInterval(row, row);
+									//Buscamos la fila de la tabla de actualizaciones que estaba seleccionada
+									for (int i = 0; i < updatesTable.getRowCount(); i++) {
+										if (selectedUpdateId == (int) updatesTable.getModel().getValueAt(i, 0)) {
+											row = i;
+										}
 									}
+									//Volvemos a seleccionar la fila de la actualización seleccionada
+									//EventUpdateTableSelectionListener se encarga de reasignar updateSelected y renovar el estado de los botones
+									//del panel de actualizaciones
+									updatesTable.setRowSelectionInterval(row, row);
+								} catch (ArrayIndexOutOfBoundsException e) {
+									// TODO: handle exception
+									System.out.println("Array out of bounds exception - EVENTSELECTED + UPDATESELECTED. " + e.getCause());
 								}
-								//Volvemos a seleccionar la fila de la actualización seleccionada
-								//EventUpdateTableSelectionListener se encarga de reasignar updateSelected y renovar el estado de los botones
-								//del panel de actualizaciones
-								updatesTable.setRowSelectionInterval(row, row);
 							}
 
 							// 2 - EVENTSELECTED + NO UPDATESELECTED
 							if (eventsTable.getSelectedRow() != -1 && updatesTable.getSelectedRow() == -1) {
-								//Buscamos el id de la incidencia seleccionada
-								int selectedEventId = (int) eventsTable.getModel()
-										.getValueAt(eventsTable.getSelectedRow(), 0);
-								//Actualizamos la tabla de incidencias
-								filterSelected.doClick();
-								//Buscamos la fila de la tabla de incidencias que estaba seleccionada
-								int row = 0;
-								for (int i = 0; i < eventsTable.getRowCount(); i++) {
-									if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
-										row = i;
+								try {
+									//Buscamos el id de la incidencia seleccionada
+									int selectedEventId = (int) eventsTable.getModel()
+											.getValueAt(eventsTable.getSelectedRow(), 0);
+									//Actualizamos la tabla de incidencias
+									filterSelected.doClick();
+									//Buscamos la fila de la tabla de incidencias que estaba seleccionada
+									int row = 0;
+									for (int i = 0; i < eventsTable.getRowCount(); i++) {
+										if (selectedEventId == (int) eventsTable.getModel().getValueAt(i, 0)) {
+											row = i;
+										}
 									}
+									//Volvemos a seleccionar la fila de la incidencia seleccionada
+									//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
+									//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
+									eventsTable.setRowSelectionInterval(row, row);
+								} catch (Exception e) {
+									// TODO: handle exception
+									System.out.println("Array out of bounds exception - EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
 								}
-								//Volvemos a seleccionar la fila de la incidencia seleccionada
-								//EventTableSelectionListener se encarga de reasignar eventSelected y firstUpdate, de renovar el estado
-								//de los botones del panel de incidencias y de actualizar la tabla de actualizaciones de incidencias
-								eventsTable.setRowSelectionInterval(row, row);
 
 							}
 
@@ -1791,10 +1801,15 @@ public class EventDataUI extends JPanel{
 							//la tabla de actualizaciones porque no mostraba ningún dato
 
 							if (eventsTable.getSelectedRow() == -1 && updatesTable.getSelectedRow() == -1) {
-								filterSelected.doClick();
-								//No hay ni incidencias ni actualizaciones seleccionadas
-								eventSelected = null;
-								updateSelected = null;
+								try {
+									filterSelected.doClick();
+									//No hay ni incidencias ni actualizaciones seleccionadas
+									eventSelected = null;
+									updateSelected = null;
+								} catch (Exception e) {
+									// TODO: handle exception
+									System.out.println("Array out of bounds exception - NO EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
+								}
 							}
 
 							//Informamos por pantalla de la actualización

@@ -2542,6 +2542,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 			       event selected update not selected, ok--
 			     --weird occasional exception thrown with no consequences in program functionality--
 			     --timerjob only updates data once every two cycles due to timerCycle value--
+			     --add try/catch blocks for the 3 update cases--
 
 	· EventEditUI class:
 		Delete attributes
