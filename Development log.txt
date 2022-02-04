@@ -2514,6 +2514,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update buildEventTable() --uses event's findFirstUpdate()--
 		Update updateEventTable() --uses event's findFirstUpdate()--
 		Update startAnewTimer() --add delay parameter--
+		New text in totalEventsLabel (Incidencias totales), eventsShownLabel (Incidencias mostradas)
+		Reposition of totalEventsLabel, eventsShownLabel, totalEvents, eventsShown to fit new text
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
 	

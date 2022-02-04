@@ -210,30 +210,30 @@ public class EventDataUI extends JPanel{
 		//Estado inicial de los botones de la tabla de incidencias
 		buttonSwitcher(EVENT_BUTTON_SET, NEW_ENABLED);
 		
-		JLabel totalEventsLabel = new JLabel("Eventos totales: ");
+		JLabel totalEventsLabel = new JLabel("Incidencias totales: ");
 		totalEventsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		totalEventsLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		totalEventsLabel.setBounds(400, 365, 150, 25);
+		totalEventsLabel.setBounds(410, 365, 185, 25);
 		eventsContainer.add(totalEventsLabel);
 		
-		JLabel eventsShownLabel = new JLabel("Eventos mostrados: ");
+		JLabel eventsShownLabel = new JLabel("Incidencias mostradas: ");
 		eventsShownLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		eventsShownLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		eventsShownLabel.setBounds(650, 365, 200, 25);
+		eventsShownLabel.setBounds(655, 365, 225, 25);
 		eventsContainer.add(eventsShownLabel);
 		
 		totalEvents = new JLabel();
 		totalEvents.setText(((Integer)session.getbUnit().getEvents().size()).toString());
 		totalEvents.setHorizontalAlignment(SwingConstants.LEFT);
 		totalEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		totalEvents.setBounds(550, 365, 50, 25);
+		totalEvents.setBounds(600, 365, 50, 25);
 		eventsContainer.add(totalEvents);
 		
 		eventsShown = new JLabel();
 		eventsShown.setText(((Integer)getLastEventsByNumber(session.getbUnit().getEvents(), 25).size()).toString());
 		eventsShown.setHorizontalAlignment(SwingConstants.LEFT);
 		eventsShown.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		eventsShown.setBounds(830, 365, 50, 25);
+		eventsShown.setBounds(880, 365, 50, 25);
 		eventsContainer.add(eventsShown);
 		
 		updatesContainer = new JPanel();
