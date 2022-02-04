@@ -2417,6 +2417,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	* - Package main.java.event
 
 	· Event class:
+		Add findFirstUpdate()
 		Override equals() & hashCode()
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code

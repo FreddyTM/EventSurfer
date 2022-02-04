@@ -360,6 +360,26 @@ public class Event {
 		return eventDeleted;
 	}
 	
+	public EventUpdate findFirstUpdate() {
+		//Si solo hay una actualización, la actualización inicial es esa
+		if (updates.size() == 1) {
+			return updates.get(0);
+		} 
+		EventUpdate firstUpdate = updates.get(0);
+		int i;
+		for (i = 1; i < updates.size(); i++) {
+			if (firstUpdate.getFechaHora().after(updates.get(i).getFechaHora())) {
+				firstUpdate = updates.get(i);
+			}
+		}
+				
+//		//Debug
+//		System.out.println("La tabla de actualizaciones tiene  " + updates.size() + " elementos");
+//		System.out.println("La actualización inicial está en la posición " + i);
+		
+		return firstUpdate;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
