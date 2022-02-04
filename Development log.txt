@@ -2530,6 +2530,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· EventUpdateTableSelectionListener class (EventDataUI inner class):
 		Update valueChanged() --updates updatesRow--
 				      --if no selection updateSelected set to null--
+				      --fix updatesRow getting data from the wrong table--
 
 	· TimerJob class (EventDataUI inner class):
 		Add attribute
@@ -2555,7 +2556,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Clean code --not completed yet--
 
 	· OKAction class EventEditUI inner class):
-		Update actionPerformed() --New new logic for all cases, not tested yet--
+		Update actionPerformed() --New new logic for all cases, ok with minor issues--
 
 		
 	

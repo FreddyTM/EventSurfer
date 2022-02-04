@@ -1403,20 +1403,20 @@ public class EventDataUI extends JPanel{
 				//Debug
         		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         		System.out.println("EventUpdateTableSelectionListener");
-				System.out.println("Tabla actualizaciones, fila seleccionada :" + eventsTable.getSelectedRow());
+				System.out.println("Tabla actualizaciones, fila seleccionada :" + updatesTable.getSelectedRow());
 				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 				
 				
 				if (updatesTable.getSelectedRow() > -1) {
 					int updateID = (int) updatesTable.getModel().getValueAt(updatesTable.getSelectedRow(), 0);
 					updateSelected = new EventUpdate().getEventUpdateById(eventSelected, updateID);
-					updatesRow = eventsTable.getSelectedRow();
+					updatesRow = updatesTable.getSelectedRow();
 					
-//					//Debug
-//					System.out.println("Id Actualización: " + updateSelected.getId() + " " + updateSelected.getDescripcion());
-//					System.out.print("Es la actualización inicial? ");
-//					System.out.println(updateSelected.getId() == firstUpdate.getId());
-//					System.out.println("-------------------------------------------------------------------------------------");
+					//Debug
+					System.out.println("Id Actualización: " + updateSelected.getId() + " " + updateSelected.getDescripcion());
+					System.out.print("Es la actualización inicial? ");
+					System.out.println(updateSelected.getId() == firstUpdate.getId());
+					System.out.println("-------------------------------------------------------------------------------------");
 
 					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
 				} else {
