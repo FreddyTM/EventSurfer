@@ -360,6 +360,24 @@ public class Event {
 		return eventDeleted;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+            return true;
+		if((obj == null) || (obj.getClass() != this.getClass()))
+			return false;
+        Event event = (Event) obj;
+        return id == event.getId() && (bUnit.getNombre().equals(event.getbUnit().getNombre()));
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 7;
+	    hash = 31 * hash + id;
+	    hash = 31 * hash + (bUnit.getNombre() == null ? 0 : bUnit.getNombre().hashCode());
+	    return hash;
+	}
+	
 	public int getId() {
 		return id;
 	}

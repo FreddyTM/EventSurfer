@@ -281,6 +281,26 @@ public class EventUpdate {
 			PersistenceManager.closePrepStatement(pstm);
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+            return true;
+		if((obj == null) || (obj.getClass() != this.getClass()))
+			return false;
+        EventUpdate update = (EventUpdate) obj;
+        return id == update.getId() && (event.getId() == update.getEvent().getId())
+        		&& user.getUserAlias().equals(update.getUser().getUserAlias());
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 7;
+	    hash = 31 * hash + id;
+	    hash = 31 * hash + event.getId();
+	    hash = 31 * hash + user.getUserAlias().hashCode();
+	    return hash;
+	}
 
 	public int getId() {
 		return id;
