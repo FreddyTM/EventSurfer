@@ -396,13 +396,14 @@ public class EventDataUI extends JPanel{
 //		TimerTask task = new TimerJob();
 //		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
 		
-		startAnewTimer();
+		startAnewTimer(1000);
 	}
 	
 	/**
 	 * Crea un nuevo Timer y le asigna un Timertask
+	 * @param delay retardo en el comienzo de la ejecución del timer en milisegundos
 	 */
-	void startAnewTimer() {
+	void startAnewTimer(long delay) {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
 		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
@@ -1402,7 +1403,7 @@ public class EventDataUI extends JPanel{
 				//Debug
         		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         		System.out.println("EventUpdateTableSelectionListener");
-				System.out.println("Tabla incidencias, fila seleccionada :" + eventsTable.getSelectedRow());
+				System.out.println("Tabla actualizaciones, fila seleccionada :" + eventsTable.getSelectedRow());
 				System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 				
 				

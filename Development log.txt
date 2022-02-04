@@ -2553,7 +2553,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Clean code --not completed yet--
 
 	· OKAction class EventEditUI inner class):
-		Update actionPerformed() --New logic for all cases, still not working...--
+		Update actionPerformed() --New new logic for all cases, not tested yet--
 
 		
 	
