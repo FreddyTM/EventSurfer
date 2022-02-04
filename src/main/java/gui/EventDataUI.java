@@ -1361,7 +1361,7 @@ public class EventDataUI extends JPanel{
 				if (eventsTable.getSelectedRow() > -1) {
 					int eventSelectedID = (int) eventsTable.getModel().getValueAt(eventsTable.getSelectedRow(),	0);
 					eventSelected = new Event().getEventById(session.getbUnit(), eventSelectedID);
-					firstUpdate = findFirstUpdate();
+					firstUpdate = eventSelected.findFirstUpdate();
 					eventsRow = eventsTable.getSelectedRow();
 					//Debug
 					
@@ -1373,9 +1373,14 @@ public class EventDataUI extends JPanel{
 					updateEventButtonsStateOnSelection();
 					//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
 					updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
-				} 
-//				//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-//				updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
+				} else {
+					//Aquí deberíamos deseleccionar eventSelected, updateSelected y firstUpdate???
+					eventSelected = null; /////CHECK!!!
+					updateSelected = null; /////CHECK!!!
+					firstUpdate = null; /////CHECK!!!
+				}
+				
+				
 			}
 			//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
         	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
@@ -1413,7 +1418,10 @@ public class EventDataUI extends JPanel{
 //					System.out.println("-------------------------------------------------------------------------------------");
 
 					updateEventUpdateButtonsStateOnSelection(updatesTable.getSelectedRow());
-				} 
+				} else {
+					//Aquí deberíamos deseleccionar updateSelected???
+					updateSelected = null; /////CHECK!!!
+				}
 			} 
 		}
 	}

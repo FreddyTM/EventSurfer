@@ -2520,9 +2520,12 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· EventTableSelectionListener class (EventDataUI inner class):
 		Update valueChanged() --updates eventsRow--
+				      --firstUpdate gets event's findFirstUpdate()--
+				      --if no selection eventSelected, updateSelected, firstUpdate set to null--
 
 	· EventUpdateTableSelectionListener class (EventDataUI inner class):
 		Update valueChanged() --updates updatesRow--
+				      --if no selection updateSelected set to null--
 
 	· TimerJob class (EventDataUI inner class):
 		Add attribute
