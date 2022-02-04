@@ -486,7 +486,7 @@ public class EventDataUI extends JPanel{
 	    	switch (months) {
 	    		case 0:
 	    			for (Event event : list) {
-	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				eventReference.setTimeInMillis(event.findFirstUpdate().getFechaHora().getTime());
 	    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
 	    						&& calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
 	    					filteredList.add(event);
@@ -503,7 +503,7 @@ public class EventDataUI extends JPanel{
 	    				calendarReference = Calendar.getInstance();
 	    				calendarReference.add(Calendar.MONTH, i);
 	    				for (Event event : list) {
-		    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+		    				eventReference.setTimeInMillis(event.findFirstUpdate().getFechaHora().getTime());
 		    				if (calendarReference.get(Calendar.MONTH) == eventReference.get(Calendar.MONTH)
 		    						&& calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
 		    					filteredList.add(event);
@@ -513,7 +513,7 @@ public class EventDataUI extends JPanel{
 	    			break;
 	    		case 12:
 	    			for (Event event : list) {
-	    				eventReference.setTimeInMillis(event.getUpdates().get(0).getFechaHora().getTime());
+	    				eventReference.setTimeInMillis(event.findFirstUpdate().getFechaHora().getTime());
 	    				if (calendarReference.get(Calendar.YEAR) == eventReference.get(Calendar.YEAR)) {
 	    					filteredList.add(event);
 	    				}
