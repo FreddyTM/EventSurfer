@@ -15,6 +15,12 @@ import main.java.persistence.PersistenceManager;
 import main.java.types_states.TypesStatesContainer;
 
 
+/**
+ * Almacena la información referente a los usuarios y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class User {
 
 	public static final String TABLE_NAME = "user";
@@ -133,7 +139,7 @@ public class User {
 	/**
 	 * Obtiene el alias, nombre, apellido y password del usuario administrador por defecto
 	 * para comprobar si su password ha sido cambiado. En la primera ejecución del programa
-	 * Es obligatorio cambiar este password, y opcional cambiar el alias, nombre y apellido. 
+	 * Es obligatorio cambiar este password, y opcional cambiar el alias, el nombre y el apellido. 
 	 * @param conn conexión con la base de datos
 	 * @return usuario administrador por defecto incluyendo solo alias, nombre, apellido y
 	 * password. El resto de datos no son necesarios porque ya son conocidos.
@@ -201,7 +207,7 @@ public class User {
 	/**
 	 * Obtiene la lista de usuarios del centro de trabajo pasado por parámetro
 	 * @param conn conexión con la base de datos
-	 * @param bUnit objeto del que queremos recuperar sus usuarios
+	 * @param bUnit centro de trabajo del que queremos recuperar sus usuarios
 	 * @return lista de usuarios del centro de trabajo almacenados en la base de datos
 	 */
 	public List<User> getUsersFromDB(Connection conn, BusinessUnit bUnit) {
@@ -287,34 +293,18 @@ public class User {
 	 */
 	public List<User> setNoActiveUsersToDB (Connection conn, BusinessUnit bUnit) {
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
-		
-		//Debug
-		System.out.println("userList.size(): " + userList.size());
-		
 		List<User> updatedUserList = new ArrayList<User>();
 		if (userList.size() > 0) {
 			for (User user : userList) {
-//				
-//				//Debug
-//				System.out.println("User: " + user.getUserAlias());
-//				
 				user.setActivo(false);
 				updatedUserList.add(user);
-//				
-//				//Debug
-//				System.out.println("Setting user inactive...");
-
 			} 
 		} 
 
 		for (User user : updatedUserList) {
 			if (!new User().updateUserToDB(conn, user)) {
 				return null;
-			}
-//			
-//			//Debug
-//			System.out.println("Updating user inactive to Db...");
-//			
+			}	
 		}
 		
 		return updatedUserList;
@@ -441,7 +431,6 @@ public class User {
 	 * @return usuario con el alias entrado por parámetro (null si no existe)
 	 */
 	public User getUserByAlias (List<User> userList, String alias) {
-//		List<User> userList = bUnit.getUsers();
 		for (User user: userList) {
 			if (user.getUserAlias().equals(alias)) {
 				return user;
@@ -497,7 +486,7 @@ public class User {
 	
 	/**
 	 * Comprueba que la contraseña introducida cumple las restricciones para ser correcta
-	 * Caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]
+	 * Caracteres [a-z], [A-Z], [0-9], [*!$%&@#^]. Mínimo 8 caracteres, máximo 25
 	 * @param password contraseña a validar
 	 * @return true si la contraseña es correcta, false si no lo es
 	 */
@@ -526,7 +515,7 @@ public class User {
 	
 	/**
 	 * Genera un hash de igual longitud al String pasado por parámetro. Si el string tiene más de
-	 * 25 caracteres, solo devuelve los 25 caracteres del hash
+	 * 25 caracteres, solo devuelve los 25 primeros caracteres del hash
 	 * @param input String de entrada
 	 * @return hash del String de entrada
 	 */
@@ -536,6 +525,8 @@ public class User {
 		String charList = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"
 				+ "0123456789"
 				+ "*!$%&@#^";
+		//Determina el desplazamiento respecto a la posición de cada caracter del input en charList.
+		//Se utiliza un desplazamiento diferente en función de la longitud del input
 		int factor = 0;
 		if (size <=10) {
 			factor = 7;
@@ -632,6 +623,5 @@ public class User {
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
-	
 	
 }
