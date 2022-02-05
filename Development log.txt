@@ -2583,7 +2583,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 		
 ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED IN COMPANYUI, BUSINESSUNITUI, USERUI, AREAUI
-	     & EVENTTYPEUI, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS
+	     & EVENTTYPEUI, CLEAN CODE, CHECK JAVADOC TEXT, LAST FUNCTIONAL TESTS
 
 	* - Package main.java.app
 		
@@ -2594,6 +2594,10 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 	* - Package main.java.exceptions
 
 	· DatabaseError class:
+		Clean code
+		Complete javadoc
+
+	· ToolBox class:
 		Clean code
 		Complete javadoc
 

@@ -9,7 +9,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,11 +16,14 @@ import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+/**
+ * Clase auxiliar que contiene métodos estáticos de utilidad para diversas clases de la aplicación
+ * @author Alfred Tomey
+ */
 public class ToolBox {
 
 	public ToolBox() {
@@ -92,7 +94,8 @@ public class ToolBox {
 	 * @param width anchura de la ventana
 	 * @param height altura de la ventana 
 	 */
-	public static void centerFrame(Frame messageFrame, GraphicsDevice [] displays, GraphicsDevice currentDisplay, int width, int height) {
+	public static void centerFrame(Frame messageFrame, GraphicsDevice [] displays, GraphicsDevice currentDisplay,
+			int width, int height) {
 		int panelWidth = width;
 		int panelHeight = height;
 		int coordinateX = currentDisplay.getDefaultConfiguration().getBounds().x;
@@ -104,7 +107,8 @@ public class ToolBox {
 			if (currentDisplay.getIDstring().equals(displays[i].getIDstring())) {
 				currentWidth = currentDisplay.getDisplayMode().getWidth();
 				currentHeight = currentDisplay.getDisplayMode().getHeight();
-				messageFrame.setBounds((currentWidth - panelWidth) / 2 + coordinateX, (currentHeight - panelHeight) / 2 + coordinateY, panelWidth, panelHeight);
+				messageFrame.setBounds((currentWidth - panelWidth) / 2 + coordinateX, (currentHeight - panelHeight) / 2 + coordinateY,
+						panelWidth, panelHeight);
 			}
 		}
 	}
@@ -127,7 +131,8 @@ public class ToolBox {
 			JOptionPane.showMessageDialog(messageFrame, message, "Información", JOptionPane.WARNING_MESSAGE);
 			return -1;
 		} else if (dialogType.equals("yes_no")) {		
-			int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			int optionSelected = JOptionPane.showConfirmDialog(messageFrame, message, "Advertencia", JOptionPane.YES_NO_OPTION,
+					JOptionPane.INFORMATION_MESSAGE);
 			return optionSelected;
 		} else {
 			return -1;
