@@ -46,13 +46,9 @@ public class CurrentSession {
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
 	//Tiempo de repetición de TimerJob
-	private long period = 30000; 
+	private long period = 60000; 
 	//Acción que devuelve el programa a la pantalla de login
 	private Action logOutAction;
-	
-	//ATRIBUTOS VOLATILE
-	//Se declaran volatile para que todos los temporizadores de actualización de datos
-	//del programa accedan a una copia única de las variables
 	
 	//Registra la fecha y hora de la última actualización que consta en la base de datos
 	//en el momento de iniciar la sesión. Se actualiza con la fecha y hora en que se produzcan
@@ -246,13 +242,11 @@ public class CurrentSession {
 		
 		@Override
 		public void run() {
+			
 			if (user != null) {
 				//Debug
 				System.out.println("Usuario: " + user.getUserAlias());
-			} else {
-				System.out.println("Usuario: sin definir");
 			}
-			System.out.println("Comprobando actualización de datos de la sesión");
 			
 			CurrentSession.this.updatedTables.clear();
 			Connection conn = session.getConnection();
@@ -275,36 +269,16 @@ public class CurrentSession {
 			String sql = "SELECT * "
 					+ "FROM last_modification";
 			try {
-//				//Debug
-//				System.out.println("Dentro del try");
 				
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
 				//Para cada tabla, comprobamos su timestamp
 				while (results.next()) {
-					
-//					//Debug
-//					System.out.println("Dentro del while");
-					
 					tableName = results.getString(1);
 					Timestamp dateTimeDb = results.getTimestamp(2);
-					
-//					//Debug
-//					System.out.println("*******************************");
-//					System.out.println("Tabla: " + tableName);
-//					System.out.println("Timestamp tabla: " + dateTimeDb);
-//					System.out.print("Actualizamos datos de " + tableName + "? ");
-//					System.out.println(sessionDateTime.before(dateTimeDb) ? "SI" : "NO");
-//					System.out.println("*******************************");
-					
-					
 					//Si el timestamp de la tabla es posterior al de la sesión, se ha
 					//producido una actualización que no tenemos registrada.
 					if (sessionDateTime.before(dateTimeDb)) {
-						
-						//Debug
-						System.out.println("CurrentSession. Dentro del if");
-						
 						//Actualizar objetos correspondientes a table_name
 						switch(tableName) {
 							case "user_type":
@@ -314,10 +288,6 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "event_type":
-								
-								//Debug
-								System.out.println("Dentro del case event_type");
-								
 								EventType eventTypeList = new EventType();
 								eventTypeList.loadData(conn);
 								TypesStatesContainer.setEvType(eventTypeList);
@@ -330,36 +300,16 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "company":
-								
-								//Debug
-								System.out.println("Dentro del case company");
-								
 								//Actualizamos la compañía de la sesión
 								company.refresh(conn);
-								
-								//Debug
-								System.out.println(session.getCompany().getNombre());
-								
 								//Añadimos la tabla company a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
-								
-								//Debug
-								System.out.println(tableName);
-								System.out.println(dateTimeDb.toString());
-								System.out.println("Tamaño del Map: " + CurrentSession.this.updatedTables.size());
-								
 								break;
 							case "business_unit":
-								
-								//Debug
-								System.out.println("Dentro del case business_unit");
-								
 								//Carga de tipos de usuarios, tipos de eventos y estados de eventos
 								loadTypesStates(conn);
-								
 								//Recargamos la lista de unidades de negocio de la base de datos
 								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
-								
 								//Localizamos la unidad de negocio del usuario que abrió sesión
 								BusinessUnit updatedBunit = null;
 								for (BusinessUnit oneUnit : bUnits) {
@@ -369,7 +319,6 @@ public class CurrentSession {
 										}
 									}
 								}
-								
 								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
 								if(updatedBunit != null && updatedBunit.isActivo() == false && usersUpdated == false) {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
@@ -385,32 +334,22 @@ public class CurrentSession {
 									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
 									//Si es un usuario administrador, se recargan todas las unidades de negocio
 									if (user.getUserType().equals("ADMIN")) {
-													
-										//Debug
-										System.out.println("Recargando todas las unidades de negocio. Usuario administrador");
-										
 										company.setBusinessUnits(bUnits);
 										for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 											if (oneUnit.getId() == bUnit.getId()) {
 												//Reasignamos la unidad de negocio de la sesión
 												bUnit = oneUnit;
-//												break;
 											}
 										}									
 									//Si es un usuario manager o user, solo recargamos su unidad de negocio, que es la misma que la
 									//de la sesión
 									} else {
 										for (BusinessUnit oneUnit : bUnits) {
-											
-											//Debug
-											System.out.println("Recargando la unidad de negocio del usuario manager o user");
-											
 											if (oneUnit.getId() == bUnit.getId()) {
 												company.getBusinessUnits().clear();
 												company.getBusinessUnits().add(oneUnit);
 												//Reasignamos la unidad de negocio de la sesión
 												bUnit = oneUnit;
-//												break;
 											}
 										}
 									}
@@ -429,12 +368,10 @@ public class CurrentSession {
 											event.setUpdates(eUpdate);
 										}
 									}
-
 									//Asignamos el usuario que abre sesión a user	
 									for (User oneUser : updatedBunit.getUsers()) {
 										if (oneUser.getId() == user.getId()) {
 											user = oneUser;
-//											break;
 										}
 									}
 									//Registramos que la recarga de los usuarios actualizados ya se ha hecho
@@ -447,17 +384,6 @@ public class CurrentSession {
 								}
 								break;
 							case "user":
-								
-								//Debug
-								if (user != null) {
-									if (user.getUserAlias() == "" || user.getUserAlias() == null) {
-										System.out.println("Usuario: ninguno");
-									} else {
-										System.out.println("Usuario: " + user.getUserAlias());
-									} 
-								}
-								System.out.println("Dentro del case user");
-								
 								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
 								//correspondiente recarga de los usuarios actualizados, para no repetirla.
 								if (!usersUpdated) {					
@@ -478,7 +404,7 @@ public class CurrentSession {
 									//Comprobamos que el usuario que abrió sesión no ha sido deshabilitado
 									if(updatedUser.isActivo() == false) {
 										if (!alertShown) {
-											//Back to login
+										//Back to login
 										backToLogin(User.TABLE_NAME, displays, currentDisplay);
 										}
 										alertShown = false;
@@ -489,7 +415,6 @@ public class CurrentSession {
 								}
 								//Reset usersUpdated
 								usersUpdated = false;
-								
 								//Añadimos la tabla user a la lista de tablas actualizadas
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
@@ -512,99 +437,21 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 //							case "event":
-//								//Recargamos los datos de las incidencias de todos los centros de trabajo
-//								//Debug
-//								System.out.println("Recargando datos................................................");
-//								
-//								
-//								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
-//									
-//									//Debug
-//									System.out.println("Recargando empresa...");
-//									
-//									
-//									List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
-//									
-//									//Debug
-//									System.out.println("Recargando incidencias...");
-//									
-//									oneUnit.setEvents(eventList);
-//									//Asignamos a cada incidencia del centro de trabajo sus actualizaciones
-//									for (Event event: oneUnit.getEvents()) {
-//										
-//										//Debug
-//										System.out.println("Recargando actualizaciones...");
-//										
-//										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-//										event.setUpdates(eUpdate);
-//									}
-//								}
 //								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 //								break;
-								
 							case "event_update":	
 								//Recargamos los datos de las incidencias de todos los centros de trabajo
-								//Debug
-								System.out.println("Recargando datos................................................");
-								
-								
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
-									
-									//Debug
-									System.out.println("Recargando empresa...");
-									
-									
 									List<Event> eventList = new Event().getBunitEventsFromDB(conn, oneUnit);
-									
-									//Debug
-									System.out.println("Recargando incidencias...");
-									
 									oneUnit.setEvents(eventList);
 									//Asignamos a cada incidencia del centro de trabajo sus actualizaciones
 									for (Event event: oneUnit.getEvents()) {
-										
-										//Debug
-										System.out.println("Recargando actualizaciones...");
-										
 										List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
 										event.setUpdates(eUpdate);
 									}
 								}
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
-								
-								//Old code --only session.bunit get its events updated--
-//								List<Event> eventList = new Event().getBunitEventsFromDB(conn, session.getbUnit());
-//								//Asignamos la lista de eventos actualizada a la unidad de negocio de la sesión
-//								session.getbUnit().setEvents(eventList);
-//								//Asignamos a cada evento de la unidad de negocio sus actualizaciones
-//								for (Event event: session.getbUnit().getEvents()) {
-//									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-//									event.setUpdates(eUpdate);
-//								}
-//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
-//								break;
-//							case "event_update":
-//								//Recargamos los datos de las incidencias de todas las unidades de negocio
-//								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
-//									//Asignamos a cada incidencia de la unidad de negocio sus actualizaciones
-//									for (Event event: oneUnit.getEvents()) {
-//										List<EventUpdate> eUpdates = new EventUpdate().getEventUpdatesFromDB(conn, event);
-//										event.setUpdates(eUpdates);
-//									}
-//								}
-//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
-//								break;
-								
-								//Old code --only session.bunit get its events updates updated--
-//								//Asignamos la lista de actualizaciones de eventos actualizada a cada evento de 
-//								//la unidad de negocio de la sesión
-//								for (Event event: session.getbUnit().getEvents()) {
-//									List<EventUpdate> eUpdate = new EventUpdate().getEventUpdatesFromDB(conn, event);
-//									event.setUpdates(eUpdate);
-//								}
-//								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
-//								break;
 							default:
 								//Error. Tabla desconocida
 						}				
@@ -615,34 +462,15 @@ public class CurrentSession {
 						}
 					}
 				}
-				
-				//Debug
-				System.out.println("----------------------------------------------------------------------");
-				System.out.println("El usuario de la sesión es: " + session.getUser().getUserAlias());
-				System.out.println("El tiempo de referencia de la sesión es: " + sessionDateTime);
-				System.out.println("El último tiempo registrado en la base de datos es: " + tempDateTime);
-				
 				//Si el timestamp de la sesión es anterior al timestamp temporal tras comprobar las actualizaciones
 				if (sessionDateTime.before(tempDateTime)) {
-					
-					//Debug
-					System.out.println("Actualizamos tiempo de referencia de la sesión...");
-					
 					//Actualizamos timestamp de la sesión con el valor del timestamp temporal
 					session.setDateTimeReference(tempDateTime);
-					
-					//Debug
-					System.out.println("El nuevo tiempo de referencia de la sesión es: " + session.getDateTimeReference());
 				}
-				
-				//Debug
-				System.out.println("----------------------------------------------------------------------");
-
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
-		
+		}	
 	}
 	
 	public Company getCompany() {

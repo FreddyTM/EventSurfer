@@ -2374,6 +2374,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 				     --period set by period attribute--
 		Update loadCurrentSessionData() --timer delay 1 second--
 						--period set by period attribute--
+		Clean code
+		Check javadoc
 
 	· TimerJob class (inner CurrentSession class):
 		Update run() --fix case business_unit not updating remote data sometimes--
