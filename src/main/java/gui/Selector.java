@@ -6,7 +6,6 @@ import javax.swing.JScrollPane;
 
 import main.java.session.CurrentSession;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,6 +18,10 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 
+/**
+ * Construye la barra lateral de selección de pantallas del programa
+ * @author Alfred Tomey
+ */
 public class Selector extends JPanel {
 	
 	private AppWindow frame;
@@ -37,7 +40,6 @@ public class Selector extends JPanel {
 	private JButton bUnitButton;
 	private JButton companyButton;
 	private JButton logOutButton;
-
 
 	public Selector(AppWindow frame, CurrentSession session) {
 		this.frame = frame;
@@ -133,10 +135,10 @@ public class Selector extends JPanel {
 	}
 	
 	/**
-	 * Asigna el panel entrado por parámetro al centerPanel del frame, lo coloca
+	 * Asigna un JScrollPane entrado por parámetro al centerPanel del frame, lo coloca
 	 * en la zona central del basePanel y lo hace visible
 	 * @param frame ventana de la aplicación
-	 * @param panel panel a mostrar
+	 * @param pane JScrollPane a mostrar
 	 */
 	public void showPane(AppWindow frame, JScrollPane pane) {
 		frame.getBasePanel().add(pane, BorderLayout.CENTER);

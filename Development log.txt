@@ -2590,8 +2590,12 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.18--
 		Clean code
-		Check javadoc
+		Complete javadoc
+
+	· Selector class:
+		Clean code
+		Complete javadoc
 
 	· EventDataUI class:
 		Clean code
-		Check javadoc
+		Complete javadoc
