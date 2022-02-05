@@ -13,10 +13,16 @@ import java.util.List;
 import main.java.company.Area;
 import main.java.company.BusinessUnit;
 import main.java.company.Company;
-import main.java.company.User;
 import main.java.persistence.PersistenceManager;
 import main.java.types_states.TypesStatesContainer;
 
+
+/**
+ * Almacena la información referente a las incidencias y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class Event {
 
 	public static final String TABLE_NAME = "event";
@@ -45,7 +51,6 @@ public class Event {
 	public Event() {
 		
 	}
-	
 	
 	/**
 	 * Inserta una nueva incidencia en la base de datos
