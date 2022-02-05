@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,8 +14,14 @@ import main.java.company.BusinessUnit;
 import main.java.company.Company;
 import main.java.company.User;
 import main.java.persistence.PersistenceManager;
-import main.java.toolbox.ToolBox;
 
+
+/**
+ * Almacena la información referente a las actualizaciones de incidencias y proporciona
+ * los métodos necesarios para realizar las operaciones CRUD con la base de datos y con
+ * el resto de componentes del programa
+ * @author Alfred Tomey
+ */
 public class EventUpdate {
 
 	public static final String TABLE_NAME = "event_update";
@@ -238,11 +242,11 @@ public class EventUpdate {
 	}
 	
 	/**
-	 * Borra de la lista de actualizaciones de la incidencia pasada por parámetro
-	 * la actualización pasada por parámetro, si es que está en la lista
+	 * Borra de la lista de actualizaciones de una incidencia la
+	 * actualización pasada por parámetro, si es que está en la lista
 	 * @param event incidencia de la que borramos la actualización
-	 * @param event incidencia a borrar
-	 * @return true si se ha borrado alguna incidencia, false si no
+	 * @param eUpdate actualización a borrar
+	 * @return true si se ha borrado la actualización, false si no
 	 */
 	public boolean deleteEventUpdate(Event event, EventUpdate eUpdate) {
 		boolean updateDeleted = false;
