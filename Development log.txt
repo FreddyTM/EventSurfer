@@ -2349,7 +2349,7 @@ ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 		Add TestDeleteEventFromDb() --ok--
 
 ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS,
-	     FIX ERRORS, NEW LOCAL & REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI
+	     FIX ERRORS, NEW LOCAL & REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI, EVENTEDITUI & CURRENTSESSION
 
 
 	* - Package main.java.persistence
@@ -2507,6 +2507,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· EventDataUI class:
 		Add attributes
 			eventsRow, updatesRow, eEditUI
+		Delete attributes
+			panelVisible
 		Add startAnewTimer() --creates a new timer after getting back from create/edit screen--
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Update updateEventsTable() --job done into a try/catch block--
@@ -2516,6 +2518,12 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update updateEventButtonsStateOnSelection() --looks for firstUpdate's user's id--
 		Update getLastEventsByDate() --uses event's findFirstUpdate()--
 		Update buildEventTable() --uses event's findFirstUpdate()--
+					 --prepareRenderer() try/catch to avoid getValueAt(row, col) throwing
+					   ArrayIndexOutOfBoundsException after new/edit data in EventEditUI
+					   (it happens occasionally and randomly)--
+		Update buildUpdatesTable() --prepareRenderer() try/catch to avoid getValueAt(row, col) throwing
+					     ArrayIndexOutOfBoundsException after new/edit data in EventEditUI
+					     (it happens occasionally and randomly)--
 		Update updateEventTable() --uses event's findFirstUpdate()--
 		Update startAnewTimer() --add delay parameter--
 		Update goToNewEditScreen() --uses eEditUI--
@@ -2574,4 +2582,11 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 					 --make actionPerformed() synchronized--
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 		
-	
+ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED IN COMPANYUI, BUSINESSUNITUI, USERUI, AREAUI
+	     & EVENTTYPEUI, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS
+
+	* - Package main.java.gui
+
+	· EventDataUI class:
+		Clean code
+		Check javadoc
