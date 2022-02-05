@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +30,28 @@ import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
 import main.java.types_states.UserType;
 
+/**
+ * Abre una sesión que incluye al usuario que ejecuta la aplicación, el centro de trabajo
+ * al que está vinculado, y la empresa a la que pertenece dicho centro de trabajo. Contiene
+ * toda la información que las distintas partes del programa necesitan conocer para realizar
+ * sus funciones correctamente. Solo existe una única instancia de esta clase (patrón singleton)
+ * 
+ * Consulta periódicamente la base de datos para detectar cambios en su contenido. Recarga la
+ * nueva información si existe, y almacena en un LinkedHashMap una referencia a las tablas
+ * que se han actualizado. Esto permite a las clases que muestran la información en pantalla
+ * el poder actualizarla de manera automática.
+ * 
+ * @author Alfred Tomey
+ */
 public class CurrentSession {
 
 	//Instancia única de la sesión en curso para toda la aplicación
 	private static CurrentSession session;
 	//Usuario que inicia sesión en la aplicación
 	private User user;
-	//Unidad de negocio al que pertenece el usuario que inicia sesión en la aplicación
+	//Centro de trabajo al que pertenece el usuario que inicia sesión en la aplicación
 	private BusinessUnit bUnit;
-	//Empresa a la que pertenece la unidad de negocio
+	//Empresa a la que pertenece el centro de trabajo
 	private Company company;
 	//Conexión con la base de datos
 	private Connection connection;
@@ -52,8 +64,7 @@ public class CurrentSession {
 	
 	//Registra la fecha y hora de la última actualización que consta en la base de datos
 	//en el momento de iniciar la sesión. Se actualiza con la fecha y hora en que se produzcan
-	//cambios en la base de datos que afecten a company, a bUnit, o a cualquiera de los objetos
-	//que contiene bUnit.
+	//cambios en la base de datos
 	private volatile Timestamp dateTimeReference;
 	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
 	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
@@ -82,9 +93,8 @@ public class CurrentSession {
 	}
 		
 	/**
-	 * Carga todos los datos de la base de datos. La compañía,
-	 * la unidad de negocio y el usuario se almacenan en los
-	 * atributos de la clase
+	 * Carga todos los datos de la base de datos. La compañía, la unidad de negocio
+	 * y el usuario se almacenan en los atributos de la clase
 	 * @param conn conexión con la base de datos
 	 * @param bUnitId unidad de negocio a la que pertenece el usuario
 	 * que identificamos con el parámetro userId
@@ -108,7 +118,7 @@ public class CurrentSession {
 				bUnit = unit;
 			}
 		}
-		//Para localizar y asignar la BusinessUnit de la sesión, también debería funcionar
+		//Para localizar y asignar el centro de trabajo de la sesión, también debería funcionar
 		// this.bunit = new BusinessUnit().getBusinessUnitById (company, bUnitId);
 		
 		//Para cada unidad de negocio, cargamos sus usuarios, areas y eventos
@@ -202,11 +212,11 @@ public class CurrentSession {
 	}
 	
 	/**
-	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro usuario desde otra
-	 * sesión. Se mostrará un mensaje informativo antes de cerrar la sesión local. El usuario que abrió sesión ya no podrá hacer
-	 * login de nuevo hasta que no sea reactivado por algún administrador.
-	 * @param tableName origen de la desactivación del usuario, bien sea por la desactivación de la unidad de negocio a la que pertenece
-	 * o por la desactivación directa del usuario
+	 * Devuelve el programa a la pantalla de login si el usuario que abrió sesión ha sido desactivado por otro
+	 * usuario desde otra sesión. Se mostrará un mensaje informativo antes de cerrar la sesión local. El usuario
+	 * que abrió sesión ya no podrá hacer login de nuevo hasta que no sea reactivado por algún administrador.
+	 * @param tableName origen de la desactivación del usuario, bien sea por la desactivación de la unidad de negocio
+	 * a la que pertenece o por la desactivación directa del usuario
 	 * @param displays lista de monitores del sistema
 	 * @param currentDisplay monitor en el que se está ejecutando la aplicación
 	 */
@@ -246,7 +256,7 @@ public class CurrentSession {
 		public synchronized void run() {
 			
 			if (user != null) {
-				//Debug
+
 				System.out.println("Usuario: " + user.getUserAlias());
 			}
 			
@@ -274,7 +284,6 @@ public class CurrentSession {
 				isLocked = true;
 				
 				System.out.println("Actualizando datos desde la base de datos. Refresco de datos suspendido................");
-				
 				
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
