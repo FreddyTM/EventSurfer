@@ -2611,7 +2611,16 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Clean code
 		Complete javadoc
 
+	* - Package main.java.toolbox
+
 	· ToolBox class:
+		Clean code
+		Complete javadoc
+
+	* - Package main.java.company
+
+	· Company class:
+		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
 		Complete javadoc
 

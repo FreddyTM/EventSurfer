@@ -11,6 +11,12 @@ import java.util.List;
 
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena la información referente a la empresa y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class Company {
 	
 	public static final String TABLE_NAME = "company";
@@ -84,7 +90,7 @@ public class Company {
 	}
 	
 	/**
-	 * Actualiza los datos de la empresa que ya existe en la base de datos si la actualización
+	 * Actualiza los datos de un objeto Company pasado por parámetro si la actualización
 	 * de dichos datos en la base de datos se realiza con éxito
 	 * @param conn conexión con la base de datos
 	 * @param company empresa que contiene los datos que se actualizan
@@ -173,12 +179,12 @@ public class Company {
 	}
 	
 	/**
-	 * Añade un centro de trabajo a la lista de unidades de negocio si la inserción del
-	 * centro de trabajo en la base de datos se hace con éxito
+	 * Añade un centro de trabajo a la lista de centros de trabajo de la empresa
+	 * si la inserción del centro de trabajo en la base de datos se hace con éxito
 	 * @param conn conexión con la base de datos
 	 * @param bUnit centro de trabajo a añadir
 	 */
-	public void addBusinessUnit (Connection conn, BusinessUnit bUnit) {
+	public void addBusinessUnitToCompany (Connection conn, BusinessUnit bUnit) {
 		BusinessUnit completeBUnit = new BusinessUnit().addNewBusinessUnit(conn, bUnit);
 		if (completeBUnit != null) {
 			businessUnits.add(completeBUnit);
