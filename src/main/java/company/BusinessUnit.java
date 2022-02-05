@@ -11,6 +11,12 @@ import java.util.List;
 import main.java.event.Event;
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena la información referente a los centros de trabajo y proporciona los métodos
+ * necesarios para realizar las operaciones CRUD con la base de datos y con el resto de
+ * componentes del programa
+ * @author Alfred Tomey
+ */
 public class BusinessUnit {
 	
 	public static final String TABLE_NAME = "business_unit";
