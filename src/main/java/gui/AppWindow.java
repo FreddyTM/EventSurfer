@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
@@ -17,13 +16,16 @@ import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 import main.java.toolbox.ToolBox;
 
+/**
+ * Construye la ventana en la que se ejecuta la aplicación
+ * @author Alfred Tomey
+ */
 public class AppWindow extends JFrame {
 	
 	private JPanel upPanel;
@@ -33,7 +35,7 @@ public class AppWindow extends JFrame {
 	private JPanel rightPanel;
 	private JPanel basePanel;
 	private JLabel infoLabel;
-	private String versionNumber = "0.1.17";
+	private String versionNumber = "0.1.18";
 	private String fullTitle = getTitle() + "               Versión " + versionNumber + "  Usuario: ";
 	private CurrentSession session;
 	private Connection conn;
@@ -54,7 +56,6 @@ public class AppWindow extends JFrame {
 	 * y de la pantalla en la que se está ejecutando la aplicación. Actualiza dicha información de manera continuada para que,
 	 * en un entorno multipantalla, la ventana de login y los mensajes emergentes puedan aparecer siempre centrados en la pantalla 
 	 * en la que se ejecuta la aplicación
-	 * 
 	 */
 	public void initialize() {
 
