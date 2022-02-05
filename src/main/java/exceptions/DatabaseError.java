@@ -3,6 +3,10 @@ package main.java.exceptions;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/**
+ * Muestra mensajes en relación a errores de conexión con la base de datos
+ * @author Alfred Tomey
+ */
 public class DatabaseError extends Exception {
 
 	public static final String TITLE = "Database error";

@@ -3,11 +3,7 @@ package main.java.app;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Scrollbar;
 import java.sql.Connection;
-
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 
 import main.java.company.User;
 import main.java.exceptions.DatabaseError;
