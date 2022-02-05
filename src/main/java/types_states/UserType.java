@@ -11,6 +11,12 @@ import java.util.Map;
 
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena los tipos de usuarios y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes
+ * del programa
+ * @author Alfred Tomey
+ */
 public class UserType {
 
 	public static final String TABLE_NAME = "user_type";

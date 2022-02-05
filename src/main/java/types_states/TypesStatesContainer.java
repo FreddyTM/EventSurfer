@@ -1,5 +1,10 @@
 package main.java.types_states;
 
+/**
+ * Clase contenedora de los objetos que almacenan las listas de tipos de eventos, tipos de usuarios
+ * y tipos de incidencias
+ * @author Alfred Tomey
+ */
 public class TypesStatesContainer {
 
 	private static EventState evState;

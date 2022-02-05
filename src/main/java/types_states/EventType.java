@@ -13,6 +13,12 @@ import java.util.Map.Entry;
 
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena los tipos de incidencias y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class EventType {
 
 	public static final String TABLE_NAME = "event_type";
@@ -218,7 +224,6 @@ public class EventType {
 			return null;
 		}
 	}
-	
 	
 	public Map <Integer, String> getEventTypes() {
 		return this.eventTypes;

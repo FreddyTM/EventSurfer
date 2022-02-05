@@ -11,6 +11,12 @@ import java.util.Map;
 
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena los estados de las incidencias y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class EventState {
 
 	public static final String TABLE_NAME = "event_state";
@@ -31,7 +37,8 @@ public class EventState {
 	}
 	
 	/**
-	 * Devuelve un array con el nombre de los diferentes estados de incidencias ordenados alfabéticamente
+	 * Devuelve un array con el nombre de los diferentes estados de incidencias ordenados
+	 * alfabéticamente
 	 * @return Estados de incidencias
 	 */
 	public String[] getEventStatesArray() {
