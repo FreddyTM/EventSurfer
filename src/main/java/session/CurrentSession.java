@@ -273,7 +273,7 @@ public class CurrentSession {
 			try {
 				isLocked = true;
 				
-				System.out.println("Actualizando datos. Acceso al map bloqueado................");
+				System.out.println("Actualizando datos desde la base de datos. Refresco de datos suspendido................");
 				
 				
 				stm = conn.createStatement();
@@ -479,7 +479,7 @@ public class CurrentSession {
 				isLocked = false;
 				notifyAll();
 				
-				System.out.println("Datos actualizados, acceso al map permitido................");
+				System.out.println("Actualización de datos desde la base de datos finalizada. Refresco de datos permitido................");
 			}
 		}	
 	}

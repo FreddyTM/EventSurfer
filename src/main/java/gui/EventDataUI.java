@@ -99,9 +99,7 @@ public class EventDataUI extends JPanel{
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Previene la actualización de datos realizada por TimerJob si es la propia instancia del programa
-	//la que ha grabado datos nuevos en la base de datos
-	private volatile boolean selfUpdate = false;
+
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	//Tamaño del monitor que ejecuta la aplicación
@@ -159,6 +157,9 @@ public class EventDataUI extends JPanel{
 	
 	//Componente que proporciona las scrollbars al panel
 	JScrollPane scrollPane;
+	
+	//Referencia a la clase que edita la información de las incidencias
+	private EventEditUI eEditUI;
 
 
 	public EventDataUI(CurrentSession session) {
@@ -398,7 +399,7 @@ public class EventDataUI extends JPanel{
 //		TimerTask task = new TimerJob();
 //		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
 		
-		startAnewTimer(1000);
+		startAnewTimer(5000);
 	}
 	
 	/**
@@ -408,7 +409,7 @@ public class EventDataUI extends JPanel{
 	void startAnewTimer(long delay) {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod());
+		timer.scheduleAtFixedRate(task, delay, session.getPeriod());
 	}
 	
 	/**
@@ -1157,7 +1158,7 @@ public class EventDataUI extends JPanel{
 	 * @param mode modo de creación / edición de incidencias y actualizaciones
 	 */
 	private void goToNewEditScreen(int mode) {
-		EventEditUI eEditUI = new EventEditUI(session, mode, this);
+		eEditUI = new EventEditUI(session, mode, this);
 		eEditUI.setOpaque(true);
 		this.setVisible(false);
 		eEditUI.setVisible(true);
@@ -1701,13 +1702,25 @@ public class EventDataUI extends JPanel{
 					
 					if (session.isLocked()) {
 						try {
-							System.out.println("EventDataUI esperando permiso para actualizar......");
+							System.out.println("EventDataUI esperando permiso para refrescar datos......");
 							wait();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
+					
+					if (eEditUI != null && eEditUI.isSelfUpdate()) {
+						try {
+							System.out.println("EventDataUI esperando permiso para refrescar datos......");
+							wait();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					System.out.println("EventDataUI tiene permiso para refrescar datos. Refrescando......");
 				
 					//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
 					//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
@@ -1722,11 +1735,7 @@ public class EventDataUI extends JPanel{
 						//Actualizamos la tabla de incidencias
 						filterSelected.doClick();
 					}
-					
-					
-					
-					System.out.println("EventDataUI tiene vía libre para actualizar. Actualizando datos......");
-					
+		
 					//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
 					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 
@@ -1969,14 +1978,6 @@ public class EventDataUI extends JPanel{
 
 	public void setUpdatesRow(int updatesRow) {
 		this.updatesRow = updatesRow;
-	}
-
-	public boolean isSelfUpdate() {
-		return selfUpdate;
-	}
-
-	public void setSelfUpdate(boolean selfUpdate) {
-		this.selfUpdate = selfUpdate;
 	}
 
 }

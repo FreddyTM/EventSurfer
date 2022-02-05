@@ -2506,7 +2506,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· EventDataUI class:
 		Add attributes
-			eventsRow, updatesRow, selfUpdate
+			eventsRow, updatesRow, eEditUI
 		Add startAnewTimer() --creates a new timer after getting back from create/edit screen--
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Update updateEventsTable() --job done into a try/catch block--
@@ -2518,6 +2518,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update buildEventTable() --uses event's findFirstUpdate()--
 		Update updateEventTable() --uses event's findFirstUpdate()--
 		Update startAnewTimer() --add delay parameter--
+		Update goToNewEditScreen() --uses eEditUI--
 		New text in totalEventsLabel (Incidencias totales), eventsShownLabel (Incidencias mostradas)
 		Reposition of totalEventsLabel, eventsShownLabel, totalEvents, eventsShown to fit new text
 		Clean code --not completed yet--
@@ -2551,15 +2552,18 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 			     --delete timerCycle check--
 
 	· EventEditUI class:
+		Add attributes
+			selfUpdate
 		Add backToEventDataScreen() --ok--
 		Delete attributes
-			eventSelected, updateSelected
+			eventSelected, updateSelected, selfUpdate
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--
 		Update isDateTimeAfterEventUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Update isDateTimebeforePreviousUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
+							       --fix prevent method compare id with updateSelected id--
 		Update backToEventDataScreen() --tries to cancel EventDataUI's timer & starts a new one--
 		Update setup() --references to eDataUI firstUpdate come from eDataUI.getFirstUpdate()--
-		Update backToEventDataScreen() --period is set to the same value as CurrentSession period--
+		Update backToEventDataScreen() --delay set to 1 second--
 		Delete all references to eventSelected / updateSelected --Now use direct references eDataUI.getEventSelected()
 									  and eDataUI.getUpdateSelected()--
 		Clean code --not completed yet--
@@ -2567,6 +2571,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· OKAction class EventEditUI inner class):
 		Update actionPerformed() --New new logic for all cases, ok with minor issues--
-
+					 --make actionPerformed() synchronized--
+					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 		
 	
