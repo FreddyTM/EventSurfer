@@ -2357,13 +2357,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· PersistenceManager class:
 		Update registerTableModification() --checks null timestamp parameter, adds a new one if so--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	* - Package main.java.toolbox
 
 	· ToolBox class:
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	* - Package main.java.session
 
@@ -2375,7 +2375,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update loadCurrentSessionData() --timer delay 1 second--
 						--period set by period attribute--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· TimerJob class (inner CurrentSession class):
 		Update run() --fix case business_unit not updating remote data sometimes--
@@ -2388,36 +2388,36 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· EventState class:
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· EventType class:
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· UserType class:
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	* - Package main.java.company
 
 	· Company class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· BusinessUnit class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· User class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· Area class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	* - Package main.java.event
 
@@ -2426,38 +2426,38 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Override equals() & hashCode()
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· EventUpdate class:
 		Override equals() & hashCode()
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	* - Package main.java.gui
 
 	· AppWindow class:
 		Update attribute versionNumber --ver 0.1.17--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· Selector class:
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· CompanyUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· BusinessUnitUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Update editableDataOn() --fix activeCheckBox not enabled on new bunit if session.bunit = default bunit--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code --not completed yet--
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· UserUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
@@ -2465,13 +2465,13 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update testData() --update wrong password error text--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet-- 
 
 	· AreaUI class:
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc 
+		Check javadoc --not completed yet--
 
 	· NewAction class (AreaUI inner class):
 		Update actionPerformed() --areaNameField has the focus on new area--
@@ -2502,7 +2502,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Change denomination --UNIDADES DE NEGOCIO are now called CENTROS DE TRABAJO--
 		Clean code
-		Check javadoc
+		Check javadoc --not completed yet--
 
 	· EventDataUI class:
 		Add attributes
@@ -2563,6 +2563,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Delete all references to eventSelected / updateSelected --Now use direct references eDataUI.getEventSelected()
 									  and eDataUI.getUpdateSelected()--
 		Clean code --not completed yet--
+		Check javadoc --not completed yet--
 
 	· OKAction class EventEditUI inner class):
 		Update actionPerformed() --New new logic for all cases, ok with minor issues--

@@ -360,6 +360,10 @@ public class Event {
 		return eventDeleted;
 	}
 	
+	/**
+	 * Busca la actualización incial de la incidencia
+	 * @return actualización inicial de la incidencia
+	 */
 	public EventUpdate findFirstUpdate() {
 		//Si solo hay una actualización, la actualización inicial es esa
 		if (updates.size() == 1) {
@@ -372,11 +376,6 @@ public class Event {
 				firstUpdate = updates.get(i);
 			}
 		}
-				
-//		//Debug
-//		System.out.println("La tabla de actualizaciones tiene  " + updates.size() + " elementos");
-//		System.out.println("La actualización inicial está en la posición " + i);
-		
 		return firstUpdate;
 	}
 	
