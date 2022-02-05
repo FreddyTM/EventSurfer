@@ -6,12 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import main.java.persistence.PersistenceManager;
 
+/**
+ * Almacena la información referente a las areas y proporciona los métodos necesarios para
+ * realizar las operaciones CRUD con la base de datos y con el resto de componentes del 
+ * programa
+ * @author Alfred Tomey
+ */
 public class Area {
 
 	public static final String TABLE_NAME = "area";
@@ -337,7 +341,7 @@ public class Area {
 	}
 	
 	/**
-	 * Devuelve el area al que pertenece el nombre entrado por parámetro
+	 * Devuelve el area al que pertenece el nombre de area entrado por parámetro
 	 * @param bUnit centro de trabajo del que comprobamos la lista de areas
 	 * @param name nombre del area buscado
 	 * @return area con el nombre entrado por parámetro (null si no existe)
@@ -353,7 +357,7 @@ public class Area {
 	}
 	
 	/**
-	 * Devuelve el area al que pertenece el nombre entrado por parámetro
+	 * Devuelve el area al que pertenece el nombre de area entrado por parámetro
 	 * @param areaList Lista de areas de la que comprobamos el nombre
 	 * @param name nombre del area buscado
 	 * @return area con el nombre entrado por parámetro (null si no existe)

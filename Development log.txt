@@ -2624,6 +2624,10 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Clean code
 		Complete javadoc
 
+	· Area class:
+		Clean code
+		Complete javadoc
+
 	* - Package main.java.event
 
 	· Event class:
