@@ -17,8 +17,10 @@ import main.java.gui.Login;
 import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 
-//VERSION 0.1.5
-
+/**
+ * Contiene el método main y ejecuta el programa
+ * @author Alfred Tomey
+ */
 public class EventSurfer {
 
 	private Connection connection;
@@ -44,29 +46,33 @@ public class EventSurfer {
 	 * Conecta con la base de datos e inicia la sesión y la ventana de la aplicación
 	 * @param args base de datos a la que conectar. Si no existe parámetro, se conecta
 	 * a la base de datos designada por defecto
+	 * @throws DatabaseError 
 	 */
-	public void go(String[] args) {
+	public void go(String[] args) throws DatabaseError {
 		
 		if (args.length == 1) {
 			try {
 				connection = PersistenceManager.connectToDatabase(args[0]);
-			} catch (DatabaseError e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new DatabaseError("No es posible conectar con la base de datos " + args[0]);
 			}
 
 		} else {
 			try {
 				connection = PersistenceManager.connectToDatabase("LOCAL_TEST_DB");
-			} catch (DatabaseError e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new DatabaseError("No es posible conectar con la base de datos " + "LOCAL_TEST_DB");
 			}			
 		}
 		
-		while(connection == null) {
-			//Error screen with reconnect button
-		}
+//		while(connection == null) {
+//			//Error screen with reconnect button
+//		}
+		
 		CurrentSession session = CurrentSession.getInstance();
 		session.setConnection(connection);
 		AppWindow frame = new AppWindow("EVENTSURFER", connection, session);

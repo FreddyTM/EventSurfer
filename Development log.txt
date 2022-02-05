@@ -2585,6 +2585,12 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED IN COMPANYUI, BUSINESSUNITUI, USERUI, AREAUI
 	     & EVENTTYPEUI, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS
 
+	* - Package main.java.app
+		
+	· EventSurfer class:
+		Clean code
+		Complete javadoc
+
 	* - Package main.java.types_states
 
 	· TypesStatesContainer class:
