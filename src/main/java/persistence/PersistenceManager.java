@@ -14,10 +14,13 @@ import javax.swing.JLabel;
 
 import main.java.exceptions.DatabaseError;
 import main.java.toolbox.ToolBox;
-import main.java.types_states.EventType;
 
-
-
+/**
+ * Proporciona los métodos que permiten conectar con la base de datos y realizar
+ * tareas auxiliares relacionadas con dicha conexión y el intercambio de información
+ * entre los objetos y la base de datos.
+ * @author Alfred Tomey
+ */
 public class PersistenceManager {
 	
 	//URL de la base de datos
@@ -106,19 +109,19 @@ public class PersistenceManager {
 		try {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(url, user, password);
-			if (url != null) {
+			if (connection != null) {
 				System.out.println("Connexión a " + dbName + " establecida con éxito\n");
 			} else {
-				System.out.println("Error de onnexión a " + dbName + "\n");
+				System.out.println("Error de conexión a " + dbName + "\n");
 			}
 		} catch (ClassNotFoundException ex) {
-			System.out.println("No se encuentra el controlador JDBC ("
+			throw new DatabaseError("No se encuentra el controlador JDBC \n("
 			+ ex.getMessage() +")");
 		} catch (SQLException e) {
 			System.out.println("Error: " + e.getMessage());
 			System.out.println("Estado: " + e.getSQLState());
 			System.out.println("Código: " + e.getErrorCode());
-			throw new DatabaseError("Error de conexión con la base de datos");
+			throw new DatabaseError("Error de conexión a " + dbName + "\n");
 		}		
 		return connection;
 	}
@@ -196,10 +199,10 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * Devuelve el id del último tipo de evento de la tabla indicada
+	 * Devuelve el id del último tipo de registro insertado en la tabla indicada
 	 * @param tableName nombre de la tabla en la base de datos
 	 * @param conn conexión con la base de datos
-	 * @return id del último tipo de evento
+	 * @return id del último registro insertado en la tabla
 	 */
 	public static int getLastElementIdFromDB (Connection conn, String tableName) {
 		int id = 0;

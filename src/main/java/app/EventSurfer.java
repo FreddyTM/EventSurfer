@@ -14,7 +14,10 @@ import main.java.persistence.PersistenceManager;
 import main.java.session.CurrentSession;
 
 /**
- * Contiene el método main y ejecuta el programa
+ * Contiene el método main y ejecuta el programa. Inicia la verificación de las
+ * credenciales del usuario y crea la sesión sobre la que dicho usuario podrá
+ * operar.
+ * y crea la sesión 
  * @author Alfred Tomey
  */
 public class EventSurfer {
