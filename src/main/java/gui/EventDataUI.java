@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -104,8 +103,6 @@ public class EventDataUI extends JPanel{
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
 
-	//Registra si el panel está visible o no
-//	private boolean panelVisible;
 	//Tamaño del monitor que ejecuta la aplicación
 	private String screenSize = getScreenSize();
 	
