@@ -1759,7 +1759,7 @@ ver 0.1.12 - EVENTTYPEUI FULLY FUNCTIONAL
 		Add testGetBunitsIdsWithEventTypes() --ok--
 		Add testGetEventTypesOnEventFromDB() --ok--
 
-ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING uses PersistenceManager registerTableModification()
+ver 0.1.13 - FIX ERRORS, CLEAN CODE, REFACTORING & INTRODUCING PersistenceManager registerTableModification()
 
 	* - Package main.java.gui
 
@@ -2348,8 +2348,8 @@ ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 		Add testDeleteAllEventUpdatesFromDb() --ok--
 		Add TestDeleteEventFromDb() --ok--
 
-ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT, JAVADOC GENERATION, LAST FUNCTIONAL TESTS,
-	     FIX ERRORS --VERSION RELEASED IN DAM PROJECT--
+ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS,
+	     FIX ERRORS, NEW LOCAL & REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI
 
 
 	* - Package main.java.persistence
@@ -2369,7 +2369,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· CurrentSession class:
 		Add attribute
-			period
+			period, isLocked
 		Update loadAllData() --timer delay 1 second--
 				     --period set by period attribute--
 		Update loadCurrentSessionData() --timer delay 1 second--
@@ -2381,6 +2381,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update run() --fix case business_unit not updating remote data sometimes--
 			     --fix copy case b_unit_area to case area to fix available bunits sometimes not showing after
 			       allocate or revoke allocation (both local & remote)--
+			     --make run() synchronized--
+			     --set isLocked to true before updating data, set to false after updating & notify()--
 
 	* - Package main.java.types_states
 
@@ -2504,7 +2506,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 
 	· EventDataUI class:
 		Add attributes
-			eventsRow, updatesRow
+			eventsRow, updatesRow, selfUpdate
 		Add startAnewTimer() --creates a new timer after getting back from create/edit screen--
 		Update constructor --timerjob period linked to currentsession (period / 2)--
 		Update updateEventsTable() --job done into a try/catch block--
@@ -2537,16 +2539,19 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 	· TimerJob class (EventDataUI inner class):
 		Add attribute
 			timerCycle
+		Delete attribute
+			timerCycle
 		Update run() --new edit actions doesn't update event's row in last_modification table--
 			     --fixing remote updates bugs in progress...
 			       no event or update selected, ok
 			       event & update selected, ok
 			       event selected update not selected, ok--
-			     --weird occasional exception thrown with no consequences in program functionality--
 			     --timerjob only updates data once every two cycles due to timerCycle value--
 			     --add try/catch blocks for the 3 update cases--
+			     --delete timerCycle check--
 
 	· EventEditUI class:
+		Add backToEventDataScreen() --ok--
 		Delete attributes
 			eventSelected, updateSelected
 		Update isDateTimeBeforeEventDateTime() --new logic using getFirstUpdate()--
@@ -2554,6 +2559,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Update isDateTimebeforePreviousUpdatesDateTime --new logic searching by timestamp, not by update position, ok--
 		Update backToEventDataScreen() --tries to cancel EventDataUI's timer & starts a new one--
 		Update setup() --references to eDataUI firstUpdate come from eDataUI.getFirstUpdate()--
+		Update backToEventDataScreen() --period is set to the same value as CurrentSession period--
 		Delete all references to eventSelected / updateSelected --Now use direct references eDataUI.getEventSelected()
 									  and eDataUI.getUpdateSelected()--
 		Clean code --not completed yet--

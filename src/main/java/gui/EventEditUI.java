@@ -124,16 +124,13 @@ public class EventEditUI extends JPanel{
 	private EventDateTimeFocusListener updateDateFocusListener;
 	private EventDateTimeFocusListener updateTimeFocusListener;
 	
-	//Incidencia y actualización seleccionados
-//	private Event eventSelected;
-//	private EventUpdate updateSelected;
-	
 	//Recoge el texto que será convertido a Timestamp
 	private String stringToParse;
 	//Habilita o deshabilita las acciones Aceptar y Cancelar en función de la validez
 	//de las fechas del formulario
 	private boolean dateTimeOk = true;
-	
+
+	//Referencia a la clase que muestra la información de las incidencias
 	private EventDataUI eDataUI;
 	
 	
@@ -968,10 +965,10 @@ public class EventEditUI extends JPanel{
 	 * Cierra la pantalla de creación / edición de incidencias y actualizaciones y devuelve la vista a la pantalla
 	 * de gestión de incidencias
 	 */
-	void backToEventDataScreen() {
+	private void backToEventDataScreen() {
 		try {
 			eDataUI.getTimer().cancel();
-			eDataUI.startAnewTimer(30000);
+			eDataUI.startAnewTimer(session.getPeriod());
 			
 			//Debug
 			System.out.println("Hemos matado al timer anterior y hemos iniciado uno nuevo");
@@ -981,12 +978,14 @@ public class EventEditUI extends JPanel{
 			//Debug
 			System.out.println("Hemos intentado matar un timer que ya estaba muerto... pero ahora inciamos otro igualmente");
 			
-			eDataUI.startAnewTimer(30000);
+			eDataUI.startAnewTimer(session.getPeriod());
 		}
 		EventEditUI.this.setVisible(false);
 		eDataUI.getScrollPane().getViewport().remove(EventEditUI.this);
 		eDataUI.getScrollPane().setViewportView(eDataUI);
 		eDataUI.setVisible(true);
+		
+		//CANDIDATA A DELETE
 		eDataUI.setPanelVisible(true);
 		
 	}

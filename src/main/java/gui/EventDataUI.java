@@ -99,6 +99,9 @@ public class EventDataUI extends JPanel{
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
+	//Previene la actualización de datos realizada por TimerJob si es la propia instancia del programa
+	//la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
 	//Registra si el panel está visible o no
 	private boolean panelVisible;
 	//Tamaño del monitor que ejecuta la aplicación
@@ -160,7 +163,6 @@ public class EventDataUI extends JPanel{
 
 	public EventDataUI(CurrentSession session) {
 		this.session = session;
-
 		setLayout(null);
 		panelVisible = true;
 		
@@ -406,7 +408,7 @@ public class EventDataUI extends JPanel{
 	void startAnewTimer(long delay) {
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		timer.scheduleAtFixedRate(task, 1000, session.getPeriod());
 	}
 	
 	/**
@@ -1668,9 +1670,9 @@ public class EventDataUI extends JPanel{
 	 */
 	private class TimerJob extends TimerTask {
 		
-		//TimerJob se ejecuta dos veces por cada ejecución del TimerJob de CurrentSession. timerCycle registra en
-		//qué ciclo de ejecución estamos
-		private int timerCycle = 0;
+//		//TimerJob se ejecuta dos veces por cada ejecución del TimerJob de CurrentSession. timerCycle registra en
+//		//qué ciclo de ejecución estamos
+//		private int timerCycle = 0;
 		
 		@Override
 		public void run() {
@@ -1684,17 +1686,29 @@ public class EventDataUI extends JPanel{
 				 System.out.println("Se ha cerrado la ventana gestión de eventos");
 			}
 			//Se comprueba la actualización de los datos si el panel es visible
-			if (EventDataUI.this.panelVisible == true) {
+//			if (EventDataUI.this.panelVisible == true) {
+			if (EventDataUI.this.isShowing()) {
 				
 				//Debug
 				System.out.println("Timerjob run()");
 				 
-				//Si estamos en el ciclo 0, TimerJob hace su trabajo 
-				if (timerCycle == 0) {
+//				//Si estamos en el ciclo 0, TimerJob hace su trabajo 
+//				if (timerCycle == 0) {
+//					
+//					//Debug
+//					System.out.println("Ciclo 0");
 					
-					//Debug
-					System.out.println("Ciclo 0");
 					
+					if (session.isLocked()) {
+						try {
+							System.out.println("EventDataUI esperando permiso para actualizar......");
+							wait();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				
 					//Si la unidad de negocio de la sesión ha sido marcada como no activa y el filtro de unidades de negocio está
 					//activado, la unidad de negocio de la sesión pasa a ser la del usuario que abrió sesión
 					if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
@@ -1708,6 +1722,11 @@ public class EventDataUI extends JPanel{
 						//Actualizamos la tabla de incidencias
 						filterSelected.doClick();
 					}
+					
+					
+					
+					System.out.println("EventDataUI tiene vía libre para actualizar. Actualizando datos......");
+					
 					//Loop por el Map de CurrentSession, si aparece la tabla event o event_update, recargar datos
 					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 
@@ -1764,9 +1783,9 @@ public class EventDataUI extends JPanel{
 									//EventUpdateTableSelectionListener se encarga de reasignar updateSelected y renovar el estado de los botones
 									//del panel de actualizaciones
 									updatesTable.setRowSelectionInterval(row, row);
-								} catch (ArrayIndexOutOfBoundsException e) {
+								} catch (Exception e) {
 									// TODO: handle exception
-									System.out.println("Array out of bounds exception - EVENTSELECTED + UPDATESELECTED. " + e.getCause());
+									System.out.println("Exception -> EVENTSELECTED + UPDATESELECTED. " + e.getCause());
 								}
 							}
 
@@ -1791,7 +1810,7 @@ public class EventDataUI extends JPanel{
 									eventsTable.setRowSelectionInterval(row, row);
 								} catch (Exception e) {
 									// TODO: handle exception
-									System.out.println("Array out of bounds exception - EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
+									System.out.println("Exception -> EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
 								}
 
 							}
@@ -1808,7 +1827,7 @@ public class EventDataUI extends JPanel{
 									updateSelected = null;
 								} catch (Exception e) {
 									// TODO: handle exception
-									System.out.println("Array out of bounds exception - NO EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
+									System.out.println("Exception -> NO EVENTSELECTED + NO UPDATESELECTED. " + e.getCause());
 								}
 							}
 
@@ -1820,18 +1839,18 @@ public class EventDataUI extends JPanel{
 						}
 					}
 					
-					//Incrementamos timerCycle para entrar en el ciclo 1
-					timerCycle = 1;
-					
-				//Si estamos en el ciclo 1, reseteamos el ciclo	
-				} else if (timerCycle == 1) {
-					
-					//Debug
-					System.out.println("Ciclo 1");
-					
-					infoLabel.setText("");
-					timerCycle = 0;
-				}
+//					//Incrementamos timerCycle para entrar en el ciclo 1
+//					timerCycle = 1;
+//					
+//				//Si estamos en el ciclo 1, reseteamos el ciclo	
+//				} else if (timerCycle == 1) {
+//					
+//					//Debug
+//					System.out.println("Ciclo 1");
+//					
+//					infoLabel.setText("");
+//					timerCycle = 0;
+//				}
 			}
 		}
 	}
@@ -1950,6 +1969,14 @@ public class EventDataUI extends JPanel{
 
 	public void setUpdatesRow(int updatesRow) {
 		this.updatesRow = updatesRow;
+	}
+
+	public boolean isSelfUpdate() {
+		return selfUpdate;
+	}
+
+	public void setSelfUpdate(boolean selfUpdate) {
+		this.selfUpdate = selfUpdate;
 	}
 
 }

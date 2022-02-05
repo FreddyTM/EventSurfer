@@ -57,6 +57,8 @@ public class CurrentSession {
 	private volatile Timestamp dateTimeReference;
 	//Lista de tablas actualizadas por el temporizador de comprobación de cambios
 	private volatile Map <String, Timestamp> updatedTables = new LinkedHashMap<String, Timestamp>();
+	//Bloquea el acceso a updatedTables mientras se está escribiendo en el map
+	private volatile boolean isLocked = false;
 	//Variable de control de actualización de usuarios si ésta se produce por la actualización
 	//de unidades de negocio
 	private volatile boolean usersUpdated = false;
@@ -241,7 +243,7 @@ public class CurrentSession {
 	private class TimerJob extends TimerTask {
 		
 		@Override
-		public void run() {
+		public synchronized void run() {
 			
 			if (user != null) {
 				//Debug
@@ -269,6 +271,10 @@ public class CurrentSession {
 			String sql = "SELECT * "
 					+ "FROM last_modification";
 			try {
+				isLocked = true;
+				
+				System.out.println("Actualizando datos. Acceso al map bloqueado................");
+				
 				
 				stm = conn.createStatement();
 				results = PersistenceManager.getResultSet(stm, sql);
@@ -469,6 +475,11 @@ public class CurrentSession {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+				isLocked = false;
+				notifyAll();
+				
+				System.out.println("Datos actualizados, acceso al map permitido................");
 			}
 		}	
 	}
@@ -575,6 +586,10 @@ public class CurrentSession {
 
 	public long getPeriod() {
 		return period;
+	}
+
+	public boolean isLocked() {
+		return isLocked;
 	}
 
 }
