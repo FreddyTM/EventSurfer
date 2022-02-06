@@ -2558,6 +2558,7 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 			     --timerjob only updates data once every two cycles due to timerCycle value--
 			     --add try/catch blocks for the 3 update cases--
 			     --delete timerCycle check--
+			     --waits for session & selfupdate lock--
 
 	· EventEditUI class:
 		Add attributes
@@ -2577,8 +2578,8 @@ ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT,
 		Clean code --not completed yet--
 		Check javadoc --not completed yet--
 
-	· OKAction class EventEditUI inner class):
-		Update actionPerformed() --New new logic for all cases, ok with minor issues--
+	· OKAction class (EventEditUI inner class):
+		Update actionPerformed() --New new logic for all cases, ok--
 					 --make actionPerformed() synchronized--
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 		
@@ -2686,6 +2687,17 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 	· CompanyUI class:
 		Clean code
 		Complete javadoc
+
+	· BusinessUnitUI class:
+		Clean code
+		Complete javadoc
+
+	· OKAction class (BusinessUnitUI inner class):
+		Update actionPerformed() --make actionPerformed() synchronized--
+					 --set selfUpdate to true before updating data, set to false after updating & notify()--
+
+	· TimerJob class (BusinessUnitUI inner class):
+		Update run() --waits for session & selfupdate lock--
 
 	· EventEditUI class:
 		Clean code

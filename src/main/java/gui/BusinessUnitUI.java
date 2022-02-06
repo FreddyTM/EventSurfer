@@ -49,8 +49,7 @@ public class BusinessUnitUI extends JPanel {
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Registra si el panel está visible o no
-	private boolean panelVisible;
+
 	private JTextField companyField;
 	private JTextField nameField;
 	private JTextField addressField;
@@ -85,13 +84,15 @@ public class BusinessUnitUI extends JPanel {
 	private final Action newAction = new NewAction();
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = BusinessUnitUI.OK_ACTION_UNDEFINED;
-
+	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
 
 	public BusinessUnitUI(CurrentSession session) {
 
 		this.session = session;
 		setLayout(null);
-		panelVisible = true;
 		
 		JTextPane bUnitTxt = new JTextPane();
 		bUnitTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -423,21 +424,9 @@ public class BusinessUnitUI extends JPanel {
 		}
 		add(newButton);
 		
-		/*Iniciamos la comprobación periódica de actualizaciones
-		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
-		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
-		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
-		* por error que no había cambios.
-		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
-		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
-		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
-		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
-		* o más lenta que la comprobación de los datos que hace el objeto session.
-		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		timer.scheduleAtFixedRate(task, 5000, session.getPeriod());
 	}
 	
 	/**
@@ -516,7 +505,7 @@ public class BusinessUnitUI extends JPanel {
 	}
 	
 	/**
-	 * Obtiene la lista de centro de trabajo cargadas en el objeto company. Serán todos los que
+	 * Obtiene la lista de centro de trabajo cargadas en el objeto Company. Serán todos los que
 	 * existan en la base de datos si el usuario que abre sesión es de tipo administrador, y solo uno
 	 * (la correspondiente al usuario que abre sesión) si es un usuario de otro tipo
 	 * @param active true si se muestran solo los centros de trabajo activas, false para mostrarlas todas
@@ -640,7 +629,7 @@ public class BusinessUnitUI extends JPanel {
 	
 	/**
 	 * Listener que define el comportamiento del objeto comboBox. Cada elemento se corresponde con
-	 * los centros de trabajo de la compañía que se han cargado en la sesión. Por el nombre seleccionado
+	 * los centros de trabajo de la empresa que se han cargado en la sesión. Por el nombre seleccionado
 	 * se localiza el objeto BusinessUnit al que pertenece y se asigna dicho objeto como centro de trabajo
 	 * de la sessión, reemplazando al que hubiera hasta ese momento. Si activeFilterCheckBox está seleccionado,
 	 * no se mostrarán ls centros de trabajo que estén marcadas como no activas
@@ -797,7 +786,7 @@ public class BusinessUnitUI extends JPanel {
 	/**
 	 * Acción del botón Aceptar. Se deshabilita el propio botón y el botón Cancelar. Se habilitan los
 	 * botones Editar y Nueva. Se intentan guardar los datos del centro de trabajo actualizados en la base
-	 * de datos, o bien los datos de un nuev centro de trabajo. Si se consigue, se actualiza el objeto businessUnit
+	 * de datos, o bien los datos de un nuevo centro de trabajo. Si se consigue, se actualiza el objeto businessUnit
 	 * con dichos datos o se crea uno nuevo. Si no se consigue, no se produce la actualización o la creación
 	 * del objeto businessUnit y se muestra un mensaje de error. Se intenta guardar el registro
 	 * de la actualización de datos en la base de datos. Si no se consigue se muestra un mensaje de error.
@@ -807,7 +796,7 @@ public class BusinessUnitUI extends JPanel {
 			putValue(NAME, "Aceptar");
 			putValue(SHORT_DESCRIPTION, "Execute new data or data edit");
 		}
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			for (JTextField tField : textFieldList) {
@@ -818,158 +807,108 @@ public class BusinessUnitUI extends JPanel {
 			
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de un nuevo centro de trabajo
-			if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
-				//Debug
-				System.out.println("Acción de grabar un nuevo centro de trabajo");
+			try {
+				selfUpdate = true;
+				
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				//Aceptamos la creación de un nuevo centro de trabajo
+				if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
+					//Debug
+					System.out.println("Acción de grabar un nuevo centro de trabajo");
 
-				//Creamos nuevo BusinessUnit a partir de los datos del formulario
-				BusinessUnit newBunit = new BusinessUnit();
-				newBunit.setCompany(session.getCompany());
-				newBunit.setNombre(nameField.getText());
-				newBunit.setDireccion(addressField.getText());
-				newBunit.setProvincia(provinceField.getText());
-				newBunit.setEstado(stateField.getText());
-				newBunit.setCpostal(postalCodeField.getText());
-				newBunit.setTelefono(telephoneField.getText());
-				newBunit.setMail(mailField.getText());
-				newBunit.setActivo(activeCheckBox.isSelected());
-				//Validamos los datos del formulario
-				if(testData(newBunit)) {
-					//Intentamos grabar el nuevo centro de trabajo en la base de datos, retornando un objeto con idénticos
-					//datos que incluye también el id que le ha asignado dicha base de datos
-					BusinessUnit storedBunit = new BusinessUnit().addNewBusinessUnit(session.getConnection(), newBunit);
-					//Si el centro de trabajo se almacena correctamente en la base de datos
-					if (storedBunit != null) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						PersistenceManager.registerTableModification(infoLabel, "NUEVO CENTRO DE TRABAJO REGISTRADO: ", session.getConnection(), tNow,
-								BusinessUnit.TABLE_NAME);
-						//Añadimos el nuevo centro de trabajo a la lista de centros de trabajo de la compañía
-						session.getCompany().getBusinessUnits().add(storedBunit);
-						
-						//Si el filtro de centros de trabajo está activo y el nuevo centro de trabajo se crea como no activa, no puede asignarse
-						//como centro de trabajo de la sesión y por tanto tampoco puede visualizarse al aceptar su creación
-						if (activeFilterCheckBox.isSelected() && storedBunit.isActivo() == false) {
-							//Recuperamos la bUnit del usuario que abre sesión
-							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-							//La asignamos como bUnit de la sesión
-							session.setbUnit(userBunit);
-							//Mostramos sus datos
-							populateTextFields();
-							//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
-							comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+					//Creamos nuevo BusinessUnit a partir de los datos del formulario
+					BusinessUnit newBunit = new BusinessUnit();
+					newBunit.setCompany(session.getCompany());
+					newBunit.setNombre(nameField.getText());
+					newBunit.setDireccion(addressField.getText());
+					newBunit.setProvincia(provinceField.getText());
+					newBunit.setEstado(stateField.getText());
+					newBunit.setCpostal(postalCodeField.getText());
+					newBunit.setTelefono(telephoneField.getText());
+					newBunit.setMail(mailField.getText());
+					newBunit.setActivo(activeCheckBox.isSelected());
+					//Validamos los datos del formulario
+					if(testData(newBunit)) {
+						//Intentamos grabar el nuevo centro de trabajo en la base de datos, retornando un objeto con idénticos
+						//datos que incluye también el id que le ha asignado dicha base de datos
+						BusinessUnit storedBunit = new BusinessUnit().addNewBusinessUnit(session.getConnection(), newBunit);
+						//Si el centro de trabajo se almacena correctamente en la base de datos
+						if (storedBunit != null) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+							PersistenceManager.registerTableModification(infoLabel, "NUEVO CENTRO DE TRABAJO REGISTRADO: ", session.getConnection(), tNow,
+									BusinessUnit.TABLE_NAME);
+							//Añadimos el nuevo centro de trabajo a la lista de centros de trabajo de la compañía
+							session.getCompany().getBusinessUnits().add(storedBunit);
 							
-						//Si el filtro de centros de trabajo no está activo, el nuevo centro de trabajo pasa a ser el centro de trabajo de la sesión,
-						//tanto si se crea como activa como si no
+							//Si el filtro de centros de trabajo está activo y el nuevo centro de trabajo se crea como no activo, no puede asignarse
+							//como centro de trabajo de la sesión y por tanto tampoco puede visualizarse al aceptar su creación
+							if (activeFilterCheckBox.isSelected() && storedBunit.isActivo() == false) {
+								//Recuperamos la bUnit del usuario que abre sesión
+								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+								//La asignamos como bUnit de la sesión
+								session.setbUnit(userBunit);
+								//Mostramos sus datos
+								populateTextFields();
+								//Seleccionamos la bUnit de la sesión en el combobox. No hace falta actualizar los elementos del combobox
+								comboBox.setSelectedIndex(getSelectedIndexFromArray(comboList));
+								
+							//Si el filtro de centros de trabajo no está activo, el nuevo centro de trabajo pasa a ser el centro de trabajo de la sesión,
+							//tanto si se crea como activa como si no
+							} else {
+								//Asignamos el nuevo centro de trabajo como centro de trabajo de la sesión
+								session.setbUnit(storedBunit);
+								//Renovamos la lista de los centros de trabajo del comboBox
+								refreshComboBox();
+							}
+							
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditBunit();
+					
+						//Si el centro de trabajo no se almacena correctamente en la base de datos 
 						} else {
-							//Asignamos el nuevo centro de trabajo como unidad de negocio de la sesión
-							session.setbUnit(storedBunit);
-							//Renovamos la lista de los centros de trabajo del comboBox
-							refreshComboBox();
+							infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO CENTRO DE TRABAJO EN LA BASE DE DATOS");
 						}
-						
-						//Devolvemos el formulario a su estado previo
-						afterNewOrEditBunit();
-				
-					//Si el centro de trabajo no se almacena correctamente en la base de datos 
-					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO CENTRO DE TRABAJO EN LA BASE DE DATOS");
 					}
-				}
-				
-			//Aceptamos los cambios del centro de trabajo editada	
-			} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
+					
+				//Aceptamos los cambios del centro de trabajo editado	
+				} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 
-				//Debug
-				System.out.println("Guardando los cambios del centro de trabajo " + nameField.getText());
-				
-				//Objeto que recoge los datos actualizados
-				BusinessUnit updatedBunit = new BusinessUnit();
-				updatedBunit.setId(session.getbUnit().getId());
-				updatedBunit.setCompany(session.getCompany());
-				updatedBunit.setNombre(nameField.getText());
-				updatedBunit.setDireccion(addressField.getText());
-				updatedBunit.setProvincia(provinceField.getText());
-				updatedBunit.setEstado(stateField.getText());
-				updatedBunit.setCpostal(postalCodeField.getText());
-				updatedBunit.setTelefono(telephoneField.getText());
-				updatedBunit.setMail(mailField.getText());
-				updatedBunit.setActivo(activeCheckBox.isSelected());
-				
-				//Si los datos están validados
-				if (testData(updatedBunit)) {
-					//Si los datos actualizados se graban en la base de datos
-					if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = ToolBox.getTimestampNow();
-						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
-						boolean UserChangeRegister = true;
-						//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
-						boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-								BusinessUnit.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DEL CENTRO DE TRABAJO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-						//Variable de control para saber si la sesión sigue activa tras la edición de un centro de trabajo
-						boolean stillOpenSession = true;
-						//Si el usuario que abre sesión deja activa el centro de trabajo editada, se actualizan los datos de la sesión
-						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos
-						//Importante: Si el centro de trabajo editada pasa de inactivo a activo, sus usuarios (previamente desactivados también)
-						//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
-						if (updatedBunit.isActivo()) {
-							
-							//Debug
-							System.out.println("Opción EDIT 1");
-							System.out.println("lastActive: " + lastActive);
-							
-							session.getbUnit().setCompany(updatedBunit.getCompany());
-							session.getbUnit().setNombre(updatedBunit.getNombre());
-							session.getbUnit().setDireccion(updatedBunit.getDireccion());
-							session.getbUnit().setProvincia(updatedBunit.getProvincia());
-							session.getbUnit().setEstado(updatedBunit.getEstado());
-							session.getbUnit().setCpostal(updatedBunit.getCpostal());
-							session.getbUnit().setTelefono(updatedBunit.getTelefono());
-							session.getbUnit().setMail(updatedBunit.getMail());
-							session.getbUnit().setActivo(updatedBunit.isActivo());
-
-							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-							//no queda registrada
-							if(!bUnitChangeRegister) {
-								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
-							}
-							//Si el centrosde trabajo se marca como activo viniendo de un estado inactivo, anunciamos que sus usuarios no han 
-							//cambiado de estado
-							if (!lastActive) {
-								infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-							}
-							//Renovamos la lista de los centros de trabajo del comboBox
-							refreshComboBox();	
-							
-						//Si el usuario que abre sesión deja inactiva un centro de trabajo que no es la suya
-						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo, pero se gestiona de
-						//manera diferente en cada caso
-						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
-							
-							//Debug
-							System.out.println("Opción EDIT 2");
-							System.out.println("lastActive: " + lastActive);
-							
-							List<User> updatedUserList = null;
-							//Si la unidad de negocio estaba activa antes de editarla
-							if (lastActive) {
-								
-								//Debug
-								System.out.println("Marcando usuarios inactivos");
-								
-								//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
-								updatedUserList = new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
-								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
-								UserChangeRegister = PersistenceManager.updateTimeStampToDB(
-										session.getConnection(), User.TABLE_NAME, tNow);
-							}
-							//Si el filtro de centros de trabajo no está activo, se actualizan los datos de la sesión
-							if (!activeFilterCheckBox.isSelected()) {
-								
-								//Debug
-								System.out.println("Opción EDIT 2 - filtro no activo");
+					//Debug
+					System.out.println("Guardando los cambios del centro de trabajo " + nameField.getText());
+					
+					//Objeto que recoge los datos actualizados
+					BusinessUnit updatedBunit = new BusinessUnit();
+					updatedBunit.setId(session.getbUnit().getId());
+					updatedBunit.setCompany(session.getCompany());
+					updatedBunit.setNombre(nameField.getText());
+					updatedBunit.setDireccion(addressField.getText());
+					updatedBunit.setProvincia(provinceField.getText());
+					updatedBunit.setEstado(stateField.getText());
+					updatedBunit.setCpostal(postalCodeField.getText());
+					updatedBunit.setTelefono(telephoneField.getText());
+					updatedBunit.setMail(mailField.getText());
+					updatedBunit.setActivo(activeCheckBox.isSelected());
+					
+					//Si los datos están validados
+					if (testData(updatedBunit)) {
+						//Si los datos actualizados se graban en la base de datos
+						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+							tNow = ToolBox.getTimestampNow();
+							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
+							boolean UserChangeRegister = true;
+							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+							boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									BusinessUnit.TABLE_NAME, tNow);
+							infoLabel.setText("DATOS DEL CENTRO DE TRABAJO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+							//Variable de control para saber si la sesión sigue activa tras la edición de un centro de trabajo
+							boolean stillOpenSession = true;
+							//Si el usuario que abre sesión deja activa el centro de trabajo editada, se actualizan los datos de la sesión
+							//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos
+							//Importante: Si el centro de trabajo editado pasa de inactivo a activo, sus usuarios (previamente desactivados también)
+							//no vuelven automáticamente al estado activo. Hay que reactivarlos en la pantalla de gestión de usuarios
+							if (updatedBunit.isActivo()) {
 								
 								session.getbUnit().setCompany(updatedBunit.getCompany());
 								session.getbUnit().setNombre(updatedBunit.getNombre());
@@ -980,113 +919,156 @@ public class BusinessUnitUI extends JPanel {
 								session.getbUnit().setTelefono(updatedBunit.getTelefono());
 								session.getbUnit().setMail(updatedBunit.getMail());
 								session.getbUnit().setActivo(updatedBunit.isActivo());
-								
-								//Debug
-								if (updatedUserList != null) {
-									//System.out.println("updatedUserList != null: " + updatedUserList != null);
-									System.out.println("updatedUserList.size(): " + updatedUserList.size());
-								}
-								
-								//Si se ha actualizado la lista de usuarios del centro de trabajo editado
-								if (updatedUserList != null && updatedUserList.size() > 0) {
-									
-									//Debug
-									System.out.println("Anunciando usuarios inactivos");
-									
-									//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
-									session.getbUnit().setUsers(updatedUserList);
-									infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
-								//Si no se ha actualizado la lista de usuarios del centro de trabajo editado
-								} else {
-									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
-								}							
-								
+
 								//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
-								//o de la tabla user no queda registrada
-								if (!bUnitChangeRegister || !UserChangeRegister) {
-									infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
+								//no queda registrada
+								if(!bUnitChangeRegister) {
+									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
 								}
-								//Renovamos la lista de las unidades de negocio del comboBox
-								refreshComboBox();
-
-							//Si el filtro de centros de trabajo está activo y el centro de trabajo editado queda inactiv, no puede seguir siendo
-							//el centro de trabajo de la sesión y por tanto tampoco puede visualizarse
-							} else {
-								
-								//Debug
-								System.out.println("Opción EDIT 2 - filtro activo");
-								
-								//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
-								//Se podrían aplicar los cambios al centro de trabajo de la sesión porque aún no la hemos cambiado, pero de esta
-								//manera evitamos ambigüedades
-								BusinessUnit targetBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getbUnit().getId());
-								targetBunit.setCompany(updatedBunit.getCompany());
-								targetBunit.setNombre(updatedBunit.getNombre());
-								targetBunit.setDireccion(updatedBunit.getDireccion());
-								targetBunit.setProvincia(updatedBunit.getProvincia());
-								targetBunit.setEstado(updatedBunit.getEstado());
-								targetBunit.setCpostal(updatedBunit.getCpostal());
-								targetBunit.setTelefono(updatedBunit.getTelefono());
-								targetBunit.setMail(updatedBunit.getMail());
-								targetBunit.setActivo(updatedBunit.isActivo());
-								//Sobreescribimos la notificación de la actualización del centro de trabajo editado a citando su nombre porque ya no
-								//se visualizará por pantalla
-								infoLabel.setText("DATOS DEL CENTRO DE TRABAJO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
-										ToolBox.formatTimestamp(tNow, null));
-								//Si se ha actualizado la lista de usuarios del centro de trabajo editada
-								if (updatedUserList != null && updatedUserList.size() > 0) {
-									//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
-									targetBunit.setUsers(updatedUserList);
-									infoLabel.setText(infoLabel.getText() +	" . USUARIOS INACTIVOS");
-								} else {
+								//Si el centrosde trabajo se marca como activo viniendo de un estado inactivo, anunciamos que sus usuarios no han 
+								//cambiado de estado
+								if (!lastActive) {
 									infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
 								}
-								//Recuperamos la bUnit del usuario que abre sesión
-								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-								//La asignamos como bUnit de la sesión
-								session.setbUnit(userBunit);
-								//Mostramos sus datos
-								populateTextFields();
 								//Renovamos la lista de los centros de trabajo del comboBox
-								refreshComboBox();						
-							}
-							//Los usuarios ya han sido actualizados
-							session.setUsersUpdated(true);
-							
-						//Si el usuario que abre sesión deja inactiva su propio centro de trabajo
-						//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos 
-						} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
-							
-							System.out.println("Opción EDIT 3");
-							System.out.println("lastActive: " + lastActive);
-											
-							//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
-							new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
-							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
-							PersistenceManager.updateTimeStampToDB(session.getConnection(),
-									User.TABLE_NAME, tNow);
-							//Se cerrará la sesión
-							stillOpenSession = false;
-							//Usuarios de la sesión actualizados
-							session.setUsersUpdated(true);
-							
-							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
-								session.setUsersUpdated(true);
-								session.backToLogin(BusinessUnit.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
-						}
+								refreshComboBox();	
 								
-						//Si la sesión sigue abierta
-						if (stillOpenSession) {
-							//Devolvemos el formulario a su estado previo
-							afterNewOrEditBunit();
-						}
+							//Si el usuario que abre sesión deja inactiva un centro de trabajo que no es la suya
+							//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo, pero se gestiona de
+							//manera diferente en cada caso
+							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() != updatedBunit.getId()) {
+								
+								List<User> updatedUserList = null;
+								//Si la unidad de negocio estaba activa antes de editarla
+								if (lastActive) {
 
-					//Si los datos actualizados no se graban en la base de datos
-					} else {
-						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+//									System.out.println("Marcando usuarios inactivos");
+									
+									//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
+									updatedUserList = new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
+									//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+									UserChangeRegister = PersistenceManager.updateTimeStampToDB(
+											session.getConnection(), User.TABLE_NAME, tNow);
+								}
+								//Si el filtro de centros de trabajo no está activo, se actualizan los datos de la sesión
+								if (!activeFilterCheckBox.isSelected()) {
+									
+									session.getbUnit().setCompany(updatedBunit.getCompany());
+									session.getbUnit().setNombre(updatedBunit.getNombre());
+									session.getbUnit().setDireccion(updatedBunit.getDireccion());
+									session.getbUnit().setProvincia(updatedBunit.getProvincia());
+									session.getbUnit().setEstado(updatedBunit.getEstado());
+									session.getbUnit().setCpostal(updatedBunit.getCpostal());
+									session.getbUnit().setTelefono(updatedBunit.getTelefono());
+									session.getbUnit().setMail(updatedBunit.getMail());
+									session.getbUnit().setActivo(updatedBunit.isActivo());
+
+//									if (updatedUserList != null) {
+//										System.out.println("updatedUserList.size(): " + updatedUserList.size());
+//									}
+									
+									//Si se ha actualizado la lista de usuarios del centro de trabajo editado
+									if (updatedUserList != null && updatedUserList.size() > 0) {
+										
+//										System.out.println("Anunciando usuarios inactivos");
+										
+										//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
+										session.getbUnit().setUsers(updatedUserList);
+										infoLabel.setText(infoLabel.getText() + " . USUARIOS INACTIVOS");
+									//Si no se ha actualizado la lista de usuarios del centro de trabajo editado
+									} else {
+										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+									}							
+									
+									//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla business_unit
+									//o de la tabla user no queda registrada
+									if (!bUnitChangeRegister || !UserChangeRegister) {
+										infoLabel.setText(infoLabel.getText() + "ERROR DE REGISTRO DE ACTUALIZACIÓN");
+									}
+									//Renovamos la lista de las unidades de negocio del comboBox
+									refreshComboBox();
+
+								//Si el filtro de centros de trabajo está activo y el centro de trabajo editado queda inactiv, no puede seguir siendo
+								//el centro de trabajo de la sesión y por tanto tampoco puede visualizarse
+								} else {
+									
+									//Recuperamos la bUnit editada de la lista de bUnits y le aplicamos los cambios
+									//Se podrían aplicar los cambios al centro de trabajo de la sesión porque aún no la hemos cambiado, pero de esta
+									//manera evitamos ambigüedades
+									BusinessUnit targetBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getbUnit().getId());
+									targetBunit.setCompany(updatedBunit.getCompany());
+									targetBunit.setNombre(updatedBunit.getNombre());
+									targetBunit.setDireccion(updatedBunit.getDireccion());
+									targetBunit.setProvincia(updatedBunit.getProvincia());
+									targetBunit.setEstado(updatedBunit.getEstado());
+									targetBunit.setCpostal(updatedBunit.getCpostal());
+									targetBunit.setTelefono(updatedBunit.getTelefono());
+									targetBunit.setMail(updatedBunit.getMail());
+									targetBunit.setActivo(updatedBunit.isActivo());
+									//Sobreescribimos la notificación de la actualización del centro de trabajo editado a citando su nombre porque ya no
+									//se visualizará por pantalla
+									infoLabel.setText("DATOS DEL CENTRO DE TRABAJO " + targetBunit.getNombre() + " ACTUALIZADOS: " + 
+											ToolBox.formatTimestamp(tNow, null));
+									//Si se ha actualizado la lista de usuarios del centro de trabajo editada
+									if (updatedUserList != null && updatedUserList.size() > 0) {
+										//Recargar los usuarios pasados a inactivos en el centro de trabajo editado
+										targetBunit.setUsers(updatedUserList);
+										infoLabel.setText(infoLabel.getText() +	" . USUARIOS INACTIVOS");
+									} else {
+										infoLabel.setText(infoLabel.getText() + " . EL ESTADO DE LOS USUARIOS NO HA CAMBIADO");
+									}
+									//Recuperamos la bUnit del usuario que abre sesión
+									BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
+									//La asignamos como bUnit de la sesión
+									session.setbUnit(userBunit);
+									//Mostramos sus datos
+									populateTextFields();
+									//Renovamos la lista de los centros de trabajo del comboBox
+									refreshComboBox();						
+								}
+								//Los usuarios ya han sido actualizados
+								session.setUsersUpdated(true);
+								
+							//Si el usuario que abre sesión deja inactiva su propio centro de trabajo
+							//Esta opción puede darse con el filtro de centros de trabajo activo o inactivo y se gestiona igual en ambos casos 
+							} else if (!updatedBunit.isActivo() && session.getUser().getbUnit().getId() == updatedBunit.getId()) {
+												
+								//Pasar a inactivos todos los usuarios del centro de trabajo en la base de datos
+								new User().setNoActiveUsersToDB(session.getConnection(), updatedBunit);
+								//Actualizamos los datos de la tabla last_modification por el cambio en la tabla user
+								PersistenceManager.updateTimeStampToDB(session.getConnection(),
+										User.TABLE_NAME, tNow);
+								//Se cerrará la sesión
+								stillOpenSession = false;
+								//Usuarios de la sesión actualizados
+								session.setUsersUpdated(true);
+								
+								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque también ha sido desactivado
+									session.setUsersUpdated(true);
+									session.backToLogin(BusinessUnit.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
+							}
+									
+							//Si la sesión sigue abierta
+							if (stillOpenSession) {
+								//Devolvemos el formulario a su estado previo
+								afterNewOrEditBunit();
+							}
+
+						//Si los datos actualizados no se graban en la base de datos
+						} else {
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+						}
 					}
 				}
-			}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfUpdate = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+			}	
 		}
 	}
 	
@@ -1101,25 +1083,45 @@ public class BusinessUnitUI extends JPanel {
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!BusinessUnitUI.this.isShowing()) {
-				BusinessUnitUI.this.panelVisible = false;
 				this.cancel();
 				BusinessUnitUI.this.timer.cancel();
-				 System.out.println("Se ha cerrado la ventana Unidad de negocio");
+				 System.out.println("Se ha cerrado la ventana Centros de Trabajo");
 			}
+			
+			if (session.isLocked()) {
+				try {
+					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfUpdate) {
+				try {
+					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && BusinessUnitUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-			} else if (BusinessUnitUI.this.panelVisible == true){
+//			} else if (BusinessUnitUI.this.panelVisible == true){
+			} else if (BusinessUnitUI.this.isShowing()){
 
-				//Debug
-				System.out.println("Comprobando actualización de datos de la unidad de negocio");
+				System.out.println("Comprobando actualización de datos del centro de trabajo");
 				System.out.println(session.getUpdatedTables().size());
 				
 				//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					
-					//Debug
+
 					System.out.println(updatedTable.getKey());
 					System.out.println(updatedTable.getValue());
 					
@@ -1129,7 +1131,6 @@ public class BusinessUnitUI extends JPanel {
 						//de trabajo de la sesión pasa a ser el del usuario que abrió sesión, y será el que se visualize
 						if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
 							
-							//Debug
 							System.out.println("Actualizando pantalla cambiando la bUnit de la sesión");
 							System.out.println("La bUnit de la sesión era " + session.getbUnit().getNombre());
 							
@@ -1138,10 +1139,7 @@ public class BusinessUnitUI extends JPanel {
 							//La asignamos como bUnit de la sesión
 							session.setbUnit(userBunit);
 							
-							//Debug
 							System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
-							
-							session.getbUnit();
 
 							//Renovamos la lista de los centros de trabajo del comboBox
 							refreshComboBox();
@@ -1149,9 +1147,9 @@ public class BusinessUnitUI extends JPanel {
 							populateTextFields();
 							//Hacemos backup del contenido de los datos del formulario
 							updateDataCache();
+							
 						} else {
 							
-							//Debug
 							System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
 							
 							//Renovamos la lista de los centros de trabajo del comboBox

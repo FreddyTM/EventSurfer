@@ -133,8 +133,8 @@ public class EventEditUI extends JPanel{
 	//de las fechas del formulario
 	private boolean dateTimeOk = true;
 	
-	//Previene la actualización de datos realizada por TimerJob si es la propia instancia del programa
-	//la que ha grabado datos nuevos en la base de datos
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
 	private volatile boolean selfUpdate = false;
 
 	//Referencia a la clase que muestra la información de las incidencias
