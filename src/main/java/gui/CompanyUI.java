@@ -25,6 +25,10 @@ import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import javax.swing.Action;
 
+/**
+ * Muestra la pantalla de edición de datos de la empresa
+ * @author Alfred Tomey
+ */
 public class CompanyUI extends JPanel {
 
 	private CurrentSession session;
