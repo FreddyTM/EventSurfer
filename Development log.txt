@@ -2760,7 +2760,7 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· EventTypeUI class:
 		Add attributes
-			selfUpdate
+			selfUpdate, selfDelete 
 		Delete attributes
 			panel Visible
 		Clean code
@@ -2773,6 +2773,7 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· DeleteAction class (EventTypeUI inner class):
 		Update actionPerformed() --fix timerjob not updating eventtype info after first eventtype deleted--
+					 --set selfDelete to true before deleting data, set to false after deleting & notify()--
 
 	· TimerJob class (EventTypeUI inner class):
 		Update run() --waits for session & selfupdate locks--
@@ -2782,9 +2783,14 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Complete javadoc
 
 	· EventDataUI class:
+		Add attributes
+			selfDelete 
 		Update delete() --set selfDelete to true before deleting data, set to false after deleting & notify()-
 		Clean code
 		Complete javadoc
+
+	· DeleteAction class (EventDataUI inner class):
+		Update actionPerformed() --fix timerjob not updating events/updates info after first event/update deleted--
 
 	· TimerJob class (EventDataUI inner class):
 		Update run() --waits for selfdelete lock--

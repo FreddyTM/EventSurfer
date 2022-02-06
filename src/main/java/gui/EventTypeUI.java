@@ -97,6 +97,9 @@ public class EventTypeUI extends JPanel {
 	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
 	//del programa la que ha grabado datos nuevos en la base de datos
 	private volatile boolean selfUpdate = false;
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha borrado datos de la base de datos
+	private volatile boolean selfDelete = false;
 	
 	public EventTypeUI(CurrentSession session) {
 		this.session = session;
@@ -599,7 +602,7 @@ public class EventTypeUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Delete data");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			
 			//Usamos okActionSelector para filtrar el comportamiento del RegisteredListener
 			okActionSelector = EventTypeUI.OK_ACTION_EDIT;
@@ -627,30 +630,44 @@ public class EventTypeUI extends JPanel {
 			//Si el borrado se autoriza, se borra el tipo de incidencia seleccionado de la base de datos
 			if (deleteOK) {
 				
-				tNow = ToolBox.getTimestampNow();
-				
-				//Si el tipo de incidencia se borra correctamente de la base de datos
-				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
-					//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-					PersistenceManager.registerTableModification(infoLabel, "TIPO DE EVENTO BORRADO:", session.getConnection(), tNow,
-							EventType.TABLE_NAME);					
-				//Si el tipo de incidencia no se almacena correctamente en la base de datos	
-				} else {
-					infoLabel.setText("ERROR DE BORRADO DEL TIPO DE EVENTO EN LA BASE DE DATOS");
-				}
-				
-				//Eliminamos el tipo de incidencia seleccionado de la lista de tipos de incidencia
-				TypesStatesContainer.getEvType().getEventTypes().remove(id);
-				//Refrescamos la lista de tipos de incidencia
-				refreshList();
-				//Designamos el primer elemento de la lista como tipo de incidencia seleccionado
-				itemSelectedIndex = 0;
-				registeredList.setSelectedIndex(itemSelectedIndex);
-				//Mostramos en pantalla y designamos como tipo de incidencia seleccionado el primer elemento de la lista
-				eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
-				selectedEventType = eventTypeNameField.getText();
-				//Devolvemos el formulario a su estado previo
-				afterNewOrEditData();
+				try {
+					selfDelete = true;
+					
+					System.out.println("Borrado de datos propios iniciado, actualizaciones suspendidas................");
+					
+					tNow = ToolBox.getTimestampNow();
+					
+					//Si el tipo de incidencia se borra correctamente de la base de datos
+					if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
+						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
+						PersistenceManager.registerTableModification(infoLabel, "TIPO DE EVENTO BORRADO:", session.getConnection(), tNow,
+								EventType.TABLE_NAME);					
+					//Si el tipo de incidencia no se almacena correctamente en la base de datos	
+					} else {
+						infoLabel.setText("ERROR DE BORRADO DEL TIPO DE EVENTO EN LA BASE DE DATOS");
+					}
+					
+					//Eliminamos el tipo de incidencia seleccionado de la lista de tipos de incidencia
+					TypesStatesContainer.getEvType().getEventTypes().remove(id);
+					//Refrescamos la lista de tipos de incidencia
+					refreshList();
+					//Designamos el primer elemento de la lista como tipo de incidencia seleccionado
+					itemSelectedIndex = 0;
+					registeredList.setSelectedIndex(itemSelectedIndex);
+					//Mostramos en pantalla y designamos como tipo de incidencia seleccionado el primer elemento de la lista
+					eventTypeNameField.setText(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? null : registeredEventTypes[0]);
+					selectedEventType = eventTypeNameField.getText();
+					//Devolvemos el formulario a su estado previo
+					afterNewOrEditData();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally {
+					selfDelete = false;
+					notifyAll();
+					
+					System.out.println("Borrado de datos propios finalizada, actualizaciones permitidas................");
+				}	
 			}
 		}
 	}
@@ -779,6 +796,16 @@ public class EventTypeUI extends JPanel {
 			if (selfUpdate) {
 				try {
 					System.out.println("EventTypeUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfDelete) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
 					wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

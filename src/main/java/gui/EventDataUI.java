@@ -1045,6 +1045,8 @@ public class EventDataUI extends JPanel{
 				
 				System.out.println("Borrado de datos propios iniciado, actualizaciones suspendidas................");
 				
+				tNow = ToolBox.getTimestampNow();
+				
 				switch (action) {
 					case EVENTDATA_ACTION_DELETE_EVENT:
 						//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
