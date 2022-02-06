@@ -22,9 +22,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+/**
+ * Muestra la pantalla de login. Se encarga de comprobar las credenciales del usuario
+ * que quiere acceder al programa. 
+ * @author Alfred Tomey
+ */
 public class Login extends JPanel {
 
-	
 	private Connection conn;
 	private CurrentSession session;
 	private AppWindow frame;
@@ -83,7 +87,6 @@ public class Login extends JPanel {
 		});
 		add(userField);
 		
-		//Declaramos aquí el botón para que pueda obtener el foco de passwordField
 		JButton acceptButton = new JButton("Aceptar");
 		
 		passwordField = new JPasswordField();
@@ -134,9 +137,16 @@ public class Login extends JPanel {
 		acceptButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		acceptButton.setBounds(460, 350, 100, 25);
 		add(acceptButton);
-
 	}
 	
+	/**
+	 * Comprueba las credenciales introducidas por el usuario en la pantalla de login
+	 * @param conn conexión con la base de datos
+	 * @param alias alias del usuario
+	 * @param password contraseña del usuario
+	 * @param label Jlabel que mostrará un mensaje de error si el login falla
+	 * @return true si el alias y la contraseña son correctas, false en caso contrario
+	 */
 	public boolean userLogin(Connection conn, String alias, String password, JLabel label) {
 		int userId = 0;
 		int bUnitId = 0;
@@ -189,9 +199,7 @@ public class Login extends JPanel {
 				break;
 			default: //Otros tipos de usuario no contemplados todavía
 				//Do nothing
-		}
-//		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + alias;
-//		frame.setTitle(title);	
+		}	
 		frame.setFullTitle(alias);
 		return true;
 	}
