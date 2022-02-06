@@ -1112,7 +1112,6 @@ public class BusinessUnitUI extends JPanel {
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && BusinessUnitUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-//			} else if (BusinessUnitUI.this.panelVisible == true){
 			} else if (BusinessUnitUI.this.isShowing()){
 
 				System.out.println("Comprobando actualización de datos del centro de trabajo");

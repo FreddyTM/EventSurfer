@@ -35,8 +35,7 @@ public class CompanyUI extends JPanel {
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Registra si el panel está visible o no
-	private boolean panelVisible;
+
 	private JTextField nameField;
 	private JTextField addressField;
 	private JTextField provinceField;
@@ -49,6 +48,7 @@ public class CompanyUI extends JPanel {
 	private JButton cancelButton;
 	private JButton oKButton;
 	private JLabel infoLabel;
+	
 	//Lista de etiquetas informativas de longitud máxima de datos
 	private List<JLabel> labelList = new ArrayList<JLabel>();
 	//Lista de campos de datos asociados a las etiquetas informativas
@@ -60,11 +60,13 @@ public class CompanyUI extends JPanel {
 	private final Action cancelAction = new CancelAction();
 	private final Action oKAction = new OKAction();
 	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
 
 	public CompanyUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
-		panelVisible = true;
 		
 		JTextPane companyTxt = new JTextPane();
 		companyTxt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -340,22 +342,9 @@ public class CompanyUI extends JPanel {
 		}
 		add(editButton);
 		
-		/*Iniciamos la comprobación periódica de actualizaciones
-		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
-		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
-		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
-		* por error que no había cambios.
-		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
-		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
-		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva actualización, y el panel
-		* nunca podrá reflejar los cambios. Esto pasaría si la actualización del panel se hace al mismo ritmo
-		* o más lenta que la comprobación de los datos que hace el objeto session.
-		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
-
+		timer.scheduleAtFixedRate(task, 5000, session.getPeriod());
 	}
 	
 	/**
@@ -494,65 +483,80 @@ public class CompanyUI extends JPanel {
 			putValue(NAME, "Aceptar");
 			putValue(SHORT_DESCRIPTION, "Execute data edit");
 		}
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			for (JTextField tField : textFieldList) {
 				tField.setBackground(Color.WHITE);
-			}			
-			//Objeto que recoge los datos actualizados
-			Company updatedCompany = new Company();
-			updatedCompany.setId(1);
-			updatedCompany.setNombre(nameField.getText());
-			updatedCompany.setDireccion(addressField.getText());
-			updatedCompany.setProvincia(provinceField.getText());
-			updatedCompany.setEstado(stateField.getText());
-			updatedCompany.setCpostal(postalCodeField.getText());
-			updatedCompany.setTelefono(telephoneField.getText());
-			updatedCompany.setMail(mailField.getText());
-			updatedCompany.setWeb(webField.getText());
-			//Si los datos están validados
-			if (testData(updatedCompany)) {
-				//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
-				if (new Company().updateCompanyToDB(session.getConnection(), updatedCompany)) {
-					session.getCompany().setNombre(updatedCompany.getNombre());
-					session.getCompany().setDireccion(updatedCompany.getDireccion());
-					session.getCompany().setProvincia(updatedCompany.getProvincia());
-					session.getCompany().setEstado(updatedCompany.getEstado());
-					session.getCompany().setCpostal(updatedCompany.getCpostal());
-					session.getCompany().setTelefono(updatedCompany.getTelefono());
-					session.getCompany().setMail(updatedCompany.getMail());
-					session.getCompany().setWeb(updatedCompany.getWeb());
-					//Registramos fecha y hora de la actualización de los datos de la tabla company
-					tNow = ToolBox.getTimestampNow();
-					//Actualizamos los datos de la tabla last_modification
-					boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow);
-					//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla company
-					//no queda registrada
-					if(!changeRegister) {
-						infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
-					} else {
-						infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-					}
-					editButton.setEnabled(true);
-					oKButton.setEnabled(false);
-					cancelButton.setEnabled(false);
-					for (JLabel label : labelList) {
-						label.setVisible(false);
-					}
-					for (JTextField tField : textFieldList) {
-						tField.setEditable(false);
-						tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
-					}
-					textFieldContentList.clear();
-					for (int i = 0; i < textFieldList.size(); i++) {
-						textFieldContentList.add(textFieldList.get(i).getText());
-					}
-				//Error de actualización de los datos en la base de datos
-				} else {
-					infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
-				}
 			}
+			
+			try {
+				selfUpdate = true;
+				
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				//Objeto que recoge los datos actualizados
+				Company updatedCompany = new Company();
+				updatedCompany.setId(1);
+				updatedCompany.setNombre(nameField.getText());
+				updatedCompany.setDireccion(addressField.getText());
+				updatedCompany.setProvincia(provinceField.getText());
+				updatedCompany.setEstado(stateField.getText());
+				updatedCompany.setCpostal(postalCodeField.getText());
+				updatedCompany.setTelefono(telephoneField.getText());
+				updatedCompany.setMail(mailField.getText());
+				updatedCompany.setWeb(webField.getText());
+				//Si los datos están validados
+				if (testData(updatedCompany)) {
+					//Si los datos actualizados se graban en la base de datos, se actualizan los datos de la sesión
+					if (new Company().updateCompanyToDB(session.getConnection(), updatedCompany)) {
+						session.getCompany().setNombre(updatedCompany.getNombre());
+						session.getCompany().setDireccion(updatedCompany.getDireccion());
+						session.getCompany().setProvincia(updatedCompany.getProvincia());
+						session.getCompany().setEstado(updatedCompany.getEstado());
+						session.getCompany().setCpostal(updatedCompany.getCpostal());
+						session.getCompany().setTelefono(updatedCompany.getTelefono());
+						session.getCompany().setMail(updatedCompany.getMail());
+						session.getCompany().setWeb(updatedCompany.getWeb());
+						//Registramos fecha y hora de la actualización de los datos de la tabla company
+						tNow = ToolBox.getTimestampNow();
+						//Actualizamos los datos de la tabla last_modification
+						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), Company.TABLE_NAME, tNow);
+						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla company
+						//no queda registrada
+						if(!changeRegister) {
+							infoLabel.setText("ERROR DE REGISTRO DE ACTUALIZACIÓN DE LA BASE DE DATOS");
+						} else {
+							infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+						}
+						editButton.setEnabled(true);
+						oKButton.setEnabled(false);
+						cancelButton.setEnabled(false);
+						for (JLabel label : labelList) {
+							label.setVisible(false);
+						}
+						for (JTextField tField : textFieldList) {
+							tField.setEditable(false);
+							tField.setBackground(UIManager.getColor(new JPanel().getBackground()));
+						}
+						textFieldContentList.clear();
+						for (int i = 0; i < textFieldList.size(); i++) {
+							textFieldContentList.add(textFieldList.get(i).getText());
+						}
+					//Error de actualización de los datos en la base de datos
+					} else {
+						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+					}
+				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfUpdate = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+			}	
 		}
 	}
 	
@@ -567,16 +571,36 @@ public class CompanyUI extends JPanel {
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!CompanyUI.this.isShowing()) {
-				CompanyUI.this.panelVisible = false;
 				this.cancel();
 				CompanyUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Empresa");
 			}
+			
+			if (session.isLocked()) {
+				try {
+					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfUpdate) {
+				try {
+					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && CompanyUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-			} else if (CompanyUI.this.panelVisible == true){
+			} else if (CompanyUI.this.isShowing()){
 				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					//Si en la tabla de actualizaciones aparece la clave Company.TABLE_NAME
