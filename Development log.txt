@@ -2735,16 +2735,19 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 					 --make actionPerformed() synchronized--
 					 --set selfDelete to true before deleting data, set to false after deleting & notify()--
 					 --fix lists not enabled after deleting--
+					 --fix timerjob not updating areas info after first area deleted--
 
 	· AllocateAction class (AreaUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--
 					 --set selfAllocate to true before allocating, set to false after allocating & notify()--
 					 --fix lists not enabled after new/edit--
+					 --fix timerjob not updating allocated areas after first area allocated--
 
 	· RevokeAction class (AreaUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--
 					 --set selfRevoke to true before revoking, set to false after revoking & notify()--
 					 --fix lists not enabled after new/edit--
+					 --fix timerjob not updating allocated areas after first area allocated--
 
 	· OKAction class (AreaUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--

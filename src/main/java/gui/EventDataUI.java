@@ -161,6 +161,10 @@ public class EventDataUI extends JPanel{
 	
 	//Referencia a la clase que edita la información de las incidencias
 	private EventEditUI eEditUI;
+	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha borrado datos de la base de datos
+	private volatile boolean selfDelete = false;
 
 
 	public EventDataUI(CurrentSession session) {
@@ -1024,7 +1028,7 @@ public class EventDataUI extends JPanel{
 	 * implica el borrado de todas sus actualizaciones.
 	 * @param action determina si se borra una incidencia o una actualización
 	 */
-	private void delete(int action) {
+	private synchronized void delete(int action) {
 		String text = "";
 		if (action == EVENTDATA_ACTION_DELETE_EVENT) {
 			text = "El borrado de incidencias no se puede deshacer. ¿Desea continuar?";
@@ -1036,43 +1040,57 @@ public class EventDataUI extends JPanel{
 		if (optionSelected != JOptionPane.YES_OPTION) {
 			return;
 		} else {
-			switch (action) {
-				case EVENTDATA_ACTION_DELETE_EVENT:
-					//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
-					if (new EventUpdate().deleteAllEventUpdatesFromDb(session.getConnection(), eventSelected)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
-						PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
-								EventUpdate.TABLE_NAME);
-						//Si la incidencia seleccionada se borra correctamente de la base de datos
-						if (new Event().deleteEventFromDb(session.getConnection(), eventSelected)) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla event
-							PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA BORRADA: ", session.getConnection(), tNow,
-									Event.TABLE_NAME);
+			try {
+				selfDelete = true;
+				
+				System.out.println("Borrado de datos propios iniciado, actualizaciones suspendidas................");
+				
+				switch (action) {
+					case EVENTDATA_ACTION_DELETE_EVENT:
+						//Si todas las actualizaciones de la incidencia se borran correctamente de la base de datos
+						if (new EventUpdate().deleteAllEventUpdatesFromDb(session.getConnection(), eventSelected)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla event_update
+							PersistenceManager.registerTableModification(infoLabel, "", session.getConnection(), tNow,
+									EventUpdate.TABLE_NAME);
+							//Si la incidencia seleccionada se borra correctamente de la base de datos
+							if (new Event().deleteEventFromDb(session.getConnection(), eventSelected)) {
+								//Registramos fecha y hora de la actualización de los datos de la tabla event
+								PersistenceManager.registerTableModification(infoLabel, "INCIDENCIA BORRADA: ", session.getConnection(), tNow,
+										Event.TABLE_NAME);
+							}
+							//Eliminamos la incidencia de la lista de incidencias de la unidad de negocio de la sesión
+							session.getbUnit().getEvents().remove(eventSelected);
+							//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
+							//y el número de incidencias mostradas y totales
+							filterSelected.doClick();
 						}
-						//Eliminamos la incidencia de la lista de incidencias de la unidad de negocio de la sesión
-						session.getbUnit().getEvents().remove(eventSelected);
-						//Reseleccionamos el último filtro seleccionado, que a su vez actualiza la tabla de incidencias
-						//y el número de incidencias mostradas y totales
-						filterSelected.doClick();
-					}
-					
-					break;
-				case EVENTDATA_ACTION_DELETE_UPDATE:
-					//Si la actualización seleccionada se borra correctamente de la base de datos
-					if (new EventUpdate().deleteEventUpdateFromDb(session.getConnection(), updateSelected)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla event_update
-						PersistenceManager.registerTableModification(infoLabel, "ACTUALIZACIÓN BORRADA: ", session.getConnection(), tNow,
-								EventUpdate.TABLE_NAME);
-						//Eliminamos la actualización de la lista de actualizaciones de la incidencia seleccionada
-						eventSelected.getUpdates().remove(updateSelected);
-						//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
-						updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
-						//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
-			        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
-					}	
-					break;
-				default:
-					
+						
+						break;
+					case EVENTDATA_ACTION_DELETE_UPDATE:
+						//Si la actualización seleccionada se borra correctamente de la base de datos
+						if (new EventUpdate().deleteEventUpdateFromDb(session.getConnection(), updateSelected)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla event_update
+							PersistenceManager.registerTableModification(infoLabel, "ACTUALIZACIÓN BORRADA: ", session.getConnection(), tNow,
+									EventUpdate.TABLE_NAME);
+							//Eliminamos la actualización de la lista de actualizaciones de la incidencia seleccionada
+							eventSelected.getUpdates().remove(updateSelected);
+							//Obtenemos las actualizaciones de la incidencia seleccionada y las mostramos en la tabla de actualizaciones
+							updateUpdatesTable(sortEventUpdatesByDate(eventSelected.getUpdates()), getUpdatesTableHeader());
+							//Tras renovar la tabla de actualizaciones, solo el botón de nueva actualización queda habilitado
+				        	buttonSwitcher(UPDATE_BUTTON_SET, NEW_ENABLED);
+						}	
+						break;
+					default:
+						
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				selfDelete = false;
+				notifyAll();
+				
+				System.out.println("Borrado de datos propios finalizada, actualizaciones permitidas................");
 			}
 		}
 	}
@@ -1542,6 +1560,16 @@ public class EventDataUI extends JPanel{
 				}
 				
 				if (eEditUI != null && eEditUI.isSelfUpdate()) {
+					try {
+						System.out.println("EventDataUI esperando permiso para refrescar datos......");
+						wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				if (selfDelete) {
 					try {
 						System.out.println("EventDataUI esperando permiso para refrescar datos......");
 						wait();

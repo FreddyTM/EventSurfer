@@ -935,6 +935,8 @@ public class AreaUI extends JPanel {
 					
 					System.out.println("Borrado de datos propios iniciado, actualizaciones suspendidas................");
 					
+					tNow = ToolBox.getTimestampNow();
+					
 					//Si el area a borrar está asignada a algún centro de trabajo en la tabla b_unit area
 					//borramos primero las referencias a dicha area en la tabla b_unit_area
 					
@@ -984,7 +986,7 @@ public class AreaUI extends JPanel {
 					selfDelete = false;
 					notifyAll();
 					
-					System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+					System.out.println("Borrado de datos propios finalizada, actualizaciones permitidas................");
 				}	
 			}
 		}
@@ -1122,6 +1124,8 @@ public class AreaUI extends JPanel {
 				
 				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
 				
+				tNow = ToolBox.getTimestampNow();
+				
 				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
 				if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
 					//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
@@ -1173,6 +1177,8 @@ public class AreaUI extends JPanel {
 				selfRevoke = true;
 				
 				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				tNow = ToolBox.getTimestampNow();
 				
 				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
 				if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
@@ -1283,6 +1289,12 @@ public class AreaUI extends JPanel {
 
 				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+					
+					//Debug
+					System.out.println(updatedTable.getKey());
+					System.out.println(updatedTable.getValue());
+					
+					
 					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
 					if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
 						
@@ -1321,8 +1333,13 @@ public class AreaUI extends JPanel {
 						AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: " +
 						ToolBox.formatTimestamp(updatedTable.getValue(), null));
 					}
+					
 					//Si en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME
 					if (updatedTable.getKey().equals(Area.B_UNIT_AREA_TABLE_NAME)) {
+						
+						//Debug
+						System.out.println("en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME");
+						
 						//Refrescamos listas
 						refreshLists();
 						allocateButton.setEnabled(false);
