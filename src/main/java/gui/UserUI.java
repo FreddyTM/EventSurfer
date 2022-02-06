@@ -38,6 +38,10 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
 
+/**
+ * Muestra la pantalla de creación / edición de usuarios
+ * @author Alfred Tomey
+ */
 public class UserUI extends JPanel {
 	
 	//Se asignan a la variable okActionSelector para determinar el comportamiento
@@ -50,8 +54,7 @@ public class UserUI extends JPanel {
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Registra si el panel está visible o no
-	private boolean panelVisible;
+
 	//Usuario seleccionado en pantalla
 	private User selectedUser;
 	private JTextField companyField;
@@ -100,11 +103,14 @@ public class UserUI extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = UserUI.OK_ACTION_UNDEFINED;
 	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
+	
 
 	public UserUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
-		panelVisible = true;
 		selectedUser = session.getUser();
 		
 		infoLabel = new JLabel();
@@ -446,21 +452,9 @@ public class UserUI extends JPanel {
 		labelList.add(maxCharsLabel5);
 		add(maxCharsLabel5);
 		
-		/*Iniciamos la comprobación periódica de actualizaciones
-		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
-		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
-		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
-		* por error que no había cambios.
-		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
-		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
-		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
-		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
-		* o más lenta que la comprobación de los datos que hace el objeto session.
-		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		timer.scheduleAtFixedRate(task, 5000, session.getPeriod());
 
 	}
 
@@ -636,7 +630,7 @@ public class UserUI extends JPanel {
 		for (int i = 0; i < textFieldList.size(); i++) {
 			textFieldContentList.add(textFieldList.get(i).getText());
 		}
-		//Guardamos el valor del ckeckbox "Activa"
+		//Guardamos el valor del ckeckbox "Activo"
 		lastActive = session.getbUnit().isActivo();
 		//Guardamos el valor de userTypeComboBox
 		lastUserType = userTypeComboBox.getSelectedItem().toString();
@@ -1152,6 +1146,8 @@ public class UserUI extends JPanel {
 			bUnitActiveFilterCheckBox.setEnabled(false);
 			userComboBox.setEnabled(false);
 			userActiveFilterCheckBox.setEnabled(false);
+			
+			userTypeComboBox.requestFocusInWindow();
 		}
 	}
 	
@@ -1188,6 +1184,8 @@ public class UserUI extends JPanel {
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
+			
+			userAliasField.requestFocusInWindow();
 		}
 	}
 	
@@ -1254,7 +1252,7 @@ public class UserUI extends JPanel {
 			putValue(NAME, "Aceptar");
 			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
 		}
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			for (JTextField tField : textFieldList) {
@@ -1266,168 +1264,182 @@ public class UserUI extends JPanel {
 			confirmPasswordField.setBackground(Color.WHITE);
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de un nuevo usuario
-			if (okActionSelector == UserUI.OK_ACTION_NEW) {
+			try {
+				selfUpdate = true;
 				
-				//Creamos un nuevo usuario a partir de los datos del formulario
-				User newUser = new User();
-				newUser.setbUnit(session.getbUnit());
-				newUser.setUserType(userTypeComboBox.getSelectedItem().toString());
-				newUser.setUserAlias(userAliasField.getText());
-				newUser.setNombre(userNameField.getText());
-				newUser.setApellido(userLastNameField.getText());
-				//Password en texto plano
-				newUser.setPassword(String.valueOf(newPasswordField.getPassword()));
-				newUser.setActivo(activeCheckBox.isSelected());
-				//Validamos los datos del formulario
-				if (testData(newUser)) {
-					//Aplicamos hash a la contraseña del nuevo usuario
-					newUser.setPassword(newUser.passwordHash(String.valueOf(newUser.getPassword())));
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				//Aceptamos la creación de un nuevo usuario
+				if (okActionSelector == UserUI.OK_ACTION_NEW) {
 					
-					//Intentamos grabar el nuevo usuario en la base de datos, retornando un objeto con idénticos
-					//datos que incluye también el id que le ha asignado dicha base de datos
-					User storedUser = new User().addNewUser(session.getConnection(), newUser);
-					//Si el usuario se almacena correctamente en la base de datos
-					if (storedUser != null) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-						tNow = ToolBox.getTimestampNow();
-						infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + ToolBox.formatTimestamp(tNow, null));
-						//Actualizamos los datos de la tabla last_modification
-						boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
-						//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
-						//no queda registrada
-						if(!changeRegister) {
-							infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
-						}
-						//Añadimos al nuevo usuario a la lista de usuarios del centro de trabajo de la sesión
-						session.getbUnit().getUsers().add(storedUser);
+					//Creamos un nuevo usuario a partir de los datos del formulario
+					User newUser = new User();
+					newUser.setbUnit(session.getbUnit());
+					newUser.setUserType(userTypeComboBox.getSelectedItem().toString());
+					newUser.setUserAlias(userAliasField.getText());
+					newUser.setNombre(userNameField.getText());
+					newUser.setApellido(userLastNameField.getText());
+					//Password en texto plano
+					newUser.setPassword(String.valueOf(newPasswordField.getPassword()));
+					newUser.setActivo(activeCheckBox.isSelected());
+					//Validamos los datos del formulario
+					if (testData(newUser)) {
+						//Aplicamos hash a la contraseña del nuevo usuario
+						newUser.setPassword(newUser.passwordHash(String.valueOf(newUser.getPassword())));
 						
-						//Si el filtro de usuarios está activo y el nuevo usuario se crea como no activo, no puede asignarse como usuario
-						//seleccionado y por tanto tampoco puede visualizarse al aceptar su creación
-						if (userActiveFilterCheckBox.isSelected() && storedUser.isActivo() == false) {
+						//Intentamos grabar el nuevo usuario en la base de datos, retornando un objeto con idénticos
+						//datos que incluye también el id que le ha asignado dicha base de datos
+						User storedUser = new User().addNewUser(session.getConnection(), newUser);
+						//Si el usuario se almacena correctamente en la base de datos
+						if (storedUser != null) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
+							tNow = ToolBox.getTimestampNow();
+							infoLabel.setText("NUEVO USUARIO REGISTRADO EN " + session.getbUnit().getNombre() + ": "  + ToolBox.formatTimestamp(tNow, null));
+							//Actualizamos los datos de la tabla last_modification
+							boolean changeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(), User.TABLE_NAME, tNow);
+							//Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
+							//no queda registrada
+							if(!changeRegister) {
+								infoLabel.setText(infoLabel.getText() + " .ERROR DE REGISTRO DE ACTUALIZACIÓN");
+							}
+							//Añadimos al nuevo usuario a la lista de usuarios del centro de trabajo de la sesión
+							session.getbUnit().getUsers().add(storedUser);
 							
-							//Mostramos los datos del anterior usuario seleccionado. No renovamos el contenido de userComboBox porque
-							//no es necesario. Tampoco hacemos backup del contenido de los datos del formulario, se mantienen los anteriores
-							populateUserFields();
-						
-						//Si el filtro de usuarios está activo y el usuario se crea como activo, pasa a ser el usuario seleccionado.
-						//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado tanto si se
-						//crea como activo como si no
-						} else {
-							selectedUser = storedUser;
-							//Renovamos la lista de usuarios del comboBox
-							userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
-							userComboBox.setModel(new DefaultComboBoxModel(userComboList));
-							for (int i = 0; i < userComboList.length; i++) {
-								if (userComboList[i].equals(selectedUser.getUserAlias())) {
-									userComboBox.setSelectedIndex(i);
+							//Si el filtro de usuarios está activo y el nuevo usuario se crea como no activo, no puede asignarse como usuario
+							//seleccionado y por tanto tampoco puede visualizarse al aceptar su creación
+							if (userActiveFilterCheckBox.isSelected() && storedUser.isActivo() == false) {
+								
+								//Mostramos los datos del anterior usuario seleccionado. No renovamos el contenido de userComboBox porque
+								//no es necesario. Tampoco hacemos backup del contenido de los datos del formulario, se mantienen los anteriores
+								populateUserFields();
+							
+							//Si el filtro de usuarios está activo y el usuario se crea como activo, pasa a ser el usuario seleccionado.
+							//Si el filtro de usuarios no está activo, el nuevo usuario pasa a ser el usuario seleccionado tanto si se
+							//crea como activo como si no
+							} else {
+								selectedUser = storedUser;
+								//Renovamos la lista de usuarios del comboBox
+								userComboList = getUserComboBoxItemsFromSession(userActiveFilterCheckBox.isSelected());
+								userComboBox.setModel(new DefaultComboBoxModel(userComboList));
+								for (int i = 0; i < userComboList.length; i++) {
+									if (userComboList[i].equals(selectedUser.getUserAlias())) {
+										userComboBox.setSelectedIndex(i);
+									}
 								}
 							}
-						}
-						//Retornamos el formulario a su estado previo a la creación de un nuevo usuario
-						afterNewOrEditUser();
-
-					//Si el usuario no se almacena correctamente en la base de datos 
-					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO USUARIO EN LA BASE DE DATOS");
-					}
-				}
-			
-			//Aceptamos los cambios de la unidad de negocio editada
-			} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
-				
-				currentPasswordField.setBackground(Color.WHITE);
-				//Objeto que recoge los datos actualizados
-				User updatedUser = new User();
-				updatedUser.setId(selectedUser.getId());
-				updatedUser.setbUnit(selectedUser.getbUnit());
-				updatedUser.setUserType(userTypeComboBox.getSelectedItem().toString());
-				updatedUser.setUserAlias(userAliasField.getText());
-				updatedUser.setNombre(userNameField.getText());
-				updatedUser.setApellido(userLastNameField.getText());
-				//Password en texto plano
-				updatedUser.setPassword(String.valueOf(newPasswordField.getPassword()));
-				updatedUser.setActivo(activeCheckBox.isSelected());
-				
-				//Validamos los datos del formulario
-				if (testData(updatedUser)) {
-					//Si no hay contraseña nueva dejamos la del usuario seleccionado
-					if (updatedUser.getPassword().equals("")) {
-						updatedUser.setPassword(selectedUser.getPassword());
-					//Si hay contraseña nueva le aplicamos el hash
-					} else {
-						updatedUser.setPassword(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
-					}
-					//Si los datos actualizados se graban en la base de datos
-					if (new User().updateUserToDB(session.getConnection(), updatedUser)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla user
-						tNow = ToolBox.getTimestampNow();
-						//Control de la actualización de la tabla last_modification por el cambio en la tabla user
-						boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
-								User.TABLE_NAME, tNow);
-						infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
-						//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
-						boolean stillOpenSession = true;
-						//Localizar en la lista de usuarios del centro de trabajo de la sesión al usuario con el mismo id que el usuario editado 
-						// y suprimirlo
-				        Iterator<User> iter = session.getbUnit().getUsers().iterator();
-				        while (iter.hasNext()) {
-				            User user = iter.next();
-				            if (user.getId() == updatedUser.getId()) {
-				                iter.remove();
-				            }
-				        }
-						
-						//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
-						//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está inactivo,
-						//también se actualizan los datos de la sesión
-						if (updatedUser.isActivo() || (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
-								&& !userActiveFilterCheckBox.isSelected())) {
-					        //El usuario editado pasa a ser el usuario seleccionado, y lo añadimos a la lista de usuarios de la unidad de negocio
-							//de la sesión
-							selectedUser = updatedUser;
-					        session.getbUnit().getUsers().add(selectedUser);
-					        //Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
-							refreshUserComboBox();
-							//Mostramos los datos del usuario seleccionado
-							populateUserFields();
-					        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
-							//no queda registrada
-							if(!UserChangeRegister) {
-								infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
-							}
-						
-						//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está activo,
-						//el usuario editado no puede seguir siendo el usuario seleccionado y por tanto tampoco puede visualizarse
-						} else if (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
-								&& userActiveFilterCheckBox.isSelected()) {
-							//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
-							session.getbUnit().getUsers().add(updatedUser);
-							//Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
-							refreshUserComboBox();
-							//Mostramos los datos del usuario seleccionado
-							populateUserFields();
-	
-						//Si el usuario que abre sesión deja inactivo su propio usuario	
-						} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
-							//Se cerrará la sesión
-							stillOpenSession = false;
-							//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
-							session.setUsersUpdated(true);
-							session.backToLogin(User.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
-							
-						}
-						//Si la sesión sigue abierta
-						if (stillOpenSession) {
-							//Devolvemos el formulario a su estado previo
+							//Retornamos el formulario a su estado previo a la creación de un nuevo usuario
 							afterNewOrEditUser();
-						}	
-						
-					//Si los datos actualizados no se graban en la base de datos
-					} else {
-						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS DE USUARIO EN LA BASE DE DATOS");
+
+						//Si el usuario no se almacena correctamente en la base de datos 
+						} else {
+							infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO USUARIO EN LA BASE DE DATOS");
+						}
+					}
+				
+				//Aceptamos los cambios de la unidad de negocio editada
+				} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
+					
+					currentPasswordField.setBackground(Color.WHITE);
+					//Objeto que recoge los datos actualizados
+					User updatedUser = new User();
+					updatedUser.setId(selectedUser.getId());
+					updatedUser.setbUnit(selectedUser.getbUnit());
+					updatedUser.setUserType(userTypeComboBox.getSelectedItem().toString());
+					updatedUser.setUserAlias(userAliasField.getText());
+					updatedUser.setNombre(userNameField.getText());
+					updatedUser.setApellido(userLastNameField.getText());
+					//Password en texto plano
+					updatedUser.setPassword(String.valueOf(newPasswordField.getPassword()));
+					updatedUser.setActivo(activeCheckBox.isSelected());
+					
+					//Validamos los datos del formulario
+					if (testData(updatedUser)) {
+						//Si no hay contraseña nueva dejamos la del usuario seleccionado
+						if (updatedUser.getPassword().equals("")) {
+							updatedUser.setPassword(selectedUser.getPassword());
+						//Si hay contraseña nueva le aplicamos el hash
+						} else {
+							updatedUser.setPassword(new User().passwordHash(String.valueOf(updatedUser.getPassword())));
+						}
+						//Si los datos actualizados se graban en la base de datos
+						if (new User().updateUserToDB(session.getConnection(), updatedUser)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla user
+							tNow = ToolBox.getTimestampNow();
+							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
+							boolean UserChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
+									User.TABLE_NAME, tNow);
+							infoLabel.setText("DATOS DEL USUARIO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
+							//Variable de control para saber si la sesión sigue activa tras la edición de un usuario
+							boolean stillOpenSession = true;
+							//Localizar en la lista de usuarios del centro de trabajo de la sesión al usuario con el mismo id que el usuario editado 
+							// y suprimirlo
+					        Iterator<User> iter = session.getbUnit().getUsers().iterator();
+					        while (iter.hasNext()) {
+					            User user = iter.next();
+					            if (user.getId() == updatedUser.getId()) {
+					                iter.remove();
+					            }
+					        }
+							
+							//Si el usuario que abre sesión deja activo al usuario editado, se actualizan los datos de la sesión
+							//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está inactivo,
+							//también se actualizan los datos de la sesión
+							if (updatedUser.isActivo() || (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
+									&& !userActiveFilterCheckBox.isSelected())) {
+						        //El usuario editado pasa a ser el usuario seleccionado, y lo añadimos a la lista de usuarios de la unidad de negocio
+								//de la sesión
+								selectedUser = updatedUser;
+						        session.getbUnit().getUsers().add(selectedUser);
+						        //Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
+								refreshUserComboBox();
+								//Mostramos los datos del usuario seleccionado
+								populateUserFields();
+						        //Si se produce un error de actualización de la tabla last_modification. La actualización de la tabla user
+								//no queda registrada
+								if(!UserChangeRegister) {
+									infoLabel.setText(infoLabel.getText() + " . ERROR DE REGISTRO DE ACTUALIZACIÓN");
+								}
+							
+							//Si el usuario que abre sesión deja inactivo a un usuario que no es él mismo y el filtro de usuarios está activo,
+							//el usuario editado no puede seguir siendo el usuario seleccionado y por tanto tampoco puede visualizarse
+							} else if (!updatedUser.isActivo() && updatedUser.getId() != session.getUser().getId()
+									&& userActiveFilterCheckBox.isSelected()) {
+								//Añadimos al usuario editado a la lista de usuarios de la unidad de negocio de la sesión
+								session.getbUnit().getUsers().add(updatedUser);
+								//Renovamos la lista de usuarios del comboBox y recuperamos al anterior usuario seleccionado
+								refreshUserComboBox();
+								//Mostramos los datos del usuario seleccionado
+								populateUserFields();
+
+							//Si el usuario que abre sesión deja inactivo su propio usuario	
+							} else if (!updatedUser.isActivo() && updatedUser.getId() == session.getUser().getId()) {
+								//Se cerrará la sesión
+								stillOpenSession = false;
+								//Cerrar sesión y volver a login. El usuario que abrió sesión ya no puede hacer login porque ha sido desactivado
+								session.setUsersUpdated(true);
+								session.backToLogin(User.TABLE_NAME, session.getDisplays(), session.getCurrentDisplay());
+								
+							}
+							//Si la sesión sigue abierta
+							if (stillOpenSession) {
+								//Devolvemos el formulario a su estado previo
+								afterNewOrEditUser();
+							}	
+							
+						//Si los datos actualizados no se graban en la base de datos
+						} else {
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS DE USUARIO EN LA BASE DE DATOS");
+						}
 					}
 				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfUpdate = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
 			}
 		}
 	}
@@ -1443,16 +1455,36 @@ public class UserUI extends JPanel {
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!UserUI.this.isShowing()) {
-				UserUI.this.panelVisible = false;
 				this.cancel();
 				UserUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Usuarios");
 			}
+			
+			if (session.isLocked()) {
+				try {
+					System.out.println("BusinessUnitUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfUpdate) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && UserUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-			} else if (UserUI.this.panelVisible == true){
+			} else if (UserUI.this.isShowing()){
 				//Loop por el Map de CurrentSession, si aparece la tabla user, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
