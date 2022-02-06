@@ -33,6 +33,10 @@ import main.java.toolbox.ToolBox;
 import main.java.types_states.EventType;
 import main.java.types_states.TypesStatesContainer;
 
+/**
+ * Muestra la pantalla de creación / edición de tipos de incidencia
+ * @author Alfred Tomey
+ */
 public class EventTypeUI extends JPanel {
 
 	//Se asignan a la variable okActionSelector para determinar el comportamiento
@@ -49,8 +53,6 @@ public class EventTypeUI extends JPanel {
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Registra si el panel está visible o no
-	private boolean panelVisible;
 	
 	//Elementos que aparecerán en la lista de tipos de eventos
 	private String[] registeredEventTypes = getEventTypesFromSession();
@@ -92,10 +94,13 @@ public class EventTypeUI extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
 	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
+	
 	public EventTypeUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
-		panelVisible = true;
 		
 		JTextPane eventTypeTxt = new JTextPane();
 		eventTypeTxt.setText("GESTIÓN DE TIPOS DE INCIDENCIAS");
@@ -189,21 +194,9 @@ public class EventTypeUI extends JPanel {
 		registeredScrollPane.setBounds(100, 350, 300, 200);
 		add(registeredScrollPane);
 		
-		/*Iniciamos la comprobación periódica de actualizaciones
-		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
-		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
-		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
-		* por error que no había cambios.
-		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
-		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
-		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
-		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
-		* o más lenta que la comprobación de los datos que hace el objeto session.
-		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		timer.scheduleAtFixedRate(task, 5000, session.getPeriod());
 	}
 	
 	/**
@@ -510,7 +503,7 @@ public class EventTypeUI extends JPanel {
 			emptyList();
 			//Vaciamos los campos de texto
 			eventTypeNameField.setText("");
-			eventTypeNameField.requestFocusInWindow(); //REPLICATE IN OTHER SCREENS IF IT WORKS
+			eventTypeNameField.requestFocusInWindow();
 		}	
 	}
 	
@@ -546,7 +539,7 @@ public class EventTypeUI extends JPanel {
 				infoLabel.setText("");
 				//Formulario editable
 				editableDataOn();
-				eventTypeNameField.requestFocusInWindow(); //REPLICATE IN OTHER SCREENS IF IT WORKS
+				eventTypeNameField.requestFocusInWindow();
 			}
 		}
 		
@@ -666,76 +659,90 @@ public class EventTypeUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			eventTypeNameField.setBackground(Color.WHITE);
 
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de un nuevo tipo de incidencia
-			if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
-				//Validamos los datos del formulario
-				if (testData()) {
-					//Intentamos grabar el nuevo tipo de incidencia en la base de datos, insertando una nueva entrada de tipos
-					//de incidencias en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
-					if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
-						//Si el tipo de incidencia se almacena correctamente en la base de datos
-						//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-						PersistenceManager.registerTableModification(infoLabel, "NUEVO TIPO DE INCIDENCIA REGISTRADO: ", session.getConnection(), tNow,
-								EventType.TABLE_NAME);			
-						//Asignamos el tipo de incidencia guardado como tipo de incidencia seleccionado
-						selectedEventType = eventTypeNameField.getText();
-						//Refrescamos la lista de tipos de incidencia
-						refreshList();
-						//Buscamos el índice del nuevo tipo de incidencia y lo seleccionamos en la lista
-						int newElementIndex = getIndexOfElement(selectedEventType);
-						registeredList.setSelectedIndex(newElementIndex);		
-						//Devolvemos el formulario a su estado previo
-						afterNewOrEditData();
-						
-					//Si el tipo de incidencia no se almacena correctamente en la base de datos	
-					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE INCIDENCIA EN LA BASE DE DATOS");
-					}
-				}
+			try {
+				selfUpdate = true;
 				
-			//Aceptamos la edición de un tipo de incidencia	existente
-			} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-				//Validamos los datos del formulario
-				if (testData()) {
-					//Buscamos el id del tipo de incidencia a editar
-					int itemId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventTypeBackup);
-					//Si el id obtenido corresponde a un tipo de incidencia almacenado en la base de datos
-					if (itemId != -1) {
-						//Si los datos actualizados se graban en la base de datos
-						if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				//Aceptamos la creación de un nuevo tipo de incidencia
+				if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
+					//Validamos los datos del formulario
+					if (testData()) {
+						//Intentamos grabar el nuevo tipo de incidencia en la base de datos, insertando una nueva entrada de tipos
+						//de incidencias en TypesStatesContainer que incluye también el id que le ha asignado dicha base de datos
+						if (TypesStatesContainer.getEvType().addNewEventType(session.getConnection(), eventTypeNameField.getText())) {
+							//Si el tipo de incidencia se almacena correctamente en la base de datos
 							//Registramos fecha y hora de la actualización de los datos de la tabla event_type
-							PersistenceManager.registerTableModification(infoLabel, "DATOS DEL TIPO DE INCIDENCIA ACTUALIZADOS: ", session.getConnection(), tNow,
-									EventType.TABLE_NAME);
-							//Hacemos backup del contenido del campo de texto
-							selectedEventTypeBackup = eventTypeNameField.getText();
-							//Actualizamos la lista de tipos de incidencia
-							TypesStatesContainer.getEvType().getEventTypes().replace(itemId, eventTypeNameField.getText());
+							PersistenceManager.registerTableModification(infoLabel, "NUEVO TIPO DE INCIDENCIA REGISTRADO: ", session.getConnection(), tNow,
+									EventType.TABLE_NAME);			
+							//Asignamos el tipo de incidencia guardado como tipo de incidencia seleccionado
+							selectedEventType = eventTypeNameField.getText();
 							//Refrescamos la lista de tipos de incidencia
 							refreshList();
-							//Reasignamos el tipo de incidencia seleccionado y su índice en la lista
-							eventTypeNameField.setText(selectedEventType);
-							//Buscamos el índice del tipo de incidencia editado y lo seleccionamos en la lista
+							//Buscamos el índice del nuevo tipo de incidencia y lo seleccionamos en la lista
 							int newElementIndex = getIndexOfElement(selectedEventType);
-							registeredList.setSelectedIndex(newElementIndex);
-							//Reactivamos la lista de tipos de incidencia
-							registeredList.setEnabled(true);
+							registeredList.setSelectedIndex(newElementIndex);		
 							//Devolvemos el formulario a su estado previo
 							afterNewOrEditData();
-						
-						//Si los datos actualizados no se graban en la base de datos
+							
+						//Si el tipo de incidencia no se almacena correctamente en la base de datos	
 						} else {
-							infoLabel.setText("ERROR DE ACTUALIZACIÓN DEL TIPO DE INCIDENCIA EN LA BASE DE DATOS");							
+							infoLabel.setText("ERROR DE GRABACIÓN DEL NUEVO TIPO DE INCIDENCIA EN LA BASE DE DATOS");
+						}
+					}
+					
+				//Aceptamos la edición de un tipo de incidencia	existente
+				} else if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
+					//Validamos los datos del formulario
+					if (testData()) {
+						//Buscamos el id del tipo de incidencia a editar
+						int itemId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventTypeBackup);
+						//Si el id obtenido corresponde a un tipo de incidencia almacenado en la base de datos
+						if (itemId != -1) {
+							//Si los datos actualizados se graban en la base de datos
+							if (TypesStatesContainer.getEvType().updateEventTypeToDB(session.getConnection(), itemId, eventTypeNameField.getText())) {
+								//Registramos fecha y hora de la actualización de los datos de la tabla event_type
+								PersistenceManager.registerTableModification(infoLabel, "DATOS DEL TIPO DE INCIDENCIA ACTUALIZADOS: ", session.getConnection(), tNow,
+										EventType.TABLE_NAME);
+								//Hacemos backup del contenido del campo de texto
+								selectedEventTypeBackup = eventTypeNameField.getText();
+								//Actualizamos la lista de tipos de incidencia
+								TypesStatesContainer.getEvType().getEventTypes().replace(itemId, eventTypeNameField.getText());
+								//Refrescamos la lista de tipos de incidencia
+								refreshList();
+								//Reasignamos el tipo de incidencia seleccionado y su índice en la lista
+								eventTypeNameField.setText(selectedEventType);
+								//Buscamos el índice del tipo de incidencia editado y lo seleccionamos en la lista
+								int newElementIndex = getIndexOfElement(selectedEventType);
+								registeredList.setSelectedIndex(newElementIndex);
+								//Reactivamos la lista de tipos de incidencia
+								registeredList.setEnabled(true);
+								//Devolvemos el formulario a su estado previo
+								afterNewOrEditData();
+							
+							//Si los datos actualizados no se graban en la base de datos
+							} else {
+								infoLabel.setText("ERROR DE ACTUALIZACIÓN DEL TIPO DE INCIDENCIA EN LA BASE DE DATOS");							
+							}
 						}
 					}
 				}
-			}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfUpdate = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+			}	
 		}
 	}
 	
@@ -750,16 +757,36 @@ public class EventTypeUI extends JPanel {
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!EventTypeUI.this.isShowing()) {
-				EventTypeUI.this.panelVisible = false;
 				this.cancel();
 				EventTypeUI.this.timer.cancel();
 				 System.out.println("Se ha cerrado la ventana Tipo de Evento");
 			}
+			
+			if (session.isLocked()) {
+				try {
+					System.out.println("EventTypeUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfUpdate) {
+				try {
+					System.out.println("EventTypeUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && EventTypeUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-			} else if (EventTypeUI.this.panelVisible == true){
+			} else if (EventTypeUI.this.isShowing()){
 				//Loop por el Map de CurrentSession, si aparece la tabla event_type, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 					//Si en la tabla de actualizaciones aparece la clave EventType.TABLE_NAME

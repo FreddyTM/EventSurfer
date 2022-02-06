@@ -1092,7 +1092,7 @@ public class BusinessUnitUI extends JPanel {
 			
 			if (session.isLocked()) {
 				try {
-					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					System.out.println("BusinessUnitUI esperando permiso para refrescar datos......");
 					wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -1102,7 +1102,7 @@ public class BusinessUnitUI extends JPanel {
 			
 			if (selfUpdate) {
 				try {
-					System.out.println("EventDataUI esperando permiso para refrescar datos......");
+					System.out.println("BusinessUnitUI esperando permiso para refrescar datos......");
 					wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

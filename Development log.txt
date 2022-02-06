@@ -1874,7 +1874,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 		Add refreshComboBox() --copied from BusinessUnitUI--
 		Add getLastEventsByNumber() --ok--
 		Add buildEventTable() --ok--
-		Add stringToTimestamp() --not tested yet--
+		Add stringToTimestamp() --ok--
 		Add setTablePanelDimensions() --ok--
 		Add updateEventTable() --ok--
 		Add formatEventTable() --ok--
@@ -1912,7 +1912,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --vectors only use objects, cell renderer ok--
 					 --fix not using list parameter, ok--
 					 --add tooltips, non editable cells--
-					 --get Event from selected row, not tested yet--
+					 --get Event from selected row, ok--
 					 --uses enableOrDisableEditDeleteEventButtons()--
 					 --uses updateUpdatesTable() ok--
 					 --clear selection of any selected row in updatesTable--
@@ -1921,7 +1921,7 @@ ver 0.1.14 - EVENTDATAUI TABLES DISPLAY ALL DATA & ROW SELECTION OK, FILTERS OK 
 					 --big tooltip, long display time, small tooltip, default display time--
 					 --uses EventTableSelectionListener, no longer inner ListSelectionListener--
 					 --uses DoubleClickOnRowListener--
-		Update updateEventTable() --fix not using list parameter, ok, not tested with enough data yet--
+		Update updateEventTable() --fix not using list parameter, ok--
 					  --get rid of parameter mode, useless--
 					  --uses formatEventTable()--
 					  --disable new, edit & delete update buttons--
@@ -2118,15 +2118,15 @@ ver 0.1.15 - EVENTEDITUI LAYOUT & INITIAL SETUP, EVENTDATAUI SWITCH TO EVENTEDIT
 				       --uses goToNewEdit()--
 				       
 	· EditEventAction (inner EventDataUI class):
-		Update actionPerformed --switch to EventEditUI in edit event mode, not tested yet--
+		Update actionPerformed --switch to EventEditUI in edit event mode,ok--
 				       --uses goToNewEdit()--
 
 	· NewUpdateAction (inner EventDataUI class):
-		Update actionPerformed --switch to EventEditUI in new update mode, not tested yet--
+		Update actionPerformed --switch to EventEditUI in new update mode, ok--
 				       --uses goToNewEdit()--
 
 	· EditUpdateAction (inner EventDataUI class):
-		Update actionPerformed --switch to EventEditUI in edit update mode, not tested yet--
+		Update actionPerformed --switch to EventEditUI in edit update mode, ok--
 				       --uses goToNewEdit()--
 
 	· DeleteAction (inner EventDataUI class):
@@ -2350,7 +2350,6 @@ ver 0.1.16 - EVENTEDITUI FULLY FUNCTIONAL, EVENTDATAUI SCROLLBARS WHEN NEEDED
 
 ver 0.1.17 - CURRENTSESSION & UIs TIMERS LINKED, CLEAN CODE, CHECK JAVADOC TEXT, FUNCTIONAL TESTS,
 	     FIX ERRORS, NEW LOCAL & REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI, EVENTEDITUI & CURRENTSESSION
-
 
 	* - Package main.java.persistence
 
@@ -2695,11 +2694,11 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 	· EditAction class (BusinessUnitUI inner class):
 		Update actionPerformed() --businessunit name gets the focus--
 
-	· OKAction class CompanyUI inner class):
+	· OKAction class (CompanyUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 
-	· TimerJob class CompanyUI inner class):
+	· TimerJob class (CompanyUI inner class):
 		Update run() --waits for session & selfupdate locks--
 
 	· BusinessUnitUI class:
@@ -2721,6 +2720,21 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 
 	· TimerJob class (BusinessUnitUI inner class):
+		Update run() --waits for session & selfupdate locks--
+
+	· EventTypeUI class:
+		Add attributes
+			selfUpdate
+		Delete attributes
+			panel Visible
+		Clean code
+		Complete javadoc
+
+	· OKAction class (EventTypeUI inner class):
+		Update actionPerformed() --make actionPerformed() synchronized--
+					 --set selfUpdate to true before updating data, set to false after updating & notify()--
+
+	· TimerJob class (EventTypeUI inner class):
 		Update run() --waits for session & selfupdate locks--
 
 	· EventEditUI class:
