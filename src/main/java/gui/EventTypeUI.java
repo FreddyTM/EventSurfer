@@ -627,6 +627,8 @@ public class EventTypeUI extends JPanel {
 			//Si el borrado se autoriza, se borra el tipo de incidencia seleccionado de la base de datos
 			if (deleteOK) {
 				
+				tNow = ToolBox.getTimestampNow();
+				
 				//Si el tipo de incidencia se borra correctamente de la base de datos
 				if (TypesStatesContainer.getEvType().deleteEventTypeFromDB(session.getConnection(), selectedEventType)) {
 					//Registramos fecha y hora de la actualización de los datos de la tabla event_type
@@ -668,6 +670,8 @@ public class EventTypeUI extends JPanel {
 			
 			try {
 				selfUpdate = true;
+				
+				tNow = ToolBox.getTimestampNow();
 				
 				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
 				
