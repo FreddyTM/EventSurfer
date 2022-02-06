@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -33,6 +32,11 @@ import main.java.toolbox.ToolBox;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 
+
+/**
+ * Muestra la pantalla de creación / edición de centros de trabajo
+ * @author Alfred Tomey
+ */
 public class BusinessUnitUI extends JPanel {
 	
 	//Se asignan a la variable okActionSelector para determinar el comportamiento
