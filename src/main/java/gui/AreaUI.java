@@ -46,6 +46,10 @@ import java.awt.event.ItemListener;
 import javax.swing.JTextArea;
 import javax.swing.JSeparator;
 
+/**
+ * Muestra la pantalla de creación / edición de areas
+ * @author Alfred Tomey
+ */
 public class AreaUI extends JPanel {
 
 	//Se asignan a la variable okActionSelector para determinar el comportamiento
@@ -62,8 +66,6 @@ public class AreaUI extends JPanel {
 	private Timestamp tNow = ToolBox.getTimestampNow();
 	//Temporizador de comprobación de cambios en los datos de la sesión
 	private Timer timer;
-	//Registra si el panel está visible o no
-	private boolean panelVisible;
 	
 	private JComboBox areaComboBox = new JComboBox();
 	private JTextField areaNameField = new JTextField();
@@ -114,12 +116,17 @@ public class AreaUI extends JPanel {
 	//Registra la acción a realizar por el botón aceptar
 	private int okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
 	
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha grabado datos nuevos en la base de datos
+	private volatile boolean selfUpdate = false;
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha borrado datos de la base de datos
+	private volatile boolean selfDelete = false;
+	
 	
 	public AreaUI(CurrentSession session) {
 		this.session = session;
 		setLayout(null);
-		panelVisible = true;
-		
 		
 		JTextPane areaTxt = new JTextPane();
 		areaTxt.setText("GESTIÓN DE AREAS");
@@ -318,21 +325,9 @@ public class AreaUI extends JPanel {
 		infoLabel2.setBounds(50, 800, 900, 25);
 		add(infoLabel2);
 		
-		/*Iniciamos la comprobación periódica de actualizaciones
-		* Se realiza 2 veces por cada comprobación de los cambios en la base de datos que hace
-		* el objeto session. Esto evita que si se produce la comprobación de datos que hace cada panel
-		* cuando la actualización de datos que hace el objeto session aún no ha finalizado, se considere
-		* por error que no había cambios.
-		* Existe la posibilidad de que eso ocurra porque se comprueban y actualizan los datos de cada tabla
-		* de manera consecutiva. Si a media actualización de los datos, un panel comprueba los datos que le
-		* atañen y su actualización aún no se ha hecho, no los actualizará. Además, el registro de cambios
-		* interno del objeto session se sobreescribirá en cuanto inicie una nueva comprobación, y el panel
-		* nunca podrá reflejar los cambios. Eso pasaría si la actualización del panel se hace al mismo ritmo
-		* o más lenta que la comprobación de los datos que hace el objeto session.
-		*/
 		timer = new Timer();
 		TimerTask task = new TimerJob();
-		timer.scheduleAtFixedRate(task, 1000, session.getPeriod() / 2);
+		timer.scheduleAtFixedRate(task, 5000, session.getPeriod());
 	}
 	
 	/**
@@ -881,12 +876,12 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón borrar. Se comprueba que el area a borrar no tenga eventos registrados
+	 * Acción del botón borrar. Se comprueba que el area a borrar no tenga incidencias registradas
 	 * y que el usuario que abre sesión tiene permiso para borrar dicha area. En caso de que el
-	 * area esté asignada a varias unidades de negocio se emite un aviso (admin), y siempre se pide
+	 * area esté asignada a varios centros de trabajo se emite un aviso (admin), y siempre se pide
 	 * confirmación para realizar el borrado. Una vez borrada el area de la base de datos, se
-	 * elimina también de la tabla b_unit_area y de la lista de areas asignadas de las unidades
-	 * de negocio cargadas en la sesión (si es que procede)
+	 * elimina también de la tabla b_unit_area y de la lista de areas asignadas de los centros
+	 * de trabajo cargados en la sesión (si es que procede)
 	 */
 	public class DeleteAction extends AbstractAction {
 		public DeleteAction() {
@@ -928,44 +923,63 @@ public class AreaUI extends JPanel {
 			}
 			//Si el borrado se autoriza, se borra el area seleccionada de la base de datos
 			if (deleteOK) {
-				
-				//Nueva lógica para respetar referencias de la base de datos
-				//Si el area a borrar está asignada a algún centro de trabajo en la tabla b_unit area
-				//Borramos primero las referencias a dicha area en la tabla b_unit_area
-				
-				//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
-				if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
-					//Borramos el area de la tabla area
-					//Si el area se borra correctamente de la base de datos
-					if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						PersistenceManager.registerTableModification(infoLabel, "AREA BORRADA: ", session.getConnection(), tNow,
-								Area.TABLE_NAME);
-						//Eliminamos el area borrada de cualquier centro de trabajo al que estuviera asignada
-						for (BusinessUnit bUnit: session.getCompany().getBusinessUnits()) {
-							boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
-							if (!areaDeleted) {	
-								infoLabel.setText("ERROR DE BORRADO DEL AREA DE LOS CENTROS DE TRABAJO");
+
+				try {
+					selfDelete = true;
+					
+					System.out.println("Borrado de datos propios iniciado, actualizaciones suspendidas................");
+					
+					//Si el area a borrar está asignada a algún centro de trabajo en la tabla b_unit area
+					//borramos primero las referencias a dicha area en la tabla b_unit_area
+					
+					//Si el area se borra correctamente de todos los registros de la tabla b_unit_area donde aparezca
+					if (new Area().deleteBUnitAreaFromDB(session.getConnection(), selectedArea)) {
+						//Borramos el area de la tabla area
+						//Si el area se borra correctamente de la base de datos
+						if (new Area().deleteAreaFromDB(session.getConnection(), selectedArea)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							PersistenceManager.registerTableModification(infoLabel, "AREA BORRADA: ", session.getConnection(), tNow,
+									Area.TABLE_NAME);
+							//Si el area está asignada a algún centro de trabajo
+							if (new Area().isAllocatedArea(session.getConnection(), selectedArea)) {
+								//Eliminamos el area borrada de cualquier centro de trabajo al que estuviera asignada
+								for (BusinessUnit bUnit : session.getCompany().getBusinessUnits()) {
+									boolean areaDeleted = new Area().deleteArea(bUnit, selectedArea);
+									if (!areaDeleted) {
+										infoLabel.setText("ERROR DE BORRADO DEL AREA DE LOS CENTROS DE TRABAJO");
+									}
+								} 
 							}
+							//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
+							//por defecto
+							areaComboList = getAreaCombolistItemsFromSession();
+							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+							areaComboBox.setSelectedIndex(0);
+							setFirstSelectedArea();	
+							//Refrescamos listas
+							refreshLists();
+							//Habilitamos asignaciones
+							availableList.setEnabled(true);
+							allocatedList.setEnabled(true);
+							allocateButton.setEnabled(false);
+							revokeButton.setEnabled(false);
+						//Si el area no se borra correctamente de la base de datos
+						} else {
+							infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
 						}
-						//Refrescamos la lista de areas del combobox y mostramos los datos de la nueva area seleccionada
-						//por defecto
-						areaComboList = getAreaCombolistItemsFromSession();
-						areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
-						areaComboBox.setSelectedIndex(0);
-						setFirstSelectedArea();	
-						//Refrescamos listas
-						refreshLists();
-						allocateButton.setEnabled(false);
-						revokeButton.setEnabled(false);
-					//Si el area no se borra correctamente de la base de datos
+					//Si el area no se borra correctamente de la tabla b_unit_area
 					} else {
-						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA BASE DE DATOS");
+						infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
 					}
-				//Si el area no se borra correctamente de la tabla b_unit_area
-				} else {
-					infoLabel.setText("ERROR DE BORRADO DEL AREA DE LA TABLA B_UNIT_AREA");
-				}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} finally {
+					selfDelete = false;
+					notifyAll();
+					
+					System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+				}	
 			}
 		}
 	}
@@ -984,7 +998,7 @@ public class AreaUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Save new data or data edit");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			//Se recupera el fondo blanco de los campos para que una anterior validación errónea de los mismos
 			//no los deje amarillos permanentemente
 			areaNameField.setBackground(Color.WHITE);
@@ -993,74 +1007,92 @@ public class AreaUI extends JPanel {
 			tNow = ToolBox.getTimestampNow();
 			//Selección de comportamiento
 			
-			//Aceptamos la creación de una nueva area
-			if (okActionSelector == AreaUI.OK_ACTION_NEW) {
-				//Debug
-				System.out.println("Acción de grabar un area nueva");
+			try {
+				selfUpdate = true;
 				
-				//Creamos un area nueva a partir de los datos del formulario
-				Area newArea = new Area();
-				newArea.setArea(areaNameField.getText());
-				newArea.setDescripcion(areaDescription.getText());
-				//Validamos los datos del formulario
-				if (testData(newArea)) {
-					//Intentamos grabar la nueva area en la base de datos, retornando un objeto con idénticos
-					//datos que incluye también el id que le ha asignado dicha base de datos
-					Area storedArea = new Area().addNewArea(session.getConnection(), newArea);
-					//Si el area se almacena correctamente en la base de datos
-					if (storedArea != null) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						PersistenceManager.registerTableModification(infoLabel, "NUEVA AREA REGISTRADA: ", session.getConnection(), tNow,
-								Area.TABLE_NAME);
-						//Asignamos el area guardada como area seleccionada
-						selectedArea = storedArea;
-						//Renovamos la lista de areas del comboBox
-						refreshComboBox();
-						//Devolvemos el formulario a su estado previo
-						afterNewOrEditArea();
-						//Refrescamos listas
-						refreshLists();
-						//Si el area no se almacena correctamente en la base de datos
-					} else {
-						infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA AREA EN LA BASE DE DATOS");
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				//Aceptamos la creación de una nueva area
+				if (okActionSelector == AreaUI.OK_ACTION_NEW) {
+					//Debug
+					System.out.println("Acción de grabar un area nueva");
+					
+					//Creamos un area nueva a partir de los datos del formulario
+					Area newArea = new Area();
+					newArea.setArea(areaNameField.getText());
+					newArea.setDescripcion(areaDescription.getText());
+					//Validamos los datos del formulario
+					if (testData(newArea)) {
+						//Intentamos grabar la nueva area en la base de datos, retornando un objeto con idénticos
+						//datos que incluye también el id que le ha asignado dicha base de datos
+						Area storedArea = new Area().addNewArea(session.getConnection(), newArea);
+						//Si el area se almacena correctamente en la base de datos
+						if (storedArea != null) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							PersistenceManager.registerTableModification(infoLabel, "NUEVA AREA REGISTRADA: ", session.getConnection(), tNow,
+									Area.TABLE_NAME);
+							//Asignamos el area guardada como area seleccionada
+							selectedArea = storedArea;
+							//Renovamos la lista de areas del comboBox
+							refreshComboBox();
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditArea();
+							//Refrescamos listas
+							refreshLists();
+							//Si el area no se almacena correctamente en la base de datos
+						} else {
+							infoLabel.setText("ERROR DE GRABACIÓN DE LA NUEVA AREA EN LA BASE DE DATOS");
+						}
+					}
+					
+				
+				//Aceptamos los cambios del area editada
+				} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
+					//Debug
+					System.out.println("Guardando los cambios del area " + areaNameField.getText());
+					
+					//Objeto que recoge los datos actualizados
+					Area updatedArea = new Area();
+					updatedArea.setId(selectedArea.getId());
+					updatedArea.setArea(areaNameField.getText());
+					updatedArea.setDescripcion(areaDescription.getText());
+					
+					//Si los datos están validados
+					if (testData(updatedArea)) {
+						//Si los datos actualizados se graban en la base de datos
+						if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
+							//Registramos fecha y hora de la actualización de los datos de la tabla area
+							PersistenceManager.registerTableModification(infoLabel, "DATOS DEL AREA ACTUALIZADOS: ", session.getConnection(), tNow,
+									Area.TABLE_NAME);
+							//Renovamos los datos del area seleccionada
+							selectedArea = updatedArea;
+							//Renovamos la lista de areas del comboBox
+							refreshComboBox();
+							//Devolvemos el formulario a su estado previo
+							afterNewOrEditArea();
+							
+						//Si los datos actualizados no se graban en la base de datos
+						} else {
+							infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+						}
 					}
 				}
+				//Refrescamos listas
+				refreshLists();
+				//Habilitamos asignaciones
+				availableList.setEnabled(true);
+				allocatedList.setEnabled(true);
+				infoLabel2.setText("");
 				
-			
-			//Aceptamos los cambios del area editada
-			} else if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
-				//Debug
-				System.out.println("Guardando los cambios del area " + areaNameField.getText());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfUpdate = false;
+				notifyAll();
 				
-				//Objeto que recoge los datos actualizados
-				Area updatedArea = new Area();
-				updatedArea.setId(selectedArea.getId());
-				updatedArea.setArea(areaNameField.getText());
-				updatedArea.setDescripcion(areaDescription.getText());
-				
-				//Si los datos están validados
-				if (testData(updatedArea)) {
-					//Si los datos actualizados se graban en la base de datos
-					if (new Area().updateAreaToDB(session.getConnection(), updatedArea)) {
-						//Registramos fecha y hora de la actualización de los datos de la tabla area
-						PersistenceManager.registerTableModification(infoLabel, "DATOS DEL AREA ACTUALIZADOS: ", session.getConnection(), tNow,
-								Area.TABLE_NAME);
-						//Renovamos los datos del area seleccionada
-						selectedArea = updatedArea;
-						//Renovamos la lista de areas del comboBox
-						refreshComboBox();
-						//Devolvemos el formulario a su estado previo
-						afterNewOrEditArea();
-						
-					//Si los datos actualizados no se graban en la base de datos
-					} else {
-						infoLabel.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
-					}
-				}
-			}
-			//Refrescamos listas
-			refreshLists();
-			infoLabel2.setText("");
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
+			}	
 		}
 		
 	}
@@ -1105,7 +1137,7 @@ public class AreaUI extends JPanel {
 	
 	/**
 	 * Acción del botón Revocar Asignación. Los usuarios de tipo ADMIN pueden revocar la asignación de cualquier area a
-	 * cualquier unidad de negocio. Los usuarios de tipo MANAGER solo pueden revocar asignaciones de areas de su propio
+	 * cualquier centro de trabajo. Los usuarios de tipo MANAGER solo pueden revocar asignaciones de areas de su propio
 	 * centro de trabajo. Los usuarios de tipo USER no pueden revocar asignaciones de areas. Se intenta eliminar de la
 	 * tabla b_unit_area la entrada que contenga el id del area y el id del centro de trabajo a la que estaba asignado.
 	 * Si se consigue, se elimina el area a la lista de areas del objeto BusinessUnit al que estaba asignado.
@@ -1152,16 +1184,48 @@ public class AreaUI extends JPanel {
 		public void run() {
 			//Si se ha cerrado el panel, se cancelan la tarea y el temporizador
 			if (!AreaUI.this.isShowing()) {
-				AreaUI.this.panelVisible = false;
 				this.cancel();
 				AreaUI.this.timer.cancel();
-				 System.out.println("Se ha cerrado la ventana Unidad de negocio");
+				 System.out.println("Se ha cerrado la ventana Area");
 			}
+			
+			System.out.println("AreaUI timerjob");
+			
+			if (session.isLocked()) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfUpdate) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfDelete) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			//No se comprueba la actualización de los datos si los estamos editando o añadiendo
 			if (cancelButton.isEnabled() && oKButton.isEnabled() && AreaUI.this.isShowing()) {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
-			} else if (AreaUI.this.panelVisible == true){
+			} else if (AreaUI.this.isShowing()){
 
 				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
 				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {

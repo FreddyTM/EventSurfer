@@ -58,7 +58,7 @@ public class CurrentSession {
 	//Temporizador de comprobación de cambios en la base de datos
 	private Timer timer;
 	//Tiempo de repetición de TimerJob
-	private long period = 60000; 
+	private long period = 30000; 
 	//Acción que devuelve el programa a la pantalla de login
 	private Action logOutAction;
 	

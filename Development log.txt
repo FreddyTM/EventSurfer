@@ -2722,6 +2722,27 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 	· TimerJob class (BusinessUnitUI inner class):
 		Update run() --waits for session & selfupdate locks--
 
+	· AreaUI class:
+		Add attributes
+			selfUpdate, selfDelete
+		Delete attributes
+			panel Visible
+		Clean code
+		Complete javadoc
+
+	· DeleteAction class (AreaUI inner class):
+		Update actionPerformed() --fix error message when deleting area if not allocated anywhere--
+					 --set selfDelete to true before deleting data, set to false after deleting & notify()--
+					 --fix lists not enabled after deleting--
+
+	· OKAction class (AreaUI inner class):
+		Update actionPerformed() --make actionPerformed() synchronized--
+					 --set selfUpdate to true before updating data, set to false after updating & notify()--
+					 --fix lists not enabled after new/edit--
+
+	· TimerJob class (AreaUI inner class):
+		Update run() --waits for session, selfupdate & selfdelete locks--
+
 	· EventTypeUI class:
 		Add attributes
 			selfUpdate

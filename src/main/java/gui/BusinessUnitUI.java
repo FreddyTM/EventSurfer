@@ -807,6 +807,8 @@ public class BusinessUnitUI extends JPanel {
 				}
 			}
 			
+			tNow = ToolBox.getTimestampNow();
+			
 			//Selección de comportamiento
 			
 			try {
@@ -816,7 +818,7 @@ public class BusinessUnitUI extends JPanel {
 				
 				//Aceptamos la creación de un nuevo centro de trabajo
 				if (okActionSelector == BusinessUnitUI.OK_ACTION_NEW) {
-					//Debug
+
 					System.out.println("Acción de grabar un nuevo centro de trabajo");
 
 					//Creamos nuevo BusinessUnit a partir de los datos del formulario
@@ -876,7 +878,6 @@ public class BusinessUnitUI extends JPanel {
 				//Aceptamos los cambios del centro de trabajo editado	
 				} else if (okActionSelector == BusinessUnitUI.OK_ACTION_EDIT) {
 
-					//Debug
 					System.out.println("Guardando los cambios del centro de trabajo " + nameField.getText());
 					
 					//Objeto que recoge los datos actualizados
@@ -896,11 +897,9 @@ public class BusinessUnitUI extends JPanel {
 					if (testData(updatedBunit)) {
 						//Si los datos actualizados se graban en la base de datos
 						if (new BusinessUnit().updateBusinessUnitToDB(session.getConnection(), updatedBunit)) {
-							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
-							tNow = ToolBox.getTimestampNow();
 							//Control de la actualización de la tabla last_modification por el cambio en la tabla user
 							boolean UserChangeRegister = true;
-							//Actualizamos los datos de la tabla last_modification por el cambio en la tabla business_unit
+							//Registramos fecha y hora de la actualización de los datos de la tabla business_unit
 							boolean bUnitChangeRegister = PersistenceManager.updateTimeStampToDB(session.getConnection(),
 									BusinessUnit.TABLE_NAME, tNow);
 							infoLabel.setText("DATOS DEL CENTRO DE TRABAJO ACTUALIZADOS: " + ToolBox.formatTimestamp(tNow, null));
