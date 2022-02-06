@@ -434,6 +434,7 @@ public class CompanyUI extends JPanel {
 				tField.setEditable(true);
 				tField.setBackground(Color.WHITE);
 			}
+			nameField.requestFocusInWindow();
 		}
 	}
 	

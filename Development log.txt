@@ -2692,6 +2692,9 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Clean code
 		Complete javadoc
 
+	· EditAction class (BusinessUnitUI inner class):
+		Update actionPerformed() --businessunit name gets the focus--
+
 	· OKAction class CompanyUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
