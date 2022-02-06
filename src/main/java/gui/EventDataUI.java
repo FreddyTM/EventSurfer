@@ -1025,7 +1025,7 @@ public class EventDataUI extends JPanel{
 	
 	/**
 	 * Borra una incidencia o una actualización en función de la acción pasada por parámetro. El borrado de una incidencia
-	 * implica el borrado de todas sus actualizaciones.
+	 * implica el borrado de todas sus actualizaciones. 
 	 * @param action determina si se borra una incidencia o una actualización
 	 */
 	private synchronized void delete(int action) {

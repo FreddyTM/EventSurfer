@@ -2756,6 +2756,7 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· TimerJob class (AreaUI inner class):
 		Update run() --waits for session, selfupdate & selfdelete locks--
+			     --waits for selfAllocate, selfRevoke--
 
 	· EventTypeUI class:
 		Add attributes
@@ -2781,5 +2782,10 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Complete javadoc
 
 	· EventDataUI class:
+		Update delete() --set selfDelete to true before deleting data, set to false after deleting & notify()-
 		Clean code
 		Complete javadoc
+
+	· TimerJob class (EventDataUI inner class):
+		Update run() --waits for selfdelete lock--
+	
