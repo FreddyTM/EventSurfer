@@ -2724,7 +2724,7 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· AreaUI class:
 		Add attributes
-			selfUpdate, selfDelete
+			selfUpdate, selfDelete, selfAllocate, selfRevoke
 		Delete attributes
 			panel Visible
 		Clean code
@@ -2732,8 +2732,19 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· DeleteAction class (AreaUI inner class):
 		Update actionPerformed() --fix error message when deleting area if not allocated anywhere--
+					 --make actionPerformed() synchronized--
 					 --set selfDelete to true before deleting data, set to false after deleting & notify()--
 					 --fix lists not enabled after deleting--
+
+	· AllocateAction class (AreaUI inner class):
+		Update actionPerformed() --make actionPerformed() synchronized--
+					 --set selfAllocate to true before allocating, set to false after allocating & notify()--
+					 --fix lists not enabled after new/edit--
+
+	· RevokeAction class (AreaUI inner class):
+		Update actionPerformed() --make actionPerformed() synchronized--
+					 --set selfRevoke to true before revoking, set to false after revoking & notify()--
+					 --fix lists not enabled after new/edit--
 
 	· OKAction class (AreaUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--

@@ -122,6 +122,12 @@ public class AreaUI extends JPanel {
 	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
 	//del programa la que ha borrado datos de la base de datos
 	private volatile boolean selfDelete = false;
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha asignado un area en la base de datos
+	private volatile boolean selfAllocate = false;
+	//Pone en pausa la actualización de datos realizada por TimerJob si es la propia instancia
+	//del programa la que ha eliminado la asignación de la base de datos
+	private volatile boolean selfRevoke = false;
 	
 	
 	public AreaUI(CurrentSession session) {
@@ -889,7 +895,7 @@ public class AreaUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Delete data");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public synchronized void actionPerformed(ActionEvent e) {
 			okActionSelector = AreaUI.OK_ACTION_UNDEFINED;
 			boolean deleteOK = false;
 			//Comprobamos que el area a borrar no tiene eventos registrados
@@ -1110,26 +1116,40 @@ public class AreaUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Allocate area");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
-			if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
-				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
-				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
-						Area.B_UNIT_AREA_TABLE_NAME);			
-				//Añadir el area al centro de trabajo
-				bUnit.getAreas().add(selectedArea);
-				infoLabel2.setText(selectedArea.getAreaNombre() + " SE AÑADE A " + bUnit.getNombre() + ". "
-						+ infoLabel2.getText());
-				//Borramos el texto informativo del area de edición
-				infoLabel.setText("");
-				//Refrescar listas
-				refreshLists();
-				//Deshabilitar botones de asignación
-				allocateButton.setEnabled(false);
-				revokeButton.setEnabled(false);
-			//Si los datos actualizados no se graban en la base de datos
-			} else {
-				infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+		public synchronized void actionPerformed(ActionEvent e) {
+			try {
+				selfAllocate = true;
+				
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), availableList.getSelectedValue());
+				if (new Area().saveBUnitAreaToDB(session.getConnection(), bUnit, selectedArea)) {
+					//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
+					PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
+							Area.B_UNIT_AREA_TABLE_NAME);			
+					//Añadir el area al centro de trabajo
+					bUnit.getAreas().add(selectedArea);
+					infoLabel2.setText(selectedArea.getAreaNombre() + " SE AÑADE A " + bUnit.getNombre() + ". "
+							+ infoLabel2.getText());
+					//Borramos el texto informativo del area de edición
+					infoLabel.setText("");
+					//Refrescar listas
+					refreshLists();
+					//Deshabilitar botones de asignación
+					allocateButton.setEnabled(false);
+					revokeButton.setEnabled(false);
+				//Si los datos actualizados no se graban en la base de datos
+				} else {
+					infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+				}
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfAllocate = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
 			}
 		}
 		
@@ -1148,27 +1168,41 @@ public class AreaUI extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Revoke area allocation");
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
-			if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
-				//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
-				PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
-						Area.B_UNIT_AREA_TABLE_NAME);	
-				//Eliminar el area del centro de trabajo
-				if (new Area().deleteArea(bUnit, selectedArea)) {
-					infoLabel2.setText(selectedArea.getAreaNombre() + " YA NO PERTENECE A " + bUnit.getNombre() + ". "
-							+ infoLabel2.getText());
-					//Borramos el texto informativo del area de edición
-					infoLabel.setText("");
+		public synchronized void actionPerformed(ActionEvent e) {
+			try {
+				selfRevoke = true;
+				
+				System.out.println("Grabación de datos propios iniciada, actualizaciones suspendidas................");
+				
+				BusinessUnit bUnit = new BusinessUnit().getBusinessUnitByName(session.getCompany(), allocatedList.getSelectedValue());
+				if (new Area().deleteOneBUnitAreaFromDB(session.getConnection(), bUnit, selectedArea)) {
+					//Registramos fecha y hora de la actualización de los datos de la tabla b_unit_area
+					PersistenceManager.registerTableModification(infoLabel2, "DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: ", session.getConnection(), tNow,
+							Area.B_UNIT_AREA_TABLE_NAME);	
+					//Eliminar el area del centro de trabajo
+					if (new Area().deleteArea(bUnit, selectedArea)) {
+						infoLabel2.setText(selectedArea.getAreaNombre() + " YA NO PERTENECE A " + bUnit.getNombre() + ". "
+								+ infoLabel2.getText());
+						//Borramos el texto informativo del area de edición
+						infoLabel.setText("");
+					}
+					//Refrescar listas
+					refreshLists();
+					//Deshabilitar botones de asignación
+					allocateButton.setEnabled(false);
+					revokeButton.setEnabled(false);
+				//Si los datos actualizados no se graban en la base de datos
+				} else {
+					infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
 				}
-				//Refrescar listas
-				refreshLists();
-				//Deshabilitar botones de asignación
-				allocateButton.setEnabled(false);
-				revokeButton.setEnabled(false);
-			//Si los datos actualizados no se graban en la base de datos
-			} else {
-				infoLabel2.setText("ERROR DE ACTUALIZACIÓN DE DATOS EN LA BASE DE DATOS");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} finally {
+				selfRevoke = false;
+				notifyAll();
+				
+				System.out.println("Grabación de datos propios finalizada, actualizaciones permitidas................");
 			}
 		}	
 	}
@@ -1212,6 +1246,26 @@ public class AreaUI extends JPanel {
 			}
 			
 			if (selfDelete) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfAllocate) {
+				try {
+					System.out.println("AreaUI esperando permiso para refrescar datos......");
+					wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			if (selfRevoke) {
 				try {
 					System.out.println("AreaUI esperando permiso para refrescar datos......");
 					wait();
