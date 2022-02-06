@@ -2685,6 +2685,10 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Complete javadoc
 
 	· CompanyUI class:
+		Add attributes
+			selfUpdate
+		Delete attributes
+			panel Visible
 		Clean code
 		Complete javadoc
 
@@ -2696,8 +2700,18 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Update run() --waits for session & selfupdate locks--
 
 	· BusinessUnitUI class:
+		Add attributes
+			selfUpdate
+		Delete attributes
+			panel Visible
 		Clean code
 		Complete javadoc
+
+	· NewAction class (BusinessUnitUI inner class):
+		Update actionPerformed() --businessunit name gets the focus--
+
+	· EditAction class (BusinessUnitUI inner class):
+		Update actionPerformed() --businessunit name gets the focus--
 
 	· OKAction class (BusinessUnitUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--

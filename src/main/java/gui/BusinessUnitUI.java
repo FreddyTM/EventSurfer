@@ -723,6 +723,7 @@ public class BusinessUnitUI extends JPanel {
 			}
 			//checkbox "Activa" activo por defecto
 			activeCheckBox.setSelected(true);
+			nameField.requestFocusInWindow();
 		}
 	}
 	
@@ -748,6 +749,7 @@ public class BusinessUnitUI extends JPanel {
 			infoLabel.setText("");
 			//Formulario editable
 			editableDataOn();
+			nameField.requestFocusInWindow();
 		}
 	}
 	
