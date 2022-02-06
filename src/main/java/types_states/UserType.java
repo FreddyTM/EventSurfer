@@ -64,7 +64,7 @@ public class UserType {
 	
 	/**
 	 * Retorna el tipo de usuario que corresponde a la clave pasada por parámetro
-	 * @param key
+	 * @param key clave del Map userTypes con el que localizar el tipo de usuario
 	 * @return tipo de usuario o null si la clave no existe
 	 */
 	public String getUserType (int key) {
@@ -78,7 +78,7 @@ public class UserType {
 	/**
 	 * Conecta con la base de datos y almacena cada tipo de usuario con su clave
 	 * en userTypes
-	 * conn conexión con la base de datos
+	 * @param conn conexión con la base de datos
 	 */
 	public void loadData(Connection conn) {
 		Statement statement = null;

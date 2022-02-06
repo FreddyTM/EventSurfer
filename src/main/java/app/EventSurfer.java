@@ -19,9 +19,13 @@ import main.java.session.CurrentSession;
  * operar.
  * y crea la sesión 
  * @author Alfred Tomey
+ * @version 0.1.18
  */
 public class EventSurfer {
 
+	/**
+	 * Conexión con la base de datos
+	 */
 	private Connection connection;
 	
 	public static void main(String[] args) {

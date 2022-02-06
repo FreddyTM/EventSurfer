@@ -6,7 +6,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/External java dependencies/postgresql-42.2.18.jar"/>
+	<classpathentry kind="lib" path="C:/External java dependencies/postgresql-42.2.18.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/D:/eclipse-workspace/EventSurfer/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

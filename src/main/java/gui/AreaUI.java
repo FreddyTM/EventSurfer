@@ -566,7 +566,7 @@ public class AreaUI extends JPanel {
 	private boolean testData (Area areaToCheck) {
 		//Comprobamos que los datos no exceden el tamaño máximo, no llegan al mínimo, o no hay nombres duplicados
 		Boolean error = false;
-		String errorLengthText = "TAMAÑO MÁXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
+		String errorLengthText = "TAMAÑO MAXIMO DE TEXTO SUPERADO O FALTAN DATOS.";
 		String errorNameText = "YA EXISTE UN AREA CON ESE NOMBRE";
 		
 		//Comprobamos que el nombre del area no existe ya en la base de datos
@@ -705,7 +705,7 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que monitoriza la selección de la lista de unidades de negocio disponibles
+	 * Listener que monitoriza la selección de la lista de centros de trabajo disponibles
 	 */
 	private class AvailableListener implements ListSelectionListener {
 
@@ -730,7 +730,7 @@ public class AreaUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que monitoriza la selección de la lista de unidades de negocio asignadas
+	 * Listener que monitoriza la selección de la lista de centros de trabajo asignadas
 	 */
 	private class AllocatedListener implements ListSelectionListener {
 

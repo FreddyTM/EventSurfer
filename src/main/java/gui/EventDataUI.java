@@ -1470,6 +1470,9 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción del botón editar incidencia
+	 */
 	private class EditEventAction extends AbstractAction {
 		public EditEventAction() {
 			putValue(NAME, "Editar");
@@ -1506,6 +1509,9 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción del botón nueva actualización de incidencia
+	 */
 	private class NewUpdateAction extends AbstractAction {
 		public NewUpdateAction() {
 			putValue(NAME, "Nueva");
@@ -1518,6 +1524,9 @@ public class EventDataUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción del botón de edición de actualización de incidencia
+	 */
 	private class EditUpdateAction extends AbstractAction {
 		public EditUpdateAction() {
 			putValue(NAME, "Editar");

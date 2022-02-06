@@ -293,7 +293,9 @@ public class PersistenceManager {
 	/**
 	 * Registra la modificación de una tabla de la base de datos pasada por parámetro
 	 * @param infoLabel JLabel en la que aparecerá la información de la actualización de datos
+	 * @param text texto informativo
 	 * @param conn conexión a la base de datos
+	 * @param tNow fecha y hora de la inserción en la base de datos
 	 * @param tableName tabla en la que ha habido algún tipo de modificación o inserción
 	 * @return true si la actualización de la tabla last_modification se completa con éxito,
 	 * false si no se completa

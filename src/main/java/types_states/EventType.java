@@ -214,7 +214,7 @@ public class EventType {
 	
 	/**
 	 * Retorna el tipo de incidencia que corresponde a la clave pasada por parámetro
-	 * @param key
+	 * @param key clave del Map eventTypes con el que localizar el tipo de incidencia
 	 * @return tipo de incidencia o null si la clave no existe
 	 */
 	public String getEventTypeDescription (int key) {

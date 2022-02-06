@@ -549,7 +549,7 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Acción del botón cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar,
+	 * Acción del botón Cancelar. Se deshabilita el propio botón y el botón Aceptar. Se habilita el botón Editar,
 	 * el botón Borrar y el botón Nuevo. Descarta los cambios en los datos introducidos en el formulario. No se
 	 * graban en la base de datos ni en la lista de tipos de evento. Se recupera la información que figuraba
 	 * anteriormente en el formulario. Se borra cualquier mensaje de error mostrado anteriormente
@@ -596,6 +596,9 @@ public class EventTypeUI extends JPanel {
 		}
 	}
 	
+	/**
+	 * Acción del botón Borrar
+	 */
 	public class DeleteAction extends AbstractAction {
 		public DeleteAction() {
 			putValue(NAME, "Borrar");
@@ -672,6 +675,9 @@ public class EventTypeUI extends JPanel {
 		}
 	}
 	
+	/**
+	 * Acción del botón Aceptar
+	 */
 	public class OKAction extends AbstractAction {
 		public OKAction() {
 			putValue(NAME, "Aceptar");

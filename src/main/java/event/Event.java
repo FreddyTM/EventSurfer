@@ -87,7 +87,7 @@ public class Event {
 	 * en el id del objeto Event
 	 * @param conn conexión con la base de datos
 	 * @param event incidencia a insertar en la base de datos
-	 * @returnobjeto incidencia con el id asignado
+	 * @return objeto incidencia con el id asignado
 	 */
 	public Event addNewEvent(Connection conn, Event event) {
 		if (saveEventToDB(conn, event)) {

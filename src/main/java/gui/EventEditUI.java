@@ -994,12 +994,11 @@ public class EventEditUI extends JPanel{
 	}
 	
 	/**
-	 * COMPROBACIÓN AL PERDER EL FOCO
-	 * Listener que comprueba que el texto de eventDateField, eventTimeField, updateDateField y updateTimeField
-	 * son correctos para validar una fecha o una hora según sea el origen del texto a comprobar. Si el origen es
-	 * eventDateField o eventTimeField y se puede validar la fecha o la hora, se replica el texto de dichos
-	 * componentes en updateDateField o updateTimeField. En caso contrario se retorna a la fecha inicial que
-	 * tuviesen los textfields.
+	 * Listener que comprueba, una vez que pierden el foco, que el texto de eventDateField, eventTimeField,
+	 * updateDateField y updateTimeField son correctos para validar una fecha o una hora según sea el origen
+	 * del texto a comprobar. Si el origen es eventDateField o eventTimeField y se puede validar la fecha o la
+	 * hora, se replica el texto de dichos componentes en updateDateField o updateTimeField. En caso contrario
+	 * se retorna a la fecha inicial que tuviesen los textfields.
 	 */
 	private class EventDateTimeFocusListener extends FocusAdapter {
 		String oldText; //Recoge fecha u hora actuales
@@ -1254,6 +1253,9 @@ public class EventEditUI extends JPanel{
 		}
 	}
 	
+	/**
+	 * Acción del botón aceptar
+	 */
 	private class OKAction extends AbstractAction {
 		public OKAction() {
 			putValue(NAME, "Aceptar");

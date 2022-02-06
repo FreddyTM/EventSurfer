@@ -364,6 +364,7 @@ public class CompanyUI extends JPanel {
 	/**
 	 * Comprueba la corrección de los datos introducidos en el formulario. Cualquier
 	 * dato incorrecto se resalta con el fondo del campo en amarillo
+	 * @param company Empresa cuyos datos estamos comprobando
 	 * @return true si son correctos, false si no lo son
 	 */
 	private boolean testData(Company company) {

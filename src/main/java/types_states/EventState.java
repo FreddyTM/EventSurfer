@@ -63,7 +63,7 @@ public class EventState {
 	
 	/**
 	 * Retorna el estado de incidencia que corresponde a la clave pasada por parámetro
-	 * @param key
+	 * @param key clave del Map eventStates con el que localizar el estado de la incidencia
 	 * @return estado de incidencias o null si la clave no existe
 	 */
 	public String getEventState (int key) {
@@ -77,6 +77,7 @@ public class EventState {
 	/**
 	 * Conecta con la base de datos y almacena cada estado de incidencia con su clave
 	 * en eventStates
+	 * @param conn conexión cno la base de datos
 	 */
 	public void loadData(Connection conn) {
 		Statement statement = null;
