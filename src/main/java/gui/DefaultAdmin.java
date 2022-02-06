@@ -3,7 +3,6 @@ package main.java.gui;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
@@ -23,6 +22,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+/**
+ * Muestra la pantalla de para el cambio de contraseña del administrador por defecto, en caso de que
+ * ésta no se haya cambiado todavía. No se podrá acceder al programa por primera vez sin cambiar
+ * esta contraseña. Opcionalmente se puede cambiar también el alias, el nombre y el apellido.
+ * @author Alfred Tomey
+ */
 public class DefaultAdmin extends JPanel {
 	private JPasswordField currentPassField;
 	private JPasswordField newPassField;
@@ -245,7 +250,6 @@ public class DefaultAdmin extends JPanel {
 			errorInfoLabel.setText("CONTRASEÑA ACTUAL INCORRECTA");
 			return false;
 		}
-		
 		//Comprobamos que la nueva contraseña no excede el tamaño máximo
 		String newPassword = String.valueOf(newPassField.getPassword());
 		if (newPassword.length() < 8 || newPassword.length() > 25) {
@@ -258,25 +262,24 @@ public class DefaultAdmin extends JPanel {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA Y LA CONFIRMACIÓN NO COINCIDEN");
 			return false;
 		}
-		
 		//Comprobamos que la contraseña nueva no es igual a la antigua
 		if (currentPassword.equals(newPassword) && currentPassword.equals(confirmPassword)) {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA NO PUEDE SER IGUAL A LA ANTIGUA");
 			return false;
 		}
-		
 		//Comprobamos que la contraseña solo incluye caracteres permitidos
 		if(!user.isAValidPassword(newPassword)) {
 			errorInfoLabel.setText("LA NUEVA CONTRASEÑA DEBE INCLUIR AL MENOS UNA MAYÚSCULA,"
 					+ "UNA MINÚSCULA, UN DÍGITO Y UN CARACTER ESPECIAL");
 			return false;
 		}
-	
+		
 		return true;
 	}
 	
 	/**
-	 * Actualizamos usuario con los datos del formulario
+	 * Actualiza el usuario con los datos del formulario
+	 * @return true si los datos se actualizan en la base de datos, false en caso contrario
 	 */
 	public boolean updateData() {
 		//Excepto bUnit, userType y activo que no deben cambiar
@@ -302,10 +305,7 @@ public class DefaultAdmin extends JPanel {
 		//User id será 1, el administrador por defecto
 		//BUnit id será 1, la unidad de negocio por defecto
 		session.loadCurrentSessionData(conn, 1, 1);
-		//Pasar userTypeId por parámetro al panel (admin = 1)
 		//Cargar paneles
-//		String title = frame.getTitle() + "        Versión " + frame.getVersionNumber() + "  Usuario: " + user.getUserAlias();
-//		frame.setTitle(title);
 		frame.setFullTitle(user.getUserAlias());
 		frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		frame.setUpWindow();

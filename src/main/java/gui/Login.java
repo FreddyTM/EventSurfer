@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 
 /**
  * Muestra la pantalla de login. Se encarga de comprobar las credenciales del usuario
- * que quiere acceder al programa. 
+ * que quiere acceder al programa y de permitirle el acceso si son correctas.
  * @author Alfred Tomey
  */
 public class Login extends JPanel {
@@ -140,7 +140,9 @@ public class Login extends JPanel {
 	}
 	
 	/**
-	 * Comprueba las credenciales introducidas por el usuario en la pantalla de login
+	 * Comprueba las credenciales introducidas por el usuario en la pantalla de login. Si son
+	 * correctas permite el acceso al programa. Para los usuarios administradores se cargan todos
+	 * los datos, para los manager y user solo los datos de su centro de trabajo
 	 * @param conn conexión con la base de datos
 	 * @param alias alias del usuario
 	 * @param password contraseña del usuario

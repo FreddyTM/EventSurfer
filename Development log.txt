@@ -2679,6 +2679,10 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 		Clean code
 		Complete javadoc
 
+	· DefaultAdmin class:
+		Clean code
+		Complete javadoc
+
 	· EventEditUI class:
 		Clean code
 		Complete javadoc
