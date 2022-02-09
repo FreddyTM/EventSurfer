@@ -449,7 +449,7 @@ public class AreaUI extends JPanel {
 		//Area asignada a más de un centro de trabajo
 		if (bUnitsList.size() > 1) {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " areas asignadas a más de una unidad de negocio", AreaUI.this,
+					"Un usuario Manager no puede " + action + " areas asignadas a más de un centro de trabajo", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -459,7 +459,7 @@ public class AreaUI extends JPanel {
 		//Area asignada a un centro de trabajo distinto a la del usuario manager que abre sesión
 		} else {
 			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " areas no asignadas a su unidad de negocio", AreaUI.this,
+					"Un usuario Manager no puede " + action + " areas no asignadas a su centro de trabajo", AreaUI.this,
 					DIALOG_INFO);
 			return false;
 		}
@@ -477,10 +477,10 @@ public class AreaUI extends JPanel {
 		String info = "";
 		//Si estamos editando el area
 		if (okActionSelector == AreaUI.OK_ACTION_EDIT) {
-			info = "Edición de area asignada a más de una unidad de negocio. ¿Desea continuar?";
+			info = "Edición de area asignada a más de un centro de trabajo. ¿Desea continuar?";
 		//Si queremos borrar el area
 		} else {
-			info = "Borrado de area asignada a más de una unidad de negocio. "
+			info = "Borrado de area asignada a más de un centro de trabajo. "
 					+ "No se puede deshacer. " + "¿Desea continuar?";
 		}
 		//Area seleccionada asignada a más de un centro de trabajo

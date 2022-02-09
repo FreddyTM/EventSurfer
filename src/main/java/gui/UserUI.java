@@ -1336,7 +1336,7 @@ public class UserUI extends JPanel {
 						}
 					}
 				
-				//Aceptamos los cambios de la unidad de negocio editada
+				//Aceptamos los cambios del usuario editado
 				} else if (okActionSelector == UserUI.OK_ACTION_EDIT) {
 					
 					currentPasswordField.setBackground(Color.WHITE);
