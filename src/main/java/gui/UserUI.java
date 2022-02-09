@@ -166,7 +166,7 @@ public class UserUI extends JPanel {
 		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
 		
-		JLabel selectBunitLabel = new JLabel("Unidades de negocio");
+		JLabel selectBunitLabel = new JLabel("Centros de trabajo");
 		selectBunitLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		selectBunitLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		selectBunitLabel.setBounds(50, 175, 200, 25);

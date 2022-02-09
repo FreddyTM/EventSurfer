@@ -161,7 +161,7 @@ public class EventEditUI extends JPanel{
 		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
 		
-		JLabel bUnitLabel = new JLabel("Unidad de negocio");
+		JLabel bUnitLabel = new JLabel("Centro de trabajo");
 		bUnitLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		bUnitLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		bUnitLabel.setBounds(50, 175, 200, 25);

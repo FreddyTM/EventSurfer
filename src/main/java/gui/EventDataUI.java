@@ -186,7 +186,7 @@ public class EventDataUI extends JPanel{
 		companyLabel.setBounds(50, 125, 200, 25);
 		add(companyLabel);
 		
-		JLabel selectLabel = new JLabel("Unidades de negocio");
+		JLabel selectLabel = new JLabel("Centros de trabajo");
 		selectLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		selectLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		selectLabel.setBounds(50, 175, 200, 25);
