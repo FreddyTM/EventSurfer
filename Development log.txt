@@ -2781,16 +2781,26 @@ ver 0.1.18 - REMOTE DATA UPDATES SYSTEM IN EVENTDATAUI & EVENTEDITUI REPLICATED 
 
 	· EventTypeUI class:
 		Add attributes
-			selfUpdate, selfDelete 
+			selfUpdate, selfDelete , OK_ACTION_DELETE
 		Delete attributes
 			panel Visible
+		Update verifyManagerEditConditions() --fix bug edit & delete options wrong--
+		Update verifyAdminEditConditions() --fix bug edit & delete options wrong--
 		Clean code
 		Complete javadoc
+
+	· RegisteredListenerclass (EventTypeUI inner class):
+		Update valueChanged() --fix wrong item selected--
+				      --fix wrong selection after new eventtype--
+
+	· NewAction class (EventTypeUI inner class):
+		Update actionPerformed() --eventtypes list disabled, not deleted--
 
 	· OKAction class (EventTypeUI inner class):
 		Update actionPerformed() --make actionPerformed() synchronized--
 					 --set selfUpdate to true before updating data, set to false after updating & notify()--
 					 --fix timerjob not updating eventtype info after first eventtype saved/edited--
+					 --fix eventtypes list disabled after new eventtype--
 
 	· DeleteAction class (EventTypeUI inner class):
 		Update actionPerformed() --fix timerjob not updating eventtype info after first eventtype deleted--

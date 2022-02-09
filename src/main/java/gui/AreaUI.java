@@ -903,7 +903,7 @@ public class AreaUI extends JPanel {
 			//Si hay eventos, borrado prohibido para cualquier usuario
 			if (eventList.size() > 0) {
 				ToolBox.showDialog(
-						"No se puede borrar areas asignadas a eventos registrados", AreaUI.this,
+						"No se puede borrar areas asignadas a incidencias registradas", AreaUI.this,
 						DIALOG_INFO);
 			//Si no hay eventos, se comprueban las condiciones para el borrado del area seleccionada	
 			} else {

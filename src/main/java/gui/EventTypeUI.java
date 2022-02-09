@@ -44,8 +44,9 @@ public class EventTypeUI extends JPanel {
 	private static final int OK_ACTION_UNDEFINED = 0; //Por defecto
 	private static final int OK_ACTION_EDIT = 1;
 	private static final int OK_ACTION_NEW = 2;
+	private static final int OK_ACTION_DELETE = 3;
 	
-	private static final String NO_EVENT_TYPE = "<Ningún tipo de evento seleccionable>";
+	private static final String NO_EVENT_TYPE = "<Ningún tipo de incidencia seleccionable>";
 	private static final String DIALOG_INFO = "info";
 	private static final String DIALOG_YES_NO = "yes_no";
 	
@@ -225,35 +226,37 @@ public class EventTypeUI extends JPanel {
 	private boolean verifyManagerEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
-		String action = "";
+		
+//		System.out.println(bUnitsList.size());	
+		
 		//Si estamos editando el tipo de incidencia
 		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-			action = "editar";
-		//Si queremos borrar el tipo de incidencia
-		} else {
-			action = "borrar";
+			//Tipo de incidencias no registrado en ninguna incidencia, o
+			//Tipo de incidencia registrado en incidencias del centro de trabajo del usuario manager que abre sesión
+			if (bUnitsList.size() == 0 || bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
+				return true;
+			//Tipo de incidencia registrado en incidencias de un centro de trabajo distinto al del usuario manager que abre sesión
+			} else {
+				ToolBox.showDialog(
+						"Un usuario Manager no puede editar tipos de incidencia registrados en incidencias de centros de trabajo distintos al suyo",
+						EventTypeUI.this, DIALOG_INFO);
+				return false;
+			}
+		} else if (okActionSelector == EventTypeUI.OK_ACTION_DELETE) {
+			//Un tipo de incidencia registrado en alguna incidencia no se puede borrar
+			if (bUnitsList.size() > 0) {
+				ToolBox.showDialog(
+						"No se pueden borrar tipos de incidencias registrados en incidencias",
+						EventTypeUI.this, DIALOG_INFO);
+				return false;
+				
+			//Tipo de incidencia no registrado en ninguna incidencia, se puede borrar
+			} else {
+				return true;
+			}
 		}
-		//Tipo de incidencia no registrado en incidencias de ningun centro de trabajo
-		if (bUnitsList.size() == 0) {
-			return true;
-		}
-		//Tipo de incidencia registrado en incidencias de más de un centro de trabajo
-		if (bUnitsList.size() > 1) {
-			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de incidencia registrados en eventos de varios centros de trabajo",
-					EventTypeUI.this, DIALOG_INFO);
-			return false;
-		}
-		//Tipo de incidencia registrado en incidencias del centro de trabajo del usuario manager que abre sesión
-		if (bUnitsList.size() == 1 && session.getUser().getbUnit().getId() == bUnitsList.get(0)) {
-			return true;
-		//Tipo de incidencia registrado en incidencias de un centro de trabajo distint al del usuario manager que abre sesión
-		} else {
-			ToolBox.showDialog(
-					"Un usuario Manager no puede " + action + " tipos de incidencia registrados en incidencias de centros de trabajo distintos al suyo",
-					EventTypeUI.this, DIALOG_INFO);
-			return false;
-		}
+		
+		return false;	
 	}
 	
 	/**
@@ -266,40 +269,41 @@ public class EventTypeUI extends JPanel {
 	private boolean verifyAdminEditConditions() {
 		int selectedEventTypeId = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
 		List<Integer> bUnitsList = new Event().getBunitsIdsWithEventTypes(session.getConnection(), selectedEventTypeId);
-		String info = "";
+
+//		System.out.println(bUnitsList.size());
+		
 		//Si estamos editando el tipo de incidencia
 		if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-			info = "Edición de tipo de incidencia registrado en más de un centro de trabajo. ¿Desea continuar?";
-		//Si queremos borrar el tipo de incidencia 
-		} else {
-			info = "Borrado de tipo de incidencia registrado en más de más de un centro de trabajo. "
-					+ "No se puede deshacer. " + "¿Desea continuar?";
-		}
-		//Tipo de incidencia registrado en incidencias de más de un centro de trabajo
-		if (bUnitsList.size() > 1) {
-			int optionSelected = ToolBox.showDialog(
-					info, EventTypeUI.this,
-					DIALOG_YES_NO);
-			if (optionSelected == JOptionPane.YES_OPTION) {
-				return true;
-			} else {
-				return false;
-			}
-		//Tipo de incidencia registrado en incidencias de uno o ningún centro de trabajo
-		} else {
-			if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-				return true;
-			} else {	
+			//Tipo de incidencia registrado en incidencias de más de un centro de trabajo, lanzamos aviso
+			if (bUnitsList.size() > 1) {
 				int optionSelected = ToolBox.showDialog(
-						"El borrado de tipos de incidencias no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
-						DIALOG_YES_NO);
+						"Edición de tipo de incidencia registrado en incidencias de más de un centro de trabajo. ¿Desea continuar?",
+						EventTypeUI.this, DIALOG_YES_NO);
 				if (optionSelected == JOptionPane.YES_OPTION) {
 					return true;
-				} else {							
+				} else {
 					return false;
 				}
+			//Tipo de incidencia registrado en incidencias de uno o ningún centro de trabajo, no hace falta avisar
+			} else {
+				return true;
 			}
-		}
+		//Si estamos borrando el tipo de incidencia
+		} else if (okActionSelector == EventTypeUI.OK_ACTION_DELETE) {
+			//Un tipo de incidencia registrado en alguna incidencia no se puede borrar
+			if (bUnitsList.size() > 0) {
+				ToolBox.showDialog(
+						"No se pueden borrar tipos de incidencias registrados en incidencias",
+						EventTypeUI.this, DIALOG_INFO);
+				return false;
+				
+			//Tipo de incidencia no registrado en ninguna incidencia, se puede borrar
+			} else {
+				return true;
+			}
+		} 
+
+		return false;
 	}
 	
 	/**
@@ -438,26 +442,20 @@ public class EventTypeUI extends JPanel {
 	}
 	
 	/**
-	 * Listener que monitoriza la selección de la lista de tipos de incidencias disponibles
+	 * Listener que monitoriza la selección de la lista de tipos de incidencias registradas
 	 */
 	private class RegisteredListener implements ListSelectionListener {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (e.getValueIsAdjusting() == false) {			
+				
+				selectedEventType = registeredList.getSelectedValue();
+				itemSelectedIndex = registeredList.getSelectedIndex();	
+				eventTypeNameField.setText(selectedEventType);
+				
 				//Si existe un elemento seleccionado
 				if (selectedEventType != null) {
-					//Actualización de la lista tras la edición o el borrado de un elemento
-					if (okActionSelector == EventTypeUI.OK_ACTION_EDIT) {
-						//En caso de borrado de algún elemento, comprobamos que el backup del índice no está fuera del rango de la lista
-						if (itemSelectedBackupIndex >= registeredEventTypes.length) {
-							itemSelectedIndex = 0;
-							selectedEventType = registeredEventTypes[0];
-						//En caso de edición, recuperamos el valor del elemento seleccionado del backup
-						} else {
-							selectedEventType = selectedEventTypeBackup;
-						}
-					}
 					//Actualización de la lista tras la creación de un elemento nuevo
 					if (okActionSelector == EventTypeUI.OK_ACTION_NEW) {
 						eventTypeNameField.setText(selectedEventType);			
@@ -474,6 +472,7 @@ public class EventTypeUI extends JPanel {
 					itemSelectedIndex = itemSelectedBackupIndex;
 				}
 				eventTypeNameField.setText(selectedEventType);
+				
 			}
 		}		
 	}
@@ -502,8 +501,9 @@ public class EventTypeUI extends JPanel {
 			updateDataCache();
 			//Formulario editable
 			editableDataOn();
-			//Vaciamos las lista de tipos de incidencia
-			emptyList();
+			//Desactivamos las lista de tipos de incidencia
+			registeredList.setEnabled(false);
+			
 			//Vaciamos los campos de texto
 			eventTypeNameField.setText("");
 			eventTypeNameField.requestFocusInWindow();
@@ -608,21 +608,26 @@ public class EventTypeUI extends JPanel {
 		public synchronized void actionPerformed(ActionEvent e) {
 			
 			//Usamos okActionSelector para filtrar el comportamiento del RegisteredListener
-			okActionSelector = EventTypeUI.OK_ACTION_EDIT;
+			okActionSelector = EventTypeUI.OK_ACTION_DELETE;
 			boolean deleteOK = false;
 			//Comprobamos que el tipo de incidencia a borrar no está registrado en ninguna incidencia
 			//Obtenemos el id del tipo de incidencia seleccionado
 			int id = TypesStatesContainer.getEvType().getEventTypeId(selectedEventType);
+			
+			//Debug
+			System.out.println("Id de tipo de incidencia: " + id);
+			
+			
 			if (new Event().getEventTypesOnEventFromDB(session.getConnection(), id) != 0) {
 				ToolBox.showDialog(
-						"No se pueden borrar tipos de evento registrados en eventos", EventTypeUI.this,
+						"No se pueden borrar tipos de incidencia registrados en incidencias", EventTypeUI.this,
 						DIALOG_INFO);
 			//Se advierte de que el borrado es irreversible, y se autoriza si se acepta
 			} else {
 				int optionSelected = ToolBox.showDialog(
-						"El borrado de tipos de evento no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
+						"El borrado de tipos de incidencias no se puede deshacer. ¿Desea continuar?", EventTypeUI.this,
 						DIALOG_YES_NO);
-				if (optionSelected != JOptionPane.YES_OPTION) {
+				if (optionSelected == JOptionPane.NO_OPTION) {
 					okActionSelector = EventTypeUI.OK_ACTION_UNDEFINED;
 					return;
 				} else {							
@@ -715,7 +720,9 @@ public class EventTypeUI extends JPanel {
 							refreshList();
 							//Buscamos el índice del nuevo tipo de incidencia y lo seleccionamos en la lista
 							int newElementIndex = getIndexOfElement(selectedEventType);
-							registeredList.setSelectedIndex(newElementIndex);		
+							registeredList.setSelectedIndex(newElementIndex);
+							//Reactivamos la lista de tipos de incidencia
+							registeredList.setEnabled(true);
 							//Devolvemos el formulario a su estado previo
 							afterNewOrEditData();
 							
