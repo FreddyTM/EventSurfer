@@ -153,23 +153,23 @@ public class CurrentSession {
 	 * @param userId id del usuario que abre la sesión
 	 */
 	public void loadCurrentSessionData(Connection conn, int bUnitId, int userId) {
-		//Carga de tipos de usuarios, tipos de eventos y estados de eventos
+		//Carga de tipos de usuarios, tipos de incidencias y estados de incidencias
 		loadTypesStates(conn);
 		//Cargamos datos de la compañía
 		company = new Company().getCompanyFromDB(conn);
 		//Cargamos la lista de todos los usuarios de la compañía
 		company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));
-		//Cargamos la unidad de negocio que tiene el id bUnitId
+		//Cargamos el centro de trabajo que tiene el id bUnitId
 		List<BusinessUnit> bUnitList = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
 		for (BusinessUnit unit: bUnitList) {
 			if (unit.getId() == bUnitId) {
-				//Añadimos a la compañía la unidad de negocio a la que pertenece el usuario
+				//Añadimos a la compañía el centro de trabajo a la que pertenece el usuario
 				company.getBusinessUnits().add(unit);
-				//Asignamos la unidad de negocio a bUnit
+				//Asignamos el centro de trabajo a bUnit
 				bUnit = unit;
 			}
 		}
-		//Cargamos sus usuarios, areas y eventos de la unidad de negocio
+		//Cargamos sus usuarios, areas e incidencias del centro de trabajo
 		List<User> userList = new User().getUsersFromDB(conn, bUnit);
 		bUnit.setUsers(userList);
 		//Asignamos el usuario que abre sesión a user
@@ -191,7 +191,7 @@ public class CurrentSession {
 	}
 	
 	/**
-	 * Carga los tipos de usuarios, tipos de eventos y estados de eventos almacenados en la base
+	 * Carga los tipos de usuarios, tipos de incidencias y estados de incidencias almacenados en la base
 	 * de datos, y los agrupa en un objeto contenedor TypesStatesContainer
 	 * @param conn conexión con la base de datos
 	 */
@@ -199,10 +199,10 @@ public class CurrentSession {
 		//Lista de tipos de usuario
 		UserType userTypeList = new UserType();
 		userTypeList.loadData(conn);	
-		//Lista de tipos de eventos
+		//Lista de tipos de incidencias
 		EventType eventTypeList = new EventType();
 		eventTypeList.loadData(conn);	
-		//Lista de estados de eventos
+		//Lista de estados de incidencias
 		EventState eventStateList = new EventState();
 		eventStateList.loadData(conn);		
 		//Mandamos las listas a un objeto contenedor
@@ -225,10 +225,10 @@ public class CurrentSession {
 		String infoMessage = "";
 		String title = "";
 		if (tableName.equals(BusinessUnit.TABLE_NAME)) {
-			infoMessage = "SE HA DESACTIVADO LA UNIDAD DE NEGOCIO A LA QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
-					+ "TODOS LOS USUARIOS DE DICHA UNIDAD DE NEGOCIO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
+			infoMessage = "SE HA DESACTIVADO EL CENTRO DE TRABAJO AL QUE PERTENECE EL USUARIO QUE ABRIÓ SESIÓN.\n"
+					+ "TODOS LOS USUARIOS DE DICHO CENTROS DE TRABAJO HAN SIDO DESACTIVADOS TAMBIÉN.\n"
 					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
-			title = "Unidad de negocio y usuarios desactivados";
+			title = "Centro de trabajo y usuarios desactivados";
 		} else if (tableName.equals(User.TABLE_NAME)) {
 			infoMessage = "SE HA DESACTIVADO AL USUARIO QUE HA ABIERTO SESIÓN.\n"
 					+ "CONTACTE CON UN ADMINISTRADOR SI NECESITA RECUPERAR SU ACCESO AL PROGRAMA.";
@@ -323,9 +323,9 @@ public class CurrentSession {
 							case "business_unit":
 								//Carga de tipos de usuarios, tipos de eventos y estados de eventos
 								loadTypesStates(conn);
-								//Recargamos la lista de unidades de negocio de la base de datos
+								//Recargamos la lista de centros de trabajo de la base de datos
 								List<BusinessUnit> bUnits = new BusinessUnit().getBusinessUnitsFromDB(conn, company);
-								//Localizamos la unidad de negocio del usuario que abrió sesión
+								//Localizamos el centro de trabajo del usuario que abrió sesión
 								BusinessUnit updatedBunit = null;
 								for (BusinessUnit oneUnit : bUnits) {
 									if (user != null) {
@@ -334,7 +334,7 @@ public class CurrentSession {
 										}
 									}
 								}
-								//Comprobamos que la unidad de negocio del usuario que abrió sesión no ha sido deshabilitada
+								//Comprobamos que el centro de trabajo del usuario que abrió sesión no ha sido deshabilitada
 								if(updatedBunit != null && updatedBunit.isActivo() == false && usersUpdated == false) {
 									//No hace falta que el case user actualize usuarios y nos devuelva también a la pantalla de login
 									usersUpdated = true;
@@ -344,19 +344,19 @@ public class CurrentSession {
 										backToLogin(BusinessUnit.TABLE_NAME, displays, currentDisplay);
 									}
 									alertShown = false;
-								//Si la unidad de negocio del usuario que abrió sesión sigue activa, recargamos datos
+								//Si el centro de trabajo del usuario que abrió sesión sigue activo, recargamos datos
 								} else if (updatedBunit != null){
-									//Filtramos la lista de unidades de negocio en función del tipo de usuario que abrió sesión
+									//Filtramos la lista de centros de trabajo en función del tipo de usuario que abrió sesión
 									//Si es un usuario administrador, se recargan todas las unidades de negocio
 									if (user.getUserType().equals("ADMIN")) {
 										company.setBusinessUnits(bUnits);
 										for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 											if (oneUnit.getId() == bUnit.getId()) {
-												//Reasignamos la unidad de negocio de la sesión
+												//Reasignamos el centro de trabajo de la sesión
 												bUnit = oneUnit;
 											}
 										}									
-									//Si es un usuario manager o user, solo recargamos su unidad de negocio, que es la misma que la
+									//Si es un usuario manager o user, solo recargamos su centro de trabajo, que es el mismo que el
 									//de la sesión
 									} else {
 										for (BusinessUnit oneUnit : bUnits) {
@@ -370,7 +370,7 @@ public class CurrentSession {
 									}
 									//Cargamos la lista de todos los usuarios de la compañía
 									company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));
-									//Recargamos los datos de la lista de unidades de negocio actualizadas							
+									//Recargamos los datos de la lista de centros de trabajo actualizadas							
 									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
 										oneUnit.setUsers(userList);
@@ -394,17 +394,17 @@ public class CurrentSession {
 									//Añadimos la tabla business_unit a la lista de tablas actualizadas
 									CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 									//Añadimos la tabla user a la lista de tablas actualizadas para cubrir la posibilidad de que la
-									//edición de una unidad de negocio haya afectado al estado de sus usuarios
+									//edición de un centro de trabajo haya afectado al estado de sus usuarios
 									CurrentSession.this.updatedTables.put(User.TABLE_NAME, dateTimeDb);
 								}
 								break;
 							case "user":
-								//Comprobamos que una actualización previa de las unidades de negocio no haya hecho ya la
+								//Comprobamos que una actualización previa de las centros de trabajo no haya hecho ya la
 								//correspondiente recarga de los usuarios actualizados, para no repetirla.
 								if (!usersUpdated) {					
 									//Cargamos la lista de todos los usuarios de la compañía
 									company.setAllCompanyUsers(new User().getAllCompanyUsers(conn, company));								
-									//Recargamos los datos de los usuarios de todas las unidades de negocio
+									//Recargamos los datos de los usuarios de todas los centros de trabajo
 									for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 										List<User> userList = new User().getUsersFromDB(conn, oneUnit);
 										oneUnit.setUsers(userList);
@@ -434,7 +434,7 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "area":
-								//Recargamos los datos de las areas de todas las unidades de negocio
+								//Recargamos los datos de las areas de todos los centros de trabajo
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 									List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
 									oneUnit.setAreas(areaList);		
@@ -443,7 +443,7 @@ public class CurrentSession {
 								CurrentSession.this.updatedTables.put(tableName, dateTimeDb);
 								break;
 							case "b_unit_area":
-								//Recargamos los datos de las areas de todas las unidades de negocio
+								//Recargamos los datos de las areas de todos los centros de trabajo
 								for (BusinessUnit oneUnit : company.getBusinessUnits()) {
 									List<Area> areaList = new Area().getAreasFromDB(conn, oneUnit);
 									oneUnit.setAreas(areaList);		
