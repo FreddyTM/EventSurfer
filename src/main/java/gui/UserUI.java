@@ -1485,42 +1485,56 @@ public class UserUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (UserUI.this.isShowing()){
-				//Loop por el Map de CurrentSession, si aparece la tabla user, recargar datos
-				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
-					if (updatedTable.getKey().equals(User.TABLE_NAME)) {
-						
-						//Si el centro de trabajo de la sesión ha sido marcada como no activa y el filtro de centros de trabajo está
-						//activado, el centro de trabajo de la sesión pasa a ser el del usuario que abrió sesión
-						if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-							//Buscamos el centro de trabajo del usuario que abrió sesión
-							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-							//Lo asignamos como centro de trabajo de la sesión
-							session.setbUnit(userBunit);
-							//Renovamos la lista de los centros de trabajo del comboBox
-							refreshBunitComboBox();
+				
+				//Debug
+				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference() == tNow));
+				//Si los datos actualilzados en la base de datos provienen de la propia pantalla, no actualizamos los datos visualizados
+				//porque no es necesario. En caso contrario, sí que actualizamos.
+				if (session.getDateTimeReference() != tNow) {
+					
+					//Debug
+					System.out.println("session.dateTimeReference: " + session.getDateTimeReference());
+					System.out.println("tNow: " + tNow);
+					
+					
+					//Loop por el Map de CurrentSession, si aparece la tabla user, recargar datos
+					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+						//Si en la tabla de actualizaciones aparece la clave User.TABLE_NAME
+						if (updatedTable.getKey().equals(User.TABLE_NAME)) {
+
+							//Si el centro de trabajo de la sesión ha sido marcada como no activa y el filtro de centros de trabajo está
+							//activado, el centro de trabajo de la sesión pasa a ser el del usuario que abrió sesión
+							if (bUnitActiveFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
+								//Buscamos el centro de trabajo del usuario que abrió sesión
+								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(),
+										session.getUser().getbUnit().getId());
+								//Lo asignamos como centro de trabajo de la sesión
+								session.setbUnit(userBunit);
+								//Renovamos la lista de los centros de trabajo del comboBox
+								refreshBunitComboBox();
+							}
+
+							//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
+							//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando el centro de trabajo de dicho usuario)
+							//o el primer usuario de la lista de usuarios de cualquier otro centro de trabajo que estemos mostrando
+							//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
+							//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
+							//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
+
+							//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
+							refreshUserComboBox();
+							//Mostramos los datos del usuario seleccionado
+							populateUserFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+
+							//Informamos por pantalla de la actualización
+							//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
+							//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
+							UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
 						}
-
-						//Si el usuario seleccionado ha sido desactivado y el filtro de usuarios está activo, el usuario
-						//seleccionado pasará a ser el usuario de la sesión (si estamos mostrando el centro de trabajo de dicho usuario)
-						//o el primer usuario de la lista de usuarios de cualquier otro centro de trabajo que estemos mostrando
-						//(si hay alguno que esté activo), y será este usuario (o ninguno) el que visualicemos
-						//Si el usuario seleccionado no ha sido desactivado, o lo ha sido pero el filtro de usuarios no está activo,
-						//seguirá siendo el usuario seleccionado y visualizaremos sus datos actualizados
-						
-						//Renovamos la lista de usuarios del comboBox y designamos un nuevo usuario seleccionado
-						refreshUserComboBox();
-						//Mostramos los datos del usuario seleccionado
-						populateUserFields();
-						//Hacemos backup del contenido de los datos del formulario
-						updateDataCache();
-
-						//Informamos por pantalla de la actualización
-						//Si el usuario seleccionado no ha sufrido ninguna modificación no habrá ningún cambio en la información
-						//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
-						UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-					}
+					} 
 				}
 			}	
 		}
