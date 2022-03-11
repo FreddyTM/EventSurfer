@@ -1487,10 +1487,10 @@ public class UserUI extends JPanel {
 			} else if (UserUI.this.isShowing()){
 				
 				//Debug
-				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference() == tNow));
+				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference().equals(tNow)));
 				//Si los datos actualilzados en la base de datos provienen de la propia pantalla, no actualizamos los datos visualizados
 				//porque no es necesario. En caso contrario, sí que actualizamos.
-				if (session.getDateTimeReference() != tNow) {
+				if (!session.getDateTimeReference().equals(tNow) ) {
 					
 					//Debug
 					System.out.println("session.dateTimeReference: " + session.getDateTimeReference());
@@ -1533,6 +1533,8 @@ public class UserUI extends JPanel {
 							//mostrada, pero seguirá interesando saber que algún usuario ha sido modificado o añadido
 							UserUI.this.infoLabel.setText("DATOS DE LOS USUARIOS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 					} 
 				}

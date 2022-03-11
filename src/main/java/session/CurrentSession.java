@@ -274,7 +274,7 @@ public class CurrentSession {
 			//variable temporal que registrará los incrementos que puedan existir 
 			//en la base de datos
 			Timestamp sessionDateTime = session.getDateTimeReference();
-			Timestamp tempDateTime = session.getDateTimeReference();;
+			Timestamp tempDateTime = session.getDateTimeReference();
 			String tableName = "";
 			Statement stm = null;
 			ResultSet results = null;

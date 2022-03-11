@@ -2831,10 +2831,10 @@ ver 0.1.19 - PREVENT UI's TIMERJOB UPDATES IF SELFUPDATE
 	* - Package main.java.gui
 
 	· AppWindow class:
-		Update attribute versionNumber --ver 0.1.18--
+		Update attribute versionNumber --ver 0.1.19--
 
 	· TimerJob class (UserUI inner class):
-		Update run() --preventing updates from selfupdate, not working yet--
+		Update run() --preventing updates from selfupdate, ok--
 
 
 	
