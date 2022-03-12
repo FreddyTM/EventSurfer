@@ -2842,5 +2842,6 @@ ver 0.1.19 - PREVENT UI's TIMERJOB UPDATES IF SELFUPDATE
 	· TimerJob class BusinessUnitUI inner class):
 		Update run() --preventing updates from selfupdate, not tested yet--
 
-
+	· TimerJob class EventTypeUI inner class):
+		Update run() --preventing updates from selfupdate, not tested yet--
 	
