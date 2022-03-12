@@ -1287,71 +1287,82 @@ public class AreaUI extends JPanel {
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (AreaUI.this.isShowing()){
 
-				//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
-				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+				//Debug
+				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference().equals(tNow)));
+				//Si los datos actualilzados en la base de datos provienen de la propia pantalla, no actualizamos los datos visualizados
+				//porque no es necesario. En caso contrario, sí que actualizamos.
+				if (!session.getDateTimeReference().equals(tNow)) {
 					
-					//Debug
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
-					
-					
-					//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
-					if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
-						
-						//LÓGICA DE ACTUALIZACIÓN
-						//Si se ha borrado el area seleccionada, refrescamos la lista de areas del
-						//combobox y mostramos los datos de la nueva area seleccionada por defecto
-						List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
-						boolean areaDeleted = true;
-						for (Area area: updatedAreaList) {
-							if (area.getAreaNombre().equals(selectedArea.getAreaNombre()) ) {
-								areaDeleted = false;
-							}
-						}
-						//Area seleccionada borrada
-						if (areaDeleted) {							
-							areaComboList = getAreaCombolistItemsFromSession();
-							areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
-							areaComboBox.setSelectedIndex(0);
-							setFirstSelectedArea();
-						}
-						//Renovamos la lista de areas del comboBox
-						refreshComboBox();
-						//Asignamos el nuevo contenido a los textfields
-						populateAreaFields();
-						//Hacemos backup del contenido de los datos del formulario
-						updateDataCache();
-						//Refrescamos listas
-						refreshLists();
-						allocateButton.setEnabled(false);
-						revokeButton.setEnabled(false);
-						
-						//Informamos por pantalla de la actualización
-						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
-						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
-						//que alguna unidad de negocio ha sido modificada o añadida
-						AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-					}
-					
-					//Si en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME
-					if (updatedTable.getKey().equals(Area.B_UNIT_AREA_TABLE_NAME)) {
+					//Loop por el Map de CurrentSession, si aparece la tabla area, recargar datos
+					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+
+						//Debug
+						System.out.println("session.dateTimeReference: " + session.getDateTimeReference());
+						System.out.println("tNow: " + tNow);
 						
 						//Debug
-						System.out.println("en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME");
-						
-						//Refrescamos listas
-						refreshLists();
-						allocateButton.setEnabled(false);
-						revokeButton.setEnabled(false);
-						
-						//Informamos por pantalla de la actualización
-						//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
-						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
-						//que alguna unidad de negocio ha sido modificada o añadida
-						AreaUI.this.infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-					}
+						System.out.println(updatedTable.getKey());
+						System.out.println(updatedTable.getValue());
+
+						//Si en la tabla de actualizaciones aparece la clave Area.TABLE_NAME
+						if (updatedTable.getKey().equals(Area.TABLE_NAME)) {
+
+							//LÓGICA DE ACTUALIZACIÓN
+							//Si se ha borrado el area seleccionada, refrescamos la lista de areas del
+							//combobox y mostramos los datos de la nueva area seleccionada por defecto
+							List<Area> updatedAreaList = new Area().getAllAreasFromDB(session.getConnection());
+							boolean areaDeleted = true;
+							for (Area area : updatedAreaList) {
+								if (area.getAreaNombre().equals(selectedArea.getAreaNombre())) {
+									areaDeleted = false;
+								}
+							}
+							//Area seleccionada borrada
+							if (areaDeleted) {
+								areaComboList = getAreaCombolistItemsFromSession();
+								areaComboBox.setModel(new DefaultComboBoxModel(areaComboList));
+								areaComboBox.setSelectedIndex(0);
+								setFirstSelectedArea();
+							}
+							//Renovamos la lista de areas del comboBox
+							refreshComboBox();
+							//Asignamos el nuevo contenido a los textfields
+							populateAreaFields();
+							//Hacemos backup del contenido de los datos del formulario
+							updateDataCache();
+							//Refrescamos listas
+							refreshLists();
+							allocateButton.setEnabled(false);
+							revokeButton.setEnabled(false);
+
+							//Informamos por pantalla de la actualización
+							//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
+							//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+							//que alguna unidad de negocio ha sido modificada o añadida
+							AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+						}
+
+						//Si en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME
+						if (updatedTable.getKey().equals(Area.B_UNIT_AREA_TABLE_NAME)) {
+
+							//Debug
+							System.out.println(
+									"en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME");
+
+							//Refrescamos listas
+							refreshLists();
+							allocateButton.setEnabled(false);
+							revokeButton.setEnabled(false);
+
+							//Informamos por pantalla de la actualización
+							//Si el area que teníamos en pantalla no ha sufrido ninguna modificación
+							//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+							//que alguna unidad de negocio ha sido modificada o añadida
+							AreaUI.this.infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+						}
+					} 
 				}
 			}
 		}
