@@ -603,20 +603,32 @@ public class CompanyUI extends JPanel {
 				//Do nothing
 			//Se comprueba la actualización de los datos si no los estamos modificando
 			} else if (CompanyUI.this.isShowing()){
-				//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
-				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
-					//Si en la tabla de actualizaciones aparece la clave Company.TABLE_NAME
-					if (updatedTable.getKey().equals(Company.TABLE_NAME)) {
-						//Asignamos el nuevo contenido a los textfields
-						CompanyUI.this.populateTextFields();
-						//renovamos la lista de contenidos de los textfields
-						textFieldContentList.clear();
-						for (int i = 0; i < textFieldList.size(); i++) {
-							textFieldContentList.add(textFieldList.get(i).getText());
+				
+				//Debug
+				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference().equals(tNow)));
+				//Si los datos actualilzados en la base de datos provienen de la propia pantalla, no actualizamos los datos visualizados
+				//porque no es necesario. En caso contrario, sí que actualizamos.
+				if (!session.getDateTimeReference().equals(tNow)) {
+					
+					//Debug
+					System.out.println("session.dateTimeReference: " + session.getDateTimeReference());
+					System.out.println("tNow: " + tNow);
+					
+					//Loop por el Map de CurrentSession, si aparece la tabla company, recargar datos
+					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+						//Si en la tabla de actualizaciones aparece la clave Company.TABLE_NAME
+						if (updatedTable.getKey().equals(Company.TABLE_NAME)) {
+							//Asignamos el nuevo contenido a los textfields
+							CompanyUI.this.populateTextFields();
+							//renovamos la lista de contenidos de los textfields
+							textFieldContentList.clear();
+							for (int i = 0; i < textFieldList.size(); i++) {
+								textFieldContentList.add(textFieldList.get(i).getText());
+							}
+							CompanyUI.this.infoLabel.setText("DATOS ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
 						}
-						CompanyUI.this.infoLabel.setText("DATOS DE LA EMPRESA ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-					}
+					} 
 				}
 			}
 		}
