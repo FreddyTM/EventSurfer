@@ -1118,55 +1118,66 @@ public class BusinessUnitUI extends JPanel {
 				System.out.println("Comprobando actualización de datos del centro de trabajo");
 				System.out.println(session.getUpdatedTables().size());
 				
-				//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
-				for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
+				//Debug
+				System.out.println("session.dateTimeReference = tNow: " + (session.getDateTimeReference().equals(tNow)));
+				//Si los datos actualilzados en la base de datos provienen de la propia pantalla, no actualizamos los datos visualizados
+				//porque no es necesario. En caso contrario, sí que actualizamos.
+				if (!session.getDateTimeReference().equals(tNow)) {
 					
-
-					System.out.println(updatedTable.getKey());
-					System.out.println(updatedTable.getValue());
+					//Debug
+					System.out.println("session.dateTimeReference: " + session.getDateTimeReference());
+					System.out.println("tNow: " + tNow);
 					
-					//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
-					if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
-						//Si el centro de trabajo de la sesión ha sido desactivada y el filtro del combobox está activo, el centro
-						//de trabajo de la sesión pasa a ser el del usuario que abrió sesión, y será el que se visualize
-						if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
-							
-							System.out.println("Actualizando pantalla cambiando la bUnit de la sesión");
-							System.out.println("La bUnit de la sesión era " + session.getbUnit().getNombre());
-							
-							//Recuperamos la bUnit del usuario que abre sesión
-							BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(), session.getUser().getbUnit().getId());
-							//La asignamos como bUnit de la sesión
-							session.setbUnit(userBunit);
-							
-							System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
+					//Loop por el Map de CurrentSession, si aparece la tabla business_unit, recargar datos
+					for (Map.Entry<String, Timestamp> updatedTable : session.getUpdatedTables().entrySet()) {
 
-							//Renovamos la lista de los centros de trabajo del comboBox
-							refreshComboBox();
-							//Asignamos el nuevo contenido a los textfields
-							populateTextFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
-							
-						} else {
-							
-							System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
-							
-							//Renovamos la lista de los centros de trabajo del comboBox
-							refreshComboBox();
-							//Asignamos el nuevo contenido a los textfields
-							populateTextFields();
-							//Hacemos backup del contenido de los datos del formulario
-							updateDataCache();
+						System.out.println(updatedTable.getKey());
+						System.out.println(updatedTable.getValue());
+
+						//Si en la tabla de actualizaciones aparece la clave BusinessUnit.TABLE_NAME
+						if (updatedTable.getKey().equals(BusinessUnit.TABLE_NAME)) {
+							//Si el centro de trabajo de la sesión ha sido desactivada y el filtro del combobox está activo, el centro
+							//de trabajo de la sesión pasa a ser el del usuario que abrió sesión, y será el que se visualize
+							if (activeFilterCheckBox.isSelected() && session.getbUnit().isActivo() == false) {
+
+								System.out.println("Actualizando pantalla cambiando la bUnit de la sesión");
+								System.out.println("La bUnit de la sesión era " + session.getbUnit().getNombre());
+
+								//Recuperamos la bUnit del usuario que abre sesión
+								BusinessUnit userBunit = new BusinessUnit().getBusinessUnitById(session.getCompany(),
+										session.getUser().getbUnit().getId());
+								//La asignamos como bUnit de la sesión
+								session.setbUnit(userBunit);
+
+								System.out.println("La nueva bUnit de la sesión es " + session.getbUnit().getNombre());
+
+								//Renovamos la lista de los centros de trabajo del comboBox
+								refreshComboBox();
+								//Asignamos el nuevo contenido a los textfields
+								populateTextFields();
+								//Hacemos backup del contenido de los datos del formulario
+								updateDataCache();
+
+							} else {
+
+								System.out.println("Actualizando pantalla sin cambiar la bUnit de la sesión");
+
+								//Renovamos la lista de los centros de trabajo del comboBox
+								refreshComboBox();
+								//Asignamos el nuevo contenido a los textfields
+								populateTextFields();
+								//Hacemos backup del contenido de los datos del formulario
+								updateDataCache();
+							}
+
+							//Informamos por pantalla de la actualización 
+							//Si el centro de trabajo que teníamos en pantalla no ha sufrido ninguna modificación
+							//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
+							//que algun centro de trabajo ha sido modificado o añadido
+							BusinessUnitUI.this.infoLabel.setText("DATOS DE LOS CENTROS DE TRABAJO ACTUALIZADOS: "
+									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
 						}
-
-						//Informamos por pantalla de la actualización 
-						//Si el centro de trabajo que teníamos en pantalla no ha sufrido ninguna modificación
-						//no habrá ningún cambio en la información mostrada, pero seguirá interesando saber
-						//que algun centro de trabajo ha sido modificado o añadido
-						BusinessUnitUI.this.infoLabel.setText("DATOS DE LOS CENTROS DE TRABAJO ACTUALIZADOS: " +
-						ToolBox.formatTimestamp(updatedTable.getValue(), null));
-					}
+					} 
 				}
 			}
 		}
