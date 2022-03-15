@@ -627,6 +627,8 @@ public class CompanyUI extends JPanel {
 							}
 							CompanyUI.this.infoLabel.setText("DATOS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 					} 
 				}
