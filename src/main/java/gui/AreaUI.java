@@ -1362,6 +1362,8 @@ public class AreaUI extends JPanel {
 							AreaUI.this.infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
 						}
+						//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+						tNow = session.getDateTimeReference();
 					} 
 				}
 			}
