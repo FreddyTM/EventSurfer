@@ -863,6 +863,8 @@ public class EventTypeUI extends JPanel {
 							//Informamos por pantalla de la actualización
 							EventTypeUI.this.infoLabel.setText("DATOS DE TIPOS DE INCIDENCIA ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 					} 
 				}
