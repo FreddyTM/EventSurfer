@@ -1176,6 +1176,8 @@ public class BusinessUnitUI extends JPanel {
 							//que algun centro de trabajo ha sido modificado o añadido
 							BusinessUnitUI.this.infoLabel.setText("DATOS DE LOS CENTROS DE TRABAJO ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 					} 
 				}
