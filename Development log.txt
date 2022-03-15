@@ -2850,4 +2850,8 @@ ver 0.1.19 - PREVENT UI's TIMERJOB UPDATES IF SELFUPDATE
 
 	· TimerJob class EventDataUI inner class):
 		Update run() --preventing updates from selfupdate, not tested yet--
+
+	· EventTypeUI class:
+		Update constructor --edit & delete disabled if no event types, ok--
+		Update afterNewOrEditData() --edit & delete disabled if no event types, ok--
 	

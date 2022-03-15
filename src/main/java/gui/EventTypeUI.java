@@ -152,7 +152,8 @@ public class EventTypeUI extends JPanel {
 		editButton.setAction(editAction);
 		editButton.setBounds(304, 225, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
-				|| selectedEventType == null) {
+//				|| selectedEventType == null) {
+				|| registeredEventTypes[0].equals(NO_EVENT_TYPE)) {
 			editButton.setEnabled(false);
 		}
 		add(editButton);
@@ -160,7 +161,8 @@ public class EventTypeUI extends JPanel {
 		deleteButton.setAction(deleteAction);
 		deleteButton.setBounds(404, 225, 89, 23);
 		if (session.getUser().getUserType().equals("USER")
-				|| selectedEventType == null) {
+//				|| selectedEventType == null) {
+				|| registeredEventTypes[0].equals(NO_EVENT_TYPE)) {
 			deleteButton.setEnabled(false);
 		}
 		add(deleteButton);
@@ -424,9 +426,11 @@ public class EventTypeUI extends JPanel {
 		updateDataCache();
 		//Formulario no editable
 		editableDataOff();
-		editButton.setEnabled(true);
+//		editButton.setEnabled(true);
+		editButton.setEnabled(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? false : true);
 		newButton.setEnabled(true);
-		deleteButton.setEnabled(true);
+//		deleteButton.setEnabled(true);
+		deleteButton.setEnabled(registeredEventTypes[0].equals(NO_EVENT_TYPE) ? false : true);
 		oKButton.setEnabled(false);
 		cancelButton.setEnabled(false);
 		//El selector de acción retorna al estado sin definir
