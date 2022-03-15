@@ -1721,6 +1721,8 @@ public class EventDataUI extends JPanel{
 							//información mostrada, pero seguirá interesando saber que alguna incidencia ha sido modificada, añadida o borrada
 							EventDataUI.this.infoLabel.setText("DATOS DE LAS INCIDENCIAS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 					} 
 				}	
