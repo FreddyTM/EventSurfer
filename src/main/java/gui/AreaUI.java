@@ -1341,6 +1341,8 @@ public class AreaUI extends JPanel {
 							//que alguna unidad de negocio ha sido modificada o añadida
 							AreaUI.this.infoLabel.setText("DATOS DE LAS AREAS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
 
 						//Si en la tabla de actualizaciones aparece la clave Area.B_UNIT_AREA_TABLE_NAME
@@ -1361,9 +1363,11 @@ public class AreaUI extends JPanel {
 							//que alguna unidad de negocio ha sido modificada o añadida
 							AreaUI.this.infoLabel2.setText("DATOS DE ASIGNACIÓN DE AREAS ACTUALIZADOS: "
 									+ ToolBox.formatTimestamp(updatedTable.getValue(), null));
+							//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+							tNow = session.getDateTimeReference();
 						}
-						//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
-						tNow = session.getDateTimeReference();
+//						//Actualizamos tNow para evitar actualizaciones de pantalla innecesarias
+//						tNow = session.getDateTimeReference();
 					} 
 				}
 			}
